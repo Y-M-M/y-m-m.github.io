@@ -3,4 +3,10 @@ title = "Contact"
 slug = "contact"
 +++
 
-Follow me, @johndoe.
+#e-mail    
+<3364107383@qq.com>
+
+#QQ    
+*3364107383*
+
+*欢迎来找我玩呀！*

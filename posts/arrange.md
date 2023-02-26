@@ -1,6 +1,5 @@
 +++
 title = "排序的整理"
-description = "Ymmald, an interesting person."
 date = "2023-2-22"
 
 author = "Ymmald"
@@ -93,11 +92,297 @@ void option(int arr[], int len)
 }
 ```
 
- ## 快排
+## 快排
 
- ## 桶排序
+### 基本思路
+- 找到一个标准，将比它小的数放到左边，比它大的数放到右边
+- 在新区域中继续划定区域，直至区域长度缩小为2
 
- ## 堆排序
+
+
+### 算法实现
+```c
+#include <stdio.h>
+#include <stdlib.h>
+typedef struct range{
+    int start, end;
+}Range;
+
+void exchange(int *m, int *n)
+{
+    int temp = *n;
+    *n = *m;
+    *m = temp;
+}
+
+Range give(int start, int end)
+{
+    Range range;
+    range.start = start;
+    range.end = end;
+    return range;
+}
+
+void quick(int *arr, int len);
+
+int main()
+{
+    int arr[] = {1, 34, 65, 45, 39, 23, 44, 5, 6, 245, 56, 34, 26, 90};
+    int len = (int)sizeof(arr) / sizeof(*arr);
+    printf("len = %d\n", len);
+    quick(arr, len);
+    for(int i = 0; i < len; i ++)
+    {
+        printf("%d%c", arr[i], " \n"[i == len - 1]);
+    }
+    return 0;
+}
+
+void quick(int *arr, int len)
+{
+    if(len < 0)
+    {
+        return ;
+    }
+    Range r[len];
+    int p = 0;
+    r[p ++] = give(0, len - 1);
+    while(p)
+    {
+        printf("p = %d\n", p);
+        Range region = r[--p];
+        if(region.start > region.end)
+            continue;
+        int mid = arr[(region.start + region.end) / 2];
+        printf("mid = %d\n", mid);
+        int left = region.start, right = region.end;
+        printf("left = %d, right = %d\n", left, right);
+        do
+        {
+            while(arr[left] < mid)
+                left ++;
+            while(arr[right] > mid)
+                right --;
+            printf("left = %d, right = %d\n", left, right);
+            if(left <= right)
+            {
+                exchange(&arr[left], &arr[right]);
+                left ++;
+                right --;
+            }
+            for(int i = 0; i < len; i ++)
+            {
+                printf("%d%c", arr[i], " \n"[i == len - 1]);
+            }
+        } while (left <= right);
+        if(left < region.end)
+            r[p++] = give(left, region.end);
+        if(right > region.start)
+            r[p++] = give(region.start, right);
+        for(int i = 0; i < len; i ++)
+        {
+            printf("%d%c", arr[i], " \n"[i == len - 1]);
+        }
+    } 
+}
+```
+
+### 遇到的问题
+- 用p控制循环是否结束，只有当p=0，而且p没有自加1的时候才会结束
+
+
+## 计数排序
+
+### 基本思路
+- 给定排序的数在一定范围内
+- 从小到大统计每个数的数目
+- 将数按顺序记录到另一个数组中，完成排序
+
+### c语言实现
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+void arrange(int *arr, int *sort, int n);
+
+int main()
+{
+    int n = 10;
+    srand(time(0));
+    int *arr = (int *) malloc(sizeof(int) * n);
+    int *sort = (int *) malloc(sizeof(int) * n);
+    for(int i = 0; i < n; i ++)
+    {
+        arr[i] = rand() % 100;
+    }
+    arrange(arr, sort, n);
+    for(int i = 0; i < n; i ++)
+    {
+        printf("%d%c", sort[i], " \n"[i == n - 1]);
+    }
+    free(arr);
+    free(sort);
+}
+
+void arrange(int *arr, int *sort, int n)
+{
+    int *count = (int *)malloc(sizeof(int) * 100);//需要被排列的数的范围是100以内
+    for(int i = 0; i < 100; i ++)
+    {
+        count[i] = 0;
+    }
+    for(int i = 0; i < 10; i ++)
+    {
+        count[arr[i]] ++;
+    }
+    for(int i = 0; i < 10;)
+    {
+        for(int j = 0; j < 100; j ++)
+        {
+            while(count[j] > 0)
+            {
+                sort[i] = j;
+                count[j] --;
+                i ++;
+            }
+        }
+    }
+    free(count);
+}
+```
+
+## 桶排序
+
+### 基本思路
+- 就是统计排序嘛……
+
+### c语言实现
+```c
+#include <stdio.h>
+#include <stdlib.h>
+void arrange(int *arr, int *sort, int len);
+int main()
+{
+    int arr[] = {1, 8, 23, 44, 29, 23, 94, 38, 22, 33, 44};
+    int len = sizeof(arr) / sizeof(int);
+    //printf("len = %d\n", len);
+    int *sort = (int *)malloc(sizeof(int) * len);
+    arrange(arr, sort, len);
+    for(int i = 0; i < len; i ++)
+    {
+        printf("%d%c", sort[i], " \n"[i == len - 1]);
+    }
+    free(sort);
+}
+
+void arrange(int *arr, int *sort, int len)
+{
+    int max = arr[0];
+    for(int i = 1; i < len; i ++)
+    {
+        if(arr[i] > max)
+            max = arr[i];
+    }
+    int *count = (int *) malloc(sizeof(int) * (max + 1));
+    for(int i = 0; i <= max; i ++)
+    {
+        count[i] = 0;
+    }
+    for(int i = 0; i < len; i ++)
+    {
+        count[arr[i]] ++;
+    }
+    for(int i = 0; i < len; )
+    {
+        for(int j = 0; j <= max; j ++)
+        {
+            while(count[j] > 0)
+            {
+                sort[i] = j;
+                i ++;
+                count[j] --;
+            }
+        }
+    }
+    free(count);
+}
+```
+
+### 出现的问题
+
+
+## 堆排序
+
+### 基本思路
+- 两个一组，与前面得数比较，将比较大的数放到前面
+- 将第一个最大的数移到最后
+- 缩小范围，重复操作
+
+
+### c语言实现
+```c
+#include <stdio.h>
+#include <stdlib.h>
+void swap(int *x, int *y)
+{
+    int temp = *y;
+    *y = *x;
+    *x = temp;
+}
+
+void arrange(int *arr, int len);
+void lit(int *arr, int start, int end);
+
+int main()
+{
+    int arr[] = {1, 5, 2, 3, 35, 32, 55, 66, 45, 98, 34, 45, 55, 66, 77, 34, 38, 92};
+    int len = (int)sizeof(arr) / sizeof(*arr);
+    arrange(arr, len);
+    for(int i = 0; i < len; i ++)
+    {
+        printf("%d%c", arr[i], " \n"[i == len - 1]);
+    }
+    return 0;
+}
+
+void arrange(int *arr, int len)
+{
+    for(int i = len/2 - 1; i >= 0; i --)
+    {
+        lit(arr, i, len - 1);
+    }
+    for(int j = len - 1; j > 0; j --)
+    {
+        swap(&arr[0], &arr[j]);
+        lit(arr, 0, j - 1);
+    }
+}
+
+void lit(int *arr, int start, int end)
+{
+    int dad = start;
+    int son = dad * 2 + 1;
+    while(son <= end)
+    {   if(son + 1 <= end && arr[son] < arr[son + 1])
+        {
+            son ++;
+        }
+        if(arr[dad] > arr[son])
+        {
+            return;
+        }
+        else
+        {
+            swap(&arr[son], &arr[dad]);
+            dad = son;
+            son = dad * 2 + 1;
+        }
+    }
+}
+```
+
+### 遇到的问题
+- 当son > end的时候应该停止，否则会打乱后面已经排好的顺序
 
  ## 插入排序
 
@@ -146,3 +431,140 @@ void insert(int *arr, int len){
 
 ### 遇到的问题
 - 本来应该在遇到小于arr[i]的数的时候插入，但可能arr[i]就是最小的数，这时候要判断一下，把arr[i]放到arr[0]的位置
+
+
+## 希尔排序
+### 基本思路
+- 将数据划分区块，分别进行插入排序
+
+### 算法实现
+```C
+#include <stdio.h>
+void range(int *arr, int len);
+int main()
+{
+    int arr[] = {1, 4, 2, 9, 15, 98, 34, 56, 34, 55, 66, 64, 90, 43, 25, 44};
+    int len = (int)sizeof(arr) / sizeof(*arr);
+    //printf("len = %d\n", len);
+    range(arr, len);
+    for(int i = 0; i < len; i ++)
+    {
+        printf("%d%c", arr[i], " \n"[i == len - 1]);
+    }
+}
+
+void range(int *arr, int len)
+{
+    int gap, i, j;
+    for(gap = len >> 1; gap > 0; gap >>= 1)
+    {
+        for(int t = 0; t < len; t ++){
+            printf("%d%c", arr[t], " \n"[t == len - 1]);
+        }
+        for(i = gap; i < len; i ++)
+        {
+            int temp = arr[i];
+            for(j = i - gap; arr[j] > temp && j >= 0; j -= gap)
+            {
+                arr[j + gap] = arr[j]; 
+            }
+            arr[j + gap] = temp;//如果要插入的数最小，退出循环时，j<0，j+gap为第一个数；如果插入的数不是最小，退出循环时，j对应的数应在插入的数前面
+        }
+    }
+}
+
+```
+
+### 遇到的问题
+- 解决需要插入的数最小的问题
+- 在最内层循环中 arr[i]的值不断变化，需要在进内层循环之时，将arr[i]记录为temp
+
+
+## 归并排序
+
+### 基本思路
+- 借助另一个数组，逐层进行选择排序
+- 
+
+
+
+### 算法实现
+
+
+#### 迭代
+```c
+#include <stdio.h>
+#include <stdlib.h>
+void arrange(int *arr, int len);
+
+int main()
+{
+    int arr[] = {1, 34, 23, 78, 34, 44, 32, 87, 95, 47, 34, 23, 38, 40, 24};
+    int len = (int)sizeof(arr) / sizeof(*arr);
+    printf("len = %d\n", len);
+    arrange(arr, len);
+    for(int i = 0; i < len; i ++){
+        printf("%d%c", arr[i], " \n"[i == len - 1]);
+    }
+}
+
+void arrange(int *arr, int len)
+{
+    int *copy = malloc(len * sizeof(int));//malloc的用法
+    for(int seg = 1; seg <= len/2; seg <<= 1)
+    {
+        printf("seg = %d\n", seg);
+        int place = 0;
+        for(int first = 0; first < len; first += seg * 2)
+        {
+            int i = 0, j = 0;
+            while((i < seg && i + first < len) || (j < seg && first + j + seg < len))
+            {    
+                printf("i = %d, j = %d\n", i, j);
+                if(i == seg)
+                {
+                    while(j <= seg - 1 && j + first  + seg < len)
+                    {
+                        copy[place] = arr[first + seg + j];
+                        j ++;
+                        place ++;
+                    }
+                }
+                else if(j == seg)
+                {
+                    while(i <= seg - 1)
+                    {
+                        copy[place] = arr[first + i];
+                        i ++;
+                        place ++;
+                    }
+                }
+                else
+                {   
+                    if(arr[first + i] < arr[first + seg + j])
+                    {
+                        printf("arr[first + i] = %d\n", arr[first+i]);
+                        copy[place] = arr[first + i];
+                        i ++;
+                        place ++;
+                    }
+                    else
+                    {
+                        printf("arr[first + seg + j] = %d\n", arr[first + seg + j]);
+                        copy[place] = arr[first + seg + j];
+                        j ++;
+                        place ++;
+                    }
+                }
+            }
+        }
+        for(int i = 0; i < len; i ++)
+        {
+            arr[i] = copy[i];
+            printf("%d%c", arr[i], " \n"[i == len - 1]);
+        }
+    }
+}
+```
+
+### 遇到的问题

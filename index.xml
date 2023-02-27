@@ -76,15 +76,6 @@ $AA^{-1} = I$
     </item>
     
     <item>
-      <title></title>
-      <link>https://y-m-m.github.io/posts/%E7%AB%9E%E8%B5%9B%E5%9F%BA%E7%A1%80%E8%AF%BE%E7%9A%84%E7%AC%94%E8%AE%B01/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://y-m-m.github.io/posts/%E7%AB%9E%E8%B5%9B%E5%9F%BA%E7%A1%80%E8%AF%BE%E7%9A%84%E7%AC%94%E8%AE%B01/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>About</title>
       <link>https://y-m-m.github.io/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -125,23 +116,35 @@ QQ Link to heading 3364107383
     </item>
     
     <item>
-      <title>博弈论</title>
-      <link>https://y-m-m.github.io/posts/%E5%8D%9A%E5%BC%88%E8%AE%BA/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://y-m-m.github.io/posts/%E5%8D%9A%E5%BC%88%E8%AE%BA/</guid>
-      <description> 囚徒困境 Link to heading 题目描述 Link to heading 假设有两个小偷A和B联合犯事、私入民宅被警察抓住。警方将两人分别置于不同的两个房间内进行审讯 如果两个犯罪嫌疑人都坦白了罪行，交出了赃物，于是证据确凿，两人都被判有罪，各被判刑8年 如果只有一个犯罪嫌疑人坦白，另一个人没有坦白而是抵赖，则以妨碍公务罪（因已有证据表明其有罪）再加刑2年，而坦白者有功被减刑8年，立即释放 如果两人都抵赖，则警方因证据不足不能判两人的偷窃罪，但可以私入民宅的罪名将两人各判入狱1年。下表给出了这个博弈的支付矩阵 |A\B | 坦白| 抵赖 |
-｜:&amp;mdash;-:｜:&amp;mdash;-:｜:&amp;mdash;-:｜ |坦白 |8,8 | 0,10 | |抵赖 | 10,0 | 1,1 |
-如果这个审讯重复进行，什么样的策略下获益最大呢 #include &amp;lt;stdio.h&amp;gt; #define detray 0 #define coo 1 #include &amp;lt;time.h&amp;gt; #include &amp;lt;stdlib.h&amp;gt; int main() { srand(time(0)); int a = rand() % 2; int b = rand() % 2; int gradeA = 0, gradeB = 0; printf(&amp;#34;最开始的时候，a选择%d, b选择%d(0-&amp;gt;detray, 1-&amp;gt;coo)\n&amp;#34;, a, b); for(int i = 0; i &amp;lt; 100; i ++) { if(a) { if(b)//如果a和b都选择合作 { gradeA ++; gradeB ++; } else//如果a选择合作，b选择背叛 { gradeA += 10; } } else { if(b)//如果a选择背叛，b选择合作 { gradeB += 10; } else//如果a和b都选择背叛 { gradeA += 8; gradeB += 8; } } int temp = a; a = b; b = temp; } printf(&amp;#34;gradeA = %d, gradeB = %d\n&amp;#34;, gradeA, gradeB); return 0; } </description>
-    </item>
-    
-    <item>
       <title>各种排序算法的整理</title>
       <link>https://y-m-m.github.io/posts/arrange/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://y-m-m.github.io/posts/arrange/</guid>
       <description>排序整理 Link to heading 冒泡排序 Link to heading 基本思路 Link to heading n-1趟将n个数据排序 每次交换相邻数据，将最大的数冒泡到最后 C语言实现 Link to heading #include &amp;lt;stdio.h&amp;gt; void bubble(int *arr, int len); int main(){ int arr[] = {11, 3, 5, 18, 20, 34, 54, 23, 7, 6}; int len = (int)sizeof(arr)/sizeof(*arr);//计算数组长度 printf(&amp;#34;len = %d\n&amp;#34;, len); bubble(arr, len); for(int i = 0; i &amp;lt; len; i ++){ printf(&amp;#34;%d%c&amp;#34;, arr[i], &amp;#34; \n&amp;#34;[i == len - 1]); } } void bubble(int *arr, int len){ int temp; for(int i = len; i &amp;gt; 1; i --)//走n-1遍，每次冒泡所得为len - 1 { for(int j = 0; j &amp;lt; i; j ++)//冒泡到i-1（len-1） { if(arr[j] &amp;gt; arr[j + 1]){ temp = arr[j]; arr[j] = arr[j + 1]; arr[j + 1] = temp; } } } } 遇到的问题 Link to heading 计算数组长度 处理内外两循环的终点/次数 选择排序 Link to heading 基本思路 Link to heading 寻找一组数据中最大的数，与最后一个数交换 对剩下的数重复 C语言实现 Link to heading #include &amp;lt;stdio.</description>
+    </item>
+    
+    <item>
+      <title>囚徒困境</title>
+      <link>https://y-m-m.github.io/posts/%E5%8D%9A%E5%BC%88%E8%AE%BA/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://y-m-m.github.io/posts/%E5%8D%9A%E5%BC%88%E8%AE%BA/</guid>
+      <description> 囚徒困境 Link to heading 题目描述 Link to heading 假设有两个小偷A和B联合犯事、私入民宅被警察抓住。警方将两人分别置于不同的两个房间内进行审讯
+如果两个犯罪嫌疑人都坦白了罪行，交出了赃物，于是证据确凿，两人都被判有罪，各被判刑8年
+如果只有一个犯罪嫌疑人坦白，另一个人没有坦白而是抵赖，则以妨碍公务罪（因已有证据表明其有罪）再加刑2年，而坦白者有功被减刑8年，立即释放
+如果两人都抵赖，则警方因证据不足不能判两人的偷窃罪，但可以私入民宅的罪名将两人各判入狱1年。下表给出了这个博弈的支付矩阵
+如果这个审讯重复进行，什么样的策略下获益最大呢
+#include &amp;lt;stdio.h&amp;gt; #define detray 0 #define coo 1 #include &amp;lt;time.h&amp;gt; #include &amp;lt;stdlib.h&amp;gt; int main() { srand(time(0)); int a = rand() % 2; int b = rand() % 2; int gradeA = 0, gradeB = 0; printf(&amp;#34;最开始的时候，a选择%d, b选择%d(0-&amp;gt;detray, 1-&amp;gt;coo)\n&amp;#34;, a, b); for(int i = 0; i &amp;lt; 100; i ++) { if(a) { if(b)//如果a和b都选择合作 { gradeA ++; gradeB ++; } else//如果a选择合作，b选择背叛 { gradeA += 10; } } else { if(b)//如果a选择背叛，b选择合作 { gradeB += 10; } else//如果a和b都选择背叛 { gradeA += 8; gradeB += 8; } } int temp = a; a = b; b = temp; } printf(&amp;#34;gradeA = %d, gradeB = %d\n&amp;#34;, gradeA, gradeB); return 0; } </description>
+    </item>
+    
+    <item>
+      <title>竞赛基础课的笔记</title>
+      <link>https://y-m-m.github.io/posts/%E7%AB%9E%E8%B5%9B%E5%9F%BA%E7%A1%80%E8%AF%BE%E7%9A%84%E7%AC%94%E8%AE%B01/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://y-m-m.github.io/posts/%E7%AB%9E%E8%B5%9B%E5%9F%BA%E7%A1%80%E8%AF%BE%E7%9A%84%E7%AC%94%E8%AE%B01/</guid>
+      <description></description>
     </item>
     
   </channel>

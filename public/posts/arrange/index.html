@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="cn">
+  <head>
+    <title>
+  各种排序算法的整理 · Ymmaldの博客
+</title>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+
+
+
+
+<meta name="author" content="Ymmald">
+<meta name="description" content="还需要完善～">
+<meta name="keywords" content="blog,developer,personal">
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="各种排序算法的整理"/>
+<meta name="twitter:description" content="还需要完善～"/>
+
+<meta property="og:title" content="各种排序算法的整理" />
+<meta property="og:description" content="还需要完善～" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://y-m-m.github.io/posts/arrange/" /><meta property="article:section" content="posts" />
+
+
+
+
+
+
+
+<link rel="canonical" href="https://y-m-m.github.io/posts/arrange/">
+
+
+<link rel="preload" href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as="font" type="font/woff2" crossorigin>
+
+
+  
+  
+  <link rel="stylesheet" href="/css/coder.min.7f9d180e3b3bebba9ba80d55eed1255c35e00764872854736d6ad7db38884ffc.css" integrity="sha256-f50YDjs767qbqA1V7tElXDXgB2SHKFRzbWrX2ziIT/w=" crossorigin="anonymous" media="screen" />
+
+
+
+
+
+
+  
+    
+    
+    <link rel="stylesheet" href="/css/coder-dark.min.216e36d3eaf6f4cdfd67dc1200c49a8169e6478102977b3e9ac51a064c57054c.css" integrity="sha256-IW420&#43;r29M39Z9wSAMSagWnmR4ECl3s&#43;msUaBkxXBUw=" crossorigin="anonymous" media="screen" />
+  
+
+
+
+ 
+
+
+
+
+<link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16">
+
+<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<meta name="generator" content="Hugo 0.105.0">
+
+
+
+
+
+  </head>
+
+
+
+
+
+
+<body class="preload-transitions colorscheme-auto">
+  
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
+  <main class="wrapper">
+    <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="/">
+      Ymmaldの博客
+    </a>
+    
+      <input type="checkbox" id="menu-toggle" />
+      <label class="menu-button float-right" for="menu-toggle">
+        <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
+      </label>
+      <ul class="navigation-list">
+        
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/about/">关于我</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/posts/">博客</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/projects/">项目</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/contact/">联系</a>
+            </li>
+          
+        
+        
+          
+          
+          
+            
+          
+            
+              
+                <li class="navigation-item menu-separator">
+                  <span>|</span>
+                </li>
+                
+              
+              <li class="navigation-item">
+                <a href="https://y-m-m.github.io/en/">🇬🇧</a>
+              </li>
+            
+          
+        
+      </ul>
+    
+  </section>
+</nav>
+
+
+    <div class="content">
+      
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">
+            <a class="title-link" href="https://y-m-m.github.io/posts/arrange/">
+              各种排序算法的整理
+            </a>
+          </h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+              <time datetime="0001-01-01T00:00:00Z">
+                January 1, 0001
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fa fa-clock-o" aria-hidden="true"></i>
+              
+            </span>
+          </div>
+          
+          
+          
+        </div>
+      </header>
+
+      <div>
+        
+        <h1 id="排序整理">
+  排序整理
+  <a class="heading-link" href="#%e6%8e%92%e5%ba%8f%e6%95%b4%e7%90%86">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h1>
+<h2 id="冒泡排序">
+  冒泡排序
+  <a class="heading-link" href="#%e5%86%92%e6%b3%a1%e6%8e%92%e5%ba%8f">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<h3 id="基本思路">
+  基本思路
+  <a class="heading-link" href="#%e5%9f%ba%e6%9c%ac%e6%80%9d%e8%b7%af">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>n-1趟将n个数据排序</li>
+<li>每次交换相邻数据，将最大的数冒泡到最后</li>
+</ul>
+<h3 id="c语言实现">
+  C语言实现
+  <a class="heading-link" href="#c%e8%af%ad%e8%a8%80%e5%ae%9e%e7%8e%b0">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="">#include</span> <span style="">&lt;stdio.h&gt;</span><span style="">
+</span></span></span><span style="display:flex;"><span><span style=""></span><span style="">void</span> bubble(<span style="">int</span> *arr, <span style="">int</span> len);
+</span></span><span style="display:flex;"><span><span style="">int</span> main(){
+</span></span><span style="display:flex;"><span>    <span style="">int</span> arr[] = {11, 3, 5, 18, 20, 34, 54, 23, 7, 6};
+</span></span><span style="display:flex;"><span>    <span style="">int</span> len = (<span style="">int</span>)<span style="font-weight:bold">sizeof</span>(arr)/<span style="font-weight:bold">sizeof</span>(*arr);<span style="font-style:italic">//计算数组长度
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>    printf(<span style="font-style:italic">&#34;len = %d</span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>, len);
+</span></span><span style="display:flex;"><span>    bubble(arr, len);
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">for</span>(<span style="">int</span> i = 0; i &lt; len; i ++){
+</span></span><span style="display:flex;"><span>        printf(<span style="font-style:italic">&#34;%d%c&#34;</span>, arr[i], <span style="font-style:italic">&#34; </span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>[i == len - 1]);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="">void</span> bubble(<span style="">int</span> *arr, <span style="">int</span> len){
+</span></span><span style="display:flex;"><span>    <span style="">int</span> temp;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">for</span>(<span style="">int</span> i = len; i &gt; 1; i --)<span style="font-style:italic">//走n-1遍，每次冒泡所得为len - 1
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>    {
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">for</span>(<span style="">int</span> j = 0; j &lt; i; j ++)<span style="font-style:italic">//冒泡到i-1（len-1）
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>        {
+</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">if</span>(arr[j] &gt; arr[j + 1]){
+</span></span><span style="display:flex;"><span>                temp = arr[j];
+</span></span><span style="display:flex;"><span>                arr[j] = arr[j + 1];
+</span></span><span style="display:flex;"><span>                arr[j + 1] = temp;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="遇到的问题">
+  遇到的问题
+  <a class="heading-link" href="#%e9%81%87%e5%88%b0%e7%9a%84%e9%97%ae%e9%a2%98">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>计算数组长度</li>
+<li>处理内外两循环的终点/次数</li>
+</ul>
+<h2 id="选择排序">
+  选择排序
+  <a class="heading-link" href="#%e9%80%89%e6%8b%a9%e6%8e%92%e5%ba%8f">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<h3 id="基本思路-1">
+  基本思路
+  <a class="heading-link" href="#%e5%9f%ba%e6%9c%ac%e6%80%9d%e8%b7%af-1">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>寻找一组数据中最大的数，与最后一个数交换</li>
+<li>对剩下的数重复</li>
+</ul>
+<h3 id="c语言实现-1">
+  C语言实现
+  <a class="heading-link" href="#c%e8%af%ad%e8%a8%80%e5%ae%9e%e7%8e%b0-1">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="">#include</span> <span style="">&lt;stdio.h&gt;</span><span style="">
+</span></span></span><span style="display:flex;"><span><span style=""></span><span style="">void</span> swap(<span style="">int</span> *a, <span style="">int</span> *b);
+</span></span><span style="display:flex;"><span><span style="">void</span> option(<span style="">int</span> arr[], <span style="">int</span> len);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="">int</span> main(){
+</span></span><span style="display:flex;"><span>    <span style="">int</span> arr[] = {1, 4, 2, 78, 34, 45, 98, 23, 89, 23, 45, 54, 34};
+</span></span><span style="display:flex;"><span>    <span style="">int</span> len = (<span style="">int</span>)<span style="font-weight:bold">sizeof</span>(arr) / <span style="font-weight:bold">sizeof</span>(*arr);
+</span></span><span style="display:flex;"><span>    option(arr, len);
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">for</span>(<span style="">int</span> i = 0; i &lt; len; i ++){
+</span></span><span style="display:flex;"><span>        printf(<span style="font-style:italic">&#34;%d%c&#34;</span>, arr[i], <span style="font-style:italic">&#34; </span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>[i == len - 1]);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">return</span> 0;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="">void</span> swap(<span style="">int</span> *a, <span style="">int</span> *b){
+</span></span><span style="display:flex;"><span>    <span style="">int</span> temp = *a;
+</span></span><span style="display:flex;"><span>    *a = *b;
+</span></span><span style="display:flex;"><span>    *b = temp;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="">void</span> option(<span style="">int</span> arr[], <span style="">int</span> len)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="">int</span> max = 0;;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">for</span>(<span style="">int</span> i = len - 1; i &gt; 0; i --)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">for</span>(<span style="">int</span> j = 1; j &lt;= i; j ++)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">if</span>(arr[j] &gt; arr[max])
+</span></span><span style="display:flex;"><span>                max = j;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        swap(&amp;arr[max], &amp;arr[i]);
+</span></span><span style="display:flex;"><span>        max = 0;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="快排">
+  快排
+  <a class="heading-link" href="#%e5%bf%ab%e6%8e%92">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<h3 id="基本思路-2">
+  基本思路
+  <a class="heading-link" href="#%e5%9f%ba%e6%9c%ac%e6%80%9d%e8%b7%af-2">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>找到一个标准，将比它小的数放到左边，比它大的数放到右边</li>
+<li>在新区域中继续划定区域，直至区域长度缩小为2</li>
+</ul>
+<h3 id="算法实现">
+  算法实现
+  <a class="heading-link" href="#%e7%ae%97%e6%b3%95%e5%ae%9e%e7%8e%b0">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="">#include</span> <span style="">&lt;stdio.h&gt;</span><span style="">
+</span></span></span><span style="display:flex;"><span><span style="">#include</span> <span style="">&lt;stdlib.h&gt;</span><span style="">
+</span></span></span><span style="display:flex;"><span><span style=""></span><span style="font-weight:bold">typedef</span> <span style="font-weight:bold">struct</span> range{
+</span></span><span style="display:flex;"><span>    <span style="">int</span> start, end;
+</span></span><span style="display:flex;"><span>}Range;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="">void</span> exchange(<span style="">int</span> *m, <span style="">int</span> *n)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="">int</span> temp = *n;
+</span></span><span style="display:flex;"><span>    *n = *m;
+</span></span><span style="display:flex;"><span>    *m = temp;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Range give(<span style="">int</span> start, <span style="">int</span> end)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    Range range;
+</span></span><span style="display:flex;"><span>    range.start = start;
+</span></span><span style="display:flex;"><span>    range.end = end;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">return</span> range;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="">void</span> quick(<span style="">int</span> *arr, <span style="">int</span> len);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="">int</span> main()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="">int</span> arr[] = {1, 34, 65, 45, 39, 23, 44, 5, 6, 245, 56, 34, 26, 90};
+</span></span><span style="display:flex;"><span>    <span style="">int</span> len = (<span style="">int</span>)<span style="font-weight:bold">sizeof</span>(arr) / <span style="font-weight:bold">sizeof</span>(*arr);
+</span></span><span style="display:flex;"><span>    printf(<span style="font-style:italic">&#34;len = %d</span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>, len);
+</span></span><span style="display:flex;"><span>    quick(arr, len);
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">for</span>(<span style="">int</span> i = 0; i &lt; len; i ++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        printf(<span style="font-style:italic">&#34;%d%c&#34;</span>, arr[i], <span style="font-style:italic">&#34; </span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>[i == len - 1]);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">return</span> 0;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="">void</span> quick(<span style="">int</span> *arr, <span style="">int</span> len)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">if</span>(len &lt; 0)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">return</span> ;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    Range r[len];
+</span></span><span style="display:flex;"><span>    <span style="">int</span> p = 0;
+</span></span><span style="display:flex;"><span>    r[p ++] = give(0, len - 1);
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">while</span>(p)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        printf(<span style="font-style:italic">&#34;p = %d</span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>, p);
+</span></span><span style="display:flex;"><span>        Range region = r[--p];
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">if</span>(region.start &gt; region.end)
+</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">continue</span>;
+</span></span><span style="display:flex;"><span>        <span style="">int</span> mid = arr[(region.start + region.end) / 2];
+</span></span><span style="display:flex;"><span>        printf(<span style="font-style:italic">&#34;mid = %d</span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>, mid);
+</span></span><span style="display:flex;"><span>        <span style="">int</span> left = region.start, right = region.end;
+</span></span><span style="display:flex;"><span>        printf(<span style="font-style:italic">&#34;left = %d, right = %d</span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>, left, right);
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">do</span>
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">while</span>(arr[left] &lt; mid)
+</span></span><span style="display:flex;"><span>                left ++;
+</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">while</span>(arr[right] &gt; mid)
+</span></span><span style="display:flex;"><span>                right --;
+</span></span><span style="display:flex;"><span>            printf(<span style="font-style:italic">&#34;left = %d, right = %d</span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>, left, right);
+</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">if</span>(left &lt;= right)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                exchange(&amp;arr[left], &amp;arr[right]);
+</span></span><span style="display:flex;"><span>                left ++;
+</span></span><span style="display:flex;"><span>                right --;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">for</span>(<span style="">int</span> i = 0; i &lt; len; i ++)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                printf(<span style="font-style:italic">&#34;%d%c&#34;</span>, arr[i], <span style="font-style:italic">&#34; </span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>[i == len - 1]);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        } <span style="font-weight:bold">while</span> (left &lt;= right);
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">if</span>(left &lt; region.end)
+</span></span><span style="display:flex;"><span>            r[p++] = give(left, region.end);
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">if</span>(right &gt; region.start)
+</span></span><span style="display:flex;"><span>            r[p++] = give(region.start, right);
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">for</span>(<span style="">int</span> i = 0; i &lt; len; i ++)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            printf(<span style="font-style:italic">&#34;%d%c&#34;</span>, arr[i], <span style="font-style:italic">&#34; </span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>[i == len - 1]);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    } 
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="遇到的问题-1">
+  遇到的问题
+  <a class="heading-link" href="#%e9%81%87%e5%88%b0%e7%9a%84%e9%97%ae%e9%a2%98-1">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>用p控制循环是否结束，只有当p=0，而且p没有自加1的时候才会结束</li>
+</ul>
+<h2 id="计数排序">
+  计数排序
+  <a class="heading-link" href="#%e8%ae%a1%e6%95%b0%e6%8e%92%e5%ba%8f">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<h3 id="基本思路-3">
+  基本思路
+  <a class="heading-link" href="#%e5%9f%ba%e6%9c%ac%e6%80%9d%e8%b7%af-3">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>给定排序的数在一定范围内</li>
+<li>从小到大统计每个数的数目</li>
+<li>将数按顺序记录到另一个数组中，完成排序</li>
+</ul>
+<h3 id="c语言实现-2">
+  c语言实现
+  <a class="heading-link" href="#c%e8%af%ad%e8%a8%80%e5%ae%9e%e7%8e%b0-2">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="">#include</span> <span style="">&lt;stdio.h&gt;</span><span style="">
+</span></span></span><span style="display:flex;"><span><span style="">#include</span> <span style="">&lt;stdlib.h&gt;</span><span style="">
+</span></span></span><span style="display:flex;"><span><span style="">#include</span> <span style="">&lt;time.h&gt;</span><span style="">
+</span></span></span><span style="display:flex;"><span><span style=""></span><span style="">void</span> arrange(<span style="">int</span> *arr, <span style="">int</span> *sort, <span style="">int</span> n);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="">int</span> main()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="">int</span> n = 10;
+</span></span><span style="display:flex;"><span>    srand(time(0));
+</span></span><span style="display:flex;"><span>    <span style="">int</span> *arr = (<span style="">int</span> *) malloc(<span style="font-weight:bold">sizeof</span>(<span style="">int</span>) * n);
+</span></span><span style="display:flex;"><span>    <span style="">int</span> *sort = (<span style="">int</span> *) malloc(<span style="font-weight:bold">sizeof</span>(<span style="">int</span>) * n);
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">for</span>(<span style="">int</span> i = 0; i &lt; n; i ++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        arr[i] = rand() % 100;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    arrange(arr, sort, n);
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">for</span>(<span style="">int</span> i = 0; i &lt; n; i ++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        printf(<span style="font-style:italic">&#34;%d%c&#34;</span>, sort[i], <span style="font-style:italic">&#34; </span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>[i == n - 1]);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    free(arr);
+</span></span><span style="display:flex;"><span>    free(sort);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="">void</span> arrange(<span style="">int</span> *arr, <span style="">int</span> *sort, <span style="">int</span> n)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="">int</span> *count = (<span style="">int</span> *)malloc(<span style="font-weight:bold">sizeof</span>(<span style="">int</span>) * 100);<span style="font-style:italic">//需要被排列的数的范围是100以内
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>    <span style="font-weight:bold">for</span>(<span style="">int</span> i = 0; i &lt; 100; i ++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        count[i] = 0;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">for</span>(<span style="">int</span> i = 0; i &lt; 10; i ++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        count[arr[i]] ++;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">for</span>(<span style="">int</span> i = 0; i &lt; 10;)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">for</span>(<span style="">int</span> j = 0; j &lt; 100; j ++)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">while</span>(count[j] &gt; 0)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                sort[i] = j;
+</span></span><span style="display:flex;"><span>                count[j] --;
+</span></span><span style="display:flex;"><span>                i ++;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    free(count);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="桶排序">
+  桶排序
+  <a class="heading-link" href="#%e6%a1%b6%e6%8e%92%e5%ba%8f">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<h3 id="基本思路-4">
+  基本思路
+  <a class="heading-link" href="#%e5%9f%ba%e6%9c%ac%e6%80%9d%e8%b7%af-4">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>就是计数排序嘛……</li>
+</ul>
+<h3 id="c语言实现-3">
+  c语言实现
+  <a class="heading-link" href="#c%e8%af%ad%e8%a8%80%e5%ae%9e%e7%8e%b0-3">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="">#include</span> <span style="">&lt;stdio.h&gt;</span><span style="">
+</span></span></span><span style="display:flex;"><span><span style="">#include</span> <span style="">&lt;stdlib.h&gt;</span><span style="">
+</span></span></span><span style="display:flex;"><span><span style=""></span><span style="">void</span> arrange(<span style="">int</span> *arr, <span style="">int</span> *sort, <span style="">int</span> len);
+</span></span><span style="display:flex;"><span><span style="">int</span> main()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="">int</span> arr[] = {1, 8, 23, 44, 29, 23, 94, 38, 22, 33, 44};
+</span></span><span style="display:flex;"><span>    <span style="">int</span> len = <span style="font-weight:bold">sizeof</span>(arr) / <span style="font-weight:bold">sizeof</span>(<span style="">int</span>);
+</span></span><span style="display:flex;"><span>    <span style="font-style:italic">//printf(&#34;len = %d\n&#34;, len);
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>    <span style="">int</span> *sort = (<span style="">int</span> *)malloc(<span style="font-weight:bold">sizeof</span>(<span style="">int</span>) * len);
+</span></span><span style="display:flex;"><span>    arrange(arr, sort, len);
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">for</span>(<span style="">int</span> i = 0; i &lt; len; i ++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        printf(<span style="font-style:italic">&#34;%d%c&#34;</span>, sort[i], <span style="font-style:italic">&#34; </span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>[i == len - 1]);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    free(sort);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="">void</span> arrange(<span style="">int</span> *arr, <span style="">int</span> *sort, <span style="">int</span> len)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="">int</span> max = arr[0];
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">for</span>(<span style="">int</span> i = 1; i &lt; len; i ++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">if</span>(arr[i] &gt; max)
+</span></span><span style="display:flex;"><span>            max = arr[i];
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="">int</span> *count = (<span style="">int</span> *) malloc(<span style="font-weight:bold">sizeof</span>(<span style="">int</span>) * (max + 1));
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">for</span>(<span style="">int</span> i = 0; i &lt;= max; i ++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        count[i] = 0;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">for</span>(<span style="">int</span> i = 0; i &lt; len; i ++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        count[arr[i]] ++;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">for</span>(<span style="">int</span> i = 0; i &lt; len; )
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">for</span>(<span style="">int</span> j = 0; j &lt;= max; j ++)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">while</span>(count[j] &gt; 0)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                sort[i] = j;
+</span></span><span style="display:flex;"><span>                i ++;
+</span></span><span style="display:flex;"><span>                count[j] --;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    free(count);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="出现的问题">
+  出现的问题
+  <a class="heading-link" href="#%e5%87%ba%e7%8e%b0%e7%9a%84%e9%97%ae%e9%a2%98">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>申请的桶应该比最大的数多一个，循环也应该循环到等于最大的数的时候</li>
+</ul>
+<h2 id="堆排序">
+  堆排序
+  <a class="heading-link" href="#%e5%a0%86%e6%8e%92%e5%ba%8f">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<h3 id="基本思路-5">
+  基本思路
+  <a class="heading-link" href="#%e5%9f%ba%e6%9c%ac%e6%80%9d%e8%b7%af-5">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>两个一组，与前面的数比较，将比较大的数放到前面</li>
+<li>将第一个最大的数移到最后</li>
+<li>将第一个数和最后一个数交换</li>
+<li>缩小范围，重复操作</li>
+</ul>
+<h3 id="c语言实现-4">
+  c语言实现
+  <a class="heading-link" href="#c%e8%af%ad%e8%a8%80%e5%ae%9e%e7%8e%b0-4">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="">#include</span> <span style="">&lt;stdio.h&gt;</span><span style="">
+</span></span></span><span style="display:flex;"><span><span style="">#include</span> <span style="">&lt;stdlib.h&gt;</span><span style="">
+</span></span></span><span style="display:flex;"><span><span style=""></span><span style="">void</span> swap(<span style="">int</span> *x, <span style="">int</span> *y)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="">int</span> temp = *y;
+</span></span><span style="display:flex;"><span>    *y = *x;
+</span></span><span style="display:flex;"><span>    *x = temp;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="">void</span> arrange(<span style="">int</span> *arr, <span style="">int</span> len);
+</span></span><span style="display:flex;"><span><span style="">void</span> lit(<span style="">int</span> *arr, <span style="">int</span> start, <span style="">int</span> end);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="">int</span> main()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="">int</span> arr[] = {1, 5, 2, 3, 35, 32, 55, 66, 45, 98, 34, 45, 55, 66, 77, 34, 38, 92};
+</span></span><span style="display:flex;"><span>    <span style="">int</span> len = (<span style="">int</span>)<span style="font-weight:bold">sizeof</span>(arr) / <span style="font-weight:bold">sizeof</span>(*arr);
+</span></span><span style="display:flex;"><span>    arrange(arr, len);
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">for</span>(<span style="">int</span> i = 0; i &lt; len; i ++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        printf(<span style="font-style:italic">&#34;%d%c&#34;</span>, arr[i], <span style="font-style:italic">&#34; </span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>[i == len - 1]);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">return</span> 0;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="">void</span> arrange(<span style="">int</span> *arr, <span style="">int</span> len)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">for</span>(<span style="">int</span> i = len/2 - 1; i &gt;= 0; i --)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        lit(arr, i, len - 1);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">for</span>(<span style="">int</span> j = len - 1; j &gt; 0; j --)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        swap(&amp;arr[0], &amp;arr[j]);
+</span></span><span style="display:flex;"><span>        lit(arr, 0, j - 1);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="">void</span> lit(<span style="">int</span> *arr, <span style="">int</span> start, <span style="">int</span> end)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="">int</span> dad = start;
+</span></span><span style="display:flex;"><span>    <span style="">int</span> son = dad * 2 + 1;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">while</span>(son &lt;= end)
+</span></span><span style="display:flex;"><span>    {   <span style="font-weight:bold">if</span>(son + 1 &lt;= end &amp;&amp; arr[son] &lt; arr[son + 1])
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            son ++;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">if</span>(arr[dad] &gt; arr[son])
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            swap(&amp;arr[son], &amp;arr[dad]);
+</span></span><span style="display:flex;"><span>            dad = son;
+</span></span><span style="display:flex;"><span>            son = dad * 2 + 1;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="遇到的问题-2">
+  遇到的问题
+  <a class="heading-link" href="#%e9%81%87%e5%88%b0%e7%9a%84%e9%97%ae%e9%a2%98-2">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>当son &gt; end的时候应该停止，否则会打乱后面已经排好的顺序</li>
+</ul>
+<h2 id="插入排序">
+  插入排序
+  <a class="heading-link" href="#%e6%8f%92%e5%85%a5%e6%8e%92%e5%ba%8f">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<h3 id="基本思路-6">
+  基本思路
+  <a class="heading-link" href="#%e5%9f%ba%e6%9c%ac%e6%80%9d%e8%b7%af-6">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>第一个元素视为有序</li>
+<li>从第二个元素开始，直到最后一个元素，将每个元素插入前面的有序序列中</li>
+</ul>
+<h3 id="c语言实现-5">
+  c语言实现
+  <a class="heading-link" href="#c%e8%af%ad%e8%a8%80%e5%ae%9e%e7%8e%b0-5">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="">#include</span> <span style="">&lt;stdio.h&gt;</span><span style="">
+</span></span></span><span style="display:flex;"><span><span style=""></span><span style="">void</span> insert(<span style="">int</span> *arr, <span style="">int</span> len);
+</span></span><span style="display:flex;"><span><span style="">int</span> main(){
+</span></span><span style="display:flex;"><span>   <span style="">int</span> arr[] = {1, 34, 56, 32, 21, 12, 3, 7, 9, 5, 34, 77, 18, 25};
+</span></span><span style="display:flex;"><span>   <span style="">int</span> len = (<span style="">int</span>)<span style="font-weight:bold">sizeof</span>(arr) / <span style="font-weight:bold">sizeof</span>(*arr);
+</span></span><span style="display:flex;"><span>   insert(arr, len);
+</span></span><span style="display:flex;"><span>   <span style="font-weight:bold">for</span>(<span style="">int</span> i = 0; i &lt; len; i ++){
+</span></span><span style="display:flex;"><span>       printf(<span style="font-style:italic">&#34;%d%c&#34;</span>, arr[i], <span style="font-style:italic">&#34; </span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>[i == len - 1]);
+</span></span><span style="display:flex;"><span>   }
+</span></span><span style="display:flex;"><span>   <span style="font-weight:bold">return</span> 0;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="">void</span> insert(<span style="">int</span> *arr, <span style="">int</span> len){
+</span></span><span style="display:flex;"><span>   <span style="">int</span> num;
+</span></span><span style="display:flex;"><span>   <span style="font-weight:bold">for</span>(<span style="">int</span> i = 1; i &lt; len; i ++)
+</span></span><span style="display:flex;"><span>   {
+</span></span><span style="display:flex;"><span>       num = arr[i];
+</span></span><span style="display:flex;"><span>       <span style="">int</span> j;
+</span></span><span style="display:flex;"><span>       <span style="font-weight:bold">for</span>(j = i - 1; j &gt;= 0; j --)
+</span></span><span style="display:flex;"><span>       {
+</span></span><span style="display:flex;"><span>           <span style="font-weight:bold">if</span>(arr[j] &lt; num){
+</span></span><span style="display:flex;"><span>               arr[j + 1] = num;
+</span></span><span style="display:flex;"><span>               <span style="font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>           }
+</span></span><span style="display:flex;"><span>           <span style="font-weight:bold">else</span>{
+</span></span><span style="display:flex;"><span>               arr[j + 1] = arr[j];
+</span></span><span style="display:flex;"><span>           }
+</span></span><span style="display:flex;"><span>       }
+</span></span><span style="display:flex;"><span>       <span style="font-weight:bold">if</span>(j &lt; 0)
+</span></span><span style="display:flex;"><span>       {
+</span></span><span style="display:flex;"><span>           arr[0] = num;
+</span></span><span style="display:flex;"><span>       }
+</span></span><span style="display:flex;"><span>   }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="遇到的问题-3">
+  遇到的问题
+  <a class="heading-link" href="#%e9%81%87%e5%88%b0%e7%9a%84%e9%97%ae%e9%a2%98-3">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>本来应该在遇到小于arr[i]的数的时候插入，但可能arr[i]就是最小的数，这时候要判断一下，把arr[i]放到arr[0]的位置</li>
+</ul>
+<h2 id="希尔排序">
+  希尔排序
+  <a class="heading-link" href="#%e5%b8%8c%e5%b0%94%e6%8e%92%e5%ba%8f">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<h3 id="基本思路-7">
+  基本思路
+  <a class="heading-link" href="#%e5%9f%ba%e6%9c%ac%e6%80%9d%e8%b7%af-7">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>将数据划分区块，分别进行插入排序</li>
+</ul>
+<h3 id="c语言实现-6">
+  c语言实现
+  <a class="heading-link" href="#c%e8%af%ad%e8%a8%80%e5%ae%9e%e7%8e%b0-6">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="">#include</span> <span style="">&lt;stdio.h&gt;</span><span style="">
+</span></span></span><span style="display:flex;"><span><span style=""></span><span style="">void</span> range(<span style="">int</span> *arr, <span style="">int</span> len);
+</span></span><span style="display:flex;"><span><span style="">int</span> main()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="">int</span> arr[] = {1, 4, 2, 9, 15, 98, 34, 56, 34, 55, 66, 64, 90, 43, 25, 44};
+</span></span><span style="display:flex;"><span>    <span style="">int</span> len = (<span style="">int</span>)<span style="font-weight:bold">sizeof</span>(arr) / <span style="font-weight:bold">sizeof</span>(*arr);
+</span></span><span style="display:flex;"><span>    <span style="font-style:italic">//printf(&#34;len = %d\n&#34;, len);
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>    range(arr, len);
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">for</span>(<span style="">int</span> i = 0; i &lt; len; i ++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        printf(<span style="font-style:italic">&#34;%d%c&#34;</span>, arr[i], <span style="font-style:italic">&#34; </span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>[i == len - 1]);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="">void</span> range(<span style="">int</span> *arr, <span style="">int</span> len)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="">int</span> gap, i, j;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">for</span>(gap = len &gt;&gt; 1; gap &gt; 0; gap &gt;&gt;= 1)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">for</span>(<span style="">int</span> t = 0; t &lt; len; t ++){
+</span></span><span style="display:flex;"><span>            printf(<span style="font-style:italic">&#34;%d%c&#34;</span>, arr[t], <span style="font-style:italic">&#34; </span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>[t == len - 1]);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">for</span>(i = gap; i &lt; len; i ++)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="">int</span> temp = arr[i];
+</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">for</span>(j = i - gap; arr[j] &gt; temp &amp;&amp; j &gt;= 0; j -= gap)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                arr[j + gap] = arr[j]; 
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            arr[j + gap] = temp;<span style="font-style:italic">//如果要插入的数最小，退出循环时，j&lt;0，j+gap为第一个数；如果插入的数不是最小，退出循环时，j对应的数应在插入的数前面
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="遇到的问题-4">
+  遇到的问题
+  <a class="heading-link" href="#%e9%81%87%e5%88%b0%e7%9a%84%e9%97%ae%e9%a2%98-4">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>解决需要插入的数最小的问题</li>
+<li>在最内层循环中 arr[i]的值不断变化，需要在进内层循环之时，将arr[i]记录为temp</li>
+</ul>
+<h2 id="归并排序">
+  归并排序
+  <a class="heading-link" href="#%e5%bd%92%e5%b9%b6%e6%8e%92%e5%ba%8f">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<h3 id="基本思路-8">
+  基本思路
+  <a class="heading-link" href="#%e5%9f%ba%e6%9c%ac%e6%80%9d%e8%b7%af-8">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>借助另一个数组，逐层进行选择排序</li>
+</ul>
+<h3 id="c语言实现-7">
+  c语言实现
+  <a class="heading-link" href="#c%e8%af%ad%e8%a8%80%e5%ae%9e%e7%8e%b0-7">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<h4 id="迭代">
+  迭代
+  <a class="heading-link" href="#%e8%bf%ad%e4%bb%a3">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="">#include</span> <span style="">&lt;stdio.h&gt;</span><span style="">
+</span></span></span><span style="display:flex;"><span><span style="">#include</span> <span style="">&lt;stdlib.h&gt;</span><span style="">
+</span></span></span><span style="display:flex;"><span><span style=""></span><span style="">void</span> arrange(<span style="">int</span> *arr, <span style="">int</span> len);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="">int</span> main()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="">int</span> arr[] = {1, 34, 23, 78, 34, 44, 32, 87, 95, 47, 34, 23, 38, 40, 24};
+</span></span><span style="display:flex;"><span>    <span style="">int</span> len = (<span style="">int</span>)<span style="font-weight:bold">sizeof</span>(arr) / <span style="font-weight:bold">sizeof</span>(*arr);
+</span></span><span style="display:flex;"><span>    printf(<span style="font-style:italic">&#34;len = %d</span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>, len);
+</span></span><span style="display:flex;"><span>    arrange(arr, len);
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">for</span>(<span style="">int</span> i = 0; i &lt; len; i ++){
+</span></span><span style="display:flex;"><span>        printf(<span style="font-style:italic">&#34;%d%c&#34;</span>, arr[i], <span style="font-style:italic">&#34; </span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>[i == len - 1]);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="">void</span> arrange(<span style="">int</span> *arr, <span style="">int</span> len)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="">int</span> *copy = malloc(len * <span style="font-weight:bold">sizeof</span>(<span style="">int</span>));<span style="font-style:italic">//malloc的用法
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>    <span style="font-weight:bold">for</span>(<span style="">int</span> seg = 1; seg &lt;= len/2; seg &lt;&lt;= 1)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        printf(<span style="font-style:italic">&#34;seg = %d</span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>, seg);
+</span></span><span style="display:flex;"><span>        <span style="">int</span> place = 0;
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">for</span>(<span style="">int</span> first = 0; first &lt; len; first += seg * 2)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="">int</span> i = 0, j = 0;
+</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">while</span>((i &lt; seg &amp;&amp; i + first &lt; len) || (j &lt; seg &amp;&amp; first + j + seg &lt; len))
+</span></span><span style="display:flex;"><span>            {    
+</span></span><span style="display:flex;"><span>                printf(<span style="font-style:italic">&#34;i = %d, j = %d</span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>, i, j);
+</span></span><span style="display:flex;"><span>                <span style="font-weight:bold">if</span>(i == seg)
+</span></span><span style="display:flex;"><span>                {
+</span></span><span style="display:flex;"><span>                    <span style="font-weight:bold">while</span>(j &lt;= seg - 1 &amp;&amp; j + first  + seg &lt; len)
+</span></span><span style="display:flex;"><span>                    {
+</span></span><span style="display:flex;"><span>                        copy[place] = arr[first + seg + j];
+</span></span><span style="display:flex;"><span>                        j ++;
+</span></span><span style="display:flex;"><span>                        place ++;
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="font-weight:bold">else</span> <span style="font-weight:bold">if</span>(j == seg)
+</span></span><span style="display:flex;"><span>                {
+</span></span><span style="display:flex;"><span>                    <span style="font-weight:bold">while</span>(i &lt;= seg - 1)
+</span></span><span style="display:flex;"><span>                    {
+</span></span><span style="display:flex;"><span>                        copy[place] = arr[first + i];
+</span></span><span style="display:flex;"><span>                        i ++;
+</span></span><span style="display:flex;"><span>                        place ++;
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>                {   
+</span></span><span style="display:flex;"><span>                    <span style="font-weight:bold">if</span>(arr[first + i] &lt; arr[first + seg + j])
+</span></span><span style="display:flex;"><span>                    {
+</span></span><span style="display:flex;"><span>                        printf(<span style="font-style:italic">&#34;arr[first + i] = %d</span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>, arr[first+i]);
+</span></span><span style="display:flex;"><span>                        copy[place] = arr[first + i];
+</span></span><span style="display:flex;"><span>                        i ++;
+</span></span><span style="display:flex;"><span>                        place ++;
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>                    <span style="font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>                    {
+</span></span><span style="display:flex;"><span>                        printf(<span style="font-style:italic">&#34;arr[first + seg + j] = %d</span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>, arr[first + seg + j]);
+</span></span><span style="display:flex;"><span>                        copy[place] = arr[first + seg + j];
+</span></span><span style="display:flex;"><span>                        j ++;
+</span></span><span style="display:flex;"><span>                        place ++;
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">for</span>(<span style="">int</span> i = 0; i &lt; len; i ++)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            arr[i] = copy[i];
+</span></span><span style="display:flex;"><span>            printf(<span style="font-style:italic">&#34;%d%c&#34;</span>, arr[i], <span style="font-style:italic">&#34; </span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>[i == len - 1]);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="遇到的问题-5">
+  遇到的问题
+  <a class="heading-link" href="#%e9%81%87%e5%88%b0%e7%9a%84%e9%97%ae%e9%a2%98-5">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+
+      </div>
+
+
+      <footer>
+        
+
+
+        
+        
+        
+      </footer>
+    </article>
+
+    
+  </section>
+
+    </div>
+
+    <footer class="footer">
+  <section class="container">
+    ©
+    
+      2022 -
+    
+    2023
+     Ymmald 
+    ·
+    
+     <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+    
+  </section>
+</footer>
+
+  </main>
+
+  
+
+  
+  
+  <script src="/js/coder.min.27afce394fb6284f521b3fbc9f6a8326342333c3092267f3944d770489876fed.js" integrity="sha256-J6/OOU&#43;2KE9SGz&#43;8n2qDJjQjM8MJImfzlE13BImHb&#43;0="></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</body>
+
+</html>

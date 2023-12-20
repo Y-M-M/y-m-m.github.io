@@ -1,6 +1,6 @@
 +++
 author = "Ymmald"
-title = "各种内部排序算法-洛谷"
+title = "内部排序"
 date = "2023-12-20"
 description = "实践数据结构学的排序算法"
 

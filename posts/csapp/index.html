@@ -3,7 +3,7 @@
 
 <head>
   <title>
-   · Ymmaldの博客
+  csapp · Ymmaldの博客
 </title>
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,15 +13,15 @@
 
 
 <meta name="author" content="Ymmald">
-<meta name="description" content="Ymmald&#39;s personal website">
+<meta name="description" content="计算机系统基础课的期末复习">
 <meta name="keywords" content="blog,developer,personal">
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content=""/>
-<meta name="twitter:description" content=""/>
+<meta name="twitter:title" content="csapp"/>
+<meta name="twitter:description" content="计算机系统基础课的期末复习"/>
 
-<meta property="og:title" content="" />
-<meta property="og:description" content="" />
+<meta property="og:title" content="csapp" />
+<meta property="og:description" content="计算机系统基础课的期末复习" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://y-m-m.github.io/posts/csapp/" /><meta property="article:section" content="posts" />
 
@@ -157,7 +157,7 @@
         <div class="post-title">
           <h1 class="title">
             <a class="title-link" href="https://y-m-m.github.io/posts/csapp/">
-              
+              csapp
             </a>
           </h1>
         </div>
@@ -182,7 +182,1382 @@
 
       <div class="post-content">
         
-        
+        <h1 id="csapp">
+  csapp
+  <a class="heading-link" href="#csapp">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h1>
+<h2 id="计算机系统漫游">
+  计算机系统漫游
+  <a class="heading-link" href="#%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%b3%bb%e7%bb%9f%e6%bc%ab%e6%b8%b8">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<h3 id="文件的分类">
+  文件的分类
+  <a class="heading-link" href="#%e6%96%87%e4%bb%b6%e7%9a%84%e5%88%86%e7%b1%bb">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>像hello.c这样只由ASCII字符构成的文件称文本文件</li>
+<li>所有其他文件都成为二进制文件</li>
+<li>系统中的所有信息都是由一串比特表示的，区分不同数据对象的唯一方法是我们读到这些数据对象时的上下文</li>
+<li><strong>文件就是字节序列，每个I/O设备都可以看成文件</strong></li>
+</ul>
+<h3 id="从源文件到目标文件的转化">
+  从源文件到目标文件的转化
+  <a class="heading-link" href="#%e4%bb%8e%e6%ba%90%e6%96%87%e4%bb%b6%e5%88%b0%e7%9b%ae%e6%a0%87%e6%96%87%e4%bb%b6%e7%9a%84%e8%bd%ac%e5%8c%96">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>hello.c&ndash;(预处理)&ndash;&gt;hello.i&ndash;(编译器)&ndash;&gt;hello.s&ndash;(汇编器)&ndash;&gt;hello.o&ndash;(链接器)&ndash;&gt;hello</li>
+</ul>
+<h3 id="系统的硬件组成">
+  系统的硬件组成
+  <a class="heading-link" href="#%e7%b3%bb%e7%bb%9f%e7%9a%84%e7%a1%ac%e4%bb%b6%e7%bb%84%e6%88%90">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>总线：传送字</li>
+<li>I/O设备：键盘、鼠标、显示器、磁盘</li>
+<li>主存：临时存储设备，由一组动态随机存取存储器（DRAM）芯片组成</li>
+<li>处理器：CPU，核心为PC（任何时候，PC都指向主存中的某条机器语言指令的地址）</li>
+</ul>
+<h2 id="信息的表示和处理">
+  信息的表示和处理
+  <a class="heading-link" href="#%e4%bf%a1%e6%81%af%e7%9a%84%e8%a1%a8%e7%a4%ba%e5%92%8c%e5%a4%84%e7%90%86">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<h3 id="字数据的大小">
+  字数据的大小
+  <a class="heading-link" href="#%e5%ad%97%e6%95%b0%e6%8d%ae%e7%9a%84%e5%a4%a7%e5%b0%8f">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>对于一个字长为w的机器而言，虚拟地址的范围是0~2<!-- raw HTML omitted -->w<!-- raw HTML omitted -->-1，程序最多访问2<!-- raw HTML omitted -->w<!-- raw HTML omitted -->个字节</li>
+</ul>
+<h3 id="向后兼容">
+  向后兼容
+  <a class="heading-link" href="#%e5%90%91%e5%90%8e%e5%85%bc%e5%ae%b9">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>linux&gt; gcc -m32 prog.c可以在32位或64位的机器上正确运行</li>
+<li>linux&gt; gcc -m64 prog.c只能在64位的机器上运行</li>
+</ul>
+<h3 id="寻址和字节顺序">
+  寻址和字节顺序
+  <a class="heading-link" href="#%e5%af%bb%e5%9d%80%e5%92%8c%e5%ad%97%e8%8a%82%e9%a1%ba%e5%ba%8f">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>小端法：最低有效字节在前</li>
+<li>大端法：最高有效字节在前</li>
+<li>网络应用程序的代码编写必须遵守已建立的关于字节顺序的规则，确保发送方机器将它的内部表示转换成网络标准，而接收方机器则将网络标准转换为内部表示</li>
+</ul>
+<h3 id="基于c数据类型的典型大小以字节为单位">
+  基于C数据类型的典型大小（以字节为单位）
+  <a class="heading-link" href="#%e5%9f%ba%e4%ba%8ec%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b%e7%9a%84%e5%85%b8%e5%9e%8b%e5%a4%a7%e5%b0%8f%e4%bb%a5%e5%ad%97%e8%8a%82%e4%b8%ba%e5%8d%95%e4%bd%8d">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">有符号C声明</th>
+<th style="text-align:center">无符号C声明</th>
+<th style="text-align:center">32位字节数</th>
+<th style="text-align:center">64位字节数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">[signed] char</td>
+<td style="text-align:center">unsigned char</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">short</td>
+<td style="text-align:center">unsigned short</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">2</td>
+</tr>
+<tr>
+<td style="text-align:center">int</td>
+<td style="text-align:center">unsigned</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">4</td>
+</tr>
+<tr>
+<td style="text-align:center">long</td>
+<td style="text-align:center">unsigned long</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">8</td>
+</tr>
+<tr>
+<td style="text-align:center">int32_t</td>
+<td style="text-align:center">uint32_t</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">4</td>
+</tr>
+<tr>
+<td style="text-align:center">int64_t</td>
+<td style="text-align:center">uint64_t</td>
+<td style="text-align:center">8</td>
+<td style="text-align:center">8</td>
+</tr>
+<tr>
+<td style="text-align:center">char *</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">8</td>
+</tr>
+<tr>
+<td style="text-align:center">float</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">4</td>
+</tr>
+<tr>
+<td style="text-align:center">double</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">8</td>
+<td style="text-align:center">8</td>
+</tr>
+</tbody>
+</table>
+<h3 id="布尔代数">
+  布尔代数
+  <a class="heading-link" href="#%e5%b8%83%e5%b0%94%e4%bb%a3%e6%95%b0">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">运算符</th>
+<th style="text-align:center">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">~</td>
+<td style="text-align:center">非</td>
+</tr>
+<tr>
+<td style="text-align:center">&amp;</td>
+<td style="text-align:center">与</td>
+</tr>
+<tr>
+<td style="text-align:center">｜</td>
+<td style="text-align:center">或</td>
+</tr>
+<tr>
+<td style="text-align:center">^</td>
+<td style="text-align:center">异或</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>也可在C语言中使用，作为按位运算操作符</li>
+<li>按位运算用法：掩码运算</li>
+</ul>
+<h3 id="c语言逻辑运算符">
+  C语言逻辑运算符
+  <a class="heading-link" href="#c%e8%af%ad%e8%a8%80%e9%80%bb%e8%be%91%e8%bf%90%e7%ae%97%e7%ac%a6">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">运算符</th>
+<th style="text-align:center">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">｜｜</td>
+<td style="text-align:center">或</td>
+</tr>
+<tr>
+<td style="text-align:center">&amp;&amp;</td>
+<td style="text-align:center">与</td>
+</tr>
+<tr>
+<td style="text-align:center">！</td>
+<td style="text-align:center">非</td>
+</tr>
+</tbody>
+</table>
+<h3 id="移位运算">
+  移位运算
+  <a class="heading-link" href="#%e7%a7%bb%e4%bd%8d%e8%bf%90%e7%ae%97">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">符号</th>
+<th style="text-align:center">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">&laquo;</td>
+<td style="text-align:center">左移</td>
+</tr>
+<tr>
+<td style="text-align:center">&raquo;(逻辑右移)</td>
+<td style="text-align:center">左补0</td>
+</tr>
+<tr>
+<td style="text-align:center">&raquo;(算术右移)</td>
+<td style="text-align:center">左补符号位</td>
+</tr>
+</tbody>
+</table>
+<h3 id="整数的数据与算数操作术语">
+  整数的数据与算数操作术语
+  <a class="heading-link" href="#%e6%95%b4%e6%95%b0%e7%9a%84%e6%95%b0%e6%8d%ae%e4%b8%8e%e7%ae%97%e6%95%b0%e6%93%8d%e4%bd%9c%e6%9c%af%e8%af%ad">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">符号</th>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">B2T<!-- raw HTML omitted -->w<!-- raw HTML omitted --></td>
+<td style="text-align:center">函数</td>
+<td style="text-align:center">二进制转补码</td>
+</tr>
+<tr>
+<td style="text-align:center">B2U<!-- raw HTML omitted -->w<!-- raw HTML omitted --></td>
+<td style="text-align:center">函数</td>
+<td style="text-align:center">二进制转无符号数</td>
+</tr>
+<tr>
+<td style="text-align:center">U2B<!-- raw HTML omitted -->w<!-- raw HTML omitted --></td>
+<td style="text-align:center">函数</td>
+<td style="text-align:center">无符号数转二进制</td>
+</tr>
+<tr>
+<td style="text-align:center">U2T<!-- raw HTML omitted -->w<!-- raw HTML omitted --></td>
+<td style="text-align:center">函数</td>
+<td style="text-align:center">无符号转补码</td>
+</tr>
+<tr>
+<td style="text-align:center">T2B<!-- raw HTML omitted -->w<!-- raw HTML omitted --></td>
+<td style="text-align:center">函数</td>
+<td style="text-align:center">补码转二进制</td>
+</tr>
+<tr>
+<td style="text-align:center">T2U<!-- raw HTML omitted -->w<!-- raw HTML omitted --></td>
+<td style="text-align:center">函数</td>
+<td style="text-align:center">补码转无符号数</td>
+</tr>
+<tr>
+<td style="text-align:center">TMin<!-- raw HTML omitted -->w<!-- raw HTML omitted --></td>
+<td style="text-align:center">常数</td>
+<td style="text-align:center">最小补码值</td>
+</tr>
+<tr>
+<td style="text-align:center">TMax<!-- raw HTML omitted -->w<!-- raw HTML omitted --></td>
+<td style="text-align:center">常数</td>
+<td style="text-align:center">最大补码值</td>
+</tr>
+<tr>
+<td style="text-align:center">UMax<!-- raw HTML omitted -->w<!-- raw HTML omitted --></td>
+<td style="text-align:center">常数</td>
+<td style="text-align:center">最大无符号数</td>
+</tr>
+<tr>
+<td style="text-align:center">+<!-- raw HTML omitted -->w<!-- raw HTML omitted --><!-- raw HTML omitted -->t<!-- raw HTML omitted --></td>
+<td style="text-align:center">操作</td>
+<td style="text-align:center">补码加法</td>
+</tr>
+<tr>
+<td style="text-align:center">+<!-- raw HTML omitted -->w<!-- raw HTML omitted --><!-- raw HTML omitted -->u<!-- raw HTML omitted --></td>
+<td style="text-align:center">操作</td>
+<td style="text-align:center">无符号数加法</td>
+</tr>
+<tr>
+<td style="text-align:center">*<!-- raw HTML omitted -->w<!-- raw HTML omitted --><!-- raw HTML omitted -->t<!-- raw HTML omitted --></td>
+<td style="text-align:center">操作</td>
+<td style="text-align:center">补码乘法</td>
+</tr>
+<tr>
+<td style="text-align:center">*<!-- raw HTML omitted -->w<!-- raw HTML omitted --><!-- raw HTML omitted -->u<!-- raw HTML omitted --></td>
+<td style="text-align:center">操作</td>
+<td style="text-align:center">无符号数乘法</td>
+</tr>
+<tr>
+<td style="text-align:center">-<!-- raw HTML omitted -->w<!-- raw HTML omitted --><!-- raw HTML omitted -->t<!-- raw HTML omitted --></td>
+<td style="text-align:center">操作</td>
+<td style="text-align:center">补码取反</td>
+</tr>
+<tr>
+<td style="text-align:center">-<!-- raw HTML omitted -->w<!-- raw HTML omitted --><!-- raw HTML omitted -->u<!-- raw HTML omitted --></td>
+<td style="text-align:center">操作</td>
+<td style="text-align:center">无符号数取反</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>下表w表示数据表示中的位数</li>
+</ul>
+<h3 id="补码编码">
+  补码编码
+  <a class="heading-link" href="#%e8%a1%a5%e7%a0%81%e7%bc%96%e7%a0%81">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>最高位为负权</li>
+<li>不对称性：|TMin| = |Tmax| + 1</li>
+<li>UMax<!-- raw HTML omitted -->w<!-- raw HTML omitted --> = 2TMax<!-- raw HTML omitted -->w<!-- raw HTML omitted --> + 1</li>
+<li>C库中的文件&lt;limits.h&gt;定义了常量INT_MAX,INT_MIN,UINT_MAX</li>
+</ul>
+<h3 id="反码和原码">
+  反码和原码
+  <a class="heading-link" href="#%e5%8f%8d%e7%a0%81%e5%92%8c%e5%8e%9f%e7%a0%81">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>反码：最高有效位的权是-(2<!-- raw HTML omitted -->w-1<!-- raw HTML omitted -->-1)而不是-2<!-- raw HTML omitted -->w-1<!-- raw HTML omitted --></li>
+<li>原码：最高有效位是符号位，用来确定剩下的位该取负权还是正权</li>
+</ul>
+<h3 id="强制类型转换显式">
+  强制类型转换（显式）
+  <a class="heading-link" href="#%e5%bc%ba%e5%88%b6%e7%b1%bb%e5%9e%8b%e8%bd%ac%e6%8d%a2%e6%98%be%e5%bc%8f">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>保持了位模式不变，只是改变了解释这些位的方式</li>
+</ul>
+<h3 id="隐式类型转换">
+  隐式类型转换
+  <a class="heading-link" href="#%e9%9a%90%e5%bc%8f%e7%b1%bb%e5%9e%8b%e8%bd%ac%e6%8d%a2">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>对于同时包含有符号和无符号数表达式的处理方式
+<table>
+<thead>
+<tr>
+<th style="text-align:center">表达式</th>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">求值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0==0U</td>
+<td style="text-align:center">无符号</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">-1&lt;0</td>
+<td style="text-align:center">有符号</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">-1&lt;0U</td>
+<td style="text-align:center">无符号</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">2147483647&gt;-2147483647-1</td>
+<td style="text-align:center">有符号</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">2147483647U&gt;-2147483647-1</td>
+<td style="text-align:center">无符号</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">214743647&gt;(int)2147483648U</td>
+<td style="text-align:center">有符号</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">-1&gt;-2</td>
+<td style="text-align:center">有符号</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">(unsigned)-1&gt;-2</td>
+<td style="text-align:center">无符号</td>
+<td style="text-align:center">1</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h3 id="c语言中tmin的写法">
+  C语言中TMin的写法
+  <a class="heading-link" href="#c%e8%af%ad%e8%a8%80%e4%b8%adtmin%e7%9a%84%e5%86%99%e6%b3%95">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>#define INT_MAX 2147483647</li>
+<li>#define INT_MAX (-INT_MAX - 1)</li>
+</ul>
+<h3 id="扩展一个数字的位表示">
+  扩展一个数字的位表示
+  <a class="heading-link" href="#%e6%89%a9%e5%b1%95%e4%b8%80%e4%b8%aa%e6%95%b0%e5%ad%97%e7%9a%84%e4%bd%8d%e8%a1%a8%e7%a4%ba">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>无符号数的零扩展</li>
+<li>补码数的符号扩展</li>
+<li>例：short sx; (unsigned) sx == (unsigned) (int) sx ,不等价于(unsigned)(unsigned short)sx，即默认先进行符号扩展，再强制类型转换为无符号数</li>
+</ul>
+<h3 id="截断数字">
+  截断数字
+  <a class="heading-link" href="#%e6%88%aa%e6%96%ad%e6%95%b0%e5%ad%97">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>将一个w位的数字截断为一个k位的数字时，会丢弃高位的w-k位</li>
+</ul>
+<h3 id="ieee浮点表示">
+  IEEE浮点表示
+  <a class="heading-link" href="#ieee%e6%b5%ae%e7%82%b9%e8%a1%a8%e7%a4%ba">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<h4 id="v---1supssup---m--2supesup">
+  V = (-1)<!-- raw HTML omitted -->s<!-- raw HTML omitted -->  * M * 2<!-- raw HTML omitted -->E<!-- raw HTML omitted -->
+  <a class="heading-link" href="#v---1supssup---m--2supesup">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<ul>
+<li>符号s决定这个数是负数（s=1）还是正数（s=0），而对于数值0的符号位解释作为特殊情况处理</li>
+<li>尾数 M是一个二进制小数</li>
+<li>阶码 E的作用是对浮点数加权，这个权重是2的E次幂（可能是负数）</li>
+</ul>
+<h4 id="浮点数的位划分">
+  浮点数的位划分
+  <a class="heading-link" href="#%e6%b5%ae%e7%82%b9%e6%95%b0%e7%9a%84%e4%bd%8d%e5%88%92%e5%88%86">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<ul>
+<li>第一位：符号位</li>
+<li>k位的阶码字段e（folat：1 8 23，double：1 11 52）</li>
+<li>n位小数字段编码尾数frac</li>
+</ul>
+<h4 id="被编码的值分类">
+  被编码的值分类
+  <a class="heading-link" href="#%e8%a2%ab%e7%bc%96%e7%a0%81%e7%9a%84%e5%80%bc%e5%88%86%e7%b1%bb">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<ul>
+<li>规格化的 e != 0 &amp;&amp; e != 255，E = e - bias, M = 1.frac(float:127, double:1023)</li>
+<li>非规格化的 e = 0，E = 1 - bias, M = 0.frac(提供了一个表示0的方法，表示非常接近0的数)</li>
+<li>无穷大 e = 255 &amp;&amp; frac = 0</li>
+<li>NaN e = 255 &amp;&amp; frac != 0</li>
+</ul>
+<h3 id="寄存器">
+  寄存器
+  <a class="heading-link" href="#%e5%af%84%e5%ad%98%e5%99%a8">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">63</th>
+<th style="text-align:center">31</th>
+<th style="text-align:center">15</th>
+<th style="text-align:center">7</th>
+<th style="text-align:center">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">%rax</td>
+<td style="text-align:center">%eax</td>
+<td style="text-align:center">%ax</td>
+<td style="text-align:center">%al</td>
+<td style="text-align:center">返回值</td>
+</tr>
+<tr>
+<td style="text-align:center">%rbx</td>
+<td style="text-align:center">%ebx</td>
+<td style="text-align:center">%bx</td>
+<td style="text-align:center">%bl</td>
+<td style="text-align:center">被调用者保存</td>
+</tr>
+<tr>
+<td style="text-align:center">%rcx</td>
+<td style="text-align:center">%ecx</td>
+<td style="text-align:center">%cx</td>
+<td style="text-align:center">%cl</td>
+<td style="text-align:center">第4个参数</td>
+</tr>
+<tr>
+<td style="text-align:center">%rdx</td>
+<td style="text-align:center">%edx</td>
+<td style="text-align:center">%dx</td>
+<td style="text-align:center">%dl</td>
+<td style="text-align:center">第3个参数</td>
+</tr>
+<tr>
+<td style="text-align:center">%rsi</td>
+<td style="text-align:center">%esi</td>
+<td style="text-align:center">%si</td>
+<td style="text-align:center">%sil</td>
+<td style="text-align:center">第2个参数</td>
+</tr>
+<tr>
+<td style="text-align:center">%rdi</td>
+<td style="text-align:center">%edi</td>
+<td style="text-align:center">%di</td>
+<td style="text-align:center">%dil</td>
+<td style="text-align:center">第1个参数</td>
+</tr>
+<tr>
+<td style="text-align:center">%rbp</td>
+<td style="text-align:center">%ebp</td>
+<td style="text-align:center">%bp</td>
+<td style="text-align:center">%bpl</td>
+<td style="text-align:center">被调用者保存</td>
+</tr>
+<tr>
+<td style="text-align:center">%rsp</td>
+<td style="text-align:center">%esp</td>
+<td style="text-align:center">%sp</td>
+<td style="text-align:center">%spl</td>
+<td style="text-align:center">栈指针</td>
+</tr>
+<tr>
+<td style="text-align:center">%r8</td>
+<td style="text-align:center">%r8d</td>
+<td style="text-align:center">%r8w</td>
+<td style="text-align:center">%r8b</td>
+<td style="text-align:center">第5个参数</td>
+</tr>
+<tr>
+<td style="text-align:center">%r9</td>
+<td style="text-align:center">%r9d</td>
+<td style="text-align:center">%r9w</td>
+<td style="text-align:center">%r9b</td>
+<td style="text-align:center">第6个参数</td>
+</tr>
+<tr>
+<td style="text-align:center">%r10</td>
+<td style="text-align:center">%r10d</td>
+<td style="text-align:center">%r10w</td>
+<td style="text-align:center">%r10b</td>
+<td style="text-align:center">调用者保存</td>
+</tr>
+<tr>
+<td style="text-align:center">%r11</td>
+<td style="text-align:center">%r11d</td>
+<td style="text-align:center">%r11w</td>
+<td style="text-align:center">%r11b</td>
+<td style="text-align:center">调用者保存</td>
+</tr>
+<tr>
+<td style="text-align:center">%r12</td>
+<td style="text-align:center">%r12d</td>
+<td style="text-align:center">%r12w</td>
+<td style="text-align:center">%r12b</td>
+<td style="text-align:center">被调用者保存</td>
+</tr>
+<tr>
+<td style="text-align:center">%r13</td>
+<td style="text-align:center">%r13d</td>
+<td style="text-align:center">%r13w</td>
+<td style="text-align:center">%r13b</td>
+<td style="text-align:center">被调用者保存</td>
+</tr>
+<tr>
+<td style="text-align:center">%r14</td>
+<td style="text-align:center">%r14d</td>
+<td style="text-align:center">%r14w</td>
+<td style="text-align:center">%r14b</td>
+<td style="text-align:center">被调用者保存</td>
+</tr>
+<tr>
+<td style="text-align:center">%r15</td>
+<td style="text-align:center">%r15d</td>
+<td style="text-align:center">%r15w</td>
+<td style="text-align:center">%r15b</td>
+<td style="text-align:center">被调用者保存</td>
+</tr>
+</tbody>
+</table>
+<h3 id="操作数指示符">
+  操作数指示符
+  <a class="heading-link" href="#%e6%93%8d%e4%bd%9c%e6%95%b0%e6%8c%87%e7%a4%ba%e7%ac%a6">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">格式</th>
+<th style="text-align:center">操作数值</th>
+<th style="text-align:center">名称</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">立即数</td>
+<td style="text-align:center">$Imm</td>
+<td style="text-align:center">Imm</td>
+<td style="text-align:center">立即数寻址</td>
+</tr>
+<tr>
+<td style="text-align:center">寄存器</td>
+<td style="text-align:center">r<!-- raw HTML omitted -->a<!-- raw HTML omitted --></td>
+<td style="text-align:center">R[r<!-- raw HTML omitted -->a<!-- raw HTML omitted -->]</td>
+<td style="text-align:center">寄存器寻址</td>
+</tr>
+<tr>
+<td style="text-align:center">存储器</td>
+<td style="text-align:center">Imm</td>
+<td style="text-align:center">M[Imm]</td>
+<td style="text-align:center">绝对寻址</td>
+</tr>
+<tr>
+<td style="text-align:center">存储器</td>
+<td style="text-align:center">(r<!-- raw HTML omitted -->a<!-- raw HTML omitted -->)</td>
+<td style="text-align:center">M[Imm+R[r<!-- raw HTML omitted -->b<!-- raw HTML omitted -->]]</td>
+<td style="text-align:center">间接寻址</td>
+</tr>
+<tr>
+<td style="text-align:center">存储器</td>
+<td style="text-align:center">Imm(r<!-- raw HTML omitted -->b<!-- raw HTML omitted -->)</td>
+<td style="text-align:center">M[Imm+R[r<!-- raw HTML omitted -->b<!-- raw HTML omitted -->]]</td>
+<td style="text-align:center">(基址+偏移量)寻址</td>
+</tr>
+<tr>
+<td style="text-align:center">存储器</td>
+<td style="text-align:center">(r<!-- raw HTML omitted -->b<!-- raw HTML omitted -->, r<!-- raw HTML omitted -->i<!-- raw HTML omitted -->)</td>
+<td style="text-align:center">M[R[r<!-- raw HTML omitted -->b<!-- raw HTML omitted -->]+R[r<!-- raw HTML omitted -->i<!-- raw HTML omitted -->]]</td>
+<td style="text-align:center">变址寻址</td>
+</tr>
+<tr>
+<td style="text-align:center">存储器</td>
+<td style="text-align:center">Imm(r<!-- raw HTML omitted -->b<!-- raw HTML omitted -->, r<!-- raw HTML omitted -->i<!-- raw HTML omitted -->)</td>
+<td style="text-align:center">M[Imm+R[r<!-- raw HTML omitted -->b<!-- raw HTML omitted -->]+R[r<!-- raw HTML omitted -->i<!-- raw HTML omitted -->]]</td>
+<td style="text-align:center">变址寻址</td>
+</tr>
+<tr>
+<td style="text-align:center">存储器</td>
+<td style="text-align:center">(, r<!-- raw HTML omitted -->i<!-- raw HTML omitted -->, s)</td>
+<td style="text-align:center">M[R[r<!-- raw HTML omitted -->i<!-- raw HTML omitted -->]*s]</td>
+<td style="text-align:center">比例变址寻址</td>
+</tr>
+<tr>
+<td style="text-align:center">存储器</td>
+<td style="text-align:center">Imm(,r<!-- raw HTML omitted -->i<!-- raw HTML omitted -->,s)</td>
+<td style="text-align:center">M[Imm+R[r<!-- raw HTML omitted -->i<!-- raw HTML omitted -->]*s]</td>
+<td style="text-align:center">比例变址寻址</td>
+</tr>
+<tr>
+<td style="text-align:center">存储器</td>
+<td style="text-align:center">(r<!-- raw HTML omitted -->b<!-- raw HTML omitted -->,r<!-- raw HTML omitted -->i<!-- raw HTML omitted -->,s)</td>
+<td style="text-align:center">M[R[r<!-- raw HTML omitted -->b<!-- raw HTML omitted -->]+R[r<!-- raw HTML omitted -->i<!-- raw HTML omitted -->]*s]</td>
+<td style="text-align:center">比例变址寻址</td>
+</tr>
+<tr>
+<td style="text-align:center">存储器</td>
+<td style="text-align:center">Imm(r<!-- raw HTML omitted -->b<!-- raw HTML omitted -->,r<!-- raw HTML omitted -->i<!-- raw HTML omitted -->,s)</td>
+<td style="text-align:center">M[Imm+R[r<!-- raw HTML omitted -->b<!-- raw HTML omitted -->]+R[r<!-- raw HTML omitted -->i<!-- raw HTML omitted -->]*s]</td>
+<td style="text-align:center">比例变址寻址</td>
+</tr>
+</tbody>
+</table>
+<h3 id="数据传输指令">
+  数据传输指令
+  <a class="heading-link" href="#%e6%95%b0%e6%8d%ae%e4%bc%a0%e8%be%93%e6%8c%87%e4%bb%a4">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">指令</th>
+<th style="text-align:center">效果</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">MOV S,D</td>
+<td style="text-align:center">D&lt;-S</td>
+<td style="text-align:center">传送</td>
+</tr>
+<tr>
+<td style="text-align:center">movb</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">传送字节1</td>
+</tr>
+<tr>
+<td style="text-align:center">movw</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">传送字2</td>
+</tr>
+<tr>
+<td style="text-align:center">movl</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">传送双字4</td>
+</tr>
+<tr>
+<td style="text-align:center">movq</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">传送四字8</td>
+</tr>
+<tr>
+<td style="text-align:center">movabsq I,R</td>
+<td style="text-align:center">R&lt;-I</td>
+<td style="text-align:center">传送绝对的四字</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">指令</th>
+<th style="text-align:center">效果</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">MOVZ S,R</td>
+<td style="text-align:center">R&lt;-（零扩展）S</td>
+<td style="text-align:center">以零扩展进行传送</td>
+</tr>
+<tr>
+<td style="text-align:center">movzbw</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">将做了零扩展的字节传送到字</td>
+</tr>
+<tr>
+<td style="text-align:center">movzbl</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">将做了零扩展的字节传送到双字</td>
+</tr>
+<tr>
+<td style="text-align:center">movzwl</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">将做了零扩展的字传送到双字</td>
+</tr>
+<tr>
+<td style="text-align:center">movzbq</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">将做了零扩展的字节传送到四字</td>
+</tr>
+<tr>
+<td style="text-align:center">movzwq</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">将做了零扩展的字传送到四字</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">指令</th>
+<th style="text-align:center">效果</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">MOVS S,R</td>
+<td style="text-align:center">R&lt;-（符号扩展）S</td>
+<td style="text-align:center">传送符号扩展的字节</td>
+</tr>
+<tr>
+<td style="text-align:center">movsbw</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">将做了符号扩展的字节传送到字</td>
+</tr>
+<tr>
+<td style="text-align:center">movsbl</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">将做了符号扩展的字节传送到双字</td>
+</tr>
+<tr>
+<td style="text-align:center">movswl</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">将做了符号扩展的字传送到双字</td>
+</tr>
+<tr>
+<td style="text-align:center">movsbq</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">将做了符号扩展的字节传送到四字</td>
+</tr>
+<tr>
+<td style="text-align:center">movswq</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">将做了符号扩展的字传送到四字</td>
+</tr>
+<tr>
+<td style="text-align:center">movslq</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">将做了符号扩展的双字传送到四字</td>
+</tr>
+<tr>
+<td style="text-align:center">cltq</td>
+<td style="text-align:center">%rax&lt;-符号扩展(%eax)</td>
+<td style="text-align:center">将%eax符号扩展到%rax</td>
+</tr>
+</tbody>
+</table>
+<h3 id="压入和弹出栈数据">
+  压入和弹出栈数据
+  <a class="heading-link" href="#%e5%8e%8b%e5%85%a5%e5%92%8c%e5%bc%b9%e5%87%ba%e6%a0%88%e6%95%b0%e6%8d%ae">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">指令</th>
+<th style="text-align:center">效果</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">pushq S</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">将四字压入展</td>
+</tr>
+<tr>
+<td style="text-align:center">popq D</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">将四字弹出栈</td>
+</tr>
+</tbody>
+</table>
+<h3 id="算术和逻辑操作">
+  算术和逻辑操作
+  <a class="heading-link" href="#%e7%ae%97%e6%9c%af%e5%92%8c%e9%80%bb%e8%be%91%e6%93%8d%e4%bd%9c">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">指令</th>
+<th style="text-align:center">效果</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">leaq S,D</td>
+<td style="text-align:center">D &lt;- &amp;S</td>
+<td style="text-align:center">加载有效地址</td>
+</tr>
+<tr>
+<td style="text-align:center">INC D</td>
+<td style="text-align:center">D &lt;- D+1</td>
+<td style="text-align:center">加1</td>
+</tr>
+<tr>
+<td style="text-align:center">DEC D</td>
+<td style="text-align:center">D &lt;- D-1</td>
+<td style="text-align:center">减1</td>
+</tr>
+<tr>
+<td style="text-align:center">NEG D</td>
+<td style="text-align:center">D &lt;- -D</td>
+<td style="text-align:center">取负</td>
+</tr>
+<tr>
+<td style="text-align:center">NOT D</td>
+<td style="text-align:center">D &lt;- ~D</td>
+<td style="text-align:center">取补</td>
+</tr>
+<tr>
+<td style="text-align:center">ADD S,D</td>
+<td style="text-align:center">D &lt;- D+S</td>
+<td style="text-align:center">加</td>
+</tr>
+<tr>
+<td style="text-align:center">SUB S,D</td>
+<td style="text-align:center">D &lt;- D-S</td>
+<td style="text-align:center">减</td>
+</tr>
+<tr>
+<td style="text-align:center">IMUL S,D</td>
+<td style="text-align:center">D &lt;- D*S</td>
+<td style="text-align:center">乘</td>
+</tr>
+<tr>
+<td style="text-align:center">XOR S,D</td>
+<td style="text-align:center">D &lt;- D^S</td>
+<td style="text-align:center">异或</td>
+</tr>
+<tr>
+<td style="text-align:center">OR S,D</td>
+<td style="text-align:center">D &lt;- D｜S</td>
+<td style="text-align:center">或</td>
+</tr>
+<tr>
+<td style="text-align:center">AND S,D</td>
+<td style="text-align:center">D &lt;- D&amp;S</td>
+<td style="text-align:center">与</td>
+</tr>
+<tr>
+<td style="text-align:center">SAL k,D</td>
+<td style="text-align:center">D &lt;- D&laquo;k</td>
+<td style="text-align:center">左移</td>
+</tr>
+<tr>
+<td style="text-align:center">SHL k,D</td>
+<td style="text-align:center">D &lt;- D&laquo;k</td>
+<td style="text-align:center">左移（等同于SAL）</td>
+</tr>
+<tr>
+<td style="text-align:center">SAR k,D</td>
+<td style="text-align:center">D &lt;- D&raquo;<!-- raw HTML omitted -->A<!-- raw HTML omitted -->k</td>
+<td style="text-align:center">算术右移</td>
+</tr>
+<tr>
+<td style="text-align:center">SHR k,D</td>
+<td style="text-align:center">D &lt;- D&raquo;<!-- raw HTML omitted -->L<!-- raw HTML omitted -->k</td>
+<td style="text-align:center">逻辑右移</td>
+</tr>
+</tbody>
+</table>
+<h4 id="leaq的作用">
+  leaq的作用
+  <a class="heading-link" href="#leaq%e7%9a%84%e4%bd%9c%e7%94%a8">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<ul>
+<li>将有效地址写入到目的操作数</li>
+<li>普通的算术运算 与有效地址计算无关，<strong>目的操作数必须是一个寄存器</strong></li>
+</ul>
+<h3 id="条件码">
+  条件码
+  <a class="heading-link" href="#%e6%9d%a1%e4%bb%b6%e7%a0%81">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>CF：进位标志。最近的操作使最高位产生了进位，可以用来检查无符号操作的一处</li>
+<li>ZF：零标志，最近的操作得出的结果为0</li>
+<li>SF：符号标志。最近的操作数得到的结果为负数</li>
+<li>OF：溢出标志。最近的操作导致一个补码溢出——正溢出或负溢出</li>
+</ul>
+<h4 id="比较和测试指令">
+  比较和测试指令
+  <a class="heading-link" href="#%e6%af%94%e8%be%83%e5%92%8c%e6%b5%8b%e8%af%95%e6%8c%87%e4%bb%a4">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<ul>
+<li>不修改任何寄存器的值，只设置条件码</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">指令</th>
+<th style="text-align:center">基于</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">CMP S<!-- raw HTML omitted -->1<!-- raw HTML omitted -->,S<!-- raw HTML omitted -->2<!-- raw HTML omitted --></td>
+<td style="text-align:center">S<!-- raw HTML omitted -->2<!-- raw HTML omitted -->-S<!-- raw HTML omitted -->1<!-- raw HTML omitted --></td>
+<td style="text-align:center">比较</td>
+</tr>
+<tr>
+<td style="text-align:center">cmpb</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">比较字节</td>
+</tr>
+<tr>
+<td style="text-align:center">cmpw</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">比较字</td>
+</tr>
+<tr>
+<td style="text-align:center">cmpl</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">比较双字</td>
+</tr>
+<tr>
+<td style="text-align:center">cmpq</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">比较四字</td>
+</tr>
+<tr>
+<td style="text-align:center">TEST S<!-- raw HTML omitted -->1<!-- raw HTML omitted -->,S<!-- raw HTML omitted -->2<!-- raw HTML omitted --></td>
+<td style="text-align:center">S<!-- raw HTML omitted -->1<!-- raw HTML omitted -->&amp;S<!-- raw HTML omitted -->2<!-- raw HTML omitted --></td>
+<td style="text-align:center">测试</td>
+</tr>
+<tr>
+<td style="text-align:center">testb</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">测试字节</td>
+</tr>
+<tr>
+<td style="text-align:center">testw</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">测试字</td>
+</tr>
+<tr>
+<td style="text-align:center">testl</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">测试双字</td>
+</tr>
+<tr>
+<td style="text-align:center">testq</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">测试四字</td>
+</tr>
+</tbody>
+</table>
+<h3 id="set指令">
+  set指令
+  <a class="heading-link" href="#set%e6%8c%87%e4%bb%a4">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">指令</th>
+<th style="text-align:center">同意名</th>
+<th style="text-align:center">效果</th>
+<th style="text-align:center">设置条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">sete D</td>
+<td style="text-align:center">setz</td>
+<td style="text-align:center">D &lt;- ZF</td>
+<td style="text-align:center">相等/零</td>
+</tr>
+<tr>
+<td style="text-align:center">setne D</td>
+<td style="text-align:center">setnz</td>
+<td style="text-align:center">D &lt;- ~ZF</td>
+<td style="text-align:center">不等/非零</td>
+</tr>
+<tr>
+<td style="text-align:center">sets D</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">D &lt;- SF</td>
+<td style="text-align:center">负数</td>
+</tr>
+<tr>
+<td style="text-align:center">setns D</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">D &lt;- SF</td>
+<td style="text-align:center">非负数</td>
+</tr>
+<tr>
+<td style="text-align:center">setg D</td>
+<td style="text-align:center">setnle</td>
+<td style="text-align:center">D &lt;- ~(SF^OF)&amp;~ZF</td>
+<td style="text-align:center">大于（有符号）</td>
+</tr>
+<tr>
+<td style="text-align:center">setge D</td>
+<td style="text-align:center">setnl</td>
+<td style="text-align:center">D &lt;- ~(SF^OF)</td>
+<td style="text-align:center">大于等于（有符号）</td>
+</tr>
+<tr>
+<td style="text-align:center">setl D</td>
+<td style="text-align:center">setnge</td>
+<td style="text-align:center">D &lt;- SF^OF</td>
+<td style="text-align:center">小于（有符号）</td>
+</tr>
+<tr>
+<td style="text-align:center">setle D</td>
+<td style="text-align:center">setng</td>
+<td style="text-align:center">D &lt;- (SF^OF)｜(ZF)</td>
+<td style="text-align:center">小于等于（有符号）</td>
+</tr>
+<tr>
+<td style="text-align:center">seta D</td>
+<td style="text-align:center">setnbe</td>
+<td style="text-align:center">D &lt;- ~CF &amp; ~ZF</td>
+<td style="text-align:center">超过（无符号）</td>
+</tr>
+<tr>
+<td style="text-align:center">setae D</td>
+<td style="text-align:center">setnb</td>
+<td style="text-align:center">D &lt;- ~CF</td>
+<td style="text-align:center">超过或相等（无符号）</td>
+</tr>
+<tr>
+<td style="text-align:center">setb D</td>
+<td style="text-align:center">setnae</td>
+<td style="text-align:center">D &lt;- CF</td>
+<td style="text-align:center">低于（无符号）</td>
+</tr>
+<tr>
+<td style="text-align:center">setbe D</td>
+<td style="text-align:center">setna</td>
+<td style="text-align:center">D &lt;- CF｜ZF</td>
+<td style="text-align:center">低于或相等（无符号）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="跳转指令">
+  跳转指令
+  <a class="heading-link" href="#%e8%b7%b3%e8%bd%ac%e6%8c%87%e4%bb%a4">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">指令</th>
+<th style="text-align:center">同义名</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">jmp Label</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">直接跳转</td>
+</tr>
+<tr>
+<td style="text-align:center">jmp *Operand</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">间接跳转</td>
+</tr>
+<tr>
+<td style="text-align:center">je Label</td>
+<td style="text-align:center">jz</td>
+<td style="text-align:center">相等/零</td>
+</tr>
+<tr>
+<td style="text-align:center">jne Label</td>
+<td style="text-align:center">jnz</td>
+<td style="text-align:center">不相等/非零</td>
+</tr>
+<tr>
+<td style="text-align:center">js Label</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">负数</td>
+</tr>
+<tr>
+<td style="text-align:center">jns Label</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">非负数</td>
+</tr>
+<tr>
+<td style="text-align:center">jg Label</td>
+<td style="text-align:center">jnle</td>
+<td style="text-align:center">大于</td>
+</tr>
+<tr>
+<td style="text-align:center">jge Labe</td>
+<td style="text-align:center">jnl</td>
+<td style="text-align:center">大于或等于</td>
+</tr>
+<tr>
+<td style="text-align:center">jl Label</td>
+<td style="text-align:center">jnge</td>
+<td style="text-align:center">小于</td>
+</tr>
+<tr>
+<td style="text-align:center">jle Label</td>
+<td style="text-align:center">jng</td>
+<td style="text-align:center">小于或等于</td>
+</tr>
+<tr>
+<td style="text-align:center">ja Label</td>
+<td style="text-align:center">jnbe</td>
+<td style="text-align:center">超过</td>
+</tr>
+<tr>
+<td style="text-align:center">jae Label</td>
+<td style="text-align:center">jnb</td>
+<td style="text-align:center">超过或相等</td>
+</tr>
+<tr>
+<td style="text-align:center">jb Label</td>
+<td style="text-align:center">jnae</td>
+<td style="text-align:center">低于</td>
+</tr>
+<tr>
+<td style="text-align:center">jbe Label</td>
+<td style="text-align:center">jna</td>
+<td style="text-align:center">低于或相等</td>
+</tr>
+</tbody>
+</table>
+<h3 id="条件传送指令">
+  条件传送指令
+  <a class="heading-link" href="#%e6%9d%a1%e4%bb%b6%e4%bc%a0%e9%80%81%e6%8c%87%e4%bb%a4">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">指令</th>
+<th style="text-align:center">同义名</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">cmove S,R</td>
+<td style="text-align:center">comvz</td>
+<td style="text-align:center">相等/零</td>
+</tr>
+<tr>
+<td style="text-align:center">cmovne S,R</td>
+<td style="text-align:center">comvnz</td>
+<td style="text-align:center">不相等/非零</td>
+</tr>
+<tr>
+<td style="text-align:center">cmovs S,R</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">负数</td>
+</tr>
+<tr>
+<td style="text-align:center">cmovns S,R</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">非负数</td>
+</tr>
+<tr>
+<td style="text-align:center">cmovg S,R</td>
+<td style="text-align:center">cmovnle</td>
+<td style="text-align:center">大于</td>
+</tr>
+<tr>
+<td style="text-align:center">cmovge S,R</td>
+<td style="text-align:center">comvnl</td>
+<td style="text-align:center">大于或等于</td>
+</tr>
+<tr>
+<td style="text-align:center">cmovl S,R</td>
+<td style="text-align:center">comvnge</td>
+<td style="text-align:center">小于</td>
+</tr>
+<tr>
+<td style="text-align:center">cmovle S,R</td>
+<td style="text-align:center">cmovng</td>
+<td style="text-align:center">小于或等于</td>
+</tr>
+<tr>
+<td style="text-align:center">cmova S,R</td>
+<td style="text-align:center">comvnbe</td>
+<td style="text-align:center">超过</td>
+</tr>
+<tr>
+<td style="text-align:center">cmovae S,R</td>
+<td style="text-align:center">cmovnb</td>
+<td style="text-align:center">超过或相等</td>
+</tr>
+<tr>
+<td style="text-align:center">cmovb S,R</td>
+<td style="text-align:center">comvnae</td>
+<td style="text-align:center">低于</td>
+</tr>
+<tr>
+<td style="text-align:center">comvbe S,R</td>
+<td style="text-align:center">comvna</td>
+<td style="text-align:center">低于或相等</td>
+</tr>
+</tbody>
+</table>
+<h2 id="链接">
+  链接
+  <a class="heading-link" href="#%e9%93%be%e6%8e%a5">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<h3 id="链接器的两个主要任务">
+  链接器的两个主要任务
+  <a class="heading-link" href="#%e9%93%be%e6%8e%a5%e5%99%a8%e7%9a%84%e4%b8%a4%e4%b8%aa%e4%b8%bb%e8%a6%81%e4%bb%bb%e5%8a%a1">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>符号解析：将每个符号引用正好和一个符号定义关联起来</li>
+<li>重定位：链接器通过把每个符号定义与一个内存为之关联起来，从而重定位这些节，然后修改所有对这些符号的引用，使它们指向这个内存位置 <em>P466</em></li>
+</ul>
+
       </div>
 
 

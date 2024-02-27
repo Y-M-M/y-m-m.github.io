@@ -1630,6 +1630,41 @@
 </h3>
 <ul>
 <li>fork函数调用一次，返回两次</li>
+<li>新创建的子进程几乎但不完全与父进程相同，子进程得到与父进程用户级虚拟地址空间相同的（但是独立的）一份副本</li>
+<li>父进程与子进程并发执行，子进程返回0，父进程返回子进程的PID（非零）</li>
+</ul>
+<h3 id="目标文件">
+  目标文件
+  <a class="heading-link" href="#%e7%9b%ae%e6%a0%87%e6%96%87%e4%bb%b6">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>可重定位目标文件</li>
+<li>可执行目标文件</li>
+<li>共享目标文件</li>
+</ul>
+<h4 id="可重定位目标文件">
+  可重定位目标文件
+  <a class="heading-link" href="#%e5%8f%af%e9%87%8d%e5%ae%9a%e4%bd%8d%e7%9b%ae%e6%a0%87%e6%96%87%e4%bb%b6">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<ul>
+<li>FILE头：生成该文件的系统的字的大小和字节顺序，FILE头的大小，目标文件的类型，机器类型，节头部表的文件偏移，节头部表中条目的带下和数量</li>
+<li>FILE头和节头部表之间都是节</li>
+<li>.text：已编译程序的机器代码</li>
+<li>.rodata：只读数据</li>
+<li>.data：已初始化的全局和静态C变量。局部变量运行时保存在栈中，既不出现在.data中，也不出现在.bss中</li>
+<li>.bss：未初始化的全局和静态C变量，以及所有被初始化为0的全局变量</li>
+<li>.symtab：符号表</li>
+<li>.rel.text：一个.text节中位置的列表</li>
+<li>.rel.data：被模块引用或定义的所有全局变量的重定位信息</li>
+<li>.debug：一个调试符号表，其条目是程序中定义的局部变量和类型定义</li>
+<li>.line：原始C源程序中的行号和.text节中机器指令之间的映射。只有以-g选项调用编译器驱动程序时，才会得到这张表</li>
+<li>.strtab：一个字符串表，其内容包括.symtab和.debug节中的符号表，以及节头部中的节名字。字符串表就是以null结尾的字符串的序列</li>
 </ul>
 <h3 id="强符号和弱符号">
   强符号和弱符号
@@ -1638,6 +1673,11 @@
     <span class="sr-only">Link to heading</span>
   </a>
 </h3>
+<ul>
+<li>不允许有多个同名的强符号</li>
+<li>如果有一个强符号和多个弱符号同名，那么选择强符号</li>
+<li>如果有多个弱符号同名，那么从这些弱符号中任意选择一个</li>
+</ul>
 <h4 id="强符号">
   强符号
   <a class="heading-link" href="#%e5%bc%ba%e7%ac%a6%e5%8f%b7">
@@ -1649,6 +1689,7 @@
 <li>强符号通常是指在程序中只能有一个定义的全局变量或函数。</li>
 <li>如果程序中有多个强符号的定义，链接器会报错，因为这违反了单一定义原则。</li>
 <li>强符号在链接时会覆盖掉其他同名的弱符号。</li>
+<li>函数名、有初值的全局变量</li>
 </ul>
 <h4 id="弱符号">
   弱符号
@@ -1661,28 +1702,64 @@
 <li>弱符号允许在程序中有多个同名的定义，而不会引起链接错误。</li>
 <li>如果有多个弱符号的定义，链接器会选择一个作为最终的符号。</li>
 <li>弱符号对于可选的定义和覆盖提供了一定的灵活性。</li>
+<li>无初值的全局变量</li>
 </ul>
-<h4 id="全局变量的强符号和弱符号">
-  全局变量的强符号和弱符号
-  <a class="heading-link" href="#%e5%85%a8%e5%b1%80%e5%8f%98%e9%87%8f%e7%9a%84%e5%bc%ba%e7%ac%a6%e5%8f%b7%e5%92%8c%e5%bc%b1%e7%ac%a6%e5%8f%b7">
+<h4 id="重定位类型">
+  重定位类型
+  <a class="heading-link" href="#%e9%87%8d%e5%ae%9a%e4%bd%8d%e7%b1%bb%e5%9e%8b">
     <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
     <span class="sr-only">Link to heading</span>
   </a>
 </h4>
 <ul>
-<li>如果在全局变量的声明和定义中都使用 extern 关键字，那么该变量是一个弱符号。</li>
-<li>如果在全局变量的定义中省略 extern，那么该变量是一个强符号。</li>
+<li>重定位引用的十六机制地址是当前指令+1，重定位引用的十六机制值是绝对地址-下一条指令的值</li>
+<li>PC相对地址的引用：一个PC相对地址就是距程序计数器(PC)的当前运行时值（下一条指令的地址）的偏移量</li>
+<li>32为绝对地址的引用</li>
 </ul>
-<h4 id="函数的强符号和弱符号">
-  函数的强符号和弱符号
-  <a class="heading-link" href="#%e5%87%bd%e6%95%b0%e7%9a%84%e5%bc%ba%e7%ac%a6%e5%8f%b7%e5%92%8c%e5%bc%b1%e7%ac%a6%e5%8f%b7">
+<h2 id="系统级io">
+  系统级I/O
+  <a class="heading-link" href="#%e7%b3%bb%e7%bb%9f%e7%ba%a7io">
     <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
     <span class="sr-only">Link to heading</span>
   </a>
-</h4>
+</h2>
+<h3 id="unix-io">
+  Unix I/O
+  <a class="heading-link" href="#unix-io">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
 <ul>
-<li>函数的默认链接属性是强符号，即使只有声明而没有定义。</li>
-<li>使用 extern 关键字也可以将函数声明为弱符号，但这在函数上很少使用。</li>
+<li>一个Linux文件就是m个字节的序列</li>
+<li>所有的I/O设备（例如网络、磁盘和终端）都被模型化为文件</li>
+<li>可以读取文件的元数据</li>
+<li>允许执行I/O重定向</li>
+<li>将一个打开的文件模型化为一个流</li>
+<li>标准I/O不适用于网络套字节的IO，并且标准IO不能读取文件的元数据</li>
+<li>通过调用read和write函数来执行输入和输出，返回-1表示一个错误，返回0表示EOF</li>
+</ul>
+<h3 id="打开文件的返回值">
+  打开文件的返回值
+  <a class="heading-link" href="#%e6%89%93%e5%bc%80%e6%96%87%e4%bb%b6%e7%9a%84%e8%bf%94%e5%9b%9e%e5%80%bc">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>打开文件时，一个应用程序要求内核打开一个相应文件，来宣告它想要访问一个I/O设备。进程开始时，打开三个文件，标准输入（描述符为0），标准输出（描述符为1）和标准错误（描述符为2）</li>
+<li>open函数总是返回最低的未打开描述符，第一次调用open会返回描述符3</li>
+</ul>
+<h3 id="文件重定向">
+  文件重定向
+  <a class="heading-link" href="#%e6%96%87%e4%bb%b6%e9%87%8d%e5%ae%9a%e5%90%91">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>Dup2(fd2, fd1);</li>
+<li>将fd1重定向到fd2，fd1继承fd2的描述符表</li>
 </ul>
 
       </div>

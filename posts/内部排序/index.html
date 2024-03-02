@@ -16,8 +16,7 @@
 <meta name="description" content="实践数据结构学的排序算法">
 <meta name="keywords" content="blog,developer,personal">
 
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="内部排序"/>
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="内部排序"/>
 <meta name="twitter:description" content="实践数据结构学的排序算法"/>
 
 <meta property="og:title" content="内部排序" />
@@ -206,140 +205,140 @@
 <p><strong>输入</strong><br>
 n(选手数) m(选票数) m个数字(选票内容)<br>
 对选票内容排序，最后打印</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>//直接插入排序，顺序结构
-</span></span><span style="display:flex;"><span>//60分，两个测试点TLE
-</span></span><span style="display:flex;"><span>#include &lt;stdio.h&gt;
-</span></span><span style="display:flex;"><span>#include &lt;stdlib.h&gt;
-</span></span><span style="display:flex;"><span>#include &lt;time.h&gt;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>int read(){
-</span></span><span style="display:flex;"><span>    int x = 0, k = 1;
-</span></span><span style="display:flex;"><span>    char c = getchar();
-</span></span><span style="display:flex;"><span>    while(c &lt; &#39;0&#39; || c &gt; &#39;9&#39;){
-</span></span><span style="display:flex;"><span>        if(c == &#39;-&#39;) k = -1;
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="font-style:italic">//直接插入排序，顺序结构
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic">//60分，两个测试点TLE
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span><span style="">#include</span> <span style="">&lt;stdio.h&gt;</span><span style="">
+</span></span></span><span style="display:flex;"><span><span style="">#include</span> <span style="">&lt;stdlib.h&gt;</span><span style="">
+</span></span></span><span style="display:flex;"><span><span style="">#include</span> <span style="">&lt;time.h&gt;</span><span style="">
+</span></span></span><span style="display:flex;"><span><span style=""></span>
+</span></span><span style="display:flex;"><span><span style="">int</span> read(){
+</span></span><span style="display:flex;"><span>    <span style="">int</span> x = 0, k = 1;
+</span></span><span style="display:flex;"><span>    <span style="">char</span> c = getchar();
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">while</span>(c &lt; <span style="font-style:italic">&#39;0&#39;</span> || c &gt; <span style="font-style:italic">&#39;9&#39;</span>){
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">if</span>(c == <span style="font-style:italic">&#39;-&#39;</span>) k = -1;
 </span></span><span style="display:flex;"><span>        c = getchar();
 </span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    while(c &gt;= &#39;0&#39; &amp;&amp; c &lt;= &#39;9&#39;){
-</span></span><span style="display:flex;"><span>        x = x * 10 + c - &#39;0&#39;;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">while</span>(c &gt;= <span style="font-style:italic">&#39;0&#39;</span> &amp;&amp; c &lt;= <span style="font-style:italic">&#39;9&#39;</span>){
+</span></span><span style="display:flex;"><span>        x = x * 10 + c - <span style="font-style:italic">&#39;0&#39;</span>;
 </span></span><span style="display:flex;"><span>        c = getchar();
 </span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    return x * k;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">return</span> x * k;
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>int main(){
-</span></span><span style="display:flex;"><span>    int n = read(), m = read();
-</span></span><span style="display:flex;"><span>    int *num;
-</span></span><span style="display:flex;"><span>    num = (int *)malloc(sizeof(int) * m);
-</span></span><span style="display:flex;"><span>    for(int i = 0; i &lt; m; i++) num[i] = read();
-</span></span><span style="display:flex;"><span>    // for(int i = 0; i &lt; m; i++){
-</span></span><span style="display:flex;"><span>    //     printf(&#34;%d%c&#34;, num[i], &#34; \n&#34;[i==m-1]);
-</span></span><span style="display:flex;"><span>    // }
-</span></span><span style="display:flex;"><span>    for(int i = 1; i &lt; m; i++){
-</span></span><span style="display:flex;"><span>        int j = 0;
-</span></span><span style="display:flex;"><span>        while(num[j] &lt; num[i] &amp;&amp; j &lt; i) j++;
-</span></span><span style="display:flex;"><span>        if(j &lt; i){
-</span></span><span style="display:flex;"><span>            int t = num[i];
-</span></span><span style="display:flex;"><span>            for(int k = i; k &gt; j; k--){
+</span></span><span style="display:flex;"><span><span style="">int</span> main(){
+</span></span><span style="display:flex;"><span>    <span style="">int</span> n = read(), m = read();
+</span></span><span style="display:flex;"><span>    <span style="">int</span> *num;
+</span></span><span style="display:flex;"><span>    num = (<span style="">int</span> *)malloc(<span style="font-weight:bold">sizeof</span>(<span style="">int</span>) * m);
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">for</span>(<span style="">int</span> i = 0; i &lt; m; i++) num[i] = read();
+</span></span><span style="display:flex;"><span>    <span style="font-style:italic">// for(int i = 0; i &lt; m; i++){
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>    <span style="font-style:italic">//     printf(&#34;%d%c&#34;, num[i], &#34; \n&#34;[i==m-1]);
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>    <span style="font-style:italic">// }
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>    <span style="font-weight:bold">for</span>(<span style="">int</span> i = 1; i &lt; m; i++){
+</span></span><span style="display:flex;"><span>        <span style="">int</span> j = 0;
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">while</span>(num[j] &lt; num[i] &amp;&amp; j &lt; i) j++;
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">if</span>(j &lt; i){
+</span></span><span style="display:flex;"><span>            <span style="">int</span> t = num[i];
+</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">for</span>(<span style="">int</span> k = i; k &gt; j; k--){
 </span></span><span style="display:flex;"><span>                num[k] = num[k - 1];
 </span></span><span style="display:flex;"><span>            }
 </span></span><span style="display:flex;"><span>            num[j] = t;
 </span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    for(int i = 0; i &lt; m; i++){
-</span></span><span style="display:flex;"><span>        printf(&#34;%d%c&#34;, num[i], &#34; \n&#34;[i==m-1]);
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">for</span>(<span style="">int</span> i = 0; i &lt; m; i++){
+</span></span><span style="display:flex;"><span>        printf(<span style="font-style:italic">&#34;%d%c&#34;</span>, num[i], <span style="font-style:italic">&#34; </span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>[i==m-1]);
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>    free(num);
-</span></span><span style="display:flex;"><span>    return 0;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">return</span> 0;
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>//直接插入排序，顺序结构
-</span></span><span style="display:flex;"><span>//改进：将寻找插入位置和插入这两个操作合并为一个操作
-</span></span><span style="display:flex;"><span>//60分，两个测试点TLE
-</span></span><span style="display:flex;"><span>#include &lt;stdio.h&gt;
-</span></span><span style="display:flex;"><span>#include &lt;stdlib.h&gt;
-</span></span><span style="display:flex;"><span>#include &lt;time.h&gt;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>int read(){
-</span></span><span style="display:flex;"><span>    int x = 0, k = 1;
-</span></span><span style="display:flex;"><span>    char c = getchar();
-</span></span><span style="display:flex;"><span>    while(c &lt; &#39;0&#39; || c &gt; &#39;9&#39;){
-</span></span><span style="display:flex;"><span>        if(c == &#39;-&#39;) k = -1;
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="font-style:italic">//直接插入排序，顺序结构
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic">//改进：将寻找插入位置和插入这两个操作合并为一个操作
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic">//60分，两个测试点TLE
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span><span style="">#include</span> <span style="">&lt;stdio.h&gt;</span><span style="">
+</span></span></span><span style="display:flex;"><span><span style="">#include</span> <span style="">&lt;stdlib.h&gt;</span><span style="">
+</span></span></span><span style="display:flex;"><span><span style="">#include</span> <span style="">&lt;time.h&gt;</span><span style="">
+</span></span></span><span style="display:flex;"><span><span style=""></span>
+</span></span><span style="display:flex;"><span><span style="">int</span> read(){
+</span></span><span style="display:flex;"><span>    <span style="">int</span> x = 0, k = 1;
+</span></span><span style="display:flex;"><span>    <span style="">char</span> c = getchar();
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">while</span>(c &lt; <span style="font-style:italic">&#39;0&#39;</span> || c &gt; <span style="font-style:italic">&#39;9&#39;</span>){
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">if</span>(c == <span style="font-style:italic">&#39;-&#39;</span>) k = -1;
 </span></span><span style="display:flex;"><span>        c = getchar();
 </span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    while(c &gt;= &#39;0&#39; &amp;&amp; c &lt;= &#39;9&#39;){
-</span></span><span style="display:flex;"><span>        x = x * 10 + c - &#39;0&#39;;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">while</span>(c &gt;= <span style="font-style:italic">&#39;0&#39;</span> &amp;&amp; c &lt;= <span style="font-style:italic">&#39;9&#39;</span>){
+</span></span><span style="display:flex;"><span>        x = x * 10 + c - <span style="font-style:italic">&#39;0&#39;</span>;
 </span></span><span style="display:flex;"><span>        c = getchar();
 </span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    return x * k;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">return</span> x * k;
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>int main(){
-</span></span><span style="display:flex;"><span>    int n = read(), m = read();
-</span></span><span style="display:flex;"><span>    int *num;
-</span></span><span style="display:flex;"><span>    num = (int *)malloc(sizeof(int) * (m+1));
-</span></span><span style="display:flex;"><span>    for(int i = 1; i &lt;= m; i++) num[i] = read();
-</span></span><span style="display:flex;"><span>    // for(int i = 0; i &lt; m; i++){
-</span></span><span style="display:flex;"><span>    //     printf(&#34;%d%c&#34;, num[i], &#34; \n&#34;[i==m-1]);
-</span></span><span style="display:flex;"><span>    // }
-</span></span><span style="display:flex;"><span>    for(int i = 2; i &lt;= m; i++){
-</span></span><span style="display:flex;"><span>        int j = i;
+</span></span><span style="display:flex;"><span><span style="">int</span> main(){
+</span></span><span style="display:flex;"><span>    <span style="">int</span> n = read(), m = read();
+</span></span><span style="display:flex;"><span>    <span style="">int</span> *num;
+</span></span><span style="display:flex;"><span>    num = (<span style="">int</span> *)malloc(<span style="font-weight:bold">sizeof</span>(<span style="">int</span>) * (m+1));
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">for</span>(<span style="">int</span> i = 1; i &lt;= m; i++) num[i] = read();
+</span></span><span style="display:flex;"><span>    <span style="font-style:italic">// for(int i = 0; i &lt; m; i++){
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>    <span style="font-style:italic">//     printf(&#34;%d%c&#34;, num[i], &#34; \n&#34;[i==m-1]);
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>    <span style="font-style:italic">// }
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>    <span style="font-weight:bold">for</span>(<span style="">int</span> i = 2; i &lt;= m; i++){
+</span></span><span style="display:flex;"><span>        <span style="">int</span> j = i;
 </span></span><span style="display:flex;"><span>        num[0] = num[i];
-</span></span><span style="display:flex;"><span>        while(num[j-1] &gt; num[0]){
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">while</span>(num[j-1] &gt; num[0]){
 </span></span><span style="display:flex;"><span>            num[j] = num[j - 1];
 </span></span><span style="display:flex;"><span>            j--;
 </span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>        num[j]=num[0];
 </span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    for(int i = 1; i &lt;= m; i++){
-</span></span><span style="display:flex;"><span>        printf(&#34;%d%c&#34;, num[i], &#34; \n&#34;[i==m]);
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">for</span>(<span style="">int</span> i = 1; i &lt;= m; i++){
+</span></span><span style="display:flex;"><span>        printf(<span style="font-style:italic">&#34;%d%c&#34;</span>, num[i], <span style="font-style:italic">&#34; </span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>[i==m]);
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>    free(num);
-</span></span><span style="display:flex;"><span>    return 0;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">return</span> 0;
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>//直接插入排序
-</span></span><span style="display:flex;"><span>//链式结构
-</span></span><span style="display:flex;"><span>//60分，两个测试点TLE
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>#include &lt;stdio.h&gt;
-</span></span><span style="display:flex;"><span>#include &lt;stdlib.h&gt;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>typedef struct node{
-</span></span><span style="display:flex;"><span>    int data;
-</span></span><span style="display:flex;"><span>    struct node *next;
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="font-style:italic">//直接插入排序
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic">//链式结构
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic">//60分，两个测试点TLE
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>
+</span></span><span style="display:flex;"><span><span style="">#include</span> <span style="">&lt;stdio.h&gt;</span><span style="">
+</span></span></span><span style="display:flex;"><span><span style="">#include</span> <span style="">&lt;stdlib.h&gt;</span><span style="">
+</span></span></span><span style="display:flex;"><span><span style=""></span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold">typedef</span> <span style="font-weight:bold">struct</span> node{
+</span></span><span style="display:flex;"><span>    <span style="">int</span> data;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">struct</span> node *next;
 </span></span><span style="display:flex;"><span>}Node;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>int read(){
-</span></span><span style="display:flex;"><span>    int x = 0, k = 1;
-</span></span><span style="display:flex;"><span>    char c = getchar();
-</span></span><span style="display:flex;"><span>    while(c &lt; &#39;0&#39; || c &gt; &#39;9&#39;) {
-</span></span><span style="display:flex;"><span>        if(c == &#39;-&#39;) k = -1;
+</span></span><span style="display:flex;"><span><span style="">int</span> read(){
+</span></span><span style="display:flex;"><span>    <span style="">int</span> x = 0, k = 1;
+</span></span><span style="display:flex;"><span>    <span style="">char</span> c = getchar();
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">while</span>(c &lt; <span style="font-style:italic">&#39;0&#39;</span> || c &gt; <span style="font-style:italic">&#39;9&#39;</span>) {
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">if</span>(c == <span style="font-style:italic">&#39;-&#39;</span>) k = -1;
 </span></span><span style="display:flex;"><span>        c = getchar();
 </span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    while(c &gt;= &#39;0&#39; &amp;&amp; c &lt;= &#39;9&#39;){
-</span></span><span style="display:flex;"><span>        x = x * 10 + c - &#39;0&#39;;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">while</span>(c &gt;= <span style="font-style:italic">&#39;0&#39;</span> &amp;&amp; c &lt;= <span style="font-style:italic">&#39;9&#39;</span>){
+</span></span><span style="display:flex;"><span>        x = x * 10 + c - <span style="font-style:italic">&#39;0&#39;</span>;
 </span></span><span style="display:flex;"><span>        c = getchar();
 </span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    return x * k;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">return</span> x * k;
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>struct node *build(int num){
-</span></span><span style="display:flex;"><span>    struct node *new = (struct node *)malloc(sizeof(struct node));
+</span></span><span style="display:flex;"><span><span style="font-weight:bold">struct</span> node *build(<span style="">int</span> num){
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">struct</span> node *new = (<span style="font-weight:bold">struct</span> node *)malloc(<span style="font-weight:bold">sizeof</span>(<span style="font-weight:bold">struct</span> node));
 </span></span><span style="display:flex;"><span>    new-&gt;data = num;
 </span></span><span style="display:flex;"><span>    new-&gt;next = NULL;
-</span></span><span style="display:flex;"><span>    return new;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">return</span> new;
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>void sortit(struct node *fir){
-</span></span><span style="display:flex;"><span>    struct node * now = fir-&gt;next;
-</span></span><span style="display:flex;"><span>    while(now-&gt;next != NULL){
-</span></span><span style="display:flex;"><span>        struct node *t = now-&gt;next;
-</span></span><span style="display:flex;"><span>        struct node *p = fir;
-</span></span><span style="display:flex;"><span>        struct node *q = fir-&gt;next;
-</span></span><span style="display:flex;"><span>        while((q-&gt;data &lt; t-&gt;data )&amp;&amp; (q != t)){
+</span></span><span style="display:flex;"><span><span style="">void</span> sortit(<span style="font-weight:bold">struct</span> node *fir){
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">struct</span> node * now = fir-&gt;next;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">while</span>(now-&gt;next != NULL){
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">struct</span> node *t = now-&gt;next;
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">struct</span> node *p = fir;
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">struct</span> node *q = fir-&gt;next;
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">while</span>((q-&gt;data &lt; t-&gt;data )&amp;&amp; (q != t)){
 </span></span><span style="display:flex;"><span>            p = p-&gt;next;
 </span></span><span style="display:flex;"><span>            q = q-&gt;next;
 </span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>        if(q == t) now = t;
-</span></span><span style="display:flex;"><span>        else{
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">if</span>(q == t) now = t;
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">else</span>{
 </span></span><span style="display:flex;"><span>            now-&gt;next = t-&gt;next;
 </span></span><span style="display:flex;"><span>            t-&gt;next =  p-&gt;next;
 </span></span><span style="display:flex;"><span>            p-&gt;next = t;
@@ -347,23 +346,23 @@ n(选手数) m(选票数) m个数字(选票内容)<br>
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>void printit(struct node * fir){
-</span></span><span style="display:flex;"><span>    struct node *t = fir;
-</span></span><span style="display:flex;"><span>    while(t-&gt;next != NULL){
+</span></span><span style="display:flex;"><span><span style="">void</span> printit(<span style="font-weight:bold">struct</span> node * fir){
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">struct</span> node *t = fir;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">while</span>(t-&gt;next != NULL){
 </span></span><span style="display:flex;"><span>        t = t-&gt;next;
-</span></span><span style="display:flex;"><span>        printf(&#34;%d&#34;, t-&gt;data);
-</span></span><span style="display:flex;"><span>        if(t-&gt;next == NULL){
-</span></span><span style="display:flex;"><span>            printf(&#34;\n&#34;);
+</span></span><span style="display:flex;"><span>        printf(<span style="font-style:italic">&#34;%d&#34;</span>, t-&gt;data);
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">if</span>(t-&gt;next == NULL){
+</span></span><span style="display:flex;"><span>            printf(<span style="font-style:italic">&#34;</span><span style="font-weight:bold;font-style:italic">\n</span><span style="font-style:italic">&#34;</span>);
 </span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>        else{
-</span></span><span style="display:flex;"><span>            printf(&#34; &#34;);
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">else</span>{
+</span></span><span style="display:flex;"><span>            printf(<span style="font-style:italic">&#34; &#34;</span>);
 </span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>void freeall(struct node *fir){
-</span></span><span style="display:flex;"><span>    struct node *t;
-</span></span><span style="display:flex;"><span>    while(fir-&gt;next != NULL){
+</span></span><span style="display:flex;"><span><span style="">void</span> freeall(<span style="font-weight:bold">struct</span> node *fir){
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">struct</span> node *t;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">while</span>(fir-&gt;next != NULL){
 </span></span><span style="display:flex;"><span>        t = fir-&gt;next;
 </span></span><span style="display:flex;"><span>        free(fir);
 </span></span><span style="display:flex;"><span>        fir = t;
@@ -371,12 +370,12 @@ n(选手数) m(选票数) m个数字(选票内容)<br>
 </span></span><span style="display:flex;"><span>    free(fir);
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>int main(){
-</span></span><span style="display:flex;"><span>    int n = read(), m = read();
-</span></span><span style="display:flex;"><span>    struct node *fir = build(0);
-</span></span><span style="display:flex;"><span>    int num = 0;
-</span></span><span style="display:flex;"><span>    struct node *now = fir;
-</span></span><span style="display:flex;"><span>    for(int i = 0; i &lt; m; i++){
+</span></span><span style="display:flex;"><span><span style="">int</span> main(){
+</span></span><span style="display:flex;"><span>    <span style="">int</span> n = read(), m = read();
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">struct</span> node *fir = build(0);
+</span></span><span style="display:flex;"><span>    <span style="">int</span> num = 0;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">struct</span> node *now = fir;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">for</span>(<span style="">int</span> i = 0; i &lt; m; i++){
 </span></span><span style="display:flex;"><span>        num = read();
 </span></span><span style="display:flex;"><span>        now-&gt;next = build(num);
 </span></span><span style="display:flex;"><span>        now = now-&gt;next;
@@ -384,7 +383,7 @@ n(选手数) m(选票数) m个数字(选票内容)<br>
 </span></span><span style="display:flex;"><span>    sortit(fir);
 </span></span><span style="display:flex;"><span>    printit(fir);
 </span></span><span style="display:flex;"><span>    freeall(fir);
-</span></span><span style="display:flex;"><span>    return 0;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">return</span> 0;
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h2 id="2-路插入排序">
   2-路插入排序

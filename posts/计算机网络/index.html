@@ -478,7 +478,7 @@
 <li>peers(对等实体) The entities comprising the corresponding layers on different machines; The peers may be processes hardware devices（进程或设备）</li>
 <li>Interface(接口) Defines which primitive operations and services the lower layer
 makes available to the upper one 不是体系结构定义的</li>
-<li>Network architecture（网络体系结构）A set of layers and protocols;Neither the details of the implementation nor the specification of the interfaces is part of the architecture 封装的细节或者借口的特点都不是网络体系结构的一部分</li>
+<li>Network architecture（网络体系结构）A set of layers and protocols;Neither the details of the implementation nor the specification of the interfaces is part of the architecture 封装的细节或者接口的特点都不是网络体系结构的一部分</li>
 <li>Protocol Stack（协议栈）A list of protocols used by a certain system</li>
 <li>通信是对等层通信，信息的流动是U形流动；除最下层外，其他层都是虚拟通信，最后一层是物理通信；高层的数据和底层的数据量不一样</li>
 </ul>
@@ -628,11 +628,290 @@ makes available to the upper one 不是体系结构定义的</li>
   </a>
 </h5>
 <ul>
-<li>上层-&gt;下层 原语</li>
-<li>n+1 -&gt; n CONNECT.request</li>
-<li>n -&gt; n+1 CONNECT.indication</li>
-<li>n+1</li>
+<li>上层与下层之间 原语</li>
+<li><img alt="service primitives" src="../../images/%E6%88%AA%E5%B1%8F2024-03-03%2009.47.37.png"></li>
 </ul>
+<h4 id="the-relationship-of-service-to-protocols">
+  The relationship of Service to Protocols
+  <a class="heading-link" href="#the-relationship-of-service-to-protocols">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<ul>
+<li>一层协议的实现需要下层的服务</li>
+<li>服务的视线需要本层协议的支持</li>
+<li>服务不变时，本层协议实现的改变不影响上层</li>
+</ul>
+<h5 id="协议的三要素">
+  协议的三要素
+  <a class="heading-link" href="#%e5%8d%8f%e8%ae%ae%e7%9a%84%e4%b8%89%e8%a6%81%e7%b4%a0">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h5>
+<ul>
+<li>语法：协议消息的格式，在PDU中可以显示出来</li>
+<li>语义：消息的字段区某个值的含义，在PDU中可以显示出来</li>
+<li>同步：事件发生顺序的说明，在PDU中不能显示出来</li>
+</ul>
+<h3 id="reference-models">
+  Reference Models
+  <a class="heading-link" href="#reference-models">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<h4 id="the-osi-referene-model">
+  The OSI referene model
+  <a class="heading-link" href="#the-osi-referene-model">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<p><img alt="OSI" src="/images/WechatIMG6.jpg"></p>
+<h4 id="layer-principles">
+  Layer principles
+  <a class="heading-link" href="#layer-principles">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<ul>
+<li>a well-defined function</li>
+<li>the layer boundaries should be chosen to minimize the informatin flow across the interfaces</li>
+<li>The number of layers should be
+<ul>
+<li>large enought that distinct functions need not be thrown together</li>
+<li>small enough that the architecture does not become too large</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/WechatIMG7.jpg"></p>
+<ul>
+<li>上三层与传输无关，7层为应用层，与用户打交道；6层为表示层，将抽象语法表示为传输语法；第5层为会话层。在intel网中都合并为一层</li>
+<li>下四层与传输有关 物理层PHY，数据链路层DL，网络层(NET)，传输层(Transport)(1-4)</li>
+<li>R之间的传输没有问题，数据不一定没有问题：在R中进行处理时可能出现错误</li>
+<li>端到端通信：上四层</li>
+</ul>
+<p><img alt="The OSI reference model" src="/images/WechatIMG8.jpg"></p>
+<ul>
+<li>网络层实现路由功能</li>
+<li>七层模型是考虑了异构计算记得最复杂情况下的模型</li>
+<li>在具体网络中需要根据实际需要确定</li>
+</ul>
+<h4 id="the-tcpip-reference-model">
+  The TCP/IP Reference Model
+  <a class="heading-link" href="#the-tcpip-reference-model">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<h5 id="design-goals">
+  Design goals
+  <a class="heading-link" href="#design-goals">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h5>
+<ul>
+<li>connect multiple networks in a seamless way</li>
+<li>be able to survive loss of subnet hardware, without existing conversations being broken off</li>
+<li>A flexible architecture to support applications with divergent requirements</li>
+</ul>
+<p><img alt="The TCP/IP Reference Model" src="/images/WechatIMG9.jpg"></p>
+<ul>
+<li>Link层为网络接口层，不对标链路层，兼容异构的网络</li>
+<li>四层架构</li>
+</ul>
+<h6 id="the-internet-layer网际层">
+  The Internet Layer(网际层)
+  <a class="heading-link" href="#the-internet-layer%e7%bd%91%e9%99%85%e5%b1%82">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h6>
+<ul>
+<li>connectionless</li>
+<li>IP(Internet Protocol)</li>
+<li>job
+<ul>
+<li>packet routing</li>
+<li>avoiding congestion</li>
+</ul>
+</li>
+</ul>
+<h6 id="tcpthe-transport-layer">
+  TCP(the transport layer)
+  <a class="heading-link" href="#tcpthe-transport-layer">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h6>
+<ul>
+<li>面向连接的、可靠的</li>
+<li>字节流byte stream：segments incoming byte stream into discrete messages</li>
+<li>reassembles the received messages into the
+output stream</li>
+<li>Flow control(流量控制)</li>
+<li>Congestion control(拥塞控制)</li>
+</ul>
+<h6 id="udpthe-transport-layer">
+  UDP(the transport layer)
+  <a class="heading-link" href="#udpthe-transport-layer">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h6>
+<ul>
+<li>无连接的、不可靠的</li>
+<li>For applications that do not want TCP‘s sequencing or flow control and wish to provide their own (i.e. NFS
+网络文件系统)</li>
+<li>For applications in which prompt delivery is more important than accurate delivery, such as transmitting speech or video, DNS</li>
+</ul>
+<h5 id="a-critique-of-the-osi-model-and-protocols">
+  A Critique of the OSI Model and Protocols
+  <a class="heading-link" href="#a-critique-of-the-osi-model-and-protocols">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h5>
+<ul>
+<li>Why OSI did not take over the world
+<ul>
+<li>bad timing</li>
+<li>bad technology</li>
+<li>bad implementations</li>
+<li>bad politics</li>
+</ul>
+</li>
+</ul>
+<h5 id="tcpip-critique">
+  TCP/IP Critique
+  <a class="heading-link" href="#tcpip-critique">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h5>
+<ul>
+<li>service, interface, and protocol not distinguished</li>
+<li>not a general model</li>
+<li>Link layer not really a layer</li>
+<li>no distinguishing between physical and data link layers</li>
+<li>minor protocols deeply entrenched, hard to replace,eg.Telnet</li>
+</ul>
+<h2 id="chapter-2-the-physical-layer">
+  chapter 2 The Physical Layer
+  <a class="heading-link" href="#chapter-2-the-physical-layer">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<h3 id="position-and-function-of-physical-layer">
+  Position and Function of Physical Layer
+  <a class="heading-link" href="#position-and-function-of-physical-layer">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>the lowest layer
+<img alt="pyhsical layer" src="/images/WechatIMG12.jpg"></li>
+<li>比特信号的转换</li>
+<li>比特速率的控制</li>
+<li>同步</li>
+<li>多路复用技术</li>
+</ul>
+<h4 id="basic-concepts-on-data-communications">
+  Basic Concepts on Data Communications
+  <a class="heading-link" href="#basic-concepts-on-data-communications">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<ul>
+<li>commmunication:the transmission of information between two distant points</li>
+<li>message:the information(data) to be communicated</li>
+<li>signal:计算机网络传输的内容，将包含信息的消息转变为信号involving a single independent variable(time)</li>
+<li>channel:信道，传送信息的介质(媒体)</li>
+<li>bandwith(Hz):The Width of the frequency range transmitted without being strongly attenuated信号所能传输的高低频之差，衰减不会太严重(analog bandwidth:Hz; the digital bandwidth:bps)
+<img alt="信道带宽" src="/images/WechatIMG13.jpg"></li>
+<li>bit rate(bps): the number of bits transmitted persecond</li>
+<li>baud rate(Baud): The number of signal units per second required to represents bits:1/T
+<img alt="Baud和bps的计算" src="/images/WechatIMG14.jpg"></li>
+<li>信道容量(Channel Capacity)：信道的最大传输数据率</li>
+<li>吞吐量：网络可以传送的数据位数</li>
+<li>负载：单位时间内注入网络的数据位数</li>
+<li>误码率BER：信道传输可靠性指标 P=传送错的位数/总的传送位数</li>
+<li>时延：从想网络中发送数据块的第一位开始，到最后一位数据被接受所经历的时间
+<ul>
+<li>发送时延(Transmission dealy)：设备发送一个数据块所需要的时间，将bit变成电信号放进传输介质中，与信道的带宽有关
+<ul>
+<li>B=link bandwith(bps)</li>
+<li>M= message length(bits)</li>
+<li>time to send bits into link = M/B</li>
+</ul>
+</li>
+<li>传播时延(Propagation Delay)
+<ul>
+<li>d = length of physical link</li>
+<li>s = pro</li>
+</ul>
+</li>
+<li>节点处理时延</li>
+<li>排队时延：在交换机/路由器中排队等待的时间</li>
+</ul>
+</li>
+</ul>
+<h4 id="theoretical-basis-for-data-communications">
+  Theoretical Basis for Data Communications
+  <a class="heading-link" href="#theoretical-basis-for-data-communications">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<h4 id="guider-transmission-mediaself-study">
+  Guider Transmission Media(Self-study)
+  <a class="heading-link" href="#guider-transmission-mediaself-study">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<h4 id="wireless-transmissionself-study">
+  Wireless Transmission(Self-study)
+  <a class="heading-link" href="#wireless-transmissionself-study">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<h4 id="communication-satellitesself-study">
+  Communication Satellites(Self-study)
+  <a class="heading-link" href="#communication-satellitesself-study">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<h4 id="digital-modulation-and-multiplexing">
+  Digital Modulation and Multiplexing
+  <a class="heading-link" href="#digital-modulation-and-multiplexing">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<h4 id="the-public-switched-telephone-network">
+  The Public Switched Telephone Network
+  <a class="heading-link" href="#the-public-switched-telephone-network">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<h4 id="补充protocol-example-rs-232">
+  (补充)Protocol Example: RS-232
+  <a class="heading-link" href="#%e8%a1%a5%e5%85%85protocol-example-rs-232">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
 
       </div>
 

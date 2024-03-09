@@ -831,9 +831,483 @@
 </li>
 </ul>
 </li>
+<li>内联函数函数
+<ul>
+<li>inline void Swap(int &amp;a, int &amp;b);</li>
+<li>编译时在调用处对函数体进行替换，节省了参数传递、控制转移等开销</li>
+<li>内联函数的声明必须出现在内连函数第一次被调用之前</li>
+<li>提高执行效率</li>
+<li>当函数在软件中会被频繁调用的时候，节省返回时的存储</li>
+<li>但函数体的执行语句比较简单时，才能提高性能</li>
+<li>替换C语言的宏定义</li>
+</ul>
+</li>
+<li>默认参数
+<ul>
+<li>函数在声明时可以预先给出默认的形参值，调用时若给出实参，则采用实参值，否则采用预先给出的默认形参值</li>
+<li>如 int add(int x = 5, int y = 6)</li>
+<li>默认形参值必须从右向左顺序声明，并且在默认形参值的右边不能有非默认形参值的参数。因为调用时实参取代形参时从左向右的顺序</li>
+<li>若调用出现在函数体实现之后，默认参数可以在函数实现时给出（但在默认参数未定义之前，函数调用时不能使用默认参数）</li>
+<li>默认参数值也可以函数原型中给出，但默认参数只能定义一次</li>
+<li>在相同的作用域内，默认形参值的说明应保持唯一，但如果在不同的作用域内，允许说明不同的默认形参（有局部默认形参值就用局部的，没有就用全局的）</li>
+</ul>
+</li>
+<li>函数重载
+<ul>
+<li>C++允许功能相近的函数在相同的作用域内以相同函数名声明，从而形成重载</li>
+<li>实际意义和功能相同或相机，方便使用，便于记忆</li>
+<li>编译器自动根据参数类型、个数等调用相应的函数</li>
+<li>重载函数的形参必须不同：个数不同或类型不同</li>
+<li>编译程序时将根据实参和形参的类型及个数的最佳匹配来选择</li>
+<li>编译器不以返回值和形参名来区分重载</li>
+<li>不要将不同功能的函数声明为重载函数，以免出现调用结果的误解、混淆</li>
 </ul>
 </li>
 </ul>
+</li>
+</ul>
+<h3 id="动态存贮分配">
+  动态存贮分配
+  <a class="heading-link" href="#%e5%8a%a8%e6%80%81%e5%ad%98%e8%b4%ae%e5%88%86%e9%85%8d">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>
+<p>c++中引入的新算符new/delete，代替C语言中的内存分配</p>
+</li>
+<li>
+<p>new</p>
+<ul>
+<li>new 类型名T（初值列表）</li>
+<li>功能
+<ul>
+<li>在程序执行期间，动态申请一块用于存放类型T的对象的内存空间，并依初值列表赋以初值</li>
+<li>动态内存空间是有操作系统管理的，可供所有程序共享申请的内存空间，称为堆</li>
+<li>不必调用库函数</li>
+</ul>
+</li>
+<li>结果值
+<ul>
+<li>成功：T类型的指针，指向新分配的内存</li>
+<li>失败：0/NULL</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>delete释放内存操作符</p>
+<ul>
+<li>语法：delete 指针表达式(new返回的指针表达式)</li>
+<li>功能
+<ul>
+<li>释放指针表达式所指向的动态内存空间，归还给操作系统，否则容易导致内存泄露</li>
+<li>delete使程序员不必要调用库函数，如free等</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>例子</p>
+<ul>
+<li>int *p;</li>
+<li>p = new int(2);</li>
+<li>delete p;</li>
+<li>p = new int[100];//申请一个int类型的数组，长度为100，返回数组首地址</li>
+<li>delete [] p;//告诉计算机要释放多个</li>
+</ul>
+</li>
+</ul>
+<h2 id="类与对象">
+  类与对象
+  <a class="heading-link" href="#%e7%b1%bb%e4%b8%8e%e5%af%b9%e8%b1%a1">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<h3 id="面向对象的程序设计oop">
+  面向对象的程序设计OOP
+  <a class="heading-link" href="#%e9%9d%a2%e5%90%91%e5%af%b9%e8%b1%a1%e7%9a%84%e7%a8%8b%e5%ba%8f%e8%ae%be%e8%ae%a1oop">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<ul>
+<li>面向过程程序设计方法
+<ul>
+<li>想法
+<ul>
+<li>首先定义所要实现的功能</li>
+<li>为这些功能设计所必要的步骤或过程</li>
+<li>采用自顶向下，功能分流法</li>
+<li>程序组成形式——主模块+子模块</li>
+<li>数据处于次要的地位，而过程是关心的重点</li>
+</ul>
+</li>
+<li>缺点
+<ul>
+<li>数据与操作这些数据的过程分离，一旦问题改变（数据结构发生变化），就需要重新修改问题的解决方法（操作数据的过程）</li>
+<li>软件维护成本高</li>
+<li>不利于代码重用
+<ul>
+<li>以函数（功能、过程）的方式实现代码重用，效率低</li>
+<li>理想的方式：问题的解决方案能够重用</li>
+</ul>
+</li>
+<li>不适于中大型、巨型软件程序设计</li>
+</ul>
+</li>
+<li>过程+数据结构，向过程传递数据</li>
+</ul>
+</li>
+</ul>
+<h4 id="面向对象概念">
+  面向对象概念
+  <a class="heading-link" href="#%e9%9d%a2%e5%90%91%e5%af%b9%e8%b1%a1%e6%a6%82%e5%bf%b5">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<ul>
+<li>是一种解决问题的方法或观点</li>
+<li>认为自然界是由一组彼此相互关联并相互作用(通信)的实体所组成，称为对象(Object)
+<ul>
+<li>对象化的表示更接近于对世界的自然描述</li>
+</ul>
+</li>
+</ul>
+<h4 id="程序员使用面向对象的观点来分析问题">
+  程序员使用面向对象的观点来分析问题
+  <a class="heading-link" href="#%e7%a8%8b%e5%ba%8f%e5%91%98%e4%bd%bf%e7%94%a8%e9%9d%a2%e5%90%91%e5%af%b9%e8%b1%a1%e7%9a%84%e8%a7%82%e7%82%b9%e6%9d%a5%e5%88%86%e6%9e%90%e9%97%ae%e9%a2%98">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<ul>
+<li>将所要解决的问题转化为程序中的对象——任何问题在程序中都被映射为对象</li>
+<li>找出问题的属性（数据描述）与操作方法（通过函数来体现）</li>
+<li>然后用计算机语言来描述问题，最后在计算机中加以处理</li>
+</ul>
+<h4 id="程序设计-1">
+  程序设计
+  <a class="heading-link" href="#%e7%a8%8b%e5%ba%8f%e8%ae%be%e8%ae%a1-1">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<ul>
+<li>解决问题时有高度的概括、抽象能力</li>
+<li>根据自然实体的属性进行分类和抽象</li>
+<li>准确描述实体类的属性和行为</li>
+<li>对问题进行分析和抽象，使用程序设计语言中的类和类之间的关系来描述待解决的问题和相关性</li>
+<li>对垒进行具体化</li>
+</ul>
+<h4 id="程序组成形式对象消息">
+  程序组成形式：对象+消息
+  <a class="heading-link" href="#%e7%a8%8b%e5%ba%8f%e7%bb%84%e6%88%90%e5%bd%a2%e5%bc%8f%e5%af%b9%e8%b1%a1%e6%b6%88%e6%81%af">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<ul>
+<li>对象之间通过消息作为连接相互驱动</li>
+<li>对象的行为体现为对消息的处理方式</li>
+<li>对象之间的关系是编程关心的重点，而对象功能实现细节则处于次要地位，并且通常被封装</li>
+</ul>
+<h4 id="面向对象程序设计的优越性">
+  面向对象程序设计的优越性
+  <a class="heading-link" href="#%e9%9d%a2%e5%90%91%e5%af%b9%e8%b1%a1%e7%a8%8b%e5%ba%8f%e8%ae%be%e8%ae%a1%e7%9a%84%e4%bc%98%e8%b6%8a%e6%80%a7">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<ul>
+<li>提高软件质量：实现数据与方法的封装，通过方法来操作改变数据，提高了数据访问的安全性</li>
+<li>易于软件维护</li>
+<li>支持软件重用</li>
+<li>实现可重用的软件组件，实现软件设计的产业化
+<ul>
+<li>由于程序是类的集合从而可以根据问题的相关性来组装程序</li>
+<li>而面向过程程序设计则是函数的集合，零散不便于代码重用</li>
+</ul>
+</li>
+</ul>
+<h4 id="oop基本手段抽象">
+  OOP基本手段——抽象
+  <a class="heading-link" href="#oop%e5%9f%ba%e6%9c%ac%e6%89%8b%e6%ae%b5%e6%8a%bd%e8%b1%a1">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<ul>
+<li>对具体问题（对象）进行分类概括，提取出这一类对象的共同性质并且加以描述的过程</li>
+<li>编程的要求
+<ul>
+<li>先注意问题的本质和描述，其次是实现过程或细节。它直接决定程序的优劣——类的定义及组成元素。</li>
+<li>所涉及到的主要内容
+<ul>
+<li>数据抽象（属性）：描述某类对象的属性或状态（对象相互区别的物理量）</li>
+<li>行为抽象（方法）：描述某类对象的共有的行为特征</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="oop基本手段封装">
+  OOP基本手段——封装
+  <a class="heading-link" href="#oop%e5%9f%ba%e6%9c%ac%e6%89%8b%e6%ae%b5%e5%b0%81%e8%a3%85">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<ul>
+<li>将抽象出的属性和行为结合，作为一个整体来对待
+<ul>
+<li>工具：在C++中使用类class来进行封装</li>
+<li>属性表示为类中的数据成员</li>
+<li>行为表示为类中的成员函数</li>
+<li>封装机制将这二类成员组合在一起，形成问题的类，类实例化就可以产生类的实体——对象</li>
+</ul>
+</li>
+<li>封装的目的
+<ul>
+<li>增强安全性和简化编程</li>
+<li>高度模块化，易于产生软件组件</li>
+</ul>
+</li>
+<li>实现封装：定义class</li>
+</ul>
+<h4 id="数据封装和数据隐藏">
+  数据封装和数据隐藏
+  <a class="heading-link" href="#%e6%95%b0%e6%8d%ae%e5%b0%81%e8%a3%85%e5%92%8c%e6%95%b0%e6%8d%ae%e9%9a%90%e8%97%8f">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<ul>
+<li>
+<p>encapsulation</p>
+<ul>
+<li>将基本数据和能够对这些基本数据进行的操作（方法）结合起来</li>
+<li>对这些数据的操作只能通过制定的方法(method)来进行</li>
+<li>这些操作方法也称为借口(interface)</li>
+</ul>
+</li>
+<li>
+<p>data hiding</p>
+<ul>
+<li>将基本数据的内部结构对外隐藏起来，使内部数据结构对外具有不可访问性</li>
+<li>提高数据安全性</li>
+</ul>
+</li>
+<li>
+<p>优点：可维护性</p>
+<ul>
+<li>对外提供一致的借口</li>
+<li>当数据及操作的内部实现发生改变时，只要接口保持一致，将不会影响软件的其他部分</li>
+</ul>
+</li>
+<li>
+<p>封装工具</p>
+<ul>
+<li>类class定义用户的抽象数据结构
+<ul>
+<li>对象(private)：基本数据和抽象数据结构，即类的成员变量</li>
+<li>成员函数：对这些数据的操作方法</li>
+<li>接口(public)</li>
+</ul>
+</li>
+<li>对象object是类的实例</li>
+</ul>
+</li>
+<li>
+<p>封装的特征</p>
+<ul>
+<li>有一定的边界
+<ul>
+<li>对数据的改动限制在边界之内</li>
+</ul>
+</li>
+<li>有外部接口（类中的public成员）</li>
+<li>有特定的数据保护或访问权限
+<ul>
+<li>保护内部细节</li>
+<li>private的成员，在对向外部不允许访问或修改</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>OOP基本手段 继承与派生</p>
+<ul>
+<li>在C++中，支持分类层次的一种机制
+<ul>
+<li>允许程序员定义一个新的类，新类在原有类属性和行为的基础上，定义更具体、更详细的属性和行为</li>
+</ul>
+</li>
+<li>现实意义
+<ul>
+<li>现实世界中的对象相互关联</li>
+<li>每一个对象所属的类在纵向上体现为从属或继承关系，这为OOP的继承提供现实基础</li>
+<li>通过继承可以实现对现有软件的重用、扩展</li>
+<li>继承通过对类的派生来实现</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>OOP基本手段 多态性</p>
+<ul>
+<li>在类的派生过程中，允许不同的派生类对同一个操作有不同的行为实现
+<ul>
+<li>多态的体现：不同的派生类中，对同一成员函数采用不同的实现方式，在调用时总是能够保证正确的方法被调用</li>
+<li>目的：行为与标识统一</li>
+<li>实现：虚函数与重写(override)函数</li>
+<li>指向大类的指针可以指向子类</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="c的类与对象">
+  C++的类与对象
+  <a class="heading-link" href="#c%e7%9a%84%e7%b1%bb%e4%b8%8e%e5%af%b9%e8%b1%a1">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<h4 id="类">
+  类
+  <a class="heading-link" href="#%e7%b1%bb">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<ul>
+<li>
+<p>类的定义</p>
+<ul>
+<li>类是具有相同属性和行为的一组对象的集合，它为属于该类的全部对象提供了统一的抽象描述，其内部包括属性和行为两部分</li>
+<li>实现数据的封装、隐藏、继承与派生</li>
+<li>易于编写大型复杂程序</li>
+</ul>
+</li>
+<li>
+<p>类的声明形式</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>class 类名称{      
+</span></span><span style="display:flex;"><span>    public:        
+</span></span><span style="display:flex;"><span>        公有成员（外部接口）
+</span></span><span style="display:flex;"><span>    private:
+</span></span><span style="display:flex;"><span>        私有成员
+</span></span><span style="display:flex;"><span>    protected:
+</span></span><span style="display:flex;"><span>        保护型成员
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><ul>
+<li>public 接口</li>
+<li>private
+<ul>
+<li>只允许在本类对象成员函数中被访问，不允许外部访问</li>
+<li>用于定义累的内部数据和代码实现</li>
+<li>省略情况下，默认为private</li>
+</ul>
+</li>
+<li>protected
+<ul>
+<li>声明后面的成员变量或成员函数只允许在本类或其派生类的成员函数中被访问</li>
+</ul>
+</li>
+<li>类定义的例子</li>
+<li>类成员的定义
+<ul>
+<li>数据成员</li>
+<li>成员函数
+<ul>
+<li>在类说明中给出原型，在类说明以外给出函数的实现</li>
+<li>在定义成员函数时，需要在函数名钱使用类名加以限定Clock::SetTIme</li>
+<li>也可直接在类说明中给出函数体，当做内联函数使用(声明内联函数的方法：类的声明中、inline，建议使用inline)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>class 与 struct</p>
+<ul>
+<li>在C++中，class与struct相同，差别仅在于：
+<ul>
+<li>不加访问类型限制时，struct成员的缺省的访问限制都是public</li>
+<li>不加访问类型限制时，class成员的缺省的访问限制都是private</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>C++的对象</p>
+<ul>
+<li>类的对象是该类的某一特定实例，是类行为该类的一个变量</li>
+<li>声明形式： 类名 对象名;</li>
+<li>对对象成员的访问方式
+<ul>
+<li>与访问结构成员类似</li>
+<li>对象名.成员名</li>
+<li>从类的外部访问该类的对象时，需要受到访问类型的限制</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>C++类中的自引用</p>
+<ul>
+<li>在类的成员函数的上下文中，存在一个指向被调用的对象的指针（用关键字this指出）
+<ul>
+<li>调用同一类的不同对象的成员函数时，其上下文的this指针不同，分别指向不同的对象</li>
+<li>尽管这些对象采相同的成员代码，但实际操作是不同的对象成员的数据成员</li>
+<li>this是类成员函数的一个隐含参数（除了静态成员函数外）</li>
+<li>当对象的成员名与形参名相同时，用this-&gt;Hour表示成员，用Hour表示形参</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>C++类的概念结构</p>
+<ul>
+<li>属于一个类的所有实例（对象）具有相同的结构，但具有不同的存储空间</li>
+</ul>
+</li>
+</ul>
+<h4 id="构造函数与析构函数">
+  构造函数与析构函数
+  <a class="heading-link" href="#%e6%9e%84%e9%80%a0%e5%87%bd%e6%95%b0%e4%b8%8e%e6%9e%90%e6%9e%84%e5%87%bd%e6%95%b0">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h4>
+<ul>
+<li>构造函数
+<ul>
+<li><em>在C语言中，未赋初值的全局变量的值为0，未赋初值的局部变量值不确定，忘记赋初值会发生运行时错误</em></li>
+<li>作用
+<ul>
+<li>在类的对象被创建的时候，对被创建的对象的数据成员的值进行特定的初始化，或者说将对象初始化为一个特定的状态</li>
+<li>在对象创建时系统自动调用类的构造函数创建对象</li>
+<li>若果未声明构造函数，系统自动产生出一个类的默认构造函数</li>
+</ul>
+</li>
+<li>特点
+<ul>
+<li>构造函数也允许为内联函数、重载函数、带默认形参值的函数</li>
+<li>构造函数没有返回值，也不是返回void</li>
+<li>构造函数的名称与类名相同</li>
+<li>不用显式调用，直接传参数</li>
+<li>构造函数允许重载</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>下周验收第一题</p>
 
       </div>
 

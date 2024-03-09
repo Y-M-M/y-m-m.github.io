@@ -692,7 +692,7 @@ makes available to the upper one 不是体系结构定义的</li>
 <li>上三层与传输无关，7层为应用层，与用户打交道；6层为表示层，将抽象语法表示为传输语法；第5层为会话层。在intel网中都合并为一层</li>
 <li>下四层与传输有关 物理层PHY，数据链路层DL，网络层(NET)，传输层(Transport)(1-4)</li>
 <li>R之间的传输没有问题，数据不一定没有问题：在R中进行处理时可能出现错误</li>
-<li>端到端通信：上四层</li>
+<li>端到端通信：上四层，下面都是点到点通信；端到端通信协议要一致，底层协议不一定要一致，只需要两点之间一致</li>
 </ul>
 <p><img alt="The OSI reference model" src="/images/WechatIMG8.jpg"></p>
 <ul>
@@ -700,9 +700,9 @@ makes available to the upper one 不是体系结构定义的</li>
 <li>七层模型是考虑了异构计算记得最复杂情况下的模型</li>
 <li>在具体网络中需要根据实际需要确定</li>
 </ul>
-<h4 id="the-tcpip-reference-model">
-  The TCP/IP Reference Model
-  <a class="heading-link" href="#the-tcpip-reference-model">
+<h4 id="the-tcpip-reference-model基于实际网络的模型">
+  The TCP/IP Reference Model（基于实际网络的模型）
+  <a class="heading-link" href="#the-tcpip-reference-model%e5%9f%ba%e4%ba%8e%e5%ae%9e%e9%99%85%e7%bd%91%e7%bb%9c%e7%9a%84%e6%a8%a1%e5%9e%8b">
     <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
     <span class="sr-only">Link to heading</span>
   </a>
@@ -815,7 +815,8 @@ output stream</li>
   </a>
 </h3>
 <ul>
-<li>the lowest layer
+<li>the lowest layer（第一层），传输介质是第0层</li>
+<li>defines the interfaces(bits are sent as signals over channels)
 <img alt="pyhsical layer" src="/images/WechatIMG12.jpg"></li>
 <li>比特信号的转换</li>
 <li>比特速率的控制</li>
@@ -830,20 +831,43 @@ output stream</li>
   </a>
 </h4>
 <ul>
-<li>commmunication:the transmission of information between two distant points</li>
-<li>message:the information(data) to be communicated</li>
-<li>signal:计算机网络传输的内容，将包含信息的消息转变为信号involving a single independent variable(time)</li>
-<li>channel:信道，传送信息的介质(媒体)</li>
-<li>bandwith(Hz):The Width of the frequency range transmitted without being strongly attenuated信号所能传输的高低频之差，衰减不会太严重(analog bandwidth:Hz; the digital bandwidth:bps)
-<img alt="信道带宽" src="/images/WechatIMG13.jpg"></li>
-<li>bit rate(bps): the number of bits transmitted persecond</li>
-<li>baud rate(Baud): The number of signal units per second required to represents bits:1/T
-<img alt="Baud和bps的计算" src="/images/WechatIMG14.jpg"></li>
-<li>信道容量(Channel Capacity)：信道的最大传输数据率</li>
-<li>吞吐量：网络可以传送的数据位数</li>
-<li>负载：单位时间内注入网络的数据位数</li>
-<li>误码率BER：信道传输可靠性指标 P=传送错的位数/总的传送位数</li>
-<li>时延：从想网络中发送数据块的第一位开始，到最后一位数据被接受所经历的时间
+<li>
+<p>commmunication:the transmission of information between two distant points</p>
+</li>
+<li>
+<p>message:the information(data) to be communicated</p>
+</li>
+<li>
+<p>signal:计算机网络传输的内容，将包含信息的消息转变为信号involving a single independent variable(time)</p>
+</li>
+<li>
+<p>channel:信道，传送信息的介质(媒体)</p>
+</li>
+<li>
+<p>bandwith(Hz):The Width of the frequency range transmitted without being strongly attenuated信号所能传输的高低频之差，衰减不会太严重(analog bandwidth:Hz; the digital bandwidth:bps)
+<img alt="信道带宽" src="/images/WechatIMG13.jpg"></p>
+</li>
+<li>
+<p>bit rate(bps): the number of bits transmitted persecond</p>
+</li>
+<li>
+<p>baud rate(Baud): The number of signal units per second required to represents bits:1/T
+<img alt="Baud和bps的计算" src="/images/WechatIMG14.jpg"></p>
+</li>
+<li>
+<p>信道容量(Channel Capacity)：信道的最大传输数据率</p>
+</li>
+<li>
+<p>吞吐量：网络可以传送的数据位数</p>
+</li>
+<li>
+<p>负载：单位时间内注入网络的数据位数</p>
+</li>
+<li>
+<p>误码率BER：信道传输可靠性指标 P=传送错的位数/总的传送位数</p>
+</li>
+<li>
+<p>时延：从想网络中发送数据块的第一位开始，到最后一位数据被接受所经历的时间</p>
 <ul>
 <li>发送时延(Transmission dealy)：设备发送一个数据块所需要的时间，将bit变成电信号放进传输介质中，与信道的带宽有关
 <ul>
@@ -862,6 +886,45 @@ output stream</li>
 <li>排队时延：在交换机/路由器中排队等待的时间</li>
 </ul>
 </li>
+<li>
+<p>带宽时延积(bandwidth-delay product):表示充满整个链路的比特数，是一种网络性能指标 = 传播时延(propagation delay)*带宽(bandwidth)</p>
+</li>
+<li>
+<p>通信方式</p>
+<ul>
+<li>simplex单工 FM Radio broadcasting</li>
+<li>Half-duplex半双工：信息可以双向传递，但同一时刻信息只能单向传递talkie and walkie</li>
+<li>Full-duplex：信息同时双向传递</li>
+</ul>
+</li>
+<li>
+<p>Serial transmission（串行传输） vs. Parallel transmission（并行传输）</p>
+</li>
+<li>
+<p>Asynchronous Transmission（异步传输） vs. Synchronous Transmission（同步传输）</p>
+<ul>
+<li>异步传输：独立时钟，无需同步，有起始位和终止位</li>
+<li>同步传输：收发双方始终同步</li>
+</ul>
+</li>
+<li>
+<p>Transmission Impairment</p>
+<ul>
+<li>Signal received may differ from signl transmitted
+<ul>
+<li>Analog - degradation(劣化) of signal quality</li>
+<li>Digital - bit errors(误码)</li>
+</ul>
+</li>
+<li>Caused by
+<ul>
+<li>Attenuation(衰减) and attenuation distortion(失真)，振幅</li>
+<li>Delay distortion(时延失真)，不同频率的电磁波的传输时延不同</li>
+<li>Noise(噪声)</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 <h4 id="theoretical-basis-for-data-communications">
   Theoretical Basis for Data Communications
@@ -870,6 +933,42 @@ output stream</li>
     <span class="sr-only">Link to heading</span>
   </a>
 </h4>
+<ul>
+<li>
+<p>Fourier Transform(傅里叶变换)</p>
+<ul>
+<li>Any periodic signal g(t) with period T(=1/f) can be constructed by summing a (possibly infinite) number of sines and cosines</li>
+<li>频率越高，能量越小（振幅越小）
+<img alt="傅里叶变换" src="/images/%E6%88%AA%E5%B1%8F2024-03-06%2010.25.46.png"></li>
+<li>bandwidth
+<ul>
+<li>信道的频率范围由它本身确定，是信道的物理特性, depends on construction, thickness, length</li>
+<li>信号的频率范围由傅里叶变换计算（信号的带宽），傅里叶变换能量主要集中范围</li>
+<li>Higher data rates require more bandwidth. Limiting bandwidth limits data rate.-&gt;尽量有效的利用给定的带宽，信号质量控制在可接受的范围内，传输速率尽量高-&gt;需要研究：传输速率c、信道带宽B之间的关系-&gt;带宽受限信道的最大传输速率</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Capacity for noiseless channel(无噪声信道)</p>
+<ul>
+<li>Nyquist proved that: if an arbitrary signal has been run through a low-pass filter of bandwidth B, the filtered signal can be completely reconstructed by making only 2B samples per second</li>
+<li>Given binary signal, data rate supported by B Hz is 2B bps
+<img alt="奈奎斯特公式" src="/images/%E6%88%AA%E5%B1%8F2024-03-06%2010.36.32.png"></li>
+<li>计算时用最小的</li>
+<li>Increasing the levels of a signal may increase the bit rate of the channel.但V不能无限制的增大，V值越多，有效状态之间的电压差越小</li>
+<li>有噪声信道的最大传输速度与信道带宽与信道质量(关系到V值能提高到多少)有关 SNR信噪比越大越好</li>
+</ul>
+</li>
+<li>
+<p>Noisy Channel: Shannon Capacity（香农公式，1948）
+<img alt="香农公式" src="/images/%E6%88%AA%E5%B1%8F2024-03-06%2010.51.08.png"></p>
+<ul>
+<li>理论上限制，若传输速率超过了理论上限制，信号一点会失真
+<img alt="信噪比" src="/images/%E6%88%AA%E5%B1%8F2024-03-06%2010.52.40.png"></li>
+</ul>
+</li>
+</ul>
 <h4 id="guider-transmission-mediaself-study">
   Guider Transmission Media(Self-study)
   <a class="heading-link" href="#guider-transmission-mediaself-study">
@@ -877,6 +976,9 @@ output stream</li>
     <span class="sr-only">Link to heading</span>
   </a>
 </h4>
+<ul>
+<li>有限传输介质</li>
+</ul>
 <h4 id="wireless-transmissionself-study">
   Wireless Transmission(Self-study)
   <a class="heading-link" href="#wireless-transmissionself-study">
@@ -884,6 +986,9 @@ output stream</li>
     <span class="sr-only">Link to heading</span>
   </a>
 </h4>
+<ul>
+<li>无限传说介质</li>
+</ul>
 <h4 id="communication-satellitesself-study">
   Communication Satellites(Self-study)
   <a class="heading-link" href="#communication-satellitesself-study">
@@ -891,6 +996,9 @@ output stream</li>
     <span class="sr-only">Link to heading</span>
   </a>
 </h4>
+<ul>
+<li>卫星传输介质</li>
+</ul>
 <h4 id="digital-modulation-and-multiplexing">
   Digital Modulation and Multiplexing
   <a class="heading-link" href="#digital-modulation-and-multiplexing">
@@ -898,6 +1006,58 @@ output stream</li>
     <span class="sr-only">Link to heading</span>
   </a>
 </h4>
+<h5 id="signal-encoding-teechniques">
+  Signal Encoding Teechniques
+  <a class="heading-link" href="#signal-encoding-teechniques">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h5>
+<ul>
+<li>digital data, digital signal</li>
+<li>digital data, analog signal 数字数据-&gt;模拟信号，带通传输
+<img alt="信道编码" src="/images/%E6%88%AA%E5%B1%8F2024-03-06%2011.03.25.png"></li>
+<li>analog data, digital signal: Digitized Analog Signals模拟数据的数字化变化，抽样变化编码</li>
+<li>analog data, analog signal 有线电话网路</li>
+</ul>
+<h5 id="baseband-transmission基带传输-vs-passband-transmission通带传输">
+  Baseband transmission（基带传输） vs Passband transmission（通带传输）
+  <a class="heading-link" href="#baseband-transmission%e5%9f%ba%e5%b8%a6%e4%bc%a0%e8%be%93-vs-passband-transmission%e9%80%9a%e5%b8%a6%e4%bc%a0%e8%be%93">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h5>
+<ul>
+<li>Baseband signal: Signals that run from 0 up to a maximum frequency</li>
+<li>Passband signal: Signals that are shifted to occupy a higher range of frequencies.所有无线通信都是带同信号</li>
+</ul>
+<h5 id="bseband-transmission-信道编码">
+  Bseband transmission 信道编码
+  <a class="heading-link" href="#bseband-transmission-%e4%bf%a1%e9%81%93%e7%bc%96%e7%a0%81">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h5>
+<ul>
+<li>bit stream</li>
+<li>manchester(曼彻斯特编码)，以太网早期采用
+<ul>
+<li>Transition in middle of each bit period</li>
+<li>Transition serves as clock and data</li>
+<li>Low to high represents 1, High to low represents 0, used by IEEE 802.3 LAN(Classic Ethernet)
+<img alt="manchester" src="/images/%E6%88%AA%E5%B1%8F2024-03-06%2011.14.43.png"></li>
+<li>提升抗干扰能力，不会误判，但无法纠错</li>
+</ul>
+</li>
+<li>NRZ 非归零码 Non·Return to Zero：接收方容易有误码（数字通信要求双方时钟同步，有判别电压），对信道传输质量要求高</li>
+<li>好的信道编码应该具备的优点
+<ul>
+<li>Clock Recovery: 信号自带时钟(mix the clock signal with the data signal)或send a separate clock</li>
+<li>Balanced Signals:不含直流分量，如曼彻斯特编码和NRZ长距离通信，有电容隔直流</li>
+<li>Bandwidth Efficiency带宽效率要高，</li>
+</ul>
+</li>
+</ul>
 <h4 id="the-public-switched-telephone-network">
   The Public Switched Telephone Network
   <a class="heading-link" href="#the-public-switched-telephone-network">

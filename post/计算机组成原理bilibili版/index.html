@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script type="application/javascript" src='https://y-m-m.github.io/js/theme-mode.js'></script>
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/frameworks.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github-style.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/light.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/dark.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/syntax.css' />
+    <title>计算机组成原理bilibili版 - 陈皮的博客</title>
+    
+    <link rel="icon" type="image/x-icon" href='/images/github-mark.png'>
+    
+    <meta name="theme-color" content="#1e2327">
+
+    
+    <meta name="description"
+  content="第一章 计算机系统概述 1-1 计算机系统的组成 软件系统（软件需要在硬件上运行） 系统软件：为管理整个计算机系统所编制的程序 操作系统 数据库管理系统 网络系统 标准程序库 语言处理程序 服务程序 应用软件：为实现用户应用所编制的各种程序 科学计算 数据处理 过程控制 事务管理 硬件系统 主机 外设 计算机系统性能的好坏，取决于硬件和软件功能的总和 1-2 计算机的发展（电子数字计算机） 图灵机：理想的计算模型 一种具备读写、存储等功能的通用计算机模型 一条带子，一个读写头和一个控制装置，能执行任何给定的计算，能执行任何可能的任务 奠定了现代计算机的基础 1938年 信息论创始人 香农-&gt;布尔代数与开关电路的联系 世界上第一台真正意义上的电子数字计算机 阿塔纳索夫-贝瑞计算机ABC 300个电子管，不可编程，仅用于求解线性方程组 1946，基于ABC计算机-&gt;电子数字积分机和计算机ENIAC 十进制、弹道参数计算 莫克利和艾克特得到美国军方的支持和冯·诺依曼等人的帮助 四个发展阶段 第1代1946-1957 电子管（真空管） 使用机器语言编程，无操作系统 第2代1958-1-64 晶体管 主要使用汇编语言编程，开始使用FORTRAN、COBOL等高等语言，单道批处理系统 第3代1965-1971 集成电路 高级语言进一步发展，出现了B语言（C语言的前身），多道批处理系统，分时系统 第4代1972至今，超大规模集成电路 各种高级语言，现代操作系统 体积越小、功耗月底、可靠性越高、速度越快-&gt;依赖于电子器件的发展 摩尔定律：半导体集成电路上可容纳的晶体管数量大约每经过18-24个月便会增加一倍。换言之，处理器的性能大约每两年翻一倍，同时价格下降为之前的一半 （从2013年开始，减缓为3年翻一番 软件发展 机器语言 汇编语言 高级语言 第一个高级语言FORTRAN 最简单的语言Basic 里程碑Pascal 现代程序语革命的起点 面向对象 C&#43;&#43; Java Python &hellip;&hellip; 当前计算机发展趋势 更微型化 低功耗 较高性能 多用途 更巨型化 超高速 并行处理 智能化 目前我国最快的超级计算机是神威·太湖之光，每秒可进行9.3亿亿次浮点运算 1-3 计算机硬件 冯诺依曼计算机
+" />
+<meta name="keywords"
+  content='blog, google analytics' />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://y-m-m.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86bilibili%E7%89%88/" />
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="计算机组成原理bilibili版 - 陈皮的博客" />
+<meta name="twitter:description"
+  content="第一章 计算机系统概述 1-1 计算机系统的组成 软件系统（软件需要在硬件上运行） 系统软件：为管理整个计算机系统所编制的程序 操作系统 数据库管理系统 网络系统 标准程序库 语言处理程序 服务程序 应用软件：为实现用户应用所编制的各种程序 科学计算 数据处理 过程控制 事务管理 硬件系统 主机 外设 计算机系统性能的好坏，取决于硬件和软件功能的总和 1-2 计算机的发展（电子数字计算机） 图灵机：理想的计算模型 一种具备读写、存储等功能的通用计算机模型 一条带子，一个读写头和一个控制装置，能执行任何给定的计算，能执行任何可能的任务 奠定了现代计算机的基础 1938年 信息论创始人 香农-&gt;布尔代数与开关电路的联系 世界上第一台真正意义上的电子数字计算机 阿塔纳索夫-贝瑞计算机ABC 300个电子管，不可编程，仅用于求解线性方程组 1946，基于ABC计算机-&gt;电子数字积分机和计算机ENIAC 十进制、弹道参数计算 莫克利和艾克特得到美国军方的支持和冯·诺依曼等人的帮助 四个发展阶段 第1代1946-1957 电子管（真空管） 使用机器语言编程，无操作系统 第2代1958-1-64 晶体管 主要使用汇编语言编程，开始使用FORTRAN、COBOL等高等语言，单道批处理系统 第3代1965-1971 集成电路 高级语言进一步发展，出现了B语言（C语言的前身），多道批处理系统，分时系统 第4代1972至今，超大规模集成电路 各种高级语言，现代操作系统 体积越小、功耗月底、可靠性越高、速度越快-&gt;依赖于电子器件的发展 摩尔定律：半导体集成电路上可容纳的晶体管数量大约每经过18-24个月便会增加一倍。换言之，处理器的性能大约每两年翻一倍，同时价格下降为之前的一半 （从2013年开始，减缓为3年翻一番 软件发展 机器语言 汇编语言 高级语言 第一个高级语言FORTRAN 最简单的语言Basic 里程碑Pascal 现代程序语革命的起点 面向对象 C&#43;&#43; Java Python &hellip;&hellip; 当前计算机发展趋势 更微型化 低功耗 较高性能 多用途 更巨型化 超高速 并行处理 智能化 目前我国最快的超级计算机是神威·太湖之光，每秒可进行9.3亿亿次浮点运算 1-3 计算机硬件 冯诺依曼计算机
+" />
+<meta name="twitter:site" content="https://y-m-m.github.io/" />
+<meta name="twitter:creator" content="陈皮" />
+<meta name="twitter:image"
+  content="https://y-m-m.github.io/">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="计算机组成原理bilibili版 - 陈皮的博客">
+<meta property="og:description"
+  content="第一章 计算机系统概述 1-1 计算机系统的组成 软件系统（软件需要在硬件上运行） 系统软件：为管理整个计算机系统所编制的程序 操作系统 数据库管理系统 网络系统 标准程序库 语言处理程序 服务程序 应用软件：为实现用户应用所编制的各种程序 科学计算 数据处理 过程控制 事务管理 硬件系统 主机 外设 计算机系统性能的好坏，取决于硬件和软件功能的总和 1-2 计算机的发展（电子数字计算机） 图灵机：理想的计算模型 一种具备读写、存储等功能的通用计算机模型 一条带子，一个读写头和一个控制装置，能执行任何给定的计算，能执行任何可能的任务 奠定了现代计算机的基础 1938年 信息论创始人 香农-&gt;布尔代数与开关电路的联系 世界上第一台真正意义上的电子数字计算机 阿塔纳索夫-贝瑞计算机ABC 300个电子管，不可编程，仅用于求解线性方程组 1946，基于ABC计算机-&gt;电子数字积分机和计算机ENIAC 十进制、弹道参数计算 莫克利和艾克特得到美国军方的支持和冯·诺依曼等人的帮助 四个发展阶段 第1代1946-1957 电子管（真空管） 使用机器语言编程，无操作系统 第2代1958-1-64 晶体管 主要使用汇编语言编程，开始使用FORTRAN、COBOL等高等语言，单道批处理系统 第3代1965-1971 集成电路 高级语言进一步发展，出现了B语言（C语言的前身），多道批处理系统，分时系统 第4代1972至今，超大规模集成电路 各种高级语言，现代操作系统 体积越小、功耗月底、可靠性越高、速度越快-&gt;依赖于电子器件的发展 摩尔定律：半导体集成电路上可容纳的晶体管数量大约每经过18-24个月便会增加一倍。换言之，处理器的性能大约每两年翻一倍，同时价格下降为之前的一半 （从2013年开始，减缓为3年翻一番 软件发展 机器语言 汇编语言 高级语言 第一个高级语言FORTRAN 最简单的语言Basic 里程碑Pascal 现代程序语革命的起点 面向对象 C&#43;&#43; Java Python &hellip;&hellip; 当前计算机发展趋势 更微型化 低功耗 较高性能 多用途 更巨型化 超高速 并行处理 智能化 目前我国最快的超级计算机是神威·太湖之光，每秒可进行9.3亿亿次浮点运算 1-3 计算机硬件 冯诺依曼计算机
+" />
+<meta property="og:url" content="https://y-m-m.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86bilibili%E7%89%88/" />
+<meta property="og:site_name" content="计算机组成原理bilibili版" />
+<meta property="og:image"
+  content="https://y-m-m.github.io/">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+<meta property="article:published_time" content="2024-03-23 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+  <div style="position: relative">
+  <header class="Header js-details-container Details px-3 px-md-4 px-lg-5 flex-wrap flex-md-nowrap open Details--on">
+    <div class="Header-item mobile-none" style="margin-top: -4px; margin-bottom: -4px;">
+      <a class="Header-link" href="https://y-m-m.github.io/">
+        <img class="octicon" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item d-md-none">
+      <button class="Header-link btn-link js-details-target" type="button"
+        onclick="document.querySelector('#header-search').style.display = document.querySelector('#header-search').style.display == 'none'? 'block': 'none'">
+        <svg height="24" class="octicon octicon-three-bars" viewBox="0 0 16 16" version="1.1" width="24">
+          <path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 2.75zm0 5A.75.75 0 011.75 7h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 7.75zM1.75 12a.75.75 0 100 1.5h12.5a.75.75 0 100-1.5H1.75z">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <div style="display: none;" id="header-search"
+      class="Header-item Header-item--full flex-column flex-md-row width-full flex-order-2 flex-md-order-none mr-0 mr-md-3 mt-3 mt-md-0 Details-content--hidden-not-important d-md-flex">
+      <div
+        class="Header-search header-search flex-auto js-site-search position-relative flex-self-stretch flex-md-self-auto mb-3 mb-md-0 mr-0 mr-md-3 scoped-search site-scoped-search js-jump-to">
+        <div class="position-relative">
+          
+          <form target="_blank" id="search-form" action="" accept-charset="UTF-8" method="get"
+            autocomplete="off">
+            <label
+              class="Header-search-label form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative d-flex flex-justify-between flex-items-center">
+              <input type="text"
+                class="Header-search-input form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable"
+                name="q" value="" placeholder="Search" autocomplete="off">
+            </label>
+          </form>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="Header-item Header-item--full flex-justify-center d-md-none position-relative">
+      <a class="Header-link " href="https://y-m-m.github.io/">
+        <img class="octicon octicon-mark-github v-align-middle" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item" style="margin-right: 0;">
+      <a href="javascript:void(0)" class="Header-link no-select" onclick="switchTheme()">
+        <svg style="fill: var(--color-profile-color-modes-toggle-moon);" class="no-select" viewBox="0 0 16 16"
+          version="1.1" width="16" height="16">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M4.52208 7.71754C7.5782 7.71754 10.0557 5.24006 10.0557 2.18394C10.0557 1.93498 10.0392 1.68986 10.0074 1.44961C9.95801 1.07727 10.3495 0.771159 10.6474 0.99992C12.1153 2.12716 13.0615 3.89999 13.0615 5.89383C13.0615 9.29958 10.3006 12.0605 6.89485 12.0605C3.95334 12.0605 1.49286 10.001 0.876728 7.24527C0.794841 6.87902 1.23668 6.65289 1.55321 6.85451C2.41106 7.40095 3.4296 7.71754 4.52208 7.71754Z">
+          </path>
+        </svg>
+      </a>
+    </div>
+  </header>
+</div>
+
+  <div id="search-result" class="container-lg px-3 new-discussion-timeline" style="display: none;">
+</div>
+
+  
+<div class="application-main">
+  <div>
+  <main>
+    <div class="gisthead pagehead bg-gray-light pb-0 pt-3 mb-4">
+      <div class="px-0">
+        <div class="mb-3 d-flex px-3 px-md-3 px-lg-5">
+          <div class="flex-auto min-width-0 width-fit mr-3">
+            <div class="d-flex">
+              <div class="d-none d-md-block">
+                <a class="avatar mr-2 flex-shrink-0" href="https://y-m-m.github.io/">
+                  <img class=" avatar-user"
+                    src="/images/me.png"
+                    width="32" height="32"></a>
+              </div>
+              <div class="d-flex flex-column">
+                <h1 class="break-word f3 text-normal mb-md-0 mb-1">
+                  <span class="author">
+                    <a href="https://y-m-m.github.io/">陈皮</a>
+                  </span>
+                  <span class="path-divider">/</span>
+                  <strong class="css-truncate css-truncate-target mr-1" style="max-width: 410px">
+                    <a href="https://y-m-m.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86bilibili%E7%89%88/">计算机组成原理bilibili版</a>
+                  </strong>
+                </h1>
+                <div class="note m-0">
+                  Created <relative-time datetime="Sat, 23 Mar 2024 00:00:00 &#43;0000"
+                    class="no-wrap">
+                    Sat, 23 Mar 2024 00:00:00 &#43;0000</relative-time>
+
+                  
+                  <span class="file-info-divider"></span>
+                  Modified <relative-time datetime="Mon, 07 Oct 2024 10:37:29 &#43;0800"
+                    class="no-wrap">
+                    Mon, 07 Oct 2024 10:37:29 &#43;0800</relative-time>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-lg px-3 new-discussion-timeline">
+      <div class="repository-content gist-content">
+        <div>
+          <div class="js-gist-file-update-container js-task-list-container file-box">
+            <div id="file-pytest" class="file my-2">
+              <div id="post-header" class="file-header d-flex flex-md-items-center flex-items-start sticky-header" style="z-index: 2">
+                <div class="file-info d-flex flex-md-items-center flex-items-start flex-order-1 flex-auto">
+                  <div class="text-mono f6 flex-auto pr-3 flex-order-2 flex-md-order-1 mt-2 mt-md-0">
+                    
+                    <summary id="toc-toggle" onclick="clickToc()" class="btn btn-octicon m-0 mr-2 p-2">
+                      <svg aria-hidden="true" viewBox="0 0 16 16" height="16" width="16" class="octicon octicon-list-unordered">
+                        <path fill-rule="evenodd" d="M2 4a1 1 0 100-2 1 1 0 000 2zm3.75-1.5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zM3 8a1 1 0 11-2 0 1 1 0 012 0zm-1 6a1 1 0 100-2 1 1 0 000 2z"></path>
+                      </svg>
+                    </summary>
+                    <details-menu class="SelectMenu" id="toc-details" style="display: none;">
+                      <div class="SelectMenu-modal rounded-3 mt-1" style="max-height: 340px;">
+                        <div class="SelectMenu-list SelectMenu-list--borderless p-2" style="overscroll-behavior: contain;" id="toc-list">
+                        </div>
+                      </div>
+                    </details-menu>
+                      12689 Words
+                    
+
+                  </div>
+                  <div class="file-actions flex-order-2 pt-0">
+                    
+                    
+                    <a class="muted-link mr-3" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      计算机科学
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      计算机组成原理
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="/tags/%E7%AC%94%E8%AE%B0">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      笔记
+                    </a>
+                    
+                    
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="Box-body px-5 pb-5" style="z-index: 1">
+                <article class="markdown-body entry-content container-lg"><h1 id="第一章-计算机系统概述">第一章 计算机系统概述</h1>
+<h2 id="1-1-计算机系统的组成">1-1 计算机系统的组成</h2>
+<ul>
+<li>软件系统（软件需要在硬件上运行）
+<ul>
+<li>系统软件：为管理整个计算机系统所编制的程序
+<ul>
+<li>操作系统 数据库管理系统 网络系统</li>
+<li>标准程序库 语言处理程序 服务程序</li>
+</ul>
+</li>
+<li>应用软件：为实现用户应用所编制的各种程序
+<ul>
+<li>科学计算 数据处理</li>
+<li>过程控制 事务管理</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>硬件系统
+<ul>
+<li>主机</li>
+<li>外设</li>
+</ul>
+</li>
+<li>计算机系统性能的好坏，取决于硬件和软件功能的总和</li>
+</ul>
+<h2 id="1-2-计算机的发展电子数字计算机">1-2 计算机的发展（电子数字计算机）</h2>
+<ul>
+<li>图灵机：理想的计算模型
+<ul>
+<li>一种具备读写、存储等功能的通用计算机模型</li>
+<li>一条带子，一个读写头和一个控制装置，能执行任何给定的计算，能执行任何可能的任务</li>
+<li>奠定了现代计算机的基础</li>
+</ul>
+</li>
+<li>1938年 信息论创始人 香农-&gt;布尔代数与开关电路的联系</li>
+<li>世界上第一台真正意义上的电子数字计算机 阿塔纳索夫-贝瑞计算机ABC 300个电子管，不可编程，仅用于求解线性方程组</li>
+<li>1946，基于ABC计算机-&gt;电子数字积分机和计算机ENIAC 十进制、弹道参数计算 莫克利和艾克特得到美国军方的支持和冯·诺依曼等人的帮助</li>
+<li>四个发展阶段
+<ul>
+<li>第1代1946-1957 电子管（真空管） 使用机器语言编程，无操作系统</li>
+<li>第2代1958-1-64 晶体管 主要使用汇编语言编程，开始使用FORTRAN、COBOL等高等语言，单道批处理系统</li>
+<li>第3代1965-1971 集成电路 高级语言进一步发展，出现了B语言（C语言的前身），多道批处理系统，分时系统</li>
+<li>第4代1972至今，超大规模集成电路 各种高级语言，现代操作系统</li>
+</ul>
+</li>
+<li>体积越小、功耗月底、可靠性越高、速度越快-&gt;依赖于电子器件的发展</li>
+<li>摩尔定律：半导体集成电路上可容纳的晶体管数量大约每经过18-24个月便会增加一倍。换言之，处理器的性能大约每两年翻一倍，同时价格下降为之前的一半 （从2013年开始，减缓为3年翻一番</li>
+<li>软件发展
+<ul>
+<li>机器语言</li>
+<li>汇编语言</li>
+<li>高级语言
+<ul>
+<li>第一个高级语言FORTRAN</li>
+<li>最简单的语言Basic</li>
+<li>里程碑Pascal</li>
+<li>现代程序语革命的起点</li>
+</ul>
+</li>
+<li>面向对象
+<ul>
+<li>C++</li>
+<li>Java</li>
+<li>Python</li>
+<li>&hellip;&hellip;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>当前计算机发展趋势
+<ul>
+<li>更微型化
+<ul>
+<li>低功耗</li>
+<li>较高性能</li>
+<li>多用途</li>
+</ul>
+</li>
+<li>更巨型化
+<ul>
+<li>超高速</li>
+<li>并行处理</li>
+<li>智能化</li>
+</ul>
+</li>
+<li>目前我国最快的超级计算机是神威·太湖之光，每秒可进行9.3亿亿次浮点运算</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-3-计算机硬件">1-3 计算机硬件</h2>
+<ul>
+<li>
+<p>冯诺依曼计算机</p>
+<ul>
+<li>构成程序的指令和数据均采用二进制表示</li>
+<li>指令和数据存放在存储器中，按地址访问</li>
+<li>指令在存储器中按顺序存放。一般情况下，指令是顺序执行的。</li>
+<li>指令：操作码(执行何种操作)+地址码(操作数在存储器中的位置)</li>
+<li>机器以运算器为中心</li>
+<li>计算机硬件由运算器、控制器、存储器、输入设备/输出设备5大部件组成</li>
+<li>基本思想是存储程序控制
+<img src="/images/WechatIMG136.jpg" alt="冯诺依曼计算机的结构(以运算器为中心)"></li>
+</ul>
+</li>
+<li>
+<p>现代计算机</p>
+<ul>
+<li>以存储器为中心
+<img src="/images/WechatIMG137.jpg" alt="现代计算机的结构"></li>
+</ul>
+</li>
+<li>
+<p>计算机硬件五大硬件的功能</p>
+<ul>
+<li>输入设备</li>
+<li>输出设备</li>
+<li>存储器
+<ul>
+<li>主存储器：负责存放程序和数据，可以直接与CPU交换信息，又称为内存储器，简称内存或主存。装机时的内存条</li>
+<li>辅助存储器：外存/辅存。辅存中的信息必须调入主存后，才能被CPU访问。如固态硬盘</li>
+</ul>
+</li>
+<li>运算器
+<ul>
+<li>核心:ALU 算术逻辑单元
+<ul>
+<li>算术运算</li>
+<li>逻辑运算</li>
+</ul>
+</li>
+<li>相关寄存器</li>
+</ul>
+</li>
+<li>控制器
+<ul>
+<li>核心CU，控制单元
+<ul>
+<li>解释存储器中的指令，并发出各种操作命令来执行指令</li>
+<li>I/O设备也受CU控制，用于完成相应的输入/输出操作</li>
+</ul>
+</li>
+<li>相关寄存器
+<img src="/images/WechatIMG138.jpg" alt="现代计算机结构示意图"></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-4-计算机软件">1-4 计算机软件</h2>
+<ul>
+<li>计算机软件
+<ul>
+<li>应用软件
+<ul>
+<li>为解决某个应用领域的相关问题而编制的程序</li>
+<li>科学计算程序</li>
+<li>工程设计程序</li>
+<li>数据处理程序</li>
+<li>企业管理程序</li>
+<li>自动控制程序</li>
+</ul>
+</li>
+<li>系统软件
+<ul>
+<li>为了用户能够高效、安全地使用和管理计算机硬件资源以及为开发和运行应用软件而编制的各种软件。</li>
+<li>操作系统</li>
+<li>数据库管理系统</li>
+<li>语言处理系统(汇编程序、编译程序、解释程序等)</li>
+<li>服务性程序(诊断程序、排错程序等)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>计算机软件的发展
+<ul>
+<li>发展的过程
+<ul>
+<li>早期：机器指令的二进制编码编写程序；编程繁琐、易出错且不易排错，限制了计算机的使用；计算机可以直接识别和执行用机器语言编写的程序(机器语言程序)，因此又称为目标程序</li>
+<li>机器指令符号化：用汇编语言编程(20世界50年代)；用表示机器指令的特殊符号编写程序；简单直观、便于记忆；计算机不能识别和执行，需要汇编器</li>
+<li>用高级语言编程：一套基本符号和编程规则；与具体计算机无关，面向使用者；计算机不能识别和执行</li>
+</ul>
+</li>
+<li>程序设计语言和语言翻译程序的关系
+<img src="/images/WechatIMG139.jpg" alt="程序设计语言和语言翻译程序的关系"></li>
+<li>使用gcc编译c语言程序举例
+<img src="/images/WechatIMG140.jpg" alt="使用gcc编译c语言程序"></li>
+<li>操作系统(系统软件)
+<ul>
+<li>提供了在汇编语言和高级语言的使用和实现过程中所需的基本操作</li>
+<li>负责控制并管理计算机系统全部硬件资源(例如CPU、内存和外部设备)和软件资源(例如编译程序、应用程序等)</li>
+<li>操作系统为用户使用计算机系统提供了极为方便的条件</li>
+</ul>
+</li>
+<li>其他各类系统软件
+<ul>
+<li>数据库管理系统</li>
+<li>网络系统</li>
+</ul>
+</li>
+<li>更高级的计算机语言：标准化、积木化、产品化及智能化，最终向自然语言发展</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-5-计算机系统的层次结构">1-5 计算机系统的层次结构</h2>
+<ul>
+<li>计算机系统的分层思想
+<ul>
+<li>系统的每一层都向上层提供一个简洁和抽象的接口</li>
+<li>每一层的实现细节对其上层而言都是“看不见”的，也就是透明的</li>
+</ul>
+</li>
+<li>自下而上1～6层-&gt;计算机系统</li>
+<li>第1层 逻辑电路层，计算机硬件系统的底层，由逻辑门、寄存器等逻辑电路组成</li>
+<li>第2层 微程序层，将一条机器指令编写成一个微程序。每个微程序包含若干条微指令，每条微指令对应一条或多条微操作</li>
+<li>第3层 指令集体系结构层 ISA 定义了机器指令的集合，规定了对每条机器指令计算机该执行什么操作，所处理的操作数应存放的位置以及操作数的类型</li>
+<li>第4层 操作系统层 对计算机的硬件资源和软件资源进行统一管理和调度；设计人员不仅要对操作系统的设计理论有比较深入的理解，还需要掌握具体机器的指令集和汇编语言以及适于编写操作系统软件的高级语言</li>
+<li>第5层 汇编语言层 汇编语言程序的执行效率一般情况下高于高级语言程序；使用汇编语言进行编程；由于汇编语言的每条语句都与机器语言的某条语句对应，因此仍要求程序员对实际机器的内部组成和指令系统非常熟悉</li>
+<li>第6层 高级语言层，使用与机器无关的高级语言编程，无需掌握机器的底层技术细节，只要掌握某种高级语言的语法规则以及算法和数据结构等方面的知识进行编程</li>
+<li>各类应用程序
+<img src="/images/WechatIMG141.jpg" alt="计算机系统"></li>
+<li>软件和硬件的逻辑功能等价性
+<ul>
+<li>在特定条件下，用软件实现的逻辑功能也可以通过硬件电路来实现，反之亦然
+<ul>
+<li>对于一些特定的计算或控制任务，可以选择将其使用软件编程来实现，也可以选择设计专用硬件电路来实现，两者结果在功能上等效</li>
+</ul>
+</li>
+<li>软件和硬件的逻辑功能等价性是计算机科学中的一个重要概念，也是计算机体系结构和工程中的基本原则之一
+<ul>
+<li>软件层面-&gt;CPU</li>
+<li>硬件层面-&gt;专用硬件电路，例如FPGA(现场可编程门阵列)或ASIC(专用集成电路)技术</li>
+</ul>
+</li>
+<li>软件vs硬件
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: center"></th>
+          <th style="text-align: center">软件实现</th>
+          <th style="text-align: center">硬件实现</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">性能与速度</td>
+          <td style="text-align: center">性能与速度弱于硬件实现</td>
+          <td style="text-align: center">更高的性能和更快的响应时间</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">灵活性</td>
+          <td style="text-align: center">相对容易地进行修改和更新</td>
+          <td style="text-align: center">需要重新设计和制造</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">成本</td>
+          <td style="text-align: center">开发软件相对便宜</td>
+          <td style="text-align: center">开发和制造硬件比较昂贵</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">应用需求</td>
+          <td style="text-align: center">有些任务更适合在软件层面完成，例如操作系统的功能</td>
+          <td style="text-align: center">有些任务更适合在硬件层面完成，例如高频交易系统</td>
+      </tr>
+  </tbody>
+</table>
+<ul>
+<li>当研制一台计算机时，设计者必须明确分配每一级的人物，确定哪些功能需要使用硬件实现，哪些功能需要使用软件实现。这是由设计目标、设计水平、性价比等综合因素决定的</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-6-计算机的基本工作原理">1-6 计算机的基本工作原理</h2>
+<ul>
+<li>计算机硬件组成细化
+<ul>
+<li>运算器除了ALU(算数运算和逻辑运算)之外，至少包含3个寄存器
+<ul>
+<li>累加器ACC</li>
+<li>乘商寄存器MQ</li>
+<li>操作数寄存器X
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: center">ALU</th>
+          <th style="text-align: center">加</th>
+          <th style="text-align: center">减</th>
+          <th style="text-align: center">乘</th>
+          <th style="text-align: center">除</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">ACC</td>
+          <td style="text-align: center">被加数 和</td>
+          <td style="text-align: center">被减数 差</td>
+          <td style="text-align: center">乘积高位</td>
+          <td style="text-align: center">被除数 余数</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">MQ</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">乘数 乘积低位</td>
+          <td style="text-align: center">商</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">X</td>
+          <td style="text-align: center">加数</td>
+          <td style="text-align: center">减数</td>
+          <td style="text-align: center">被乘数</td>
+          <td style="text-align: center">除数</td>
+      </tr>
+  </tbody>
+</table>
+</li>
+<li>加法操作过程
+<ul>
+<li>(M) -&gt; X</li>
+<li>(ACC) + (X) -&gt; ACC</li>
+</ul>
+</li>
+<li>减法操作过程
+<ul>
+<li>(M) -&gt; X</li>
+<li>(ACC) - (X) -&gt; ACC</li>
+</ul>
+</li>
+<li>乘法操作过程
+<ul>
+<li>(M) -&gt; MQ</li>
+<li>(ACC) -&gt; X</li>
+<li>(X) * (MQ) -&gt; ACC // MQ</li>
+</ul>
+</li>
+<li>除法操作过程
+<ul>
+<li>(M) -&gt; X</li>
+<li>(ACC) / (X) -&gt; MQ</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>主存储器组件
+<ul>
+<li>存储体
+<ul>
+<li>由很多个存储单元组成
+<ul>
+<li>每个存储单元由若干个存储元件组成
+<ul>
+<li>每个存储元件能存储一位二进制数&quot;0&quot;或&quot;1&quot;</li>
+</ul>
+</li>
+<li>一个存储单元中可存储一串二进制信息，称这串二进制信息为一个存储字，这串二进制信息的位数称为存储字长(可以是8位、16位或32位等)</li>
+</ul>
+</li>
+<li>存储单元地址，给存储单元编号</li>
+</ul>
+</li>
+<li>存储器地址寄存器MAR
+<ul>
+<li>存放欲访问的存储单元地址
+<ul>
+<li>MAR的位数(长度)，决定了存储单元的数量</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>存储器数据寄存器MDR
+<ul>
+<li>用来存放从存储体的某个存储单元取出的信息或者准备往某个存储单元存入的信息
+<ul>
+<li>MDR的位数(长度)，与存储字长相等</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>主存的这种按存储单元的地址来实现对其写入和读取的存取操作，需要在CPU中的控制器的控制下进行</li>
+<li>控制器除了控制单元CU外，还包含两个寄存器
+<ul>
+<li>程序计数器PC</li>
+<li>指令寄存器IR</li>
+</ul>
+</li>
+<li>控制器
+<ul>
+<li>是计算机的神经中枢，由它指挥各部件自动、协调地工作</li>
+<li>控制从主存中读取一条指令，称为取指过程(阶段)</li>
+<li>对指令进行分析，指出该指令要完成何种操作，并按寻址特征指明操作数的地址，称为分析过程(阶段)</li>
+<li>根据指令的操作码和操作数所在的地址完成某种操作，称为执行过程(阶段)</li>
+<li>程序计数器PC用来存放当前欲执行指令的地址
+<ul>
+<li>PC与MAR之间有一条直接通路</li>
+<li>PC自动形成下一条指令的地址(&ldquo;自动加1&quot;功能)</li>
+</ul>
+</li>
+<li>指令寄存器IR用来存放当前指令
+<ul>
+<li>IR的内容来自MDR</li>
+<li>IR中的操作码(用OP(IR)表示)会送至CU(用OP(IR)-&gt;CU表示)，用来分析指令</li>
+<li>IR中的地址码(用Ad(IR)表示)作为操作数的地址送至MAR(用Ad(IR)-&gt;MA表示)，用来从内存中取操作数</li>
+</ul>
+</li>
+<li>控制单元CU用来分析当前指令所需完成的操作，并发出各种微操作命令序列，用以控制所有被控对象</li>
+</ul>
+</li>
+<li>机器指令简介
+<ul>
+<li>操作码(6位)+地址码(10位)</li>
+</ul>
+</li>
+<li>随着硬件技术的发展，内存都制成大规模集成电路芯片，而将MAR和MDR集成到了CPU芯片中</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-7-计算机系统的性能指标">1-7 计算机系统的性能指标</h2>
+<h3 id="什么是计算机系统的性能指标">什么是计算机系统的性能指标</h3>
+<ul>
+<li>计算机系统的性能指标是用来衡量计算系统在各种操作和任务中的工作效率、执行速度以及处理能力的标准</li>
+<li>帮助人们评估计算机系统的整体表现，从而更好地了解系统在不同方面的优势和限制</li>
+</ul>
+<h3 id="软硬件与计算机性能的关系">软硬件与计算机性能的关系</h3>
+<ul>
+<li>硬件与计算机系统性能的关系
+<ul>
+<li>硬件是构建计算机系统的物理组件(例如CPU、内存、外部设备等)</li>
+<li>硬件对与计算机系统的性能有着重要影响，因为它决定了系统的计算能力、数据传输速率和存储容量
+<ul>
+<li>CPU的时钟频率决定了CPU每秒可以执行的指令数量</li>
+<li>内存带宽会影响数据的读写速率</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>软件与计算机系统性能的关系
+<ul>
+<li>软件包括用于控制、管理、应用计算机系统的各类系统软件和应用软件</li>
+<li>软件的优化可以显著影响计算机系统的性能，因为合理的算法和代码实现可以更有效地利用硬件资源
+<ul>
+<li>操作系统的调度算法会影响多任务处理的效率，从而影响系统的响应时间</li>
+<li>在图像处理任务中，优化的软件算法可以减轻CPU和内存的负担，提高图形处理速度</li>
+<li>软件层面的并行计算可以更好地利用多核处理器，提高吞吐量</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>计算机系统的性能指标涵盖了硬件和软件两个层面，它们之间密切相关。优化硬件可以提供更强大的计算和传输能力，而优化软件可以更有效地利用这些硬件资源，从而共同实现更好的系统性能。正确的硬件选择可以为软件提供更好的执行环境，反之亦然。</li>
+</ul>
+<h3 id="计算机硬件相关性能指标">计算机硬件相关性能指标</h3>
+<ul>
+<li>基本性能指标
+<ul>
+<li>机器字长
+<ul>
+<li>CPU一次能处理的二进制数据位数
+<ul>
+<li>与ALU的位数以及通用寄存器的宽度相等</li>
+</ul>
+</li>
+<li>主要影响
+<ul>
+<li>字长越长，数的表示范围越大，精度越高</li>
+<li>字长越长，计算精度越高</li>
+<li>会影响计算速度</li>
+</ul>
+</li>
+<li>8位-&gt;16-&gt;32-&gt;64-&gt;更高</li>
+</ul>
+</li>
+<li>主存容量
+<ul>
+<li>主存储器(内存)能够存储的最大信息量
+<ul>
+<li>M个存储单元，每个存储单元可存储N个二进制位，可以通过下式计算主存容量
+<ul>
+<li>主存容量 = N * M (b)
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: center">数据量的单位</th>
+          <th style="text-align: center">换算关系</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">比特(b)</td>
+          <td style="text-align: center">基本单位</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">字节(B)</td>
+          <td style="text-align: center">1B = 8bit</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">千字节(KB)</td>
+          <td style="text-align: center">KB = 2<!-- raw HTML omitted -->10<!-- raw HTML omitted -->B</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">兆字节(MB)</td>
+          <td style="text-align: center">MB = 2<!-- raw HTML omitted -->20<!-- raw HTML omitted -->B</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">吉字节(GB)</td>
+          <td style="text-align: center">GB = 2<!-- raw HTML omitted -->30<!-- raw HTML omitted -->B</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">太字节(TB)</td>
+          <td style="text-align: center">TB = 2<!-- raw HTML omitted -->40<!-- raw HTML omitted -->B</td>
+      </tr>
+  </tbody>
+</table>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>增加主存(内存)容量可以减少程序运行期间对辅存(外存)的访问，由于访问的速度远大于访问外存的速度，因此可以提高程序的执行速度，进而提高计算机系统的性能</li>
+</ul>
+</li>
+<li>吞吐量
+<ul>
+<li>计算机系统在单位时间内所能处理的信息量</li>
+<li>影响吞吐量的主要因素
+<ul>
+<li>CPU的处理能力</li>
+<li>内存(主存)的访问速度</li>
+<li>外存(辅存，例如硬盘)的访问速度</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>响应时间
+<ul>
+<li>从向计算机系统提交作业开始，到系统完成作业为止所需要的时间</li>
+<li>分为
+<ul>
+<li>CPU时间
+<ul>
+<li>CPU执行时间
+<ul>
+<li>执行用户程序本身所花费的CPU时间</li>
+</ul>
+</li>
+<li>系统CPU时间
+<ul>
+<li>为执行程序而花费在操作系统上的时间</li>
+</ul>
+</li>
+<li>在没有特别说明的情况下，基于CPU执行时间进行计算机性能评价</li>
+</ul>
+</li>
+<li>其他时间
+<ul>
+<li>用户访问内存(主存)、外存(辅存)、其他外部设备所花费的时间</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>与运算速度相关的性能指标
+<ul>
+<li>CPU时钟频率和时钟周期
+<ul>
+<li>计算机执行一条指令的过程：取指-&gt;分析-&gt;执行</li>
+<li>每个步骤都需要特定的控制信号进行控制
+<ul>
+<li>控制信号的发出时机、持续时间等都需要相应的定时信号来调控</li>
+</ul>
+</li>
+<li>CPU时钟信号是一个基本定时信号，它是一种固定频率的脉冲信号，用于驱动计算机内部各组件协调工作
+<ul>
+<li>这种脉冲信号的频率被称为CPU时钟频率(Clock Rate)，基本单位为赫兹(Hz)</li>
+<li>CPU时钟周期，是CPU时钟频率的倒数，基本单位为秒(s)</li>
+</ul>
+</li>
+<li>对于同类型的计算机，同一指令执行所需的CPU时钟周期的数量是一样的，因此CPU的时钟频率越高，该指令的执行速度就越快
+<img src="/images/WechatIMG150.jpg" alt="单位及换算"></li>
+</ul>
+</li>
+<li>CPI
+<ul>
+<li>执行一条指令所需要的时钟周期数量</li>
+<li>由于不同指令的功能不同，即使相同指令还可能有不同的寻址方式，因此每条指令执行所需的时钟周期数量也可能不同
+<ul>
+<li>针对一条指令、一类指令、一个程序，它们各自CPI的含义如下
+<ul>
+<li>一条指令的CPI：该指令执行所需要的时钟周期数量</li>
+<li>一类指令(例如算术运算类指令)的CPI：构成该类指令的所有指令执行所需要时钟周期数量的平均值</li>
+<li>一个程序的CPI：构成该程序的所有指令执行所需要时钟周期数量的平均值</li>
+</ul>
+</li>
+<li>CPI = 程序执行所需要时钟周期数量/程序所包含的指令数量(若程序仅包含一种指令，则CPi就是这条指令的CPI)
+<img src="/images/WechatIMG151.jpg" alt="CPI"></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>CPU执行时间
+<ul>
+<li>CPU执行时间是指真正用于用户程序的执行时间，而不包括为执行用户程序而花费在操作系统、访问主存(内存)、访问辅存(外存)、访问外部设备上的时间</li>
+<li>CPU执行时间 = 程序执行所需时钟周期数量 * 时钟周期 = 程序执行所需时钟周期数量/时钟频率</li>
+<li>CPU执行时间 = (CPI * 程序所包含的指令数量) * 时钟周期 = (CPI * 程序所包含的指令数量) / 时钟频率</li>
+<li>同一程序在不同计算机上运行，CPU执行时间少的计算机，其运行速度更快</li>
+<li>仅仅通过计算机遍以后目标代码中包含的指令数量来评估计算机性能是不准确的</li>
+</ul>
+</li>
+<li>IPC
+<ul>
+<li>每个时钟周期能够执行的指令数量</li>
+<li>是CPI的倒数，它与CPU架构、指令集、指令流水线技术等密切相关</li>
+<li>由于指令流水线技术以及多核技术的发展，目前IPC的值已经可以大于1</li>
+</ul>
+</li>
+<li>MIPS
+<ul>
+<li>每秒执行多少百万条指令</li>
+<li>MIPS = (程序是所包含的指令数量/CPU执行时间) / 10<!-- raw HTML omitted -->6<!-- raw HTML omitted --></li>
+<li>CPU执行时间 = (CPI * 程序所包含的指令数量) / 时钟频率</li>
+<li>MIPS = (时钟频率 / CPI) / 10<!-- raw HTML omitted -->6<!-- raw HTML omitted --></li>
+<li>用MIPS对不同的机器进行性能比较有时是不准确的，主要原因如下
+<ul>
+<li>不同机器的指令集不同，并且指令的功能也不同，在某种机器上的某一条指令的功能，可能在另一种机器上需要用多条指令来实现</li>
+<li>不同机器的CPI和时钟周期也不同，因而同一条指令在不同机器上所用的时间也不同</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>MFLOPS
+<ul>
+<li>每秒执行多少百万次浮点运算</li>
+<li>MFLOPS = (浮点运算次数/测试程序的执行时间)/10<!-- raw HTML omitted -->6<!-- raw HTML omitted --></li>
+<li>衡量每秒执行浮点运算的次数还有以下更大的单位
+<ul>
+<li>GFLOPS(GigaFLOPS)的意思是每秒执行多少十亿次浮点运算</li>
+<li>TFLOPS(TeraFLOPS)的意思是每秒执行多少万亿次浮点运算</li>
+<li>PFLOPS(PetaFLOPS)的意思是每秒执行多少千万亿次浮点运算</li>
+<li>EFLOPS(ExaFLOPS)的意思是每秒执行多少百亿亿次浮点运算</li>
+<li>ZFLOPS(ZettaFLOPS)的意思是每秒执行多少十万亿亿次浮点运算</li>
+</ul>
+</li>
+<li>单位换算
+<ul>
+<li>MFLOPS = 10<!-- raw HTML omitted -->6<!-- raw HTML omitted --> * FLOPS</li>
+<li>GFLOPS = 10<!-- raw HTML omitted -->9<!-- raw HTML omitted --> * FLOPS</li>
+<li>TFLOPS = 10<!-- raw HTML omitted -->12<!-- raw HTML omitted --> * FLOPS</li>
+<li>PFLOPS = 10<!-- raw HTML omitted -->15<!-- raw HTML omitted --> * FLOPS</li>
+<li>EFLOPS = 10<!-- raw HTML omitted -->18<!-- raw HTML omitted --> * FLOPS</li>
+<li>ZFLOPS = 10<!-- raw HTML omitted -->21<!-- raw HTML omitted --> * FLOPS</li>
+</ul>
+</li>
+<li>MFLOPS不能全面反映计算机系统的性能。MFLOPS仅反应浮点运算速度，其值与所使用的测试程序相关，不同测试程序中包含的浮点运算量不同，测试得到的结果也不同</li>
+</ul>
+</li>
+<li>使用基准程序进行性能评估
+<ul>
+<li>基准程序是一组特定的程序，专门用于评测计算机的性能
+<ul>
+<li>这些程序能够有效地模拟计算机在处理实际任务时的表现</li>
+<li>在不同计算机上运行同样的基准程序，通过比较各计算机运行基准程序的时间，从而评测它们各自的性能</li>
+</ul>
+</li>
+<li>不同基准程序的评测重点不同，例如CPU性能、图形性能、存储性能、浮点数计算性能、并行计算性能等</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>衡量计算机系统性能是一项比较复杂的任务，很难仅凭单一指标进行精确衡量。上述一些衡量计算机性能的指标之间也不是完全独立的，改变其中一项指标可能会影响到其他指标
+<img src="/images/WechatIMG152.jpg" alt="例题"></li>
+</ul>
+<h1 id="第二章-计算机内部的数据表示">第二章 计算机内部的数据表示</h1>
+<h2 id="2-1-数据表示的相关基本概念">2-1 数据表示的相关基本概念</h2>
+<ul>
+<li>电子数字计算机内部使用二进制来表示数据</li>
+<li>数值的二进制编码
+<ul>
+<li>无符号数</li>
+<li>有符号数 整数-&gt;定点数 小数点位置固定</li>
+<li>有符号数 纯小数-&gt;定点数 小数点位置固定</li>
+<li>有符号数 带小数-&gt;浮点数 小数点位置浮动</li>
+</ul>
+</li>
+<li>数值数据的编码规则 机器码(机器数)
+<ul>
+<li>原码</li>
+<li>补码</li>
+<li>反码</li>
+<li>移码</li>
+</ul>
+</li>
+<li>计算机内部参与运算的数
+<ul>
+<li>无符号数</li>
+<li>有符号数
+<ul>
+<li>定点数
+<ul>
+<li>整数</li>
+<li>小数</li>
+</ul>
+</li>
+<li>浮点数
+<ul>
+<li>单精度</li>
+<li>双精度
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-08%2019.56.06.png" alt=""></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-2-进位计数制及其数据之间的相互转换">2-2 进位计数制及其数据之间的相互转换</h2>
+<ul>
+<li>进位进数制(常用)
+<ul>
+<li>十进制 日常生活中最常用</li>
+<li>二进制 计算机内部使用</li>
+<li>八进制 计算机外部使用，为了书写和阅读方便</li>
+<li>十六进制 计算机外部使用，为了书写和阅读方便
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-08%2020.03.35.png" alt=""></li>
+</ul>
+</li>
+<li>任意进制-&gt;十进制
+<ul>
+<li>按权展开</li>
+</ul>
+</li>
+<li>二进制&lt;-&gt;八进制</li>
+<li>二进制&lt;-&gt;十六进制</li>
+<li>八进制&lt;-&gt;十六进制
+<ul>
+<li>以二进制为桥梁</li>
+</ul>
+</li>
+<li>十进制-&gt;任意进制
+<ul>
+<li>除基取余(针对整数部分)-&gt;低位先得</li>
+<li>乘基取整(帧对小鼠部分)-&gt;高位先得
+<ul>
+<li>十进制小数0.3转化为二进制小数时，会出现无限循环小数，达到所需精度即可</li>
+</ul>
+</li>
+<li>十进制转二进制：凑值法</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-3-定点数的编码">2-3 定点数的编码</h2>
+<ul>
+<li>原码、补码、反码、移码</li>
+</ul>
+<h3 id="2-3-1-原码">2-3-1 原码</h3>
+<ul>
+<li>符号位0表示正数，符号位1表示负数</li>
+<li>数值位为真值的绝对值</li>
+<li>原码表示又称为带符号的绝对值表示</li>
+<li>定点整数的原码，用逗号分隔符号位与数值位</li>
+<li>定点小数的原码表示，符号位与数值位用.隔开</li>
+<li>优点
+<ul>
+<li>表示方法简单直观</li>
+</ul>
+</li>
+<li>缺点
+<ul>
+<li>对于0有两种不同的表示</li>
+<li>符号位不能直接参与运算-&gt;符号不同的数的加法运算需要用减法来实现</li>
+</ul>
+</li>
+<li>原码在计算机中目前仅仅用于表示浮点数的尾码</li>
+</ul>
+<h3 id="2-3-2-定点数的编码补码">2-3-2 定点数的编码——补码</h3>
+<ul>
+<li>模的概念
+<ul>
+<li>模 一个数值计量系统的计量范围 mod或M</li>
+<li>补数：与负数等价的正数</li>
+<li>超过计量范围的数都应该自动舍弃模数</li>
+</ul>
+</li>
+<li>补数的特点
+<ul>
+<li>一个负数可以用它的正补数来替代，而这个正补数可以用模数加上负数本身求得</li>
+<li>一个正数互为补数时，它们的绝对值之和即为模数</li>
+<li>正数的补数即该正数本身</li>
+</ul>
+</li>
+<li>寻找一个负数的正补数的意义
+<ul>
+<li>把减法运算用加法实现</li>
+<li>符号位也可以直接参与运算</li>
+<li>在计算机内部可以用加法起实现减法运算，降低了硬件复杂度和成本</li>
+</ul>
+</li>
+<li>将补数的概念应用到计算机内部，便出现了补码这种机器码(机器数)
+<ul>
+<li>正数的补码：符号位为0，数值位就是它本身</li>
+<li>负数的补码：等于模数加上该负数本身，而模数就是最高位进位的位权值 或 除符号位外，按位取反再加1</li>
+</ul>
+</li>
+<li>现代计算机通常不会涉及定点小数的补码运算</li>
+<li>优点
+<ul>
+<li>补码表示方法似的减法匀速啊可以转换成加法运算</li>
+<li>真值0在补码中只有一种表示，这使得补码比原码多表示一个最小负数</li>
+<li>符号位可以直接参与运算，运算时符号位的进位作为模会被自动舍弃</li>
+<li>目前计算机中普遍采用补码表示有符号定点整数，例如C语言中char、short、int、long型整数都是采用补码进行表示的</li>
+</ul>
+</li>
+<li>缺点
+<ul>
+<li>补码的表示相对原码更复杂
+<ul>
+<li>原码的数值位与真值的绝对值相同。因此，通过原码可以很容易地得出真值。但是，补码就没有这么简单了</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-3-3-反码">2-3-3 反码</h3>
+<ul>
+<li>负数的原码-&gt;补码
+<ul>
+<li>除符号位外，按位取反(反码)再加1</li>
+</ul>
+</li>
+<li>反码通常用来作为由原码求补码或者由补码求原码的中间过渡
+<ul>
+<li>正数的反码：符号位为0，数值位就是它本身</li>
+<li>负数的反码：符号位为1，数值位就是真值数值位取反
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-17%2019.19.11.png" alt="原码、反码和补码"></li>
+</ul>
+</li>
+<li>优点
+<ul>
+<li>符号位可以参与运算</li>
+</ul>
+</li>
+<li>缺点
+<ul>
+<li>最高位(符号位)产生的进位要加到运算结果的低位(循环进位)</li>
+<li>真值0在反码中有两种不同的表示</li>
+</ul>
+</li>
+<li>反码在计算机中目前很少被使用</li>
+</ul>
+<h3 id="2-3-4-移码">2-3-4 移码</h3>
+<ul>
+<li>移码就是在真值上加一个常数2<!-- raw HTML omitted -->n<!-- raw HTML omitted -->
+<ul>
+<li>在数轴上，向右平移2<!-- raw HTML omitted -->n<!-- raw HTML omitted -->个单元</li>
+<li>移码只用于定点整数的表示
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-17%2019.24.25.png" alt="移码"></li>
+</ul>
+</li>
+<li>真值0在移码中只有一种表示
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-17%2019.27.38.png" alt="移码"></li>
+<li>优点
+<ul>
+<li>真值0在移码中只有一种表示</li>
+<li>移码保持了真值原有的大小顺序，可以直接比较大小</li>
+<li>最小真值的移码为全0，最大真值的移码为全1，符合人们的习惯</li>
+<li>当浮点数的阶码用移码来表示时，就能很方便地比较阶码的大小</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-3-5-定点数的编码">2-3-5 定点数的编码</h3>
+<ul>
+<li>原码、补码、反码、移码之间的转换
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-18%2009.42.44.png" alt=""></li>
+<li>原码-&gt;补码/补码-&gt;原码
+<ul>
+<li>反码法-&gt;适合用硬件求补码</li>
+<li>扫描法：仅对数值位从右到左顺序扫描，右起第一个1及其右边的0保持不变，其余各位取反-&gt;适合手工计算求补码</li>
+<li>补码的补码是原码，原码与补码互为补码</li>
+<li>x的补码-&gt;-x的补码/-x的补码-&gt;x的补码
+<ul>
+<li>全部位按位取反，末位加1</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>已知原码、反码、补码，如何算出真值(十进制形式)
+<ul>
+<li>正数：将原码、反码、补码的数值位按权展开相加，符号位的0表示&rdquo;+&quot;</li>
+<li>负数：将反码、补码转换成原码，然后将原码的数值位按权展开相加，符号位的1表示&quot;-&quot;</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-4-浮点数的表示">2-4 浮点数的表示</h2>
+<h3 id="2-4-1-浮点数的表示形式和表示范围">2-4-1 浮点数的表示形式和表示范围</h3>
+<ul>
+<li>定点小数表示
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-18%2010.15.49.png" alt="定点小数"></li>
+<li>定点整数表示
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-18%2010.18.05.png" alt="定点整数"></li>
+<li>定点数所能表示的数据范围与下列因素有关
+<ul>
+<li>机器字长：字长越长，其表示的数据范围就越大</li>
+<li>所采用的机器码：补码和移码所能表示的数据范围，比原码和反码所能表示的数据范围要多一个最小负数</li>
+</ul>
+</li>
+<li>计算机中处理的小数不一定都是纯小数或纯整数，不能直接用定点小数或定点整数表示</li>
+<li>二进制浮点数可采用类似十进制科学计数法的表示方法</li>
+<li>浮点数表示
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-18%2010.24.00.png" alt="浮点数表示">
+<ul>
+<li>阶码的位数决定了数据表示的范围，位数越多，能表示的数据范围就越大</li>
+<li>阶码的值决定了小数点的位置</li>
+<li>尾数的位数决定了数据的表示精度。阶码长度相同时，分配给尾数的位数越多，数据表示的精度就越高</li>
+</ul>
+</li>
+<li>浮点数的表示范围
+<ul>
+<li>正数最大值
+<ul>
+<li>阶码取最大值</li>
+<li>尾数取正数最大值</li>
+</ul>
+</li>
+<li>正数最小值
+<ul>
+<li>阶码取最小值</li>
+<li>尾数取正数最小值</li>
+</ul>
+</li>
+<li>负数最小值
+<ul>
+<li>阶码取最大值</li>
+<li>尾数取负数最小值</li>
+</ul>
+</li>
+<li>负数最大值
+<ul>
+<li>阶码取最小值</li>
+<li>尾数取负数最大值
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-18%2010.31.45.png" alt=""></li>
+</ul>
+</li>
+<li>浮点数有效扩大了数据表示范围</li>
+<li>受机器字长限制，浮点数仍然存在溢出现象
+<ul>
+<li>当浮点数的阶码大于最大阶码时，称为<strong>上溢</strong>，此时机器停止运算，浮点运算器件会显示溢出标志</li>
+<li>当浮点数的阶码小于最小阶码时，称为<strong>下溢</strong>，虽然此时数据不能被精确表示，但由于发生下溢时数据的绝对值很小，通常将尾数各位强置为0，按机器0处理，此时机器可以继续运行</li>
+<li>当一个浮点数在正、负数区域中但并不在某个数轴刻度上时，也会出现<strong>精度溢出</strong>的问题，此时只能用近似数表示
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-18%2010.38.45.png" alt="浮点数的表示范围"></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>一旦浮点数的位数确定后，合理分配阶码E和尾数M的位数，直接影响浮点数的表示范围和精度
+<ul>
+<li>短实数(32位)：阶码E取8位(含1位阶符)，尾数M取24位(含1位数符)</li>
+<li>长实数(64位)：阶码E取11位(含1位阶符)，尾数M取53位(含1位数符)</li>
+<li>临时实数(80位)：阶码E取15位(含1位阶符)，尾数M取65位(含1位数符)</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-4-2-浮点数的规格化">2-4-2 浮点数的规格化</h3>
+<ul>
+<li>通常要求浮点数在数据表示时对尾数进行规格化处理，即使得尾数的最高数值位必须是一个有效值</li>
+<li>浮点数规格化带来的好处
+<ul>
+<li>使浮点数的表示形式唯一</li>
+<li>使浮点数的表示精度最高</li>
+</ul>
+</li>
+<li>对于非规格化尾数，需要对其进行规格化操作，即根据具体形式通过将非规格化尾数的数值部分进行左移或右移，并相应减少或增加阶码值的操作进行规格化，对应的规格化方法分别称为向左规格化(简称左规)和向右规格化(简称右规)</li>
+<li>对于基数r不同的浮点数，因其规格化数的形式不同，规格化过程也不同
+<ul>
+<li>当r=2时，尾数数值部分最高位为1的数为规格化数
+<ul>
+<li>左规：尾数数值部分每左移1为，阶码减1</li>
+<li>右规：尾数数值部分每右移1位，阶码加1</li>
+</ul>
+</li>
+<li>当r=4时，尾数数值部分最高2位不全为0的数为规格化数
+<ul>
+<li>左规：尾数数值部分每左移2位，阶码减1</li>
+<li>右规：尾数数值部分每右移2位，阶码加1</li>
+</ul>
+</li>
+<li>当r=8时，尾数数值部分最高3位不全为0的数为规格化数
+<ul>
+<li>左规：尾数数值部分每左移3位，阶码减1</li>
+<li>右规：尾数数值部分每右移3位，阶码加1</li>
+</ul>
+</li>
+<li>基数r不同，对数的表示范围和精度等都有影响
+<ul>
+<li>一般来说，基数r越大，可表示的浮点数范围越大，而且所表示的数的个数越多。但浮点数的精度反而下降
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-18%2020.16.38.png" alt="举例"></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>浮点数规格化后的表示范围
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-18%2020.19.37.png" alt="浮点数表示范围"></li>
+</ul>
+<h3 id="2-4-3-ieee-754浮点数标准">2-4-3 IEEE 754浮点数标准</h3>
+<ul>
+<li>32位单精度浮点数
+<ul>
+<li>对应C语言中的float型</li>
+<li>1 8 23</li>
+<li>偏移常数为127</li>
+<li>为什么不采用标准的128，而采用127
+<ul>
+<li>采用偏移常数128表示的最小规格化数的倒数会发生溢出，而采用偏移常数127表示的任何一个规格化数的倒数则不会溢出</li>
+</ul>
+</li>
+<li>阶码全1用来表示特殊数
+<ul>
+<li>正无穷 符号位为0，阶码全1，尾数0</li>
+<li>负无穷 符号位为1，阶码全1，尾数0</li>
+<li>NAN(无定义数/非数) 符号位为0/1，阶码全1，尾数≠0
+<ul>
+<li>0/0、无穷/无穷、负数的平方根等</li>
+<li>部分非数NaN的运算结果可能会出现异常</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>阶码全0用来表示非规格化数
+<ul>
+<li>正0 符号位为0，阶码全0，尾数0</li>
+<li>负0 符号位为1，阶码全0，尾数0</li>
+<li>非规格化正数</li>
+<li>非规格化负数</li>
+<li>非规格化数可用于处理阶码下溢，使得出现比最小规格化数还小的数时程序也能继续进行下去</li>
+</ul>
+</li>
+<li>规格化数
+<ul>
+<li>规格化正数</li>
+<li>规格化负数
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-18%2020.43.07.png" alt="32位单精度浮点数"></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>64位双精度浮点数
+<ul>
+<li>对应C语言中的double型</li>
+<li>1 11 52
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-18%2020.28.38.png" alt="IEEE 754浮点数标准">
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-18%2020.45.46.png" alt="IEEE 754浮点数标准"></li>
+</ul>
+</li>
+<li>IEEE 754浮点数表示范围
+<ul>
+<li>十进制小数转换成二进制小数时，可能出现无限循环小数，只能转换到符合精度要求的位数(即所谓的精度缺失)</li>
+<li>IEEE 754浮点数格式位数有限(单精度32位、双精度64位)，无法精确表示无限循环小数
+<ul>
+<li>通常只能采用舍入的方式近似表示，因此会带来数据表示的误差。这种误差会在计算的过程中不断累积放大，可能导致严重后果</li>
+</ul>
+</li>
+<li>石海用二进制浮点数编程时一定要十分小心，要充分考虑浮点数运算可能带来的计算误差，尽量避免对浮点数的直接比较</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-5-c语言中的数据类型转换">2-5 C语言中的数据类型转换</h2>
+<ul>
+<li>计算机中的数据以二进制形式存储在寄存器或存储器中</li>
+<li>汇编语言中的数据类型取决于指令操作码
+<ul>
+<li>存储在寄存器、存储器中的操作数本身没有数据类型，对该书进行和中数据类型的操作完全取决于指令</li>
+<li>同一个操作数，既可以当做有符号数，也可以当做无符号数；既可以是定点数，也可以是浮点数</li>
+</ul>
+</li>
+<li>溢出
+<ul>
+<li>无论无符号数还是有符号数，C语言程序并不检测数据在加、减、乘等运算中产生的溢出现象</li>
+<li>程序员应尽量避免出现这种情况，所编制的应用程序应具有对溢出进行判断的功能</li>
+</ul>
+</li>
+<li>C语言的数据类型转换
+<ul>
+<li>强制类型转换
+<ul>
+<li>整型数据之间的转换
+<ul>
+<li>尽量保持转换前后的机器码相同或机器码部分相同
+<ul>
+<li>相同字长之间的转换
+<ul>
+<li>机器码不变，仅改变解释方式</li>
+</ul>
+</li>
+<li>小字长转大字长
+<ul>
+<li>原数据为无符号类型，进行0扩展</li>
+<li>原数据为有符号类型，进行符号扩展</li>
+</ul>
+</li>
+<li>大字长转小字长
+<ul>
+<li>一般情况下，编译器会将机器码截短处理(从前截短)
+<ul>
+<li>表示范围缩小</li>
+<li>很可能会出错</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>int、float、double之间的转换
+<ul>
+<li>机器码并不相同</li>
+<li>表示范围和精度不相同</li>
+<li>编译器只能保证数值尽量相等，大多数情况下只是近似值</li>
+<li>float-&gt;double完全相等</li>
+<li>double-&gt;float
+<ul>
+<li>大数转换，可能发生溢出</li>
+<li>高精度数转换，可能发生舍入</li>
+</ul>
+</li>
+<li>float/double-&gt;int
+<ul>
+<li>将小数部分向0方向截断</li>
+<li>大数转换：可能发生溢出</li>
+</ul>
+</li>
+<li>int-&gt;float
+<ul>
+<li>二者在数轴上表示的数据并不完全重叠</li>
+<li>可能会发生精度溢出</li>
+</ul>
+</li>
+<li>int-&gt;double
+<ul>
+<li>double型数据的尾数包含隐藏位在内有53位，可以精确表示所有32位正整数
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-18%2021.12.44.png" alt=""></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="第三章-运算方法和运算器">第三章 运算方法和运算器</h1>
+<h2 id="3-1-移位运算">3-1 移位运算</h2>
+<h3 id="3-1-1-逻辑移位">3-1-1 逻辑移位</h3>
+<ul>
+<li>逻辑移位对象：无符号数</li>
+<li>逻辑移位的规则
+<ul>
+<li>逻辑左移：高位移除，低位补0</li>
+<li>逻辑右移：低位移除，高位补0</li>
+</ul>
+</li>
+<li>逻辑移位的应用
+<ul>
+<li>(1&laquo;6)获得只有第七位为1的数</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-1-2-算术移位">3-1-2 算术移位</h3>
+<ul>
+<li>算术移位的对象：有符号数(针对定点数，包括定点整数和定点小数)</li>
+<li>不论是整数还是负数，符号位保持不变，仅对数值位进行移位(左移或右移)</li>
+<li>对于真值的原码、反码和补码进行算术移位后，它们各自所对应的新的真值应该保持一致
+<ul>
+<li>真值为正数时，真值的原码、反码和补码都相同，因此，对它们进行算术移位后，它们各自所对应的新的真值自然是保持一致的。对于移位后出现的空位，规定添补0
+<ul>
+<li>左移时，若最高位丢1，则结果出错</li>
+<li>右移时，若最高位丢1，则精度缺失</li>
+</ul>
+</li>
+<li>当真值为负数时，真值的原码、反码和补码都不同，因此，对它们进行算术移位后，为了确保它们各自所对应的新的真值保持一致，对于移位后出现的空位，添补规则各不相同
+<ul>
+<li>原码：空位添补0；最高位丢1，则结果出错；最低位丢1，则精度缺失</li>
+<li>反码：空位添补1；最高位丢0，则结果出错；最低位丢0，则精度缺失</li>
+<li>补码
+<ul>
+<li>左移时，空位添补0</li>
+<li>右移时，空位添补1</li>
+<li>最高位丢0，则结果出错，最低位丢1，则精度缺失</li>
+<li>另一种方法
+<ul>
+<li>符号位参与移位</li>
+<li>左移：高位移除，低位添补0；移动前后若符号位发生变化，则发生溢出</li>
+<li>右移：低位移除，高位添补符号位</li>
+<li>优点
+<ul>
+<li>左移时，有检测出发生溢出的方法：符号位发生变化可判定溢出</li>
+<li>符号位与数值位一起移位，方便ALU处理，也方便人们记忆
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-19%2015.20.35.png" alt=""></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>算术移位的应用
+<ul>
+<li>机器内部乘法运算，可由加法运算和算术移位运算来完成-&gt;可以不设计专门的乘法器</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-1-3-循环移位">3-1-3 循环移位</h3>
+<ul>
+<li>对象：无符号数
+<ul>
+<li>将无符号数二进制形式中各个位向左或向右移动，被移出的位会重新出现在另一端，形成循环</li>
+</ul>
+</li>
+<li>在很多处理器架构中，循环移位指令会影响状态寄存器中的进位标志CF(Carry Flag)位，CF标志位用于标识在执行算术或逻辑操作时是否发生了进位</li>
+<li>根据CF标志位是否加入循环移位过程，循环移位可分为以下四种
+<ul>
+<li>不带CF标志位的循环右移</li>
+<li>不带CF标志位的循环左移</li>
+<li>带CF标志位的循环右移</li>
+<li>带CF标志位的循环左移</li>
+</ul>
+</li>
+</ul>
+<p><strong>没看完，回头补</strong></p>
+<h2 id="3-2-定点数的加法和减法运算">3-2 定点数的加法和减法运算</h2>
+<h3 id="3-2-1-补码加减法运算公式">3-2-1 补码加减法运算公式</h3>
+<ul>
+<li>定点数在计算机内部采用补码表示
+<ul>
+<li>补码的符号位可以与数值位一起参加运算</li>
+<li>采用补码可将减法运算转换成加法运算</li>
+<li>-&gt;运算规则简单，易于实现</li>
+</ul>
+</li>
+<li>补码加法和减法运算公式
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-19%2019.48.23.png" alt="补码加法和减法运算公式">
+<ul>
+<li>证明
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-19%2019.50.56.png" alt="均为正数">
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-19%2019.53.38.png" alt="符号相反">
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-19%2019.54.30.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-19%2019.57.14.png" alt="符号同负">
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-19%2019.59.47.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-19%2020.01.17.png" alt=""></li>
+<li>计算时，符号位进位的值为模数，应该舍去</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-2-2-补码加减运算的溢出检测">3-2-2 补码加减运算的溢出检测</h3>
+<ul>
+<li>计算机的字长是有限的，因此所能表示的数据范围也是有限的</li>
+<li>当运算结果超出所能表示的数据范围时，就会出现溢出
+<ul>
+<li>溢出会导致错误的预算结果
+<ul>
+<li>负溢：超出了补码可以表示的最小定点整数</li>
+<li>正溢：超出了补码可以表示的最大定点整数</li>
+</ul>
+</li>
+<li>计算机系统设计人员必须要解决溢出的检测问题，以便在发生溢出时计算机能做出相应的处理</li>
+</ul>
+</li>
+<li>溢出检测
+<ul>
+<li>根据操作数的符号位与运算结果的符号位是否一致进行判断
+<ul>
+<li>两个操作数相加时，当它们的符号位相同(同正或同负)时，才可能发出溢出
+<ul>
+<li>溢出：运算结果的符号位与原操作数的符号位不同</li>
+<li>未溢出：运算结果的符号位与原操作数的符号位相同</li>
+</ul>
+</li>
+<li>溢出标志位OF
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-19%2020.24.16.png" alt="OF"></li>
+</ul>
+</li>
+<li>根据运算过程中最高数值位的进位与符号位的进位是否一致进行判断
+<ul>
+<li>不同可判定为产生溢出，相同可判定为没有产生溢出</li>
+<li>溢出标志位
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-19%2020.27.49.png" alt="溢出标志位"></li>
+</ul>
+</li>
+<li>利用变形补码(具有2位符号位的补码)的符号位进行判断
+<ul>
+<li>双符号位
+<ul>
+<li>00 整数</li>
+<li>11 负数</li>
+<li>01 正溢出</li>
+<li>10 负溢出</li>
+</ul>
+</li>
+<li>优缺点
+<ul>
+<li>非常直观，适合手工运算时的溢出检测</li>
+<li>硬件成本高，在计算机中主要采用单符号溢出检测方案</li>
+</ul>
+</li>
+<li>溢出标志位
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-19%2020.33.34.png" alt="溢出标志位"></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-2-3-逻辑代数和逻辑门">3-2-3 逻辑代数和逻辑门</h3>
+<p><strong>基本没看，数字逻辑与数字系统的基础知识</strong></p>
+<h3 id="3-2-4-一位全加器的硬件逻辑实现">3-2-4 一位全加器的硬件逻辑实现</h3>
+<ul>
+<li>用逻辑门电路实现一位加法
+<ul>
+<li>X<!-- raw HTML omitted -->i<!-- raw HTML omitted -->, Y<!-- raw HTML omitted -->i<!-- raw HTML omitted --> 本位加数</li>
+<li>C<!-- raw HTML omitted -->i<!-- raw HTML omitted -->来自低位的进位</li>
+<li>S<!-- raw HTML omitted -->i<!-- raw HTML omitted -->本位和</li>
+<li>C<!-- raw HTML omitted -->i+1<!-- raw HTML omitted -->向高位进位
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-19%2020.44.46.png" alt="一位加法">
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-19%2020.48.28.png" alt=""></li>
+</ul>
+</li>
+<li>延迟
+<ul>
+<li>假设基本逻辑门电路的传播延迟为1T，复合逻辑门电路的传播延迟为3T
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-19%2020.51.05.png" alt="时延"></li>
+</ul>
+</li>
+<li>简化表示
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-19%2020.52.55.png" alt=""></li>
+</ul>
+<h3 id="3-2-5-串行进位加法器的硬件逻辑实现">3-2-5 串行进位加法器的硬件逻辑实现</h3>
+<ul>
+<li>串行进位加法器/行波进位加法器
+<ul>
+<li>8个一位全加器FA通过进位串联得到8为串行进位加法器
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-19%2020.57.02.png" alt="行波进位加法器"></li>
+<li>溢出检测
+<ul>
+<li>运算结果的符号位与原操作数的符号位不同</li>
+<li>最高数值位的进位与符号位的进位不同(方便快捷)
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-19%2020.57.02.png" alt="溢出检测"></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>在加法器中实现减法
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-19%2021.02.50.png" alt="在加法器中实现减法">
+<ul>
+<li>Sub=1时，将y按位取反加1，即求-y的补码</li>
+<li>Sub=1时，正常进行加法运算</li>
+</ul>
+</li>
+<li>延迟
+<ul>
+<li>假设基本逻辑门OR、AND的传播延迟位1T</li>
+<li>假设复合逻辑门XOR的传播延迟为3T</li>
+<li>假设仅考虑逻辑门的传播延迟，不考虑信号在线路上的传播时延
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-19%2021.08.29.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-19%2021.08.41.png" alt=""></li>
+<li>在n为串行进位加法器中，每个高位的一位全加器FA的运算依赖于相邻低位的一位FA的进位C<!-- raw HTML omitted -->i+1<!-- raw HTML omitted -->，因此所有一位FA不能并行运行，其时间关键延迟为(2n+4)T，与串行进位加法器的位数n呈线性关系，当n较大时性能较差</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-2-6-先行进位加法器的硬件逻辑实现">3-2-6 先行进位加法器的硬件逻辑实现</h3>
+<ul>
+<li>进位生成函数、进位传递函数
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-20%2008.54.38.png" alt="先行进位"></li>
+<li>构建逻辑电路
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-20%2009.01.29.png" alt="逻辑电路"></li>
+<li>时间延迟
+<ul>
+<li>假定各逻辑门的传播延迟为1T，不考虑信号在线路上的传播时延，则该电路的总时间延迟为2T</li>
+</ul>
+</li>
+<li>基于4位先行进位电路构建4位快速加法器
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-20%2009.08.30.png" alt="4位快速加法器"></li>
+<li>4位快速加法器与4位串行进位加法器性能比较
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-20%2009.10.29.png" alt="性能比较"></li>
+<li>使用4位快速加法器构建更大位宽的加法器电路
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-20%2009.15.54.png" alt="">
+<ul>
+<li>4位一组，组内并行进位、组间串行进位</li>
+<li>改进：利用线性电路提前产生C<!-- raw HTML omitted -->4<!-- raw HTML omitted -->,C<!-- raw HTML omitted -->8<!-- raw HTML omitted -->,C<!-- raw HTML omitted -->12<!-- raw HTML omitted -->,C<!-- raw HTML omitted -->16<!-- raw HTML omitted -->信号，则可以实现组间并行进位</li>
+</ul>
+</li>
+<li>使用1个可级联的4位先行进位电路和4个可级联的4位快速加法器 构建16位组内并行、组间并行加法器
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-20%2009.22.55.png" alt="16位组内并行、组间并行加法器">
+<ul>
+<li>性能比较
+<img src="/images/%E6%88%AA%E5%B1%8F2024-04-20%2009.31.48.png" alt="性能比较">
+<ul>
+<li>位宽越大，性能相差越大</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-3-乘法运算">3-3 乘法运算</h2>
+<p><strong>学校的课还没讲，等讲完再看</strong></p>
+</article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="application/javascript" src='https://y-m-m.github.io/js/toc.js'></script>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/toc.css' />
+
+  
+<div id="gitalk-container" class="gitalk-container"></div>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/gitalk.css'>
+<script src='https://y-m-m.github.io/js/gitalk.min.js'></script>
+<script>
+  const gitalk = new Gitalk({
+    clientID: 'Ov23livxKNtTlPeMjV2H',
+    clientSecret: '6d3bc9f47a1296f29628a63701ea5624cd28a26b',
+    repo: 'y-m-m.github.io\/',
+    owner: 'Y-M-M',
+    admin: ['Y-M-M'],
+    id: eval("location.pathname"), 
+    distractionFreeMode: false 
+  });
+  (function() {
+    gitalk.render('gitalk-container');
+  })();
+</script>
+
+</div>
+
+  <div class="footer container-xl width-full p-responsive">
+  <div
+    class="position-relative d-flex flex-row-reverse flex-lg-row flex-wrap flex-lg-nowrap flex-justify-center flex-lg-justify-between flex-sm-items-center pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
+    <a aria-label="Homepage" title="GitHub" class="footer-octicon d-none d-lg-block mr-lg-4" href="https://y-m-m.github.io/">
+      <svg height="24" class="octicon octicon-mark-github" viewBox="0 0 16 16" version="1.1" width="24">
+        <path fill-rule="evenodd"
+          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+        </path>
+      </svg>
+    </a>
+    <ul class="list-style-none d-flex flex-wrap col-12 flex-justify-center flex-lg-justify-between mb-2 mb-lg-0">
+      
+      <li class="mr-3 mr-lg-0">Theme by <a href='https://github.com/MeiK2333/github-style'>github-style</a></li>
+      
+    </ul>
+  </div>
+  <div class="d-flex flex-justify-center pb-6">
+    <span class="f6 text-gray-light"></span>
+  </div>
+
+
+</div>
+</body>
+
+<script type="application/javascript" src="https://y-m-m.github.io/js/github-style.js"></script>
+
+
+
+<script type="text/javascript" async
+  src="https://cdn.bootcss.com/mathjax/2.7.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\[\[', '\]\]']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        TeX: {
+          equationNumbers: { autoNumber: "AMS" },
+          extensions: ["AMSmath.js", "AMSsymbols.js"]
+        }
+      }
+    });
+
+    MathJax.Hub.Queue(function () {
+      
+      
+      
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+
+<style>
+  code.has-jax {
+    font: inherit;
+    font-size: 100%;
+    background: inherit;
+    border: inherit;
+    color: #515151;
+  }
+</style>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+<script type="application/javascript" src='https://y-m-m.github.io/js/search.js'></script>
+
+
+
+</html>

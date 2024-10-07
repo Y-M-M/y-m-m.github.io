@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script type="application/javascript" src='https://y-m-m.github.io/js/theme-mode.js'></script>
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/frameworks.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github-style.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/light.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/dark.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/syntax.css' />
+    <title>csapp - 陈皮的博客</title>
+    
+    <link rel="icon" type="image/x-icon" href='/images/github-mark.png'>
+    
+    <meta name="theme-color" content="#1e2327">
+
+    
+    <meta name="description"
+  content="计算机系统漫游 文件的分类 像hello.c这样只由ASCII字符构成的文件称文本文件 所有其他文件都成为二进制文件 系统中的所有信息都是由一串比特表示的，区分不同数据对象的唯一方法是我们读到这些数据对象时的上下文 文件就是字节序列，每个I/O设备都可以看成文件 从源文件到目标文件的转化 hello.c&ndash;(预处理cpp)&ndash;&gt;hello.i&ndash;(编译器ccl)&ndash;&gt;hello.s&ndash;(汇编器as)&ndash;&gt;hello.o&ndash;(链接器ld)&ndash;&gt;hello 系统的硬件组成 总线：传送字 I/O设备：键盘、鼠标、显示器、磁盘 主存：临时存储设备，由一组动态随机存取存储器（DRAM）芯片组成 处理器：CPU，核心为PC（任何时候，PC都指向主存中的某条机器语言指令的地址） 信息的表示和处理 字数据的大小 对于一个字长为w的机器而言，虚拟地址的范围是0~2w-1，程序最多访问2w个字节 向后兼容 linux&gt; gcc -m32 prog.c可以在32位或64位的机器上正确运行 linux&gt; gcc -m64 prog.c只能在64位的机器上运行 寻址和字节顺序 小端法：最低有效字节在前 大端法：最高有效字节在前 网络应用程序的代码编写必须遵守已建立的关于字节顺序的规则，确保发送方机器将它的内部表示转换成网络标准，而接收方机器则将网络标准转换为内部表示 基于C数据类型的典型大小（以字节为单位） 有符号C声明 无符号C声明 32位字节数 64位字节数 [signed] char unsigned char 1 1 short unsigned short 2 2 int unsigned 4 4 long unsigned long 4 8 int32_t uint32_t 4 4 int64_t uint64_t 8 8 char * 4 8 float 4 4 double 8 8 布尔代数 运算符 作用 ~ 非 &amp; 与 ｜ 或 ^ 异或 也可在C语言中使用，作为按位运算操作符 按位运算用法：掩码运算 C语言逻辑运算符 运算符 作用 ｜｜ 或 &amp;&amp; 与 ！ 非 移位运算 符号 作用 &laquo; 左移 &raquo;(逻辑右移) 左补0 &raquo;(算术右移) 左补符号位 x&raquo;3与x/8不相等，移位操作向下舍入，除法操作向0舍入 整数的数据与算数操作术语 符号 类型 含义 B2Tw 函数 二进制转补码 B2Uw 函数 二进制转无符号数 U2Bw 函数 无符号数转二进制 U2Tw 函数 无符号转补码 T2Bw 函数 补码转二进制 T2Uw 函数 补码转无符号数 TMinw 常数 最小补码值 TMaxw 常数 最大补码值 UMaxw 常数 最大无符号数 &#43;wt 操作 补码加法 &#43;wu 操作 无符号数加法 *wt 操作 补码乘法 *wu 操作 无符号数乘法 -wt 操作 补码取反 -wu 操作 无符号数取反 下表w表示数据表示中的位数 补码编码 最高位为负权 不对称性：|TMin| = |Tmax| &#43; 1 UMaxw = 2TMaxw &#43; 1 C库中的文件&lt;limits.h&gt;定义了常量INT_MAX,INT_MIN,UINT_MAX 反码和原码 反码：最高有效位的权是-(2w-1-1)而不是-2w-1 原码：最高有效位是符号位，用来确定剩下的位该取负权还是正权 强制类型转换（显式） 保持了位模式不变，只是改变了解释这些位的方式 隐式类型转换 对于同时包含有符号和无符号数表达式的处理方式 表达式 类型 求值 0==0U 无符号 1 -1&lt;0 有符号 1 -1&lt;0U 无符号 0 2147483647&gt;-2147483647-1 有符号 1 2147483647U&gt;-2147483647-1 无符号 0 214743647&gt;(int)2147483648U 有符号 1 -1&gt;-2 有符号 1 (unsigned)-1&gt;-2 无符号 1 C语言中TMin的写法 #define INT_MAX 2147483647 #define INT_MAX (-INT_MAX - 1) 扩展一个数字的位表示 无符号数的零扩展 补码数的符号扩展 例：short sx; (unsigned) sx == (unsigned) (int) sx ,不等价于(unsigned)(unsigned short)sx，即默认先进行符号扩展，再强制类型转换为无符号数 截断数字 将一个w位的数字截断为一个k位的数字时，会丢弃高位的w-k位 IEEE浮点表示 V = (-1)s * M * 2E 符号s决定这个数是负数（s=1）还是正数（s=0），而对于数值0的符号位解释作为特殊情况处理 尾数 M是一个二进制小数 阶码 E的作用是对浮点数加权，这个权重是2的E次幂（可能是负数） 浮点数的位划分 第一位：符号位 k位的阶码字段e（folat：1 8 23，double：1 11 52） n位小数字段编码尾数frac 被编码的值分类 规格化的 e != 0 &amp;&amp; e != 255，E = e - bias, M = 1.frac(float:127, double:1023) 非规格化的 e = 0，E = 1 - bias, M = 0.frac(提供了一个表示0的方法，表示非常接近0的数) 无穷大 e = 255 &amp;&amp; frac = 0 NaN e = 255 &amp;&amp; frac != 0 寄存器 63 31 15 7 作用 %rax %eax %ax %al 返回值 %rbx %ebx %bx %bl 被调用者保存 %rcx %ecx %cx %cl 第4个参数 %rdx %edx %dx %dl 第3个参数 %rsi %esi %si %sil 第2个参数 %rdi %edi %di %dil 第1个参数 %rbp %ebp %bp %bpl 被调用者保存 %rsp %esp %sp %spl 栈指针 %r8 %r8d %r8w %r8b 第5个参数 %r9 %r9d %r9w %r9b 第6个参数 %r10 %r10d %r10w %r10b 调用者保存 %r11 %r11d %r11w %r11b 调用者保存 %r12 %r12d %r12w %r12b 被调用者保存 %r13 %r13d %r13w %r13b 被调用者保存 %r14 %r14d %r14w %r14b 被调用者保存 %r15 %r15d %r15w %r15b 被调用者保存 操作数指示符 类型 格式 操作数值 名称 立即数 $Imm Imm 立即数寻址 寄存器 ra R[ra] 寄存器寻址 存储器 Imm M[Imm] 绝对寻址 存储器 (ra) M[Imm&#43;R[rb]] 间接寻址 存储器 Imm(rb) M[Imm&#43;R[rb]] (基址&#43;偏移量)寻址 存储器 (rb, ri) M[R[rb]&#43;R[ri]] 变址寻址 存储器 Imm(rb, ri) M[Imm&#43;R[rb]&#43;R[ri]] 变址寻址 存储器 (, ri, s) M[R[ri]*s] 比例变址寻址 存储器 Imm(,ri,s) M[Imm&#43;R[ri]*s] 比例变址寻址 存储器 (rb,ri,s) M[R[rb]&#43;R[ri]*s] 比例变址寻址 存储器 Imm(rb,ri,s) M[Imm&#43;R[rb]&#43;R[ri]*s] 比例变址寻址 数据传输指令 指令两端不能同时操作内存
+" />
+<meta name="keywords"
+  content='blog, google analytics' />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://y-m-m.github.io/post/csapp/" />
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="csapp - 陈皮的博客" />
+<meta name="twitter:description"
+  content="计算机系统漫游 文件的分类 像hello.c这样只由ASCII字符构成的文件称文本文件 所有其他文件都成为二进制文件 系统中的所有信息都是由一串比特表示的，区分不同数据对象的唯一方法是我们读到这些数据对象时的上下文 文件就是字节序列，每个I/O设备都可以看成文件 从源文件到目标文件的转化 hello.c&ndash;(预处理cpp)&ndash;&gt;hello.i&ndash;(编译器ccl)&ndash;&gt;hello.s&ndash;(汇编器as)&ndash;&gt;hello.o&ndash;(链接器ld)&ndash;&gt;hello 系统的硬件组成 总线：传送字 I/O设备：键盘、鼠标、显示器、磁盘 主存：临时存储设备，由一组动态随机存取存储器（DRAM）芯片组成 处理器：CPU，核心为PC（任何时候，PC都指向主存中的某条机器语言指令的地址） 信息的表示和处理 字数据的大小 对于一个字长为w的机器而言，虚拟地址的范围是0~2w-1，程序最多访问2w个字节 向后兼容 linux&gt; gcc -m32 prog.c可以在32位或64位的机器上正确运行 linux&gt; gcc -m64 prog.c只能在64位的机器上运行 寻址和字节顺序 小端法：最低有效字节在前 大端法：最高有效字节在前 网络应用程序的代码编写必须遵守已建立的关于字节顺序的规则，确保发送方机器将它的内部表示转换成网络标准，而接收方机器则将网络标准转换为内部表示 基于C数据类型的典型大小（以字节为单位） 有符号C声明 无符号C声明 32位字节数 64位字节数 [signed] char unsigned char 1 1 short unsigned short 2 2 int unsigned 4 4 long unsigned long 4 8 int32_t uint32_t 4 4 int64_t uint64_t 8 8 char * 4 8 float 4 4 double 8 8 布尔代数 运算符 作用 ~ 非 &amp; 与 ｜ 或 ^ 异或 也可在C语言中使用，作为按位运算操作符 按位运算用法：掩码运算 C语言逻辑运算符 运算符 作用 ｜｜ 或 &amp;&amp; 与 ！ 非 移位运算 符号 作用 &laquo; 左移 &raquo;(逻辑右移) 左补0 &raquo;(算术右移) 左补符号位 x&raquo;3与x/8不相等，移位操作向下舍入，除法操作向0舍入 整数的数据与算数操作术语 符号 类型 含义 B2Tw 函数 二进制转补码 B2Uw 函数 二进制转无符号数 U2Bw 函数 无符号数转二进制 U2Tw 函数 无符号转补码 T2Bw 函数 补码转二进制 T2Uw 函数 补码转无符号数 TMinw 常数 最小补码值 TMaxw 常数 最大补码值 UMaxw 常数 最大无符号数 &#43;wt 操作 补码加法 &#43;wu 操作 无符号数加法 *wt 操作 补码乘法 *wu 操作 无符号数乘法 -wt 操作 补码取反 -wu 操作 无符号数取反 下表w表示数据表示中的位数 补码编码 最高位为负权 不对称性：|TMin| = |Tmax| &#43; 1 UMaxw = 2TMaxw &#43; 1 C库中的文件&lt;limits.h&gt;定义了常量INT_MAX,INT_MIN,UINT_MAX 反码和原码 反码：最高有效位的权是-(2w-1-1)而不是-2w-1 原码：最高有效位是符号位，用来确定剩下的位该取负权还是正权 强制类型转换（显式） 保持了位模式不变，只是改变了解释这些位的方式 隐式类型转换 对于同时包含有符号和无符号数表达式的处理方式 表达式 类型 求值 0==0U 无符号 1 -1&lt;0 有符号 1 -1&lt;0U 无符号 0 2147483647&gt;-2147483647-1 有符号 1 2147483647U&gt;-2147483647-1 无符号 0 214743647&gt;(int)2147483648U 有符号 1 -1&gt;-2 有符号 1 (unsigned)-1&gt;-2 无符号 1 C语言中TMin的写法 #define INT_MAX 2147483647 #define INT_MAX (-INT_MAX - 1) 扩展一个数字的位表示 无符号数的零扩展 补码数的符号扩展 例：short sx; (unsigned) sx == (unsigned) (int) sx ,不等价于(unsigned)(unsigned short)sx，即默认先进行符号扩展，再强制类型转换为无符号数 截断数字 将一个w位的数字截断为一个k位的数字时，会丢弃高位的w-k位 IEEE浮点表示 V = (-1)s * M * 2E 符号s决定这个数是负数（s=1）还是正数（s=0），而对于数值0的符号位解释作为特殊情况处理 尾数 M是一个二进制小数 阶码 E的作用是对浮点数加权，这个权重是2的E次幂（可能是负数） 浮点数的位划分 第一位：符号位 k位的阶码字段e（folat：1 8 23，double：1 11 52） n位小数字段编码尾数frac 被编码的值分类 规格化的 e != 0 &amp;&amp; e != 255，E = e - bias, M = 1.frac(float:127, double:1023) 非规格化的 e = 0，E = 1 - bias, M = 0.frac(提供了一个表示0的方法，表示非常接近0的数) 无穷大 e = 255 &amp;&amp; frac = 0 NaN e = 255 &amp;&amp; frac != 0 寄存器 63 31 15 7 作用 %rax %eax %ax %al 返回值 %rbx %ebx %bx %bl 被调用者保存 %rcx %ecx %cx %cl 第4个参数 %rdx %edx %dx %dl 第3个参数 %rsi %esi %si %sil 第2个参数 %rdi %edi %di %dil 第1个参数 %rbp %ebp %bp %bpl 被调用者保存 %rsp %esp %sp %spl 栈指针 %r8 %r8d %r8w %r8b 第5个参数 %r9 %r9d %r9w %r9b 第6个参数 %r10 %r10d %r10w %r10b 调用者保存 %r11 %r11d %r11w %r11b 调用者保存 %r12 %r12d %r12w %r12b 被调用者保存 %r13 %r13d %r13w %r13b 被调用者保存 %r14 %r14d %r14w %r14b 被调用者保存 %r15 %r15d %r15w %r15b 被调用者保存 操作数指示符 类型 格式 操作数值 名称 立即数 $Imm Imm 立即数寻址 寄存器 ra R[ra] 寄存器寻址 存储器 Imm M[Imm] 绝对寻址 存储器 (ra) M[Imm&#43;R[rb]] 间接寻址 存储器 Imm(rb) M[Imm&#43;R[rb]] (基址&#43;偏移量)寻址 存储器 (rb, ri) M[R[rb]&#43;R[ri]] 变址寻址 存储器 Imm(rb, ri) M[Imm&#43;R[rb]&#43;R[ri]] 变址寻址 存储器 (, ri, s) M[R[ri]*s] 比例变址寻址 存储器 Imm(,ri,s) M[Imm&#43;R[ri]*s] 比例变址寻址 存储器 (rb,ri,s) M[R[rb]&#43;R[ri]*s] 比例变址寻址 存储器 Imm(rb,ri,s) M[Imm&#43;R[rb]&#43;R[ri]*s] 比例变址寻址 数据传输指令 指令两端不能同时操作内存
+" />
+<meta name="twitter:site" content="https://y-m-m.github.io/" />
+<meta name="twitter:creator" content="陈皮" />
+<meta name="twitter:image"
+  content="https://y-m-m.github.io/">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="csapp - 陈皮的博客">
+<meta property="og:description"
+  content="计算机系统漫游 文件的分类 像hello.c这样只由ASCII字符构成的文件称文本文件 所有其他文件都成为二进制文件 系统中的所有信息都是由一串比特表示的，区分不同数据对象的唯一方法是我们读到这些数据对象时的上下文 文件就是字节序列，每个I/O设备都可以看成文件 从源文件到目标文件的转化 hello.c&ndash;(预处理cpp)&ndash;&gt;hello.i&ndash;(编译器ccl)&ndash;&gt;hello.s&ndash;(汇编器as)&ndash;&gt;hello.o&ndash;(链接器ld)&ndash;&gt;hello 系统的硬件组成 总线：传送字 I/O设备：键盘、鼠标、显示器、磁盘 主存：临时存储设备，由一组动态随机存取存储器（DRAM）芯片组成 处理器：CPU，核心为PC（任何时候，PC都指向主存中的某条机器语言指令的地址） 信息的表示和处理 字数据的大小 对于一个字长为w的机器而言，虚拟地址的范围是0~2w-1，程序最多访问2w个字节 向后兼容 linux&gt; gcc -m32 prog.c可以在32位或64位的机器上正确运行 linux&gt; gcc -m64 prog.c只能在64位的机器上运行 寻址和字节顺序 小端法：最低有效字节在前 大端法：最高有效字节在前 网络应用程序的代码编写必须遵守已建立的关于字节顺序的规则，确保发送方机器将它的内部表示转换成网络标准，而接收方机器则将网络标准转换为内部表示 基于C数据类型的典型大小（以字节为单位） 有符号C声明 无符号C声明 32位字节数 64位字节数 [signed] char unsigned char 1 1 short unsigned short 2 2 int unsigned 4 4 long unsigned long 4 8 int32_t uint32_t 4 4 int64_t uint64_t 8 8 char * 4 8 float 4 4 double 8 8 布尔代数 运算符 作用 ~ 非 &amp; 与 ｜ 或 ^ 异或 也可在C语言中使用，作为按位运算操作符 按位运算用法：掩码运算 C语言逻辑运算符 运算符 作用 ｜｜ 或 &amp;&amp; 与 ！ 非 移位运算 符号 作用 &laquo; 左移 &raquo;(逻辑右移) 左补0 &raquo;(算术右移) 左补符号位 x&raquo;3与x/8不相等，移位操作向下舍入，除法操作向0舍入 整数的数据与算数操作术语 符号 类型 含义 B2Tw 函数 二进制转补码 B2Uw 函数 二进制转无符号数 U2Bw 函数 无符号数转二进制 U2Tw 函数 无符号转补码 T2Bw 函数 补码转二进制 T2Uw 函数 补码转无符号数 TMinw 常数 最小补码值 TMaxw 常数 最大补码值 UMaxw 常数 最大无符号数 &#43;wt 操作 补码加法 &#43;wu 操作 无符号数加法 *wt 操作 补码乘法 *wu 操作 无符号数乘法 -wt 操作 补码取反 -wu 操作 无符号数取反 下表w表示数据表示中的位数 补码编码 最高位为负权 不对称性：|TMin| = |Tmax| &#43; 1 UMaxw = 2TMaxw &#43; 1 C库中的文件&lt;limits.h&gt;定义了常量INT_MAX,INT_MIN,UINT_MAX 反码和原码 反码：最高有效位的权是-(2w-1-1)而不是-2w-1 原码：最高有效位是符号位，用来确定剩下的位该取负权还是正权 强制类型转换（显式） 保持了位模式不变，只是改变了解释这些位的方式 隐式类型转换 对于同时包含有符号和无符号数表达式的处理方式 表达式 类型 求值 0==0U 无符号 1 -1&lt;0 有符号 1 -1&lt;0U 无符号 0 2147483647&gt;-2147483647-1 有符号 1 2147483647U&gt;-2147483647-1 无符号 0 214743647&gt;(int)2147483648U 有符号 1 -1&gt;-2 有符号 1 (unsigned)-1&gt;-2 无符号 1 C语言中TMin的写法 #define INT_MAX 2147483647 #define INT_MAX (-INT_MAX - 1) 扩展一个数字的位表示 无符号数的零扩展 补码数的符号扩展 例：short sx; (unsigned) sx == (unsigned) (int) sx ,不等价于(unsigned)(unsigned short)sx，即默认先进行符号扩展，再强制类型转换为无符号数 截断数字 将一个w位的数字截断为一个k位的数字时，会丢弃高位的w-k位 IEEE浮点表示 V = (-1)s * M * 2E 符号s决定这个数是负数（s=1）还是正数（s=0），而对于数值0的符号位解释作为特殊情况处理 尾数 M是一个二进制小数 阶码 E的作用是对浮点数加权，这个权重是2的E次幂（可能是负数） 浮点数的位划分 第一位：符号位 k位的阶码字段e（folat：1 8 23，double：1 11 52） n位小数字段编码尾数frac 被编码的值分类 规格化的 e != 0 &amp;&amp; e != 255，E = e - bias, M = 1.frac(float:127, double:1023) 非规格化的 e = 0，E = 1 - bias, M = 0.frac(提供了一个表示0的方法，表示非常接近0的数) 无穷大 e = 255 &amp;&amp; frac = 0 NaN e = 255 &amp;&amp; frac != 0 寄存器 63 31 15 7 作用 %rax %eax %ax %al 返回值 %rbx %ebx %bx %bl 被调用者保存 %rcx %ecx %cx %cl 第4个参数 %rdx %edx %dx %dl 第3个参数 %rsi %esi %si %sil 第2个参数 %rdi %edi %di %dil 第1个参数 %rbp %ebp %bp %bpl 被调用者保存 %rsp %esp %sp %spl 栈指针 %r8 %r8d %r8w %r8b 第5个参数 %r9 %r9d %r9w %r9b 第6个参数 %r10 %r10d %r10w %r10b 调用者保存 %r11 %r11d %r11w %r11b 调用者保存 %r12 %r12d %r12w %r12b 被调用者保存 %r13 %r13d %r13w %r13b 被调用者保存 %r14 %r14d %r14w %r14b 被调用者保存 %r15 %r15d %r15w %r15b 被调用者保存 操作数指示符 类型 格式 操作数值 名称 立即数 $Imm Imm 立即数寻址 寄存器 ra R[ra] 寄存器寻址 存储器 Imm M[Imm] 绝对寻址 存储器 (ra) M[Imm&#43;R[rb]] 间接寻址 存储器 Imm(rb) M[Imm&#43;R[rb]] (基址&#43;偏移量)寻址 存储器 (rb, ri) M[R[rb]&#43;R[ri]] 变址寻址 存储器 Imm(rb, ri) M[Imm&#43;R[rb]&#43;R[ri]] 变址寻址 存储器 (, ri, s) M[R[ri]*s] 比例变址寻址 存储器 Imm(,ri,s) M[Imm&#43;R[ri]*s] 比例变址寻址 存储器 (rb,ri,s) M[R[rb]&#43;R[ri]*s] 比例变址寻址 存储器 Imm(rb,ri,s) M[Imm&#43;R[rb]&#43;R[ri]*s] 比例变址寻址 数据传输指令 指令两端不能同时操作内存
+" />
+<meta property="og:url" content="https://y-m-m.github.io/post/csapp/" />
+<meta property="og:site_name" content="csapp" />
+<meta property="og:image"
+  content="https://y-m-m.github.io/">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+<meta property="article:published_time" content="2024-01-04 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+  <div style="position: relative">
+  <header class="Header js-details-container Details px-3 px-md-4 px-lg-5 flex-wrap flex-md-nowrap open Details--on">
+    <div class="Header-item mobile-none" style="margin-top: -4px; margin-bottom: -4px;">
+      <a class="Header-link" href="https://y-m-m.github.io/">
+        <img class="octicon" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item d-md-none">
+      <button class="Header-link btn-link js-details-target" type="button"
+        onclick="document.querySelector('#header-search').style.display = document.querySelector('#header-search').style.display == 'none'? 'block': 'none'">
+        <svg height="24" class="octicon octicon-three-bars" viewBox="0 0 16 16" version="1.1" width="24">
+          <path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 2.75zm0 5A.75.75 0 011.75 7h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 7.75zM1.75 12a.75.75 0 100 1.5h12.5a.75.75 0 100-1.5H1.75z">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <div style="display: none;" id="header-search"
+      class="Header-item Header-item--full flex-column flex-md-row width-full flex-order-2 flex-md-order-none mr-0 mr-md-3 mt-3 mt-md-0 Details-content--hidden-not-important d-md-flex">
+      <div
+        class="Header-search header-search flex-auto js-site-search position-relative flex-self-stretch flex-md-self-auto mb-3 mb-md-0 mr-0 mr-md-3 scoped-search site-scoped-search js-jump-to">
+        <div class="position-relative">
+          
+          <form target="_blank" id="search-form" action="" accept-charset="UTF-8" method="get"
+            autocomplete="off">
+            <label
+              class="Header-search-label form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative d-flex flex-justify-between flex-items-center">
+              <input type="text"
+                class="Header-search-input form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable"
+                name="q" value="" placeholder="Search" autocomplete="off">
+            </label>
+          </form>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="Header-item Header-item--full flex-justify-center d-md-none position-relative">
+      <a class="Header-link " href="https://y-m-m.github.io/">
+        <img class="octicon octicon-mark-github v-align-middle" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item" style="margin-right: 0;">
+      <a href="javascript:void(0)" class="Header-link no-select" onclick="switchTheme()">
+        <svg style="fill: var(--color-profile-color-modes-toggle-moon);" class="no-select" viewBox="0 0 16 16"
+          version="1.1" width="16" height="16">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M4.52208 7.71754C7.5782 7.71754 10.0557 5.24006 10.0557 2.18394C10.0557 1.93498 10.0392 1.68986 10.0074 1.44961C9.95801 1.07727 10.3495 0.771159 10.6474 0.99992C12.1153 2.12716 13.0615 3.89999 13.0615 5.89383C13.0615 9.29958 10.3006 12.0605 6.89485 12.0605C3.95334 12.0605 1.49286 10.001 0.876728 7.24527C0.794841 6.87902 1.23668 6.65289 1.55321 6.85451C2.41106 7.40095 3.4296 7.71754 4.52208 7.71754Z">
+          </path>
+        </svg>
+      </a>
+    </div>
+  </header>
+</div>
+
+  <div id="search-result" class="container-lg px-3 new-discussion-timeline" style="display: none;">
+</div>
+
+  
+<div class="application-main">
+  <div>
+  <main>
+    <div class="gisthead pagehead bg-gray-light pb-0 pt-3 mb-4">
+      <div class="px-0">
+        <div class="mb-3 d-flex px-3 px-md-3 px-lg-5">
+          <div class="flex-auto min-width-0 width-fit mr-3">
+            <div class="d-flex">
+              <div class="d-none d-md-block">
+                <a class="avatar mr-2 flex-shrink-0" href="https://y-m-m.github.io/">
+                  <img class=" avatar-user"
+                    src="/images/me.png"
+                    width="32" height="32"></a>
+              </div>
+              <div class="d-flex flex-column">
+                <h1 class="break-word f3 text-normal mb-md-0 mb-1">
+                  <span class="author">
+                    <a href="https://y-m-m.github.io/">陈皮</a>
+                  </span>
+                  <span class="path-divider">/</span>
+                  <strong class="css-truncate css-truncate-target mr-1" style="max-width: 410px">
+                    <a href="https://y-m-m.github.io/post/csapp/">csapp</a>
+                  </strong>
+                </h1>
+                <div class="note m-0">
+                  Created <relative-time datetime="Thu, 04 Jan 2024 00:00:00 &#43;0000"
+                    class="no-wrap">
+                    Thu, 04 Jan 2024 00:00:00 &#43;0000</relative-time>
+
+                  
+                  <span class="file-info-divider"></span>
+                  Modified <relative-time datetime="Mon, 18 Mar 2024 20:12:32 &#43;0800"
+                    class="no-wrap">
+                    Mon, 18 Mar 2024 20:12:32 &#43;0800</relative-time>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-lg px-3 new-discussion-timeline">
+      <div class="repository-content gist-content">
+        <div>
+          <div class="js-gist-file-update-container js-task-list-container file-box">
+            <div id="file-pytest" class="file my-2">
+              <div id="post-header" class="file-header d-flex flex-md-items-center flex-items-start sticky-header" style="z-index: 2">
+                <div class="file-info d-flex flex-md-items-center flex-items-start flex-order-1 flex-auto">
+                  <div class="text-mono f6 flex-auto pr-3 flex-order-2 flex-md-order-1 mt-2 mt-md-0">
+                    
+                    <summary id="toc-toggle" onclick="clickToc()" class="btn btn-octicon m-0 mr-2 p-2">
+                      <svg aria-hidden="true" viewBox="0 0 16 16" height="16" width="16" class="octicon octicon-list-unordered">
+                        <path fill-rule="evenodd" d="M2 4a1 1 0 100-2 1 1 0 000 2zm3.75-1.5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zM3 8a1 1 0 11-2 0 1 1 0 012 0zm-1 6a1 1 0 100-2 1 1 0 000 2z"></path>
+                      </svg>
+                    </summary>
+                    <details-menu class="SelectMenu" id="toc-details" style="display: none;">
+                      <div class="SelectMenu-modal rounded-3 mt-1" style="max-height: 340px;">
+                        <div class="SelectMenu-list SelectMenu-list--borderless p-2" style="overscroll-behavior: contain;" id="toc-list">
+                        </div>
+                      </div>
+                    </details-menu>
+                      4598 Words
+                    
+
+                  </div>
+                  <div class="file-actions flex-order-2 pt-0">
+                    
+                    
+                    <a class="muted-link mr-3" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      计算机科学
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      计算机系统基础
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="/tags/%E7%AC%94%E8%AE%B0">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      笔记
+                    </a>
+                    
+                    
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="Box-body px-5 pb-5" style="z-index: 1">
+                <article class="markdown-body entry-content container-lg"><h1 id="计算机系统漫游">计算机系统漫游</h1>
+<h2 id="文件的分类">文件的分类</h2>
+<ul>
+<li>像hello.c这样只由ASCII字符构成的文件称文本文件</li>
+<li>所有其他文件都成为二进制文件</li>
+<li>系统中的所有信息都是由一串比特表示的，区分不同数据对象的唯一方法是我们读到这些数据对象时的上下文</li>
+<li><strong>文件就是字节序列，每个I/O设备都可以看成文件</strong></li>
+</ul>
+<h2 id="从源文件到目标文件的转化">从源文件到目标文件的转化</h2>
+<ul>
+<li>hello.c&ndash;(预处理cpp)&ndash;&gt;hello.i&ndash;(编译器ccl)&ndash;&gt;hello.s&ndash;(汇编器as)&ndash;&gt;hello.o&ndash;(链接器ld)&ndash;&gt;hello</li>
+</ul>
+<h2 id="系统的硬件组成">系统的硬件组成</h2>
+<ul>
+<li>总线：传送字</li>
+<li>I/O设备：键盘、鼠标、显示器、磁盘</li>
+<li>主存：临时存储设备，由一组动态随机存取存储器（DRAM）芯片组成</li>
+<li>处理器：CPU，核心为PC（任何时候，PC都指向主存中的某条机器语言指令的地址）</li>
+</ul>
+<h1 id="信息的表示和处理">信息的表示和处理</h1>
+<h2 id="字数据的大小">字数据的大小</h2>
+<ul>
+<li>对于一个字长为w的机器而言，虚拟地址的范围是0~2<!-- raw HTML omitted -->w<!-- raw HTML omitted -->-1，程序最多访问2<!-- raw HTML omitted -->w<!-- raw HTML omitted -->个字节</li>
+</ul>
+<h2 id="向后兼容">向后兼容</h2>
+<ul>
+<li>linux&gt; gcc -m32 prog.c可以在32位或64位的机器上正确运行</li>
+<li>linux&gt; gcc -m64 prog.c只能在64位的机器上运行</li>
+</ul>
+<h2 id="寻址和字节顺序">寻址和字节顺序</h2>
+<ul>
+<li>小端法：最低有效字节在前</li>
+<li>大端法：最高有效字节在前</li>
+<li>网络应用程序的代码编写必须遵守已建立的关于字节顺序的规则，确保发送方机器将它的内部表示转换成网络标准，而接收方机器则将网络标准转换为内部表示</li>
+</ul>
+<h2 id="基于c数据类型的典型大小以字节为单位">基于C数据类型的典型大小（以字节为单位）</h2>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: center">有符号C声明</th>
+          <th style="text-align: center">无符号C声明</th>
+          <th style="text-align: center">32位字节数</th>
+          <th style="text-align: center">64位字节数</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">[signed] char</td>
+          <td style="text-align: center">unsigned char</td>
+          <td style="text-align: center">1</td>
+          <td style="text-align: center">1</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">short</td>
+          <td style="text-align: center">unsigned short</td>
+          <td style="text-align: center">2</td>
+          <td style="text-align: center">2</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">int</td>
+          <td style="text-align: center">unsigned</td>
+          <td style="text-align: center">4</td>
+          <td style="text-align: center">4</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">long</td>
+          <td style="text-align: center">unsigned long</td>
+          <td style="text-align: center">4</td>
+          <td style="text-align: center">8</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">int32_t</td>
+          <td style="text-align: center">uint32_t</td>
+          <td style="text-align: center">4</td>
+          <td style="text-align: center">4</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">int64_t</td>
+          <td style="text-align: center">uint64_t</td>
+          <td style="text-align: center">8</td>
+          <td style="text-align: center">8</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">char *</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">4</td>
+          <td style="text-align: center">8</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">float</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">4</td>
+          <td style="text-align: center">4</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">double</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">8</td>
+          <td style="text-align: center">8</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="布尔代数">布尔代数</h2>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: center">运算符</th>
+          <th style="text-align: center">作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">~</td>
+          <td style="text-align: center">非</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">&amp;</td>
+          <td style="text-align: center">与</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">｜</td>
+          <td style="text-align: center">或</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">^</td>
+          <td style="text-align: center">异或</td>
+      </tr>
+  </tbody>
+</table>
+<ul>
+<li>也可在C语言中使用，作为按位运算操作符</li>
+<li>按位运算用法：掩码运算</li>
+</ul>
+<h2 id="c语言逻辑运算符">C语言逻辑运算符</h2>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: center">运算符</th>
+          <th style="text-align: center">作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">｜｜</td>
+          <td style="text-align: center">或</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">&amp;&amp;</td>
+          <td style="text-align: center">与</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">！</td>
+          <td style="text-align: center">非</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="移位运算">移位运算</h2>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: center">符号</th>
+          <th style="text-align: center">作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">&laquo;</td>
+          <td style="text-align: center">左移</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">&raquo;(逻辑右移)</td>
+          <td style="text-align: center">左补0</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">&raquo;(算术右移)</td>
+          <td style="text-align: center">左补符号位</td>
+      </tr>
+  </tbody>
+</table>
+<ul>
+<li><strong>x&raquo;3与x/8不相等，移位操作向下舍入，除法操作向0舍入</strong></li>
+</ul>
+<h2 id="整数的数据与算数操作术语">整数的数据与算数操作术语</h2>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: center">符号</th>
+          <th style="text-align: center">类型</th>
+          <th style="text-align: center">含义</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">B2T<!-- raw HTML omitted -->w<!-- raw HTML omitted --></td>
+          <td style="text-align: center">函数</td>
+          <td style="text-align: center">二进制转补码</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">B2U<!-- raw HTML omitted -->w<!-- raw HTML omitted --></td>
+          <td style="text-align: center">函数</td>
+          <td style="text-align: center">二进制转无符号数</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">U2B<!-- raw HTML omitted -->w<!-- raw HTML omitted --></td>
+          <td style="text-align: center">函数</td>
+          <td style="text-align: center">无符号数转二进制</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">U2T<!-- raw HTML omitted -->w<!-- raw HTML omitted --></td>
+          <td style="text-align: center">函数</td>
+          <td style="text-align: center">无符号转补码</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">T2B<!-- raw HTML omitted -->w<!-- raw HTML omitted --></td>
+          <td style="text-align: center">函数</td>
+          <td style="text-align: center">补码转二进制</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">T2U<!-- raw HTML omitted -->w<!-- raw HTML omitted --></td>
+          <td style="text-align: center">函数</td>
+          <td style="text-align: center">补码转无符号数</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">TMin<!-- raw HTML omitted -->w<!-- raw HTML omitted --></td>
+          <td style="text-align: center">常数</td>
+          <td style="text-align: center">最小补码值</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">TMax<!-- raw HTML omitted -->w<!-- raw HTML omitted --></td>
+          <td style="text-align: center">常数</td>
+          <td style="text-align: center">最大补码值</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">UMax<!-- raw HTML omitted -->w<!-- raw HTML omitted --></td>
+          <td style="text-align: center">常数</td>
+          <td style="text-align: center">最大无符号数</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">+<!-- raw HTML omitted -->w<!-- raw HTML omitted --><!-- raw HTML omitted -->t<!-- raw HTML omitted --></td>
+          <td style="text-align: center">操作</td>
+          <td style="text-align: center">补码加法</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">+<!-- raw HTML omitted -->w<!-- raw HTML omitted --><!-- raw HTML omitted -->u<!-- raw HTML omitted --></td>
+          <td style="text-align: center">操作</td>
+          <td style="text-align: center">无符号数加法</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">*<!-- raw HTML omitted -->w<!-- raw HTML omitted --><!-- raw HTML omitted -->t<!-- raw HTML omitted --></td>
+          <td style="text-align: center">操作</td>
+          <td style="text-align: center">补码乘法</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">*<!-- raw HTML omitted -->w<!-- raw HTML omitted --><!-- raw HTML omitted -->u<!-- raw HTML omitted --></td>
+          <td style="text-align: center">操作</td>
+          <td style="text-align: center">无符号数乘法</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">-<!-- raw HTML omitted -->w<!-- raw HTML omitted --><!-- raw HTML omitted -->t<!-- raw HTML omitted --></td>
+          <td style="text-align: center">操作</td>
+          <td style="text-align: center">补码取反</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">-<!-- raw HTML omitted -->w<!-- raw HTML omitted --><!-- raw HTML omitted -->u<!-- raw HTML omitted --></td>
+          <td style="text-align: center">操作</td>
+          <td style="text-align: center">无符号数取反</td>
+      </tr>
+  </tbody>
+</table>
+<ul>
+<li>下表w表示数据表示中的位数</li>
+</ul>
+<h2 id="补码编码">补码编码</h2>
+<ul>
+<li>最高位为负权</li>
+<li>不对称性：|TMin| = |Tmax| + 1</li>
+<li>UMax<!-- raw HTML omitted -->w<!-- raw HTML omitted --> = 2TMax<!-- raw HTML omitted -->w<!-- raw HTML omitted --> + 1</li>
+<li>C库中的文件&lt;limits.h&gt;定义了常量INT_MAX,INT_MIN,UINT_MAX</li>
+</ul>
+<h2 id="反码和原码">反码和原码</h2>
+<ul>
+<li>反码：最高有效位的权是-(2<!-- raw HTML omitted -->w-1<!-- raw HTML omitted -->-1)而不是-2<!-- raw HTML omitted -->w-1<!-- raw HTML omitted --></li>
+<li>原码：最高有效位是符号位，用来确定剩下的位该取负权还是正权</li>
+</ul>
+<h2 id="强制类型转换显式">强制类型转换（显式）</h2>
+<ul>
+<li>保持了位模式不变，只是改变了解释这些位的方式</li>
+</ul>
+<h2 id="隐式类型转换">隐式类型转换</h2>
+<ul>
+<li>对于同时包含有符号和无符号数表达式的处理方式</li>
+</ul>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: center">表达式</th>
+          <th style="text-align: center">类型</th>
+          <th style="text-align: center">求值</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">0==0U</td>
+          <td style="text-align: center">无符号</td>
+          <td style="text-align: center">1</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">-1&lt;0</td>
+          <td style="text-align: center">有符号</td>
+          <td style="text-align: center">1</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">-1&lt;0U</td>
+          <td style="text-align: center">无符号</td>
+          <td style="text-align: center">0</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">2147483647&gt;-2147483647-1</td>
+          <td style="text-align: center">有符号</td>
+          <td style="text-align: center">1</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">2147483647U&gt;-2147483647-1</td>
+          <td style="text-align: center">无符号</td>
+          <td style="text-align: center">0</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">214743647&gt;(int)2147483648U</td>
+          <td style="text-align: center">有符号</td>
+          <td style="text-align: center">1</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">-1&gt;-2</td>
+          <td style="text-align: center">有符号</td>
+          <td style="text-align: center">1</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">(unsigned)-1&gt;-2</td>
+          <td style="text-align: center">无符号</td>
+          <td style="text-align: center">1</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="c语言中tmin的写法">C语言中TMin的写法</h2>
+<ul>
+<li>#define INT_MAX 2147483647</li>
+<li>#define INT_MAX (-INT_MAX - 1)</li>
+</ul>
+<h2 id="扩展一个数字的位表示">扩展一个数字的位表示</h2>
+<ul>
+<li>无符号数的零扩展</li>
+<li>补码数的符号扩展</li>
+<li>例：short sx; (unsigned) sx == (unsigned) (int) sx ,不等价于(unsigned)(unsigned short)sx，即默认先进行符号扩展，再强制类型转换为无符号数</li>
+</ul>
+<h2 id="截断数字">截断数字</h2>
+<ul>
+<li>将一个w位的数字截断为一个k位的数字时，会丢弃高位的w-k位</li>
+</ul>
+<h2 id="ieee浮点表示">IEEE浮点表示</h2>
+<h3 id="v---1supssup---m--2supesup">V = (-1)<!-- raw HTML omitted -->s<!-- raw HTML omitted -->  * M * 2<!-- raw HTML omitted -->E<!-- raw HTML omitted --></h3>
+<ul>
+<li>符号s决定这个数是负数（s=1）还是正数（s=0），而对于数值0的符号位解释作为特殊情况处理</li>
+<li>尾数 M是一个二进制小数</li>
+<li>阶码 E的作用是对浮点数加权，这个权重是2的E次幂（可能是负数）</li>
+</ul>
+<h3 id="浮点数的位划分">浮点数的位划分</h3>
+<ul>
+<li>第一位：符号位</li>
+<li>k位的阶码字段e（folat：1 8 23，double：1 11 52）</li>
+<li>n位小数字段编码尾数frac</li>
+</ul>
+<h3 id="被编码的值分类">被编码的值分类</h3>
+<ul>
+<li>规格化的 e != 0 &amp;&amp; e != 255，E = e - bias, M = 1.frac(float:127, double:1023)</li>
+<li>非规格化的 e = 0，E = 1 - bias, M = 0.frac(提供了一个表示0的方法，表示非常接近0的数)</li>
+<li>无穷大 e = 255 &amp;&amp; frac = 0</li>
+<li>NaN e = 255 &amp;&amp; frac != 0</li>
+</ul>
+<h2 id="寄存器">寄存器</h2>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: center">63</th>
+          <th style="text-align: center">31</th>
+          <th style="text-align: center">15</th>
+          <th style="text-align: center">7</th>
+          <th style="text-align: center">作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">%rax</td>
+          <td style="text-align: center">%eax</td>
+          <td style="text-align: center">%ax</td>
+          <td style="text-align: center">%al</td>
+          <td style="text-align: center">返回值</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">%rbx</td>
+          <td style="text-align: center">%ebx</td>
+          <td style="text-align: center">%bx</td>
+          <td style="text-align: center">%bl</td>
+          <td style="text-align: center">被调用者保存</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">%rcx</td>
+          <td style="text-align: center">%ecx</td>
+          <td style="text-align: center">%cx</td>
+          <td style="text-align: center">%cl</td>
+          <td style="text-align: center">第4个参数</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">%rdx</td>
+          <td style="text-align: center">%edx</td>
+          <td style="text-align: center">%dx</td>
+          <td style="text-align: center">%dl</td>
+          <td style="text-align: center">第3个参数</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">%rsi</td>
+          <td style="text-align: center">%esi</td>
+          <td style="text-align: center">%si</td>
+          <td style="text-align: center">%sil</td>
+          <td style="text-align: center">第2个参数</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">%rdi</td>
+          <td style="text-align: center">%edi</td>
+          <td style="text-align: center">%di</td>
+          <td style="text-align: center">%dil</td>
+          <td style="text-align: center">第1个参数</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">%rbp</td>
+          <td style="text-align: center">%ebp</td>
+          <td style="text-align: center">%bp</td>
+          <td style="text-align: center">%bpl</td>
+          <td style="text-align: center">被调用者保存</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">%rsp</td>
+          <td style="text-align: center">%esp</td>
+          <td style="text-align: center">%sp</td>
+          <td style="text-align: center">%spl</td>
+          <td style="text-align: center">栈指针</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">%r8</td>
+          <td style="text-align: center">%r8d</td>
+          <td style="text-align: center">%r8w</td>
+          <td style="text-align: center">%r8b</td>
+          <td style="text-align: center">第5个参数</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">%r9</td>
+          <td style="text-align: center">%r9d</td>
+          <td style="text-align: center">%r9w</td>
+          <td style="text-align: center">%r9b</td>
+          <td style="text-align: center">第6个参数</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">%r10</td>
+          <td style="text-align: center">%r10d</td>
+          <td style="text-align: center">%r10w</td>
+          <td style="text-align: center">%r10b</td>
+          <td style="text-align: center">调用者保存</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">%r11</td>
+          <td style="text-align: center">%r11d</td>
+          <td style="text-align: center">%r11w</td>
+          <td style="text-align: center">%r11b</td>
+          <td style="text-align: center">调用者保存</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">%r12</td>
+          <td style="text-align: center">%r12d</td>
+          <td style="text-align: center">%r12w</td>
+          <td style="text-align: center">%r12b</td>
+          <td style="text-align: center">被调用者保存</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">%r13</td>
+          <td style="text-align: center">%r13d</td>
+          <td style="text-align: center">%r13w</td>
+          <td style="text-align: center">%r13b</td>
+          <td style="text-align: center">被调用者保存</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">%r14</td>
+          <td style="text-align: center">%r14d</td>
+          <td style="text-align: center">%r14w</td>
+          <td style="text-align: center">%r14b</td>
+          <td style="text-align: center">被调用者保存</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">%r15</td>
+          <td style="text-align: center">%r15d</td>
+          <td style="text-align: center">%r15w</td>
+          <td style="text-align: center">%r15b</td>
+          <td style="text-align: center">被调用者保存</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="操作数指示符">操作数指示符</h2>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: center">类型</th>
+          <th style="text-align: center">格式</th>
+          <th style="text-align: center">操作数值</th>
+          <th style="text-align: center">名称</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">立即数</td>
+          <td style="text-align: center">$Imm</td>
+          <td style="text-align: center">Imm</td>
+          <td style="text-align: center">立即数寻址</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">寄存器</td>
+          <td style="text-align: center">r<!-- raw HTML omitted -->a<!-- raw HTML omitted --></td>
+          <td style="text-align: center">R[r<!-- raw HTML omitted -->a<!-- raw HTML omitted -->]</td>
+          <td style="text-align: center">寄存器寻址</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">存储器</td>
+          <td style="text-align: center">Imm</td>
+          <td style="text-align: center">M[Imm]</td>
+          <td style="text-align: center">绝对寻址</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">存储器</td>
+          <td style="text-align: center">(r<!-- raw HTML omitted -->a<!-- raw HTML omitted -->)</td>
+          <td style="text-align: center">M[Imm+R[r<!-- raw HTML omitted -->b<!-- raw HTML omitted -->]]</td>
+          <td style="text-align: center">间接寻址</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">存储器</td>
+          <td style="text-align: center">Imm(r<!-- raw HTML omitted -->b<!-- raw HTML omitted -->)</td>
+          <td style="text-align: center">M[Imm+R[r<!-- raw HTML omitted -->b<!-- raw HTML omitted -->]]</td>
+          <td style="text-align: center">(基址+偏移量)寻址</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">存储器</td>
+          <td style="text-align: center">(r<!-- raw HTML omitted -->b<!-- raw HTML omitted -->, r<!-- raw HTML omitted -->i<!-- raw HTML omitted -->)</td>
+          <td style="text-align: center">M[R[r<!-- raw HTML omitted -->b<!-- raw HTML omitted -->]+R[r<!-- raw HTML omitted -->i<!-- raw HTML omitted -->]]</td>
+          <td style="text-align: center">变址寻址</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">存储器</td>
+          <td style="text-align: center">Imm(r<!-- raw HTML omitted -->b<!-- raw HTML omitted -->, r<!-- raw HTML omitted -->i<!-- raw HTML omitted -->)</td>
+          <td style="text-align: center">M[Imm+R[r<!-- raw HTML omitted -->b<!-- raw HTML omitted -->]+R[r<!-- raw HTML omitted -->i<!-- raw HTML omitted -->]]</td>
+          <td style="text-align: center">变址寻址</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">存储器</td>
+          <td style="text-align: center">(, r<!-- raw HTML omitted -->i<!-- raw HTML omitted -->, s)</td>
+          <td style="text-align: center">M[R[r<!-- raw HTML omitted -->i<!-- raw HTML omitted -->]*s]</td>
+          <td style="text-align: center">比例变址寻址</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">存储器</td>
+          <td style="text-align: center">Imm(,r<!-- raw HTML omitted -->i<!-- raw HTML omitted -->,s)</td>
+          <td style="text-align: center">M[Imm+R[r<!-- raw HTML omitted -->i<!-- raw HTML omitted -->]*s]</td>
+          <td style="text-align: center">比例变址寻址</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">存储器</td>
+          <td style="text-align: center">(r<!-- raw HTML omitted -->b<!-- raw HTML omitted -->,r<!-- raw HTML omitted -->i<!-- raw HTML omitted -->,s)</td>
+          <td style="text-align: center">M[R[r<!-- raw HTML omitted -->b<!-- raw HTML omitted -->]+R[r<!-- raw HTML omitted -->i<!-- raw HTML omitted -->]*s]</td>
+          <td style="text-align: center">比例变址寻址</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">存储器</td>
+          <td style="text-align: center">Imm(r<!-- raw HTML omitted -->b<!-- raw HTML omitted -->,r<!-- raw HTML omitted -->i<!-- raw HTML omitted -->,s)</td>
+          <td style="text-align: center">M[Imm+R[r<!-- raw HTML omitted -->b<!-- raw HTML omitted -->]+R[r<!-- raw HTML omitted -->i<!-- raw HTML omitted -->]*s]</td>
+          <td style="text-align: center">比例变址寻址</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="数据传输指令">数据传输指令</h2>
+<p><strong>指令两端不能同时操作内存</strong></p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: center">指令</th>
+          <th style="text-align: center">效果</th>
+          <th style="text-align: center">描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">MOV S,D</td>
+          <td style="text-align: center">D&lt;-S</td>
+          <td style="text-align: center">传送</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">movb</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">传送字节1</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">movw</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">传送字2</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">movl</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">传送双字4</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">movq</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">传送四字8</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">movabsq I,R</td>
+          <td style="text-align: center">R&lt;-I</td>
+          <td style="text-align: center">传送绝对的四字</td>
+      </tr>
+  </tbody>
+</table>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: center">指令</th>
+          <th style="text-align: center">效果</th>
+          <th style="text-align: center">描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">MOVZ S,R</td>
+          <td style="text-align: center">R&lt;-（零扩展）S</td>
+          <td style="text-align: center">以零扩展进行传送</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">movzbw</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">将做了零扩展的字节传送到字</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">movzbl</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">将做了零扩展的字节传送到双字</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">movzwl</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">将做了零扩展的字传送到双字</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">movzbq</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">将做了零扩展的字节传送到四字</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">movzwq</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">将做了零扩展的字传送到四字</td>
+      </tr>
+  </tbody>
+</table>
+<ul>
+<li>movl修改%eax之后，%rax的高32位会清零</li>
+</ul>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: center">指令</th>
+          <th style="text-align: center">效果</th>
+          <th style="text-align: center">描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">MOVS S,R</td>
+          <td style="text-align: center">R&lt;-（符号扩展）S</td>
+          <td style="text-align: center">传送符号扩展的字节</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">movsbw</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">将做了符号扩展的字节传送到字</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">movsbl</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">将做了符号扩展的字节传送到双字</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">movswl</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">将做了符号扩展的字传送到双字</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">movsbq</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">将做了符号扩展的字节传送到四字</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">movswq</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">将做了符号扩展的字传送到四字</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">movslq</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">将做了符号扩展的双字传送到四字</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">cltq</td>
+          <td style="text-align: center">%rax&lt;-符号扩展(%eax)</td>
+          <td style="text-align: center">将%eax符号扩展到%rax</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="压入和弹出栈数据">压入和弹出栈数据</h2>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: center">指令</th>
+          <th style="text-align: center">效果</th>
+          <th style="text-align: center">描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">pushq S</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">将四字压入展</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">popq D</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">将四字弹出栈</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="算术和逻辑操作">算术和逻辑操作</h2>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: center">指令</th>
+          <th style="text-align: center">效果</th>
+          <th style="text-align: center">描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">leaq S,D</td>
+          <td style="text-align: center">D &lt;- &amp;S</td>
+          <td style="text-align: center">加载有效地址</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">INC D</td>
+          <td style="text-align: center">D &lt;- D+1</td>
+          <td style="text-align: center">加1</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">DEC D</td>
+          <td style="text-align: center">D &lt;- D-1</td>
+          <td style="text-align: center">减1</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">NEG D</td>
+          <td style="text-align: center">D &lt;- -D</td>
+          <td style="text-align: center">取负</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">NOT D</td>
+          <td style="text-align: center">D &lt;- ~D</td>
+          <td style="text-align: center">取补</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">ADD S,D</td>
+          <td style="text-align: center">D &lt;- D+S</td>
+          <td style="text-align: center">加</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">SUB S,D</td>
+          <td style="text-align: center">D &lt;- D-S</td>
+          <td style="text-align: center">减</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">IMUL S,D</td>
+          <td style="text-align: center">D &lt;- D*S</td>
+          <td style="text-align: center">乘</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">XOR S,D</td>
+          <td style="text-align: center">D &lt;- D^S</td>
+          <td style="text-align: center">异或</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">OR S,D</td>
+          <td style="text-align: center">D &lt;- D｜S</td>
+          <td style="text-align: center">或</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">AND S,D</td>
+          <td style="text-align: center">D &lt;- D&amp;S</td>
+          <td style="text-align: center">与</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">SAL k,D</td>
+          <td style="text-align: center">D &lt;- D&laquo;k</td>
+          <td style="text-align: center">左移</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">SHL k,D</td>
+          <td style="text-align: center">D &lt;- D&laquo;k</td>
+          <td style="text-align: center">左移（等同于SAL）</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">SAR k,D</td>
+          <td style="text-align: center">D &lt;- D&raquo;<!-- raw HTML omitted -->A<!-- raw HTML omitted -->k</td>
+          <td style="text-align: center">算术右移</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">SHR k,D</td>
+          <td style="text-align: center">D &lt;- D&raquo;<!-- raw HTML omitted -->L<!-- raw HTML omitted -->k</td>
+          <td style="text-align: center">逻辑右移</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="leaq的作用">leaq的作用</h3>
+<ul>
+<li>将有效地址写入到目的操作数</li>
+<li>普通的算术运算 与有效地址计算无关，<strong>目的操作数必须是一个寄存器</strong></li>
+</ul>
+<h2 id="条件码">条件码</h2>
+<ul>
+<li>CF：进位标志。最近的操作使最高位产生了进位，可以用来检查无符号操作的一处</li>
+<li>ZF：零标志，最近的操作得出的结果为0</li>
+<li>SF：符号标志。最近的操作数得到的结果为负数</li>
+<li>OF：溢出标志。最近的操作导致一个补码溢出——正溢出或负溢出</li>
+</ul>
+<h3 id="比较和测试指令">比较和测试指令</h3>
+<ul>
+<li>不修改任何寄存器的值，只设置条件码</li>
+</ul>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: center">指令</th>
+          <th style="text-align: center">基于</th>
+          <th style="text-align: center">描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">CMP S<!-- raw HTML omitted -->1<!-- raw HTML omitted -->,S<!-- raw HTML omitted -->2<!-- raw HTML omitted --></td>
+          <td style="text-align: center">S<!-- raw HTML omitted -->2<!-- raw HTML omitted -->-S<!-- raw HTML omitted -->1<!-- raw HTML omitted --></td>
+          <td style="text-align: center">比较</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">cmpb</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">比较字节</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">cmpw</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">比较字</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">cmpl</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">比较双字</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">cmpq</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">比较四字</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">TEST S<!-- raw HTML omitted -->1<!-- raw HTML omitted -->,S<!-- raw HTML omitted -->2<!-- raw HTML omitted --></td>
+          <td style="text-align: center">S<!-- raw HTML omitted -->1<!-- raw HTML omitted -->&amp;S<!-- raw HTML omitted -->2<!-- raw HTML omitted --></td>
+          <td style="text-align: center">测试</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">testb</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">测试字节</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">testw</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">测试字</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">testl</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">测试双字</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">testq</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">测试四字</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="set指令">set指令</h2>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: center">指令</th>
+          <th style="text-align: center">同意名</th>
+          <th style="text-align: center">效果</th>
+          <th style="text-align: center">设置条件</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">sete D</td>
+          <td style="text-align: center">setz</td>
+          <td style="text-align: center">D &lt;- ZF</td>
+          <td style="text-align: center">相等/零</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">setne D</td>
+          <td style="text-align: center">setnz</td>
+          <td style="text-align: center">D &lt;- ~ZF</td>
+          <td style="text-align: center">不等/非零</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">sets D</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">D &lt;- SF</td>
+          <td style="text-align: center">负数</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">setns D</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">D &lt;- SF</td>
+          <td style="text-align: center">非负数</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">setg D</td>
+          <td style="text-align: center">setnle</td>
+          <td style="text-align: center">D &lt;- ~(SF^OF)&amp;~ZF</td>
+          <td style="text-align: center">大于（有符号）</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">setge D</td>
+          <td style="text-align: center">setnl</td>
+          <td style="text-align: center">D &lt;- ~(SF^OF)</td>
+          <td style="text-align: center">大于等于（有符号）</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">setl D</td>
+          <td style="text-align: center">setnge</td>
+          <td style="text-align: center">D &lt;- SF^OF</td>
+          <td style="text-align: center">小于（有符号）</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">setle D</td>
+          <td style="text-align: center">setng</td>
+          <td style="text-align: center">D &lt;- (SF^OF)｜(ZF)</td>
+          <td style="text-align: center">小于等于（有符号）</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">seta D</td>
+          <td style="text-align: center">setnbe</td>
+          <td style="text-align: center">D &lt;- ~CF &amp; ~ZF</td>
+          <td style="text-align: center">超过（无符号）</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">setae D</td>
+          <td style="text-align: center">setnb</td>
+          <td style="text-align: center">D &lt;- ~CF</td>
+          <td style="text-align: center">超过或相等（无符号）</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">setb D</td>
+          <td style="text-align: center">setnae</td>
+          <td style="text-align: center">D &lt;- CF</td>
+          <td style="text-align: center">低于（无符号）</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">setbe D</td>
+          <td style="text-align: center">setna</td>
+          <td style="text-align: center">D &lt;- CF｜ZF</td>
+          <td style="text-align: center">低于或相等（无符号）</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="跳转指令">跳转指令</h2>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: center">指令</th>
+          <th style="text-align: center">同义名</th>
+          <th style="text-align: center">描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">jmp Label</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">直接跳转</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">jmp *Operand</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">间接跳转</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">je Label</td>
+          <td style="text-align: center">jz</td>
+          <td style="text-align: center">相等/零</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">jne Label</td>
+          <td style="text-align: center">jnz</td>
+          <td style="text-align: center">不相等/非零</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">js Label</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">负数</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">jns Label</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">非负数</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">jg Label</td>
+          <td style="text-align: center">jnle</td>
+          <td style="text-align: center">大于</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">jge Labe</td>
+          <td style="text-align: center">jnl</td>
+          <td style="text-align: center">大于或等于</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">jl Label</td>
+          <td style="text-align: center">jnge</td>
+          <td style="text-align: center">小于</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">jle Label</td>
+          <td style="text-align: center">jng</td>
+          <td style="text-align: center">小于或等于</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">ja Label</td>
+          <td style="text-align: center">jnbe</td>
+          <td style="text-align: center">超过</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">jae Label</td>
+          <td style="text-align: center">jnb</td>
+          <td style="text-align: center">超过或相等</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">jb Label</td>
+          <td style="text-align: center">jnae</td>
+          <td style="text-align: center">低于</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">jbe Label</td>
+          <td style="text-align: center">jna</td>
+          <td style="text-align: center">低于或相等</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="条件传送指令">条件传送指令</h2>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: center">指令</th>
+          <th style="text-align: center">同义名</th>
+          <th style="text-align: center">描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">cmove S,R</td>
+          <td style="text-align: center">comvz</td>
+          <td style="text-align: center">相等/零</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">cmovne S,R</td>
+          <td style="text-align: center">comvnz</td>
+          <td style="text-align: center">不相等/非零</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">cmovs S,R</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">负数</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">cmovns S,R</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">非负数</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">cmovg S,R</td>
+          <td style="text-align: center">cmovnle</td>
+          <td style="text-align: center">大于</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">cmovge S,R</td>
+          <td style="text-align: center">comvnl</td>
+          <td style="text-align: center">大于或等于</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">cmovl S,R</td>
+          <td style="text-align: center">comvnge</td>
+          <td style="text-align: center">小于</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">cmovle S,R</td>
+          <td style="text-align: center">cmovng</td>
+          <td style="text-align: center">小于或等于</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">cmova S,R</td>
+          <td style="text-align: center">comvnbe</td>
+          <td style="text-align: center">超过</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">cmovae S,R</td>
+          <td style="text-align: center">cmovnb</td>
+          <td style="text-align: center">超过或相等</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">cmovb S,R</td>
+          <td style="text-align: center">comvnae</td>
+          <td style="text-align: center">低于</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">comvbe S,R</td>
+          <td style="text-align: center">comvna</td>
+          <td style="text-align: center">低于或相等</td>
+      </tr>
+  </tbody>
+</table>
+<h1 id="异常控制流">异常控制流</h1>
+<ul>
+<li>异常是控制流中的突变，用来响应处理器状态中的某些变化</li>
+<li>检测到异常-&gt;异常表（跳转表）</li>
+</ul>
+<h2 id="异常的类别">异常的类别</h2>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: center">类别</th>
+          <th style="text-align: center">原因</th>
+          <th style="text-align: center">异步/同步</th>
+          <th style="text-align: center">返回行为</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">中断</td>
+          <td style="text-align: center">来自I/O设备的信号</td>
+          <td style="text-align: center">异步</td>
+          <td style="text-align: center">总是返回到下一条指令</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">陷阱</td>
+          <td style="text-align: center">有意的异常</td>
+          <td style="text-align: center">同步</td>
+          <td style="text-align: center">总是返回到下一条指令</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">故障</td>
+          <td style="text-align: center">潜在可恢复的错误</td>
+          <td style="text-align: center">同步</td>
+          <td style="text-align: center">可能返回到当前指令</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">终止</td>
+          <td style="text-align: center">不可恢复的错误</td>
+          <td style="text-align: center">同步</td>
+          <td style="text-align: center">不会返回</td>
+      </tr>
+  </tbody>
+</table>
+<ul>
+<li>异步异常是由处理器外部的I/O设备中的事件产生的。</li>
+<li>同步异常是执行一条指令的直接产物。</li>
+</ul>
+<h1 id="链接">链接</h1>
+<h2 id="链接器的两个主要任务">链接器的两个主要任务</h2>
+<ul>
+<li>符号解析：将每个符号引用正好和一个符号定义关联起来</li>
+<li>重定位：链接器通过把每个符号定义与一个内存为之关联起来，从而重定位这些节，然后修改所有对这些符号的引用，使它们指向这个内存位置 <em>P466</em></li>
+</ul>
+<h2 id="fork函数">fork函数</h2>
+<ul>
+<li>fork函数调用一次，返回两次</li>
+<li>新创建的子进程几乎但不完全与父进程相同，子进程得到与父进程用户级虚拟地址空间相同的（但是独立的）一份副本</li>
+<li>父进程与子进程并发执行，子进程返回0，父进程返回子进程的PID（非零）</li>
+</ul>
+<h2 id="目标文件">目标文件</h2>
+<ul>
+<li>可重定位目标文件</li>
+<li>可执行目标文件</li>
+<li>共享目标文件</li>
+</ul>
+<h3 id="可重定位目标文件">可重定位目标文件</h3>
+<ul>
+<li>FILE头：生成该文件的系统的字的大小和字节顺序，FILE头的大小，目标文件的类型，机器类型，节头部表的文件偏移，节头部表中条目的带下和数量</li>
+<li>FILE头和节头部表之间都是节</li>
+<li>.text：已编译程序的机器代码</li>
+<li>.rodata：只读数据</li>
+<li>.data：已初始化的全局和静态C变量。局部变量运行时保存在栈中，既不出现在.data中，也不出现在.bss中</li>
+<li>.bss：未初始化的全局和静态C变量，以及所有被初始化为0的全局变量</li>
+<li>.symtab：符号表</li>
+<li>.rel.text：一个.text节中位置的列表</li>
+<li>.rel.data：被模块引用或定义的所有全局变量的重定位信息</li>
+<li>.debug：一个调试符号表，其条目是程序中定义的局部变量和类型定义</li>
+<li>.line：原始C源程序中的行号和.text节中机器指令之间的映射。只有以-g选项调用编译器驱动程序时，才会得到这张表</li>
+<li>.strtab：一个字符串表，其内容包括.symtab和.debug节中的符号表，以及节头部中的节名字。字符串表就是以null结尾的字符串的序列</li>
+</ul>
+<h2 id="强符号和弱符号">强符号和弱符号</h2>
+<ul>
+<li>不允许有多个同名的强符号</li>
+<li>如果有一个强符号和多个弱符号同名，那么选择强符号</li>
+<li>如果有多个弱符号同名，那么从这些弱符号中任意选择一个</li>
+</ul>
+<h3 id="强符号">强符号</h3>
+<ul>
+<li>强符号通常是指在程序中只能有一个定义的全局变量或函数。</li>
+<li>如果程序中有多个强符号的定义，链接器会报错，因为这违反了单一定义原则。</li>
+<li>强符号在链接时会覆盖掉其他同名的弱符号。</li>
+<li>函数名、有初值的全局变量</li>
+</ul>
+<h3 id="弱符号">弱符号</h3>
+<ul>
+<li>弱符号允许在程序中有多个同名的定义，而不会引起链接错误。</li>
+<li>如果有多个弱符号的定义，链接器会选择一个作为最终的符号。</li>
+<li>弱符号对于可选的定义和覆盖提供了一定的灵活性。</li>
+<li>无初值的全局变量</li>
+</ul>
+<h3 id="重定位类型">重定位类型</h3>
+<ul>
+<li>重定位引用的十六机制地址是当前指令+1，重定位引用的十六机制值是绝对地址-下一条指令的值</li>
+<li>PC相对地址的引用：一个PC相对地址就是距程序计数器(PC)的当前运行时值（下一条指令的地址）的偏移量</li>
+<li>32为绝对地址的引用</li>
+</ul>
+<h2 id="系统级io">系统级I/O</h2>
+<h3 id="unix-io">Unix I/O</h3>
+<ul>
+<li>一个Linux文件就是m个字节的序列</li>
+<li>所有的I/O设备（例如网络、磁盘和终端）都被模型化为文件</li>
+<li>可以读取文件的元数据</li>
+<li>允许执行I/O重定向</li>
+<li>将一个打开的文件模型化为一个流</li>
+<li>标准I/O不适用于网络套字节的IO，并且标准IO不能读取文件的元数据</li>
+<li>通过调用read和write函数来执行输入和输出，返回-1表示一个错误，返回0表示EOF</li>
+</ul>
+<h3 id="打开文件的返回值">打开文件的返回值</h3>
+<ul>
+<li>打开文件时，一个应用程序要求内核打开一个相应文件，来宣告它想要访问一个I/O设备。进程开始时，打开三个文件，标准输入（描述符为0），标准输出（描述符为1）和标准错误（描述符为2）</li>
+<li>open函数总是返回最低的未打开描述符，第一次调用open会返回描述符3</li>
+</ul>
+<h3 id="文件重定向">文件重定向</h3>
+<ul>
+<li>Dup2(fd2, fd1);</li>
+<li>将fd1重定向到fd2，fd1继承fd2的描述符表</li>
+</ul>
+</article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="application/javascript" src='https://y-m-m.github.io/js/toc.js'></script>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/toc.css' />
+
+  
+<div id="gitalk-container" class="gitalk-container"></div>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/gitalk.css'>
+<script src='https://y-m-m.github.io/js/gitalk.min.js'></script>
+<script>
+  const gitalk = new Gitalk({
+    clientID: 'Ov23livxKNtTlPeMjV2H',
+    clientSecret: '6d3bc9f47a1296f29628a63701ea5624cd28a26b',
+    repo: 'y-m-m.github.io\/',
+    owner: 'Y-M-M',
+    admin: ['Y-M-M'],
+    id: eval("location.pathname"), 
+    distractionFreeMode: false 
+  });
+  (function() {
+    gitalk.render('gitalk-container');
+  })();
+</script>
+
+</div>
+
+  <div class="footer container-xl width-full p-responsive">
+  <div
+    class="position-relative d-flex flex-row-reverse flex-lg-row flex-wrap flex-lg-nowrap flex-justify-center flex-lg-justify-between flex-sm-items-center pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
+    <a aria-label="Homepage" title="GitHub" class="footer-octicon d-none d-lg-block mr-lg-4" href="https://y-m-m.github.io/">
+      <svg height="24" class="octicon octicon-mark-github" viewBox="0 0 16 16" version="1.1" width="24">
+        <path fill-rule="evenodd"
+          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+        </path>
+      </svg>
+    </a>
+    <ul class="list-style-none d-flex flex-wrap col-12 flex-justify-center flex-lg-justify-between mb-2 mb-lg-0">
+      
+      <li class="mr-3 mr-lg-0">Theme by <a href='https://github.com/MeiK2333/github-style'>github-style</a></li>
+      
+    </ul>
+  </div>
+  <div class="d-flex flex-justify-center pb-6">
+    <span class="f6 text-gray-light"></span>
+  </div>
+
+
+</div>
+</body>
+
+<script type="application/javascript" src="https://y-m-m.github.io/js/github-style.js"></script>
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+<script type="application/javascript" src='https://y-m-m.github.io/js/search.js'></script>
+
+
+
+</html>

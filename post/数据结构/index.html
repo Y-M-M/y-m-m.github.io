@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script type="application/javascript" src='https://y-m-m.github.io/js/theme-mode.js'></script>
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/frameworks.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github-style.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/light.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/dark.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/syntax.css' />
+    <title>数据结构 - 陈皮的博客</title>
+    
+    <link rel="icon" type="image/x-icon" href='/images/github-mark.png'>
+    
+    <meta name="theme-color" content="#1e2327">
+
+    
+    <meta name="description"
+  content="绪论 C/C&#43;&#43;常见问题 switch-case语句 switch之后的case遇到break才会停止 static的作用 静态函数：只能在定义它的文件中使用 静态变量：初始值为0，在程序运行期间一直存在 静态代码块：只有在函数第一次被调用时才会运行 缺省情况下全局可见 优先级 .的优先级高于*和-&gt; []的优先级高于* ()的优先级高于* !=和==的优先级高于位运算 算术运算的优先级高于位运算 逗号在所有运算符中优先级最低 const和*的不同位置表示的含义 const在*之前(const int *a; int const *b)，指针所指对象只读 const在*之后(int *const c;)，指针只读 const在*之前和之后都有(const int * const d; int const *const e;)，指针和指针所指对象只读 传值、传址、传引用 传值：function(x)/void function(int x) 传址：function(&amp;x)/void function(int *x) 传引用：function(x)/void function(int &amp;x) 基本概念和术语 数据：对客观事物的符号表示，在计算机科学中是指所有能输入到计算机中并被计算机程序处理的符号的总称。 数据元素：数据的基本单位，是数据结合中的一个个体，一个数据元素可由若干个数据项组成。 数据对象：性质相同的数据元素的集合，是数据的一个子集。 数据结构：相互之间存在一种或多种特定关系的数据元素的集合。 数据结构：(D,S,Op)。其中D位数据元素的集合；S为D上的关系Op为定义在D上的运算 数据结构的分类 集合 线性结构 树形结构 图状结构或网状结构 逻辑结构 数据元素之间的逻辑关系 (D, S) 操作 构造函数、析构函数 询问类操作：判空、求长度 查找类操作：查找某个元素的位置、遍历 添加和删除类操作：添加一个数据元素、删除一个数据元素、置空 存储结构（物理结构） 数据的逻辑结构在计算机存储器中的映像表示 数据元素的映像 用二进制位的位串表示数据元素 每个数据元素的映像称为结点 每个数据项的映像称为数据域 不同的存储结构 顺序存储结构 链式存储结构 哈希存储结构（散列存储结构） 索引存储结构 数据类型 刻画（程序）操作对象的特性 原子类型 结构类型 抽象数据类型（ADT） 一个数学模型以及定义在该模型上的一组操作 原子类型 固定聚合类型 可变聚合类型 算法的基本概念 算法需要满足的特性 有穷性、确定性、可行性、输入、输出 算法设计：自顶向下、逐步求精 算法的评价标准 正确性 可读性 健壮性 高效率与地存储量需求 算法的后续测试 在算法中的某些部位插入时间函数time(t)测定算法完成某一功能所需要华为的时间(打印t) 算法的事前估计 空间复杂度（原地工作：额外空间相对于输入数据量来说是常数）
+" />
+<meta name="keywords"
+  content='blog, google analytics' />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://y-m-m.github.io/post/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" />
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="数据结构 - 陈皮的博客" />
+<meta name="twitter:description"
+  content="绪论 C/C&#43;&#43;常见问题 switch-case语句 switch之后的case遇到break才会停止 static的作用 静态函数：只能在定义它的文件中使用 静态变量：初始值为0，在程序运行期间一直存在 静态代码块：只有在函数第一次被调用时才会运行 缺省情况下全局可见 优先级 .的优先级高于*和-&gt; []的优先级高于* ()的优先级高于* !=和==的优先级高于位运算 算术运算的优先级高于位运算 逗号在所有运算符中优先级最低 const和*的不同位置表示的含义 const在*之前(const int *a; int const *b)，指针所指对象只读 const在*之后(int *const c;)，指针只读 const在*之前和之后都有(const int * const d; int const *const e;)，指针和指针所指对象只读 传值、传址、传引用 传值：function(x)/void function(int x) 传址：function(&amp;x)/void function(int *x) 传引用：function(x)/void function(int &amp;x) 基本概念和术语 数据：对客观事物的符号表示，在计算机科学中是指所有能输入到计算机中并被计算机程序处理的符号的总称。 数据元素：数据的基本单位，是数据结合中的一个个体，一个数据元素可由若干个数据项组成。 数据对象：性质相同的数据元素的集合，是数据的一个子集。 数据结构：相互之间存在一种或多种特定关系的数据元素的集合。 数据结构：(D,S,Op)。其中D位数据元素的集合；S为D上的关系Op为定义在D上的运算 数据结构的分类 集合 线性结构 树形结构 图状结构或网状结构 逻辑结构 数据元素之间的逻辑关系 (D, S) 操作 构造函数、析构函数 询问类操作：判空、求长度 查找类操作：查找某个元素的位置、遍历 添加和删除类操作：添加一个数据元素、删除一个数据元素、置空 存储结构（物理结构） 数据的逻辑结构在计算机存储器中的映像表示 数据元素的映像 用二进制位的位串表示数据元素 每个数据元素的映像称为结点 每个数据项的映像称为数据域 不同的存储结构 顺序存储结构 链式存储结构 哈希存储结构（散列存储结构） 索引存储结构 数据类型 刻画（程序）操作对象的特性 原子类型 结构类型 抽象数据类型（ADT） 一个数学模型以及定义在该模型上的一组操作 原子类型 固定聚合类型 可变聚合类型 算法的基本概念 算法需要满足的特性 有穷性、确定性、可行性、输入、输出 算法设计：自顶向下、逐步求精 算法的评价标准 正确性 可读性 健壮性 高效率与地存储量需求 算法的后续测试 在算法中的某些部位插入时间函数time(t)测定算法完成某一功能所需要华为的时间(打印t) 算法的事前估计 空间复杂度（原地工作：额外空间相对于输入数据量来说是常数）
+" />
+<meta name="twitter:site" content="https://y-m-m.github.io/" />
+<meta name="twitter:creator" content="陈皮" />
+<meta name="twitter:image"
+  content="https://y-m-m.github.io/">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="数据结构 - 陈皮的博客">
+<meta property="og:description"
+  content="绪论 C/C&#43;&#43;常见问题 switch-case语句 switch之后的case遇到break才会停止 static的作用 静态函数：只能在定义它的文件中使用 静态变量：初始值为0，在程序运行期间一直存在 静态代码块：只有在函数第一次被调用时才会运行 缺省情况下全局可见 优先级 .的优先级高于*和-&gt; []的优先级高于* ()的优先级高于* !=和==的优先级高于位运算 算术运算的优先级高于位运算 逗号在所有运算符中优先级最低 const和*的不同位置表示的含义 const在*之前(const int *a; int const *b)，指针所指对象只读 const在*之后(int *const c;)，指针只读 const在*之前和之后都有(const int * const d; int const *const e;)，指针和指针所指对象只读 传值、传址、传引用 传值：function(x)/void function(int x) 传址：function(&amp;x)/void function(int *x) 传引用：function(x)/void function(int &amp;x) 基本概念和术语 数据：对客观事物的符号表示，在计算机科学中是指所有能输入到计算机中并被计算机程序处理的符号的总称。 数据元素：数据的基本单位，是数据结合中的一个个体，一个数据元素可由若干个数据项组成。 数据对象：性质相同的数据元素的集合，是数据的一个子集。 数据结构：相互之间存在一种或多种特定关系的数据元素的集合。 数据结构：(D,S,Op)。其中D位数据元素的集合；S为D上的关系Op为定义在D上的运算 数据结构的分类 集合 线性结构 树形结构 图状结构或网状结构 逻辑结构 数据元素之间的逻辑关系 (D, S) 操作 构造函数、析构函数 询问类操作：判空、求长度 查找类操作：查找某个元素的位置、遍历 添加和删除类操作：添加一个数据元素、删除一个数据元素、置空 存储结构（物理结构） 数据的逻辑结构在计算机存储器中的映像表示 数据元素的映像 用二进制位的位串表示数据元素 每个数据元素的映像称为结点 每个数据项的映像称为数据域 不同的存储结构 顺序存储结构 链式存储结构 哈希存储结构（散列存储结构） 索引存储结构 数据类型 刻画（程序）操作对象的特性 原子类型 结构类型 抽象数据类型（ADT） 一个数学模型以及定义在该模型上的一组操作 原子类型 固定聚合类型 可变聚合类型 算法的基本概念 算法需要满足的特性 有穷性、确定性、可行性、输入、输出 算法设计：自顶向下、逐步求精 算法的评价标准 正确性 可读性 健壮性 高效率与地存储量需求 算法的后续测试 在算法中的某些部位插入时间函数time(t)测定算法完成某一功能所需要华为的时间(打印t) 算法的事前估计 空间复杂度（原地工作：额外空间相对于输入数据量来说是常数）
+" />
+<meta property="og:url" content="https://y-m-m.github.io/post/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" />
+<meta property="og:site_name" content="数据结构" />
+<meta property="og:image"
+  content="https://y-m-m.github.io/">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+<meta property="article:published_time" content="2024-01-07 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+  <div style="position: relative">
+  <header class="Header js-details-container Details px-3 px-md-4 px-lg-5 flex-wrap flex-md-nowrap open Details--on">
+    <div class="Header-item mobile-none" style="margin-top: -4px; margin-bottom: -4px;">
+      <a class="Header-link" href="https://y-m-m.github.io/">
+        <img class="octicon" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item d-md-none">
+      <button class="Header-link btn-link js-details-target" type="button"
+        onclick="document.querySelector('#header-search').style.display = document.querySelector('#header-search').style.display == 'none'? 'block': 'none'">
+        <svg height="24" class="octicon octicon-three-bars" viewBox="0 0 16 16" version="1.1" width="24">
+          <path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 2.75zm0 5A.75.75 0 011.75 7h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 7.75zM1.75 12a.75.75 0 100 1.5h12.5a.75.75 0 100-1.5H1.75z">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <div style="display: none;" id="header-search"
+      class="Header-item Header-item--full flex-column flex-md-row width-full flex-order-2 flex-md-order-none mr-0 mr-md-3 mt-3 mt-md-0 Details-content--hidden-not-important d-md-flex">
+      <div
+        class="Header-search header-search flex-auto js-site-search position-relative flex-self-stretch flex-md-self-auto mb-3 mb-md-0 mr-0 mr-md-3 scoped-search site-scoped-search js-jump-to">
+        <div class="position-relative">
+          
+          <form target="_blank" id="search-form" action="" accept-charset="UTF-8" method="get"
+            autocomplete="off">
+            <label
+              class="Header-search-label form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative d-flex flex-justify-between flex-items-center">
+              <input type="text"
+                class="Header-search-input form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable"
+                name="q" value="" placeholder="Search" autocomplete="off">
+            </label>
+          </form>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="Header-item Header-item--full flex-justify-center d-md-none position-relative">
+      <a class="Header-link " href="https://y-m-m.github.io/">
+        <img class="octicon octicon-mark-github v-align-middle" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item" style="margin-right: 0;">
+      <a href="javascript:void(0)" class="Header-link no-select" onclick="switchTheme()">
+        <svg style="fill: var(--color-profile-color-modes-toggle-moon);" class="no-select" viewBox="0 0 16 16"
+          version="1.1" width="16" height="16">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M4.52208 7.71754C7.5782 7.71754 10.0557 5.24006 10.0557 2.18394C10.0557 1.93498 10.0392 1.68986 10.0074 1.44961C9.95801 1.07727 10.3495 0.771159 10.6474 0.99992C12.1153 2.12716 13.0615 3.89999 13.0615 5.89383C13.0615 9.29958 10.3006 12.0605 6.89485 12.0605C3.95334 12.0605 1.49286 10.001 0.876728 7.24527C0.794841 6.87902 1.23668 6.65289 1.55321 6.85451C2.41106 7.40095 3.4296 7.71754 4.52208 7.71754Z">
+          </path>
+        </svg>
+      </a>
+    </div>
+  </header>
+</div>
+
+  <div id="search-result" class="container-lg px-3 new-discussion-timeline" style="display: none;">
+</div>
+
+  
+<div class="application-main">
+  <div>
+  <main>
+    <div class="gisthead pagehead bg-gray-light pb-0 pt-3 mb-4">
+      <div class="px-0">
+        <div class="mb-3 d-flex px-3 px-md-3 px-lg-5">
+          <div class="flex-auto min-width-0 width-fit mr-3">
+            <div class="d-flex">
+              <div class="d-none d-md-block">
+                <a class="avatar mr-2 flex-shrink-0" href="https://y-m-m.github.io/">
+                  <img class=" avatar-user"
+                    src="/images/me.png"
+                    width="32" height="32"></a>
+              </div>
+              <div class="d-flex flex-column">
+                <h1 class="break-word f3 text-normal mb-md-0 mb-1">
+                  <span class="author">
+                    <a href="https://y-m-m.github.io/">陈皮</a>
+                  </span>
+                  <span class="path-divider">/</span>
+                  <strong class="css-truncate css-truncate-target mr-1" style="max-width: 410px">
+                    <a href="https://y-m-m.github.io/post/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+                  </strong>
+                </h1>
+                <div class="note m-0">
+                  Created <relative-time datetime="Sun, 07 Jan 2024 00:00:00 &#43;0000"
+                    class="no-wrap">
+                    Sun, 07 Jan 2024 00:00:00 &#43;0000</relative-time>
+
+                  
+                  <span class="file-info-divider"></span>
+                  Modified <relative-time datetime="Mon, 18 Mar 2024 20:11:52 &#43;0800"
+                    class="no-wrap">
+                    Mon, 18 Mar 2024 20:11:52 &#43;0800</relative-time>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-lg px-3 new-discussion-timeline">
+      <div class="repository-content gist-content">
+        <div>
+          <div class="js-gist-file-update-container js-task-list-container file-box">
+            <div id="file-pytest" class="file my-2">
+              <div id="post-header" class="file-header d-flex flex-md-items-center flex-items-start sticky-header" style="z-index: 2">
+                <div class="file-info d-flex flex-md-items-center flex-items-start flex-order-1 flex-auto">
+                  <div class="text-mono f6 flex-auto pr-3 flex-order-2 flex-md-order-1 mt-2 mt-md-0">
+                    
+                    <summary id="toc-toggle" onclick="clickToc()" class="btn btn-octicon m-0 mr-2 p-2">
+                      <svg aria-hidden="true" viewBox="0 0 16 16" height="16" width="16" class="octicon octicon-list-unordered">
+                        <path fill-rule="evenodd" d="M2 4a1 1 0 100-2 1 1 0 000 2zm3.75-1.5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zM3 8a1 1 0 11-2 0 1 1 0 012 0zm-1 6a1 1 0 100-2 1 1 0 000 2z"></path>
+                      </svg>
+                    </summary>
+                    <details-menu class="SelectMenu" id="toc-details" style="display: none;">
+                      <div class="SelectMenu-modal rounded-3 mt-1" style="max-height: 340px;">
+                        <div class="SelectMenu-list SelectMenu-list--borderless p-2" style="overscroll-behavior: contain;" id="toc-list">
+                        </div>
+                      </div>
+                    </details-menu>
+                      8193 Words
+                    
+
+                  </div>
+                  <div class="file-actions flex-order-2 pt-0">
+                    
+                    
+                    <a class="muted-link mr-3" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      计算机科学
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="/tags/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      算法与数据结构
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="/tags/%E5%A4%8D%E4%B9%A0%E6%95%B4%E7%90%86">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      复习整理
+                    </a>
+                    
+                    
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="Box-body px-5 pb-5" style="z-index: 1">
+                <article class="markdown-body entry-content container-lg"><h1 id="绪论">绪论</h1>
+<h2 id="cc常见问题">C/C++常见问题</h2>
+<h3 id="switch-case语句">switch-case语句</h3>
+<ul>
+<li>switch之后的case遇到break才会停止</li>
+</ul>
+<h3 id="static的作用">static的作用</h3>
+<ul>
+<li>静态函数：只能在定义它的文件中使用</li>
+<li>静态变量：初始值为0，在程序运行期间一直存在</li>
+<li>静态代码块：只有在函数第一次被调用时才会运行</li>
+<li>缺省情况下全局可见</li>
+</ul>
+<h3 id="优先级">优先级</h3>
+<ul>
+<li>.的优先级高于*和-&gt;</li>
+<li>[]的优先级高于*</li>
+<li>()的优先级高于*</li>
+<li>!=和==的优先级高于位运算</li>
+<li>算术运算的优先级高于位运算</li>
+<li>逗号在所有运算符中优先级最低</li>
+</ul>
+<h3 id="const和的不同位置表示的含义">const和*的不同位置表示的含义</h3>
+<ul>
+<li>const在*之前(const int *a; int const *b)，指针所指对象只读</li>
+<li>const在*之后(int *const c;)，指针只读</li>
+<li>const在*之前和之后都有(const int * const d; int const *const e;)，指针和指针所指对象只读</li>
+</ul>
+<h3 id="传值传址传引用">传值、传址、传引用</h3>
+<ul>
+<li>传值：function(x)/void function(int x)</li>
+<li>传址：function(&amp;x)/void function(int *x)</li>
+<li>传引用：function(x)/void function(int &amp;x)</li>
+</ul>
+<h2 id="基本概念和术语">基本概念和术语</h2>
+<ul>
+<li>数据：对客观事物的符号表示，在计算机科学中是指所有能输入到计算机中并被计算机程序处理的符号的总称。</li>
+<li>数据元素：数据的基本单位，是数据结合中的一个个体，一个数据元素可由若干个数据项组成。</li>
+<li>数据对象：性质相同的数据元素的集合，是数据的一个子集。</li>
+<li>数据结构：相互之间存在一种或多种特定关系的数据元素的集合。</li>
+<li>数据结构：(D,S,Op)。其中D位数据元素的集合；S为D上的关系Op为定义在D上的运算</li>
+</ul>
+<h2 id="数据结构的分类">数据结构的分类</h2>
+<ul>
+<li>集合</li>
+<li>线性结构</li>
+<li>树形结构</li>
+<li>图状结构或网状结构</li>
+</ul>
+<h2 id="逻辑结构">逻辑结构</h2>
+<ul>
+<li>数据元素之间的逻辑关系</li>
+<li>(D, S)</li>
+</ul>
+<h2 id="操作">操作</h2>
+<ul>
+<li>构造函数、析构函数</li>
+<li>询问类操作：判空、求长度</li>
+<li>查找类操作：查找某个元素的位置、遍历</li>
+<li>添加和删除类操作：添加一个数据元素、删除一个数据元素、置空</li>
+</ul>
+<h2 id="存储结构物理结构">存储结构（物理结构）</h2>
+<ul>
+<li>数据的逻辑结构在计算机存储器中的映像表示</li>
+</ul>
+<h3 id="数据元素的映像">数据元素的映像</h3>
+<ul>
+<li>用二进制位的位串表示数据元素</li>
+<li>每个数据元素的映像称为结点</li>
+<li>每个数据项的映像称为数据域</li>
+</ul>
+<h3 id="不同的存储结构">不同的存储结构</h3>
+<ul>
+<li>顺序存储结构</li>
+<li>链式存储结构</li>
+<li>哈希存储结构（散列存储结构）</li>
+<li>索引存储结构</li>
+</ul>
+<h3 id="数据类型">数据类型</h3>
+<ul>
+<li>刻画（程序）操作对象的特性</li>
+<li>原子类型</li>
+<li>结构类型</li>
+</ul>
+<h3 id="抽象数据类型adt">抽象数据类型（ADT）</h3>
+<ul>
+<li>一个数学模型以及定义在该模型上的一组操作</li>
+<li>原子类型</li>
+<li>固定聚合类型</li>
+<li>可变聚合类型</li>
+</ul>
+<h2 id="算法的基本概念">算法的基本概念</h2>
+<h3 id="算法需要满足的特性">算法需要满足的特性</h3>
+<ul>
+<li>有穷性、确定性、可行性、输入、输出</li>
+</ul>
+<h3 id="算法设计自顶向下逐步求精">算法设计：自顶向下、逐步求精</h3>
+<h3 id="算法的评价标准">算法的评价标准</h3>
+<ul>
+<li>正确性</li>
+<li>可读性</li>
+<li>健壮性</li>
+<li>高效率与地存储量需求</li>
+</ul>
+<h3 id="算法的后续测试">算法的后续测试</h3>
+<ul>
+<li>在算法中的某些部位插入时间函数time(t)测定算法完成某一功能所需要华为的时间(打印t)</li>
+</ul>
+<h3 id="算法的事前估计">算法的事前估计</h3>
+<ul>
+<li>
+<p>空间复杂度（原地工作：额外空间相对于输入数据量来说是常数）</p>
+<ul>
+<li>存储密度：数据本身存储量/实际所占存储量</li>
+</ul>
+</li>
+<li>
+<p>时间复杂度</p>
+</li>
+</ul>
+<h1 id="线性表">线性表</h1>
+<h2 id="形式定义">形式定义</h2>
+<ul>
+<li>由n(n&gt;=0)个数据元素组成的有序序列，n为表长，n为0时，是空表</li>
+<li>Linear_list = (D, S)</li>
+<li>数据元素间是线性关系，数据元素在表中的位置只取决于其序号</li>
+<li>存在唯一的“第一个”和“最后一个”数据元素</li>
+<li>除第一个元素外，每一个元素都有一个直接前驱元素，除最后一个元素外，每个元素都有一个直接后继元素</li>
+</ul>
+<h2 id="顺序表向量">顺序表（向量）</h2>
+<ul>
+<li>malloc和free，检查是否malloc成功</li>
+</ul>
+<h3 id="优点">优点</h3>
+<ul>
+<li>逻辑相邻、物理相邻</li>
+<li>可随机存取任一元素</li>
+<li>存储空间使用紧凑</li>
+</ul>
+<h3 id="缺点">缺点</h3>
+<ul>
+<li>插入、删除操作需移动大量元素</li>
+<li>按最大空间分配，利用不充分</li>
+<li>容量扩充困难</li>
+</ul>
+<h2 id="单链表">单链表</h2>
+<h3 id="两种基本形式">两种基本形式</h3>
+<ul>
+<li>头指针</li>
+<li>头结点</li>
+</ul>
+<h2 id="单循环链表">单循环链表</h2>
+<h2 id="双向链表">双向链表</h2>
+<ul>
+<li>两个方向都是循环链表</li>
+</ul>
+<h3 id="判空">判空</h3>
+<ul>
+<li>H为头指针，有头结点</li>
+<li>不能用H-&gt;next==H-&gt;prev来判空，若仅有一个数据元素也成立</li>
+<li>可用H-&gt;next==H或H-&gt;prev==H来判断</li>
+</ul>
+<h2 id="静态链表">静态链表</h2>
+<ul>
+<li>用数组模拟链表，逻辑上看像链表，物理上看像数组</li>
+</ul>
+<h2 id="线性表的应用">线性表的应用</h2>
+<ul>
+<li>一元n次多项式相加</li>
+</ul>
+<h1 id="栈和队列">栈和队列</h1>
+<h2 id="栈的定义">栈的定义</h2>
+<ul>
+<li>特殊的线性表：顺序方式或链式方式存储</li>
+<li>插入和删除操作只能在表尾进行</li>
+<li>具有后进先出的特点</li>
+</ul>
+<h2 id="顺序栈">顺序栈</h2>
+<ul>
+<li>数组（栈空间）+ 栈顶指示</li>
+<li>栈空条件S.top == -1</li>
+<li>栈满条件S.top == max - 1</li>
+<li>*<em>n个元素依次入栈，可得到多少个合法的出栈序列：(2n)!/[(n+1)!<em>n!]</em></em></li>
+</ul>
+<h2 id="链式栈">链式栈</h2>
+<ul>
+<li>链式栈无栈满问题，空间可扩充</li>
+<li>插入与删除仅在栈顶处执行</li>
+<li>链式栈的栈顶在链头</li>
+<li>适合于多栈操作</li>
+</ul>
+<h2 id="栈的应用">栈的应用</h2>
+<h3 id="递归问题汉诺塔问题">递归问题（汉诺塔问题）</h3>
+<ul>
+<li>空间复杂度O(n)最大空间</li>
+<li>时间复杂度O(2<!-- raw HTML omitted -->n<!-- raw HTML omitted -->)</li>
+</ul>
+<h3 id="消除尾递归">消除尾递归</h3>
+<ul>
+<li>goto回到程序最开头</li>
+<li>改为循环</li>
+</ul>
+<h3 id="整形数简单表达式求值">整形数简单表达式求值</h3>
+<h2 id="队列的定义">队列的定义</h2>
+<ul>
+<li>队列是一种特殊的线性表，限定插入和删除操作分别在表的两段进行，先进先出</li>
+</ul>
+<h2 id="优先级队列">优先级队列</h2>
+<ul>
+<li>内部元素按照权值排序，权值较高者排在最前优先出队列</li>
+</ul>
+<h2 id="链队列">链队列</h2>
+<ul>
+<li>类型定义：队头指针+队尾指针</li>
+<li>存在问题：假上溢</li>
+</ul>
+<h2 id="循环队列">循环队列</h2>
+<ul>
+<li>设循环队列中数组的下标范围是1~n，其头尾指针分别是f和r，则其元素个数为 (r-f+n) mod n</li>
+</ul>
+<h3 id="判断队满">判断队满</h3>
+<ul>
+<li>牺牲一个空间</li>
+<li>统计元素个数</li>
+</ul>
+<h2 id="双端队列">双端队列</h2>
+<ul>
+<li>限定插入和删除操作在线性表的两端进行</li>
+</ul>
+<h1 id="字符串与模式匹配">字符串与模式匹配</h1>
+<h2 id="基本概念">基本概念</h2>
+<ul>
+<li>串：由另个或多个字符组成的优先序列，串是特殊的线性表，数据元素是单个字符</li>
+<li>串长：串中的字符的数目</li>
+<li>子串和主串：串中任意个连续的字符组成的子序列称为该串的子串，包含子串的串相应的称为主串</li>
+<li>串相等：长度相等，各个对应位置的字符都相等</li>
+<li>空串和空格串：空串中不包含任何字符，空格串由一个或多个空格组成</li>
+</ul>
+<h2 id="串的存储结构">串的存储结构</h2>
+<h3 id="静态存储结构">静态存储结构</h3>
+<ul>
+<li>非紧缩格式：串空间+串长</li>
+<li>紧缩格式：串空间+串长</li>
+</ul>
+<h3 id="动态存储结构">动态存储结构</h3>
+<ul>
+<li>块链存储方式：字符串块链表的头指针+串长</li>
+<li>堆结构存储方式：系统分配一个大容量连续存储空间作为串值的可利用空间。每个串使用时动态申请一组地址连续的存储单元</li>
+</ul>
+<h2 id="串的模式匹配">串的模式匹配</h2>
+<ul>
+<li>在主串中寻找子串的位置</li>
+<li>蛮力搜索，时间复杂度O(n<!-- raw HTML omitted -->2<!-- raw HTML omitted -->)</li>
+<li><strong>KMP算法，时间复杂度O(m+n)</strong></li>
+</ul>
+<h3 id="kmp算法">KMP算法</h3>
+<ul>
+<li>引入next数组，当第k个元素比较出错时，再与next[k]个元素进行比较</li>
+</ul>
+<h1 id="数组和广义表">数组和广义表</h1>
+<h2 id="数组">数组</h2>
+<ul>
+<li>任何数组A都可以看作一个线性表</li>
+<li>n维数组可以看成m个n-1维数组</li>
+<li>数组作为函数形参时必须提供除最左边一维外所有维的长度，把实参限制在除最左边一维外的所有维都必须与形参匹配的数组</li>
+<li>Pascal、C语言按行存储，Fortraon语言按列存储</li>
+</ul>
+<h2 id="矩阵的压缩存储">矩阵的压缩存储</h2>
+<ul>
+<li>对称矩阵 a<!-- raw HTML omitted -->k<!-- raw HTML omitted --> = i*(i - 1)/2 + j</li>
+<li>三角矩阵，对角线以下（或以上）的数据元素（不包括对角线）全部为常数C 重复元素C共享一个元素存储空间</li>
+<li>*<em>带状矩阵 以对角线顺序存储，共nL个元素，存储地址计算：k=(i-1)<em>L+1+(j-1)</em></em></li>
+<li>稀疏矩阵 顺序存储：三元组表；链式存储：十字（正交）链表</li>
+</ul>
+<h2 id="广义表">广义表</h2>
+<h3 id="概念">概念</h3>
+<ul>
+<li>广义表是由零个或多个原子或子表组成的有限序列，可以记作：LS=(d<!-- raw HTML omitted -->1<!-- raw HTML omitted -->, d<!-- raw HTML omitted -->2<!-- raw HTML omitted -->,…… d<!-- raw HTML omitted -->n<!-- raw HTML omitted -->)</li>
+<li>逻辑定义 Lists = (D, R)</li>
+<li>与线性表的关系：广义表中的元素全部为原子时即为线性表，线性表时广义表的特例，广义表是线性表的推广</li>
+<li>表的长度：表中的元素（第一层）的个数</li>
+<li>表的深度：表中元素的最深嵌套层数</li>
+<li>表头：表中的第一个元素</li>
+<li>表尾：除第一个元素外，剩余元素构成的广义表</li>
+</ul>
+<h3 id="广义表的存储方式">广义表的存储方式</h3>
+<ul>
+<li>头尾链表形式 原子结点（0，data）、表结点（1，hp，tp）</li>
+<li>扩展的线性链表形式 表结点（1，hp，tp）、原子结点（0，data，tp）</li>
+</ul>
+<h1 id="树与二叉树">树与二叉树</h1>
+<h2 id="树">树</h2>
+<ul>
+<li>重要的非线性数据结构，是以分支关系定义的层次结构</li>
+<li>树是由n(n&gt;=0)个结点组成的有限集合T</li>
+<li>除根节点外，每个节点都仅有一个前驱结点</li>
+<li>结点的度：子树的数目（分支的数目）</li>
+<li>叶子结点：度为0的结点</li>
+<li>分支（非终端）结点：度不为0的结点</li>
+<li>树的度：树的各结点度的<strong>最大值</strong></li>
+<li>分支数：n-1条边（结点数为n）</li>
+<li>在树中任意两结点之间连线，构成图状结构</li>
+<li>内部结点：除根节点之外的分支结点</li>
+<li>孩子结点</li>
+<li>双亲结点</li>
+<li>兄弟结点</li>
+<li>结点的祖先：从根到该结点所经分支上的所有结点</li>
+<li>结点的子孙：该结点为根的子树中的任何一个结点</li>
+<li>结点的层次：表示该结点在树中的相对位置，根为<strong>第一层</strong>，其他的结点依次下推，若某结点在L层上，则其孩子在L+1层上</li>
+<li>堂兄弟：双亲在同一层的结点互为堂兄弟</li>
+<li>树的高度（深度）：树中结点的最大层次</li>
+<li>路径长度：从树中某结点N<!-- raw HTML omitted -->i<!-- raw HTML omitted -->出发，能够“自上而下”的穿过某些结点，到达另一个结点N<!-- raw HTML omitted -->j<!-- raw HTML omitted -->，则称N<!-- raw HTML omitted -->i<!-- raw HTML omitted -->到N<!-- raw HTML omitted -->j<!-- raw HTML omitted -->存在一条路径，路径长度等于这两个结点之间的分支数</li>
+<li>树的路径长度：根到每个结点的路径长度之和</li>
+<li>森林：是m棵互不相交的树的集合</li>
+</ul>
+<h3 id="非空树">非空树</h3>
+<ul>
+<li>有一个称之为根的结点</li>
+<li>除根以外的其余结点被分成m(0&lt;=m&lt;n)个互不相交的集合，其中每一个结合是一棵树，且称为根的子树</li>
+</ul>
+<h2 id="二叉树">二叉树</h2>
+<h3 id="定义">定义</h3>
+<ul>
+<li>二叉树是n(n&gt;=0)个结点的有限集合，它成为空树(n=0)，或由一个根节点和两颗互不相交的左子树和右子树的二叉树组成</li>
+<li>定义是递归的</li>
+<li>0&lt;=结点的度&lt;=2（0、1、2）</li>
+<li>是有序树</li>
+<li>满二叉树 每一层上的结点数都是最大结点数</li>
+<li>完全二叉树 只有最下面两层结点的度可以小于2，而最下一层的叶子结点集中于左边的若干位置上</li>
+</ul>
+<h3 id="性质">性质</h3>
+<ul>
+<li>二叉树第i层上至多有2<!-- raw HTML omitted -->i-1<!-- raw HTML omitted -->个结点</li>
+<li>深度为k的二叉树至多有2<!-- raw HTML omitted -->k<!-- raw HTML omitted -->-1个结点</li>
+<li>对任何一棵二叉树，如果其终端结点数为n<!-- raw HTML omitted -->0<!-- raw HTML omitted -->，度为2的结点数为n<!-- raw HTML omitted -->2<!-- raw HTML omitted -->，则n<!-- raw HTML omitted -->0<!-- raw HTML omitted -->=n<!-- raw HTML omitted -->2<!-- raw HTML omitted -->+1</li>
+<li>具有n个结点的完全二叉树的深度为log<!-- raw HTML omitted -->2<!-- raw HTML omitted -->n+1（向下取整）</li>
+<li>一棵具有n个结点的完全二叉树（顺序二叉树）对其结点编号1～n，则对于任意一结点i，有其左右孩子结点的编号为2i-1和2i+1</li>
+</ul>
+<h3 id="二叉树的存储结构">二叉树的存储结构</h3>
+<ul>
+<li>顺序存储结构</li>
+<li>三元组(data,lc,rc)</li>
+<li>存储双亲(data,parent)</li>
+<li>二叉链表(lc,data,rc)</li>
+<li>三叉链表(lc,data,parent,rc)</li>
+</ul>
+<h3 id="二叉树的遍历">二叉树的遍历</h3>
+<ul>
+<li>目的：非线性结构-&gt;线性结构</li>
+<li>DLR 先序遍历</li>
+<li>LDR 中序遍历</li>
+<li>LRD 后序遍历</li>
+<li>层序遍历</li>
+<li>先序遍历与中序遍历相当于入栈和出栈操作</li>
+<li>中序遍历和后序遍历相当于入栈和出栈操作</li>
+<li>中序+先序/后序可推知树的结构</li>
+<li>先序+后序遍历不可推知树的结构</li>
+<li>层序+中序可推知树的结构</li>
+<li>层序+先序/后序可推知树的结构</li>
+</ul>
+<h3 id="特殊二叉树">特殊二叉树</h3>
+<ul>
+<li>先序序列与后序序列相同：空树/只有根节点的二叉树</li>
+<li>中序序列与后序序列相同：空树/任一结点至多只有左子树的二叉树</li>
+<li>先序序列与中序序列相同：空树/任一结点至多只有右子树的二叉树</li>
+<li>中序序列与层序遍历序列相同：空树/任一结点至多只有右子树的二叉树</li>
+</ul>
+<h3 id="线索二叉树">线索二叉树</h3>
+<ul>
+<li><strong>中序线索化</strong></li>
+<li>(lc, Itag, data, rtag, rc)</li>
+<li>先序线索二叉树：最后一个元素即最右下的叶子结点右指针一定为空；第一个元素若没有左子树则左指针为空，若有左孩子，则不为空-&gt;有一个或两个空指针</li>
+<li>中序线索二叉树：第一个元素没有前驱，最后一个元素没有后继，一定有两个空指针</li>
+<li>后序线索二叉树：最后一个元素即根节点的右指针不一定为空；第一个元素即最左下的元素的左指针一定为空-&gt;有一个或两个空指针</li>
+</ul>
+<h3 id="哈夫曼树">哈夫曼树</h3>
+<ul>
+<li>最优二叉树（带权路径长度之和WPL最小的二叉树）</li>
+<li>树的路径长度：从树根到每一个结点的路径上的分支数</li>
+<li>带权路径长度：结点的路径长度与该结点的权之和</li>
+<li>树的带权路径长度：树中所有叶子结点的带权路径长度之和</li>
+</ul>
+<h3 id="哈夫曼编码">哈夫曼编码</h3>
+<ul>
+<li>不等长编码</li>
+<li>前缀编码</li>
+<li>哈夫曼编码树中没有度为1的结点，若叶子结点的个数为n，则哈夫曼编码树的结点总数为2n-1</li>
+</ul>
+<h3 id="森林与二叉树的转换">森林与二叉树的转换</h3>
+<ul>
+<li>森林-&gt;二叉树：在兄弟之间加一条线</li>
+<li>对每一结点，去掉它与孩子的连线（最左孩子除外）</li>
+<li>以根为轴心，对整棵树旋转45<!-- raw HTML omitted -->o<!-- raw HTML omitted --></li>
+</ul>
+<h3 id="森林的遍历">森林的遍历</h3>
+<ul>
+<li>森林转化成二叉树：(1)每一棵树转换成二叉树。(2)从最后一棵树开始，把后一棵树作为前一棵树根的右子</li>
+<li>先序遍历，对应二叉树的先序遍历</li>
+<li>中序遍历：对应二叉树的中序遍历</li>
+</ul>
+<h3 id="树的存储结构">树的存储结构</h3>
+<ul>
+<li>多重链表表示法(data, child1, child2, child3……)</li>
+<li>双亲表示法(一维数组(data, parent))</li>
+<li>数组+单链表</li>
+<li>孩子兄弟表示法(二叉链表表示法)(firstchild, data, nextsibling)</li>
+</ul>
+<h3 id="并查集">并查集</h3>
+<ul>
+<li>等价类：结合种互不相交的子集</li>
+</ul>
+<h1 id="图">图</h1>
+<ul>
+<li>非线性结构，数据元素之间呈多对多的关系</li>
+<li>图的定义Graph=(V, E)：V:定点（数据元素的有穷非空集合），E(边的有穷集合)</li>
+<li>顶点：数据元素构成的结点</li>
+<li>无向图：边的顶点偶对事物序的</li>
+<li>有向图 弧，弧尾（初始点），弧头（终端点）</li>
+<li>无向完全图 边数e = n*(n-1)/2</li>
+<li>有向完全图 边数e = n*(n-1)</li>
+<li>稀疏图</li>
+<li>稠密图</li>
+<li>权：图中的边或弧具有一定大小的概念</li>
+<li>网：边/弧带权的图</li>
+<li>邻接</li>
+<li>关联</li>
+<li>子图：所有结点与全部边都在原图中</li>
+<li>生成子图：由图的全部顶点和部分边组成的子图称为原图的生成子图</li>
+<li>生成树</li>
+<li>顶点的度：D,ID,OD</li>
+<li>路径 路径长度 回路(不讨论自反) 简单路径 简单回路</li>
+<li>连通图 连通分量 极小连通子图</li>
+<li>强连通图 强连通分量</li>
+<li>生成子树</li>
+<li>有向树</li>
+<li>生成森林</li>
+</ul>
+<h2 id="图的存储结构">图的存储结构</h2>
+<ul>
+<li>数组+邻接矩阵</li>
+<li>邻接表（顺序存储+链式存储）（顶点表(data,firstarc)+边表(info,adjvex,nextarc)）</li>
+<li>关联矩阵（顺序存储）（结点*边）（有向图用正负表示出入）</li>
+<li>十字链表（顺序存储+链式存储）(tailvex,headvex,weight,hlink,tlink)</li>
+<li>邻接多重表（顺序存储+链式存储）(mark,ivex,ilink,jvex,jlink)</li>
+</ul>
+<h2 id="图的遍历">图的遍历</h2>
+<h3 id="深度优先遍历-栈">深度优先遍历-&gt;栈</h3>
+<h3 id="广度优先遍历树的层序遍历-队列">广度优先遍历（树的层序遍历）-&gt;队列</h3>
+<h3 id="有向图强连通分量的求法">有向图强连通分量的求法</h3>
+<ul>
+<li>深度优先遍历</li>
+<li>将有向图的所有边倒置，构造新的有向图</li>
+<li>从最大编号开始进行深度优先遍历，能够访问到的结点构成强连通分量</li>
+<li>从剩余结点中选编号最大的，重复3</li>
+</ul>
+<h3 id="最小生成树">最小生成树</h3>
+<ul>
+<li>由一个网络生成的各边的权数总和最小的生成树称为最小生成树，记为MST</li>
+</ul>
+<h4 id="prim算法适用于稠密图">Prim算法：适用于稠密图</h4>
+<h4 id="kruscal小根堆和并查集适用于稀疏图">Kruscal（小根堆和并查集）：适用于稀疏图</h4>
+<h3 id="有向无环图的应用">有向无环图的应用</h3>
+<h4 id="aov网络">AOV网络</h4>
+<ul>
+<li>顶点为活动，有向边的指向表示活动执行的次序</li>
+</ul>
+<h4 id="aoe网路">AOE网路</h4>
+<ul>
+<li>顶点为事件，单位是时刻。有向边定义为活动，它的权值定义为活动进行所需的时间</li>
+</ul>
+<h4 id="拓扑排序">拓扑排序</h4>
+<ul>
+<li>-&gt;拓扑序列（不唯一），AOV网的性质</li>
+<li>无前驱顶点优先算法</li>
+<li>无后继顶点优先算法 可用深度优先遍历：无法判断是否有环，适用于有向无环图</li>
+</ul>
+<h4 id="关键路径">关键路径</h4>
+<ul>
+<li>AOE网的性质</li>
+<li>源点</li>
+<li>汇点</li>
+<li>关键路径</li>
+<li>关键活动</li>
+<li>e(i)活动a<!-- raw HTML omitted -->i<!-- raw HTML omitted -->的最早开始时间，l(i)活动a<!-- raw HTML omitted -->i<!-- raw HTML omitted -->的最迟开始时间，ve(j)事件v<!-- raw HTML omitted -->j<!-- raw HTML omitted -->的最早发生时间，vl(j)事件v<!-- raw HTML omitted -->j<!-- raw HTML omitted -->的最迟发生时间。e(i) = ve(j) l(i) = vl(k) - dut(j, k)</li>
+<li>求事件v<!-- raw HTML omitted -->j<!-- raw HTML omitted -->的最早发生时间ve(j)，从前往后，在求拓扑排序的过程中实现</li>
+<li>求事件v<!-- raw HTML omitted -->j<!-- raw HTML omitted -->的最迟发生时间vl(j)，从后往前，逆拓扑排序</li>
+<li>求活动a<!-- raw HTML omitted -->i<!-- raw HTML omitted -->的最早开始时间e(i)和最迟开始时间l(i)，确定关键活动e(i)=l(i) 根据ve和vl求</li>
+</ul>
+<h4 id="最短路径">最短路径</h4>
+<h5 id="dijkstra算法">Dijkstra算法</h5>
+<ul>
+<li>最短路径性质：三角不等式性质，最短路径的子路径也是最短路径</li>
+<li>最短路径的松弛操作，初始值：P(v)是v可能的最短路径上的前驱结点，D(s)=0, D(v)=∞，P(v) = NULL -&gt; 松弛过程</li>
+<li>已知图G,求从图中一个顶点到其他顶点的最段路径，一般使用的算法是Dikstra算法</li>
+<li>数据结构：邻接矩阵w[n][n]；一维数组S[1..n]：记录相应顶点是否已被确定最段距离；一维数组D[1..n]：记录源点到相应顶点路径长度；一维数组P[1..n]：记录相应顶点的双亲顶点</li>
+<li>时间复杂度O(n<!-- raw HTML omitted -->2<!-- raw HTML omitted -->)</li>
+<li>适合稠密图：与边的数目无关</li>
+</ul>
+<h4 id="弗洛伊德算法">弗洛伊德算法</h4>
+<ul>
+<li>存储结构是邻接矩阵</li>
+<li>利用二维数组记录当前v<!-- raw HTML omitted -->i<!-- raw HTML omitted -->到v<!-- raw HTML omitted -->j<!-- raw HTML omitted -->的最短路径长度</li>
+<li>集合S记录当前允许的中间节点</li>
+<li>依次向S中加入v<!-- raw HTML omitted -->1<!-- raw HTML omitted -->、v<!-- raw HTML omitted -->2<!-- raw HTML omitted -->、&hellip;v<!-- raw HTML omitted -->n<!-- raw HTML omitted -->，每加入一个顶点，对A[i, j]进行一次修正</li>
+<li>时间复杂度O(n<!-- raw HTML omitted -->3<!-- raw HTML omitted -->)</li>
+</ul>
+<h1 id="查找">查找</h1>
+<h2 id="基本概念和术语-1">基本概念和术语</h2>
+<ul>
+<li>查找表</li>
+<li>查找</li>
+<li>关键字（主关键字、次关键字）</li>
+<li>静态查找表</li>
+<li>动态查找表</li>
+<li>查找成功</li>
+<li>查找不成功</li>
+<li>内查找</li>
+<li>外查找</li>
+<li>平均查找长度AASL(查找方法时效的度量)</li>
+</ul>
+<h2 id="顺序表的查找">顺序表的查找</h2>
+<ul>
+<li>设置监视哨，提高算法效率</li>
+<li>改进措施：非等概率查找时，可将查找概率高的记录尽量排在表前部</li>
+</ul>
+<h2 id="二分查找折半查找">二分查找（折半查找）</h2>
+<h2 id="静态树表的查找">静态树表的查找</h2>
+<ul>
+<li>以概率高的结点为根，二分查找</li>
+<li>静态最优查找树：PH值最小</li>
+<li>次优查找树：PH值近似为最小</li>
+</ul>
+<h3 id="构造次优查找树">构造次优查找树</h3>
+<ul>
+<li>按关键字升序排列，选取记录r<!-- raw HTML omitted -->i<!-- raw HTML omitted -->作为根节点，计算左右子树的PH之差，找出最小的PH之差对应的i，若相邻关键字的权值大，则确定为权值大的关键字对应的i n</li>
+<li>左右子树也为静态最优查找树</li>
+</ul>
+<h2 id="分块查找">分块查找</h2>
+<ul>
+<li>构造索引表</li>
+<li>折半或顺序查找索引表，确定所在块</li>
+<li>在已确定的快中顺序查找/折半查找</li>
+<li>分块查找效率介于顺序查找和折半查找之间</li>
+</ul>
+<h2 id="二叉排序树bst">二叉排序树BST</h2>
+<ul>
+<li>左子树&lt;根节点&lt;右子树</li>
+<li>新插入的结点总是叶子结点</li>
+<li>生成：从空树开始进行插入操作</li>
+<li>删除中间节点后，以左子树的最大值或右子树的最小值填充</li>
+</ul>
+<h2 id="平衡二叉树avl避免二叉排序树退化">平衡二叉树AVL（避免二叉排序树退化）</h2>
+<ul>
+<li>是二叉排序树</li>
+<li>左、右子树的高度之差的绝对值不超过1</li>
+<li>左右子树本身又是一棵平衡二叉树</li>
+<li>二叉树上结点的平衡因子：该结点的左子树的高度减去右子树的高度</li>
+</ul>
+<h3 id="平衡二叉树的调整">平衡二叉树的调整</h3>
+<ul>
+<li>LL型：新插入的结点在危机结点的左子的左子树上-&gt;一次顺时针旋转</li>
+<li>LR型：新插入的结点在危机结点的左子的右子树上-&gt;一次逆时针旋转+一次顺时针旋转</li>
+<li>RR型：新插入的结点在危机结点的右子的右子树上-&gt;一次逆时针旋转</li>
+<li>RL型：新插入的结点在危机结点的右子的左子树上-&gt;一次顺时针旋转+一次逆时针旋转</li>
+<li>AVL树是接近最优的，其平均查找长度与log<!-- raw HTML omitted -->2<!-- raw HTML omitted -->n同数量级</li>
+</ul>
+<h2 id="b树与b-树">B+树与B-树</h2>
+<h3 id="b-树">B-树</h3>
+<ul>
+<li>多路平衡查找树，应用于文件系统</li>
+<li>m阶B-树，树中每节点最多有m棵子树，若根节点不是叶子结点，则最少有两棵子树，除根之外的所有非终端节点最少m/2向上取整棵子树，所有非终端节点包含信息数据，所有叶子结点在同一层上且不带信息</li>
+<li>B-树插入过程，若结点数过多，必须分裂成两个结点</li>
+<li>B-树删除过程：不动/借/并</li>
+</ul>
+<h3 id="b树">B+树</h3>
+<ul>
+<li>B-树的变形树，应用于索引顺序文件系统</li>
+<li>有n棵子树的结点中有n个关键字，非叶子结点可以看成是索引部分，所有叶子结点中包含了全部关键字的信息以及指向这些关键字记录的指针，且叶子结点以关键字大小自小至大顺序链接</li>
+</ul>
+<h2 id="哈希表">哈希表</h2>
+<ul>
+<li>在记录的存储地址和它的关键字之间建立一个确定的对应关系</li>
+<li>哈希表</li>
+<li>哈希函数</li>
+<li>冲突</li>
+<li>同义词</li>
+<li>哈希（散列）地址</li>
+<li>装填因子n/m</li>
+</ul>
+<h3 id="哈希函数的基本构造方法">哈希函数的基本构造方法</h3>
+<ul>
+<li>直接定址法</li>
+<li>数字分析法/基数转换法：取关键字在某种进制下的若干数位作为哈希地址</li>
+<li>平方取中法：关键字平方后取中间几位作为地址</li>
+<li>随机数法：较适于关键字长度不等时的情况</li>
+<li>折叠法：将关键字分割成位数相同的几部分，然后取这几部分的叠加和作为哈希地址</li>
+<li>除留余数法 p最好是素数</li>
+</ul>
+<h3 id="处理冲突的常用方法">处理冲突的常用方法</h3>
+<ul>
+<li>开放定址法：线性探测再散列、二次探测再散列、为随机探测再散列、双重散列函数探查法</li>
+<li>再哈希法</li>
+<li>链地址法：为每个哈希地址建立一个单链表</li>
+<li>建立公共溢出区</li>
+</ul>
+<h1 id="排序">排序</h1>
+<h2 id="插入排序">插入排序</h2>
+<h3 id="普通插入排序稳定">普通插入排序（稳定）</h3>
+<ul>
+<li>算法改进：折半插入排序（稳定、二路插入排序（稳定）</li>
+</ul>
+<h3 id="希尔排序不稳定">希尔排序（不稳定）</h3>
+<ul>
+<li>选定一个记录下标的增量d，将整个记录序列按增量d从第一个记录开始划分为若干组，对每组使用直接插入排序的方法，然后减小增量d，不断重复上述过程，如此下去，直到d=1</li>
+<li>最后一个增量之必为1</li>
+<li>避免增量序列中的值有公因子</li>
+<li>实验结果：n比较大时，比较和移动次数约在n<!-- raw HTML omitted -->1.25<!-- raw HTML omitted -->到1.6n<!-- raw HTML omitted -->1.25<!-- raw HTML omitted --></li>
+<li>原地排序</li>
+</ul>
+<h2 id="交换排序">交换排序</h2>
+<h3 id="冒泡排序稳定">冒泡排序（稳定）</h3>
+<ul>
+<li>时间复杂度O(n<!-- raw HTML omitted -->2<!-- raw HTML omitted -->)</li>
+<li>辅助空间复杂度O(1)</li>
+<li>算法改进：每趟排序中，记录最后一次发生交换的位置、双向交替起泡</li>
+</ul>
+<h3 id="快速排序不稳定">快速排序（不稳定）</h3>
+<ul>
+<li>分化交换排序/分治法</li>
+<li>指定枢轴/支点/基准记录r[p]（通常为第一个记录），通过一趟排序将其放在正确的位置上，它把代排记录分割为独立的两部分，使得左边记录的关键字&lt;=r[p].key&lt;=右边记录的关键字</li>
+<li>对左右两部分记录序列重复上述过程，依次类推，直到子序列中只剩下一个记录或不含记录为止</li>
+<li>时间复杂度：最坏：O(n<!-- raw HTML omitted -->2<!-- raw HTML omitted -->)，最好：O(nlog<!-- raw HTML omitted -->2<!-- raw HTML omitted -->n)</li>
+<li>辅助空间复杂度：最好O(log<!-- raw HTML omitted -->2<!-- raw HTML omitted -->n)，最坏O(n)</li>
+<li>算法改进：三者取中、随机产生</li>
+</ul>
+<h2 id="选择排序">选择排序</h2>
+<h3 id="简单选择排序不稳定">简单选择排序（不稳定）</h3>
+<ul>
+<li>选择、交换</li>
+<li>总的比较次数与记录排列的初始状态无关C=n*(n-1)/2</li>
+<li>移动次数M<!-- raw HTML omitted -->max<!-- raw HTML omitted -->=3(n-1)，M<!-- raw HTML omitted -->min<!-- raw HTML omitted -->=0</li>
+<li>平均时间复杂度O(n<!-- raw HTML omitted -->2<!-- raw HTML omitted -->)，辅助空间复杂度O(1)</li>
+</ul>
+<h3 id="树形选择排序稳定">树形选择排序（稳定）</h3>
+<ul>
+<li>时间复杂度O(nlog<!-- raw HTML omitted -->2<!-- raw HTML omitted -->n)</li>
+<li>缺陷：辅助空间较多，需与“最大值”进行多余的比较</li>
+</ul>
+<h3 id="堆排序不稳定">堆排序（不稳定）</h3>
+<ul>
+<li>堆的调整（筛选）</li>
+<li>建堆（从后往前）</li>
+<li>时间复杂度O(nlog<!-- raw HTML omitted -->2<!-- raw HTML omitted -->n)</li>
+<li>空间复杂度：辅助空间O(1)</li>
+</ul>
+<h2 id="归并排序">归并排序</h2>
+<h3 id="两路归并排序稳定">两路归并排序（稳定）</h3>
+<ul>
+<li>时间复杂度O(nlog<!-- raw HTML omitted -->2<!-- raw HTML omitted -->n)</li>
+<li>空间复杂度O(n)</li>
+<li>很少用于内部排序</li>
+</ul>
+<h3 id="单链表的两路归并排序稳定">单链表的两路归并排序（稳定）</h3>
+<ul>
+<li>空间复杂度O(1)</li>
+</ul>
+<h3 id="自然两路归并排序不稳定">自然两路归并排序（不稳定）</h3>
+<ul>
+<li>以游程（自然的有序段）作为自序列进行归并</li>
+<li>前半段寻找正序游程，后半段寻找逆序游程，前半段与后半段对应归并-&gt;不稳定</li>
+</ul>
+<h2 id="基数排序稳定">基数排序（稳定）</h2>
+<ul>
+<li>通过分配与收集过程来实现排序</li>
+<li>时间复杂度可以突破给予关键字比较一类方法的下界O(nlog<!-- raw HTML omitted -->2<!-- raw HTML omitted -->n)，达到O(n)</li>
+<li>最高位优先法（MSD）:分摊-&gt;分摊-&gt;收集-&gt;收集</li>
+<li>最低位优先法（LSD）：分摊-&gt;收集-&gt;分摊-&gt;收集</li>
+<li>LSD：分摊后形成队列，把所有队列头尾相连地收集起来</li>
+<li>辅助空间：O(n+rd)</li>
+</ul>
+<p><strong>快速排序是目前基于比较的内部排序中最好的方法</strong></p>
+<h1 id="外部排序">外部排序</h1>
+<h2 id="io次数计算">I/O次数计算</h2>
+<ul>
+<li>每个物理块一次存取需要两次I/O</li>
+</ul>
+</article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="application/javascript" src='https://y-m-m.github.io/js/toc.js'></script>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/toc.css' />
+
+  
+<div id="gitalk-container" class="gitalk-container"></div>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/gitalk.css'>
+<script src='https://y-m-m.github.io/js/gitalk.min.js'></script>
+<script>
+  const gitalk = new Gitalk({
+    clientID: 'Ov23livxKNtTlPeMjV2H',
+    clientSecret: '6d3bc9f47a1296f29628a63701ea5624cd28a26b',
+    repo: 'y-m-m.github.io\/',
+    owner: 'Y-M-M',
+    admin: ['Y-M-M'],
+    id: eval("location.pathname"), 
+    distractionFreeMode: false 
+  });
+  (function() {
+    gitalk.render('gitalk-container');
+  })();
+</script>
+
+</div>
+
+  <div class="footer container-xl width-full p-responsive">
+  <div
+    class="position-relative d-flex flex-row-reverse flex-lg-row flex-wrap flex-lg-nowrap flex-justify-center flex-lg-justify-between flex-sm-items-center pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
+    <a aria-label="Homepage" title="GitHub" class="footer-octicon d-none d-lg-block mr-lg-4" href="https://y-m-m.github.io/">
+      <svg height="24" class="octicon octicon-mark-github" viewBox="0 0 16 16" version="1.1" width="24">
+        <path fill-rule="evenodd"
+          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+        </path>
+      </svg>
+    </a>
+    <ul class="list-style-none d-flex flex-wrap col-12 flex-justify-center flex-lg-justify-between mb-2 mb-lg-0">
+      
+      <li class="mr-3 mr-lg-0">Theme by <a href='https://github.com/MeiK2333/github-style'>github-style</a></li>
+      
+    </ul>
+  </div>
+  <div class="d-flex flex-justify-center pb-6">
+    <span class="f6 text-gray-light"></span>
+  </div>
+
+
+</div>
+</body>
+
+<script type="application/javascript" src="https://y-m-m.github.io/js/github-style.js"></script>
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+<script type="application/javascript" src='https://y-m-m.github.io/js/search.js'></script>
+
+
+
+</html>

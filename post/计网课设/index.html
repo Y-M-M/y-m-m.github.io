@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script type="application/javascript" src='https://y-m-m.github.io/js/theme-mode.js'></script>
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/frameworks.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github-style.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/light.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/dark.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/syntax.css' />
+    <title>计算机网络课程设计 - 陈皮的博客</title>
+    
+    <link rel="icon" type="image/x-icon" href='/images/github-mark.png'>
+    
+    <meta name="theme-color" content="#1e2327">
+
+    
+    <meta name="description"
+  content="题目 DNS中继服务器的实现 设计一个DNS服务器程序，读入“域名-IP地址”对照表（一个文件），当客户端查询域名对应的IP地址时，用域名检索该对照表，得到三种检索结果： 检索结果为IP地址0.0.0.0，则向客户端返回“域名不存在”的报错信息（不良网站拦截功能） 检索结果为普通IP地址，则向客户返回这个地址（服务器功能） 表中未检测到该域名，则向因特网DNS服务器发出查询，并将结果返回给客户端（中继功能） 考虑多个计算机上的客户端会同时查询，需要进行消息ID的转换 DNS介绍 DNS查询过程(迭代查询) 客户端向DNS服务器发起查询请求 DNS搜索本地解析库没有结果。向根域发起查询请求，根域告诉DNS服务器，.com服务器上有它需要的资源 DNS服务器又向.com服务器发起请求，.com服务器告诉DNS服务器，.google.com上有它需要的资源 DNS服务器又向.google.com服务器发起请求，得到解析记录，并返回给了客户端。用户提供一种名称，查询以得到另一种名称：域名-&gt;IP或IP-&gt;域名 DNS报文 构成 格式
+除Header外其余四部分为可变长度(12字节长) Question: the question for the name server Answer: RRs answering the question Authority: RRs pointing toward an authority Additional: RRs holding additional information 后三段格式相同，每段都是由0~n个资源记录(Resource Record)构成 报头字段 12字节 ID 由客户程序设置并由服务器返回结果。客户程序通过它来确定响应与查询是否匹配 QR：0表示查询报，1表示响应报 OPCODE 通常值为0(标准查询)，其他值为1(反向查询)和2(服务器状态请求) AA：权威答案 TC：截断的 应答的总长度超过512字节时，只返回前512个字节 RD：期望递归 查询报中设置，响应报中返回 告诉名字服务器处理递归查询 如果该位为1，则递归查询 如果该位为0，且被请求的名字服务器没有一个权威回答，就返回一个能解答该查询的其他名字服务器列表，这称为迭代查询 RA：递归可用 如果名字服务器支持递归查询，则在响应中该比特设置为1 Z：必须为0，保留字段 RCODE：响应码，仅用于响应报 值为0(没有差错) 值为3表示名字差错。从权威名字服务器返回，表示在查询中指定域名不存在 QDCOUNT Number of entries in the question section ANCOUNT Number of RRs in the answer section NSCOUNT Number of name server RRs in authority records section ARCOUNT Number of RRs in additional records section Question Section Format " />
+<meta name="keywords"
+  content='blog, google analytics' />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://y-m-m.github.io/post/%E8%AE%A1%E7%BD%91%E8%AF%BE%E8%AE%BE/" />
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="计算机网络课程设计 - 陈皮的博客" />
+<meta name="twitter:description"
+  content="题目 DNS中继服务器的实现 设计一个DNS服务器程序，读入“域名-IP地址”对照表（一个文件），当客户端查询域名对应的IP地址时，用域名检索该对照表，得到三种检索结果： 检索结果为IP地址0.0.0.0，则向客户端返回“域名不存在”的报错信息（不良网站拦截功能） 检索结果为普通IP地址，则向客户返回这个地址（服务器功能） 表中未检测到该域名，则向因特网DNS服务器发出查询，并将结果返回给客户端（中继功能） 考虑多个计算机上的客户端会同时查询，需要进行消息ID的转换 DNS介绍 DNS查询过程(迭代查询) 客户端向DNS服务器发起查询请求 DNS搜索本地解析库没有结果。向根域发起查询请求，根域告诉DNS服务器，.com服务器上有它需要的资源 DNS服务器又向.com服务器发起请求，.com服务器告诉DNS服务器，.google.com上有它需要的资源 DNS服务器又向.google.com服务器发起请求，得到解析记录，并返回给了客户端。用户提供一种名称，查询以得到另一种名称：域名-&gt;IP或IP-&gt;域名 DNS报文 构成 格式
+除Header外其余四部分为可变长度(12字节长) Question: the question for the name server Answer: RRs answering the question Authority: RRs pointing toward an authority Additional: RRs holding additional information 后三段格式相同，每段都是由0~n个资源记录(Resource Record)构成 报头字段 12字节 ID 由客户程序设置并由服务器返回结果。客户程序通过它来确定响应与查询是否匹配 QR：0表示查询报，1表示响应报 OPCODE 通常值为0(标准查询)，其他值为1(反向查询)和2(服务器状态请求) AA：权威答案 TC：截断的 应答的总长度超过512字节时，只返回前512个字节 RD：期望递归 查询报中设置，响应报中返回 告诉名字服务器处理递归查询 如果该位为1，则递归查询 如果该位为0，且被请求的名字服务器没有一个权威回答，就返回一个能解答该查询的其他名字服务器列表，这称为迭代查询 RA：递归可用 如果名字服务器支持递归查询，则在响应中该比特设置为1 Z：必须为0，保留字段 RCODE：响应码，仅用于响应报 值为0(没有差错) 值为3表示名字差错。从权威名字服务器返回，表示在查询中指定域名不存在 QDCOUNT Number of entries in the question section ANCOUNT Number of RRs in the answer section NSCOUNT Number of name server RRs in authority records section ARCOUNT Number of RRs in additional records section Question Section Format " />
+<meta name="twitter:site" content="https://y-m-m.github.io/" />
+<meta name="twitter:creator" content="陈皮" />
+<meta name="twitter:image"
+  content="https://y-m-m.github.io/">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="计算机网络课程设计 - 陈皮的博客">
+<meta property="og:description"
+  content="题目 DNS中继服务器的实现 设计一个DNS服务器程序，读入“域名-IP地址”对照表（一个文件），当客户端查询域名对应的IP地址时，用域名检索该对照表，得到三种检索结果： 检索结果为IP地址0.0.0.0，则向客户端返回“域名不存在”的报错信息（不良网站拦截功能） 检索结果为普通IP地址，则向客户返回这个地址（服务器功能） 表中未检测到该域名，则向因特网DNS服务器发出查询，并将结果返回给客户端（中继功能） 考虑多个计算机上的客户端会同时查询，需要进行消息ID的转换 DNS介绍 DNS查询过程(迭代查询) 客户端向DNS服务器发起查询请求 DNS搜索本地解析库没有结果。向根域发起查询请求，根域告诉DNS服务器，.com服务器上有它需要的资源 DNS服务器又向.com服务器发起请求，.com服务器告诉DNS服务器，.google.com上有它需要的资源 DNS服务器又向.google.com服务器发起请求，得到解析记录，并返回给了客户端。用户提供一种名称，查询以得到另一种名称：域名-&gt;IP或IP-&gt;域名 DNS报文 构成 格式
+除Header外其余四部分为可变长度(12字节长) Question: the question for the name server Answer: RRs answering the question Authority: RRs pointing toward an authority Additional: RRs holding additional information 后三段格式相同，每段都是由0~n个资源记录(Resource Record)构成 报头字段 12字节 ID 由客户程序设置并由服务器返回结果。客户程序通过它来确定响应与查询是否匹配 QR：0表示查询报，1表示响应报 OPCODE 通常值为0(标准查询)，其他值为1(反向查询)和2(服务器状态请求) AA：权威答案 TC：截断的 应答的总长度超过512字节时，只返回前512个字节 RD：期望递归 查询报中设置，响应报中返回 告诉名字服务器处理递归查询 如果该位为1，则递归查询 如果该位为0，且被请求的名字服务器没有一个权威回答，就返回一个能解答该查询的其他名字服务器列表，这称为迭代查询 RA：递归可用 如果名字服务器支持递归查询，则在响应中该比特设置为1 Z：必须为0，保留字段 RCODE：响应码，仅用于响应报 值为0(没有差错) 值为3表示名字差错。从权威名字服务器返回，表示在查询中指定域名不存在 QDCOUNT Number of entries in the question section ANCOUNT Number of RRs in the answer section NSCOUNT Number of name server RRs in authority records section ARCOUNT Number of RRs in additional records section Question Section Format " />
+<meta property="og:url" content="https://y-m-m.github.io/post/%E8%AE%A1%E7%BD%91%E8%AF%BE%E8%AE%BE/" />
+<meta property="og:site_name" content="计算机网络课程设计" />
+<meta property="og:image"
+  content="https://y-m-m.github.io/">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+<meta property="article:published_time" content="2024-06-25 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+  <div style="position: relative">
+  <header class="Header js-details-container Details px-3 px-md-4 px-lg-5 flex-wrap flex-md-nowrap open Details--on">
+    <div class="Header-item mobile-none" style="margin-top: -4px; margin-bottom: -4px;">
+      <a class="Header-link" href="https://y-m-m.github.io/">
+        <img class="octicon" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item d-md-none">
+      <button class="Header-link btn-link js-details-target" type="button"
+        onclick="document.querySelector('#header-search').style.display = document.querySelector('#header-search').style.display == 'none'? 'block': 'none'">
+        <svg height="24" class="octicon octicon-three-bars" viewBox="0 0 16 16" version="1.1" width="24">
+          <path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 2.75zm0 5A.75.75 0 011.75 7h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 7.75zM1.75 12a.75.75 0 100 1.5h12.5a.75.75 0 100-1.5H1.75z">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <div style="display: none;" id="header-search"
+      class="Header-item Header-item--full flex-column flex-md-row width-full flex-order-2 flex-md-order-none mr-0 mr-md-3 mt-3 mt-md-0 Details-content--hidden-not-important d-md-flex">
+      <div
+        class="Header-search header-search flex-auto js-site-search position-relative flex-self-stretch flex-md-self-auto mb-3 mb-md-0 mr-0 mr-md-3 scoped-search site-scoped-search js-jump-to">
+        <div class="position-relative">
+          
+          <form target="_blank" id="search-form" action="" accept-charset="UTF-8" method="get"
+            autocomplete="off">
+            <label
+              class="Header-search-label form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative d-flex flex-justify-between flex-items-center">
+              <input type="text"
+                class="Header-search-input form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable"
+                name="q" value="" placeholder="Search" autocomplete="off">
+            </label>
+          </form>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="Header-item Header-item--full flex-justify-center d-md-none position-relative">
+      <a class="Header-link " href="https://y-m-m.github.io/">
+        <img class="octicon octicon-mark-github v-align-middle" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item" style="margin-right: 0;">
+      <a href="javascript:void(0)" class="Header-link no-select" onclick="switchTheme()">
+        <svg style="fill: var(--color-profile-color-modes-toggle-moon);" class="no-select" viewBox="0 0 16 16"
+          version="1.1" width="16" height="16">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M4.52208 7.71754C7.5782 7.71754 10.0557 5.24006 10.0557 2.18394C10.0557 1.93498 10.0392 1.68986 10.0074 1.44961C9.95801 1.07727 10.3495 0.771159 10.6474 0.99992C12.1153 2.12716 13.0615 3.89999 13.0615 5.89383C13.0615 9.29958 10.3006 12.0605 6.89485 12.0605C3.95334 12.0605 1.49286 10.001 0.876728 7.24527C0.794841 6.87902 1.23668 6.65289 1.55321 6.85451C2.41106 7.40095 3.4296 7.71754 4.52208 7.71754Z">
+          </path>
+        </svg>
+      </a>
+    </div>
+  </header>
+</div>
+
+  <div id="search-result" class="container-lg px-3 new-discussion-timeline" style="display: none;">
+</div>
+
+  
+<div class="application-main">
+  <div>
+  <main>
+    <div class="gisthead pagehead bg-gray-light pb-0 pt-3 mb-4">
+      <div class="px-0">
+        <div class="mb-3 d-flex px-3 px-md-3 px-lg-5">
+          <div class="flex-auto min-width-0 width-fit mr-3">
+            <div class="d-flex">
+              <div class="d-none d-md-block">
+                <a class="avatar mr-2 flex-shrink-0" href="https://y-m-m.github.io/">
+                  <img class=" avatar-user"
+                    src="/images/me.png"
+                    width="32" height="32"></a>
+              </div>
+              <div class="d-flex flex-column">
+                <h1 class="break-word f3 text-normal mb-md-0 mb-1">
+                  <span class="author">
+                    <a href="https://y-m-m.github.io/">陈皮</a>
+                  </span>
+                  <span class="path-divider">/</span>
+                  <strong class="css-truncate css-truncate-target mr-1" style="max-width: 410px">
+                    <a href="https://y-m-m.github.io/post/%E8%AE%A1%E7%BD%91%E8%AF%BE%E8%AE%BE/">计算机网络课程设计</a>
+                  </strong>
+                </h1>
+                <div class="note m-0">
+                  Created <relative-time datetime="Tue, 25 Jun 2024 00:00:00 &#43;0000"
+                    class="no-wrap">
+                    Tue, 25 Jun 2024 00:00:00 &#43;0000</relative-time>
+
+                  
+                  <span class="file-info-divider"></span>
+                  Modified <relative-time datetime="Fri, 05 Jul 2024 14:28:01 &#43;0800"
+                    class="no-wrap">
+                    Fri, 05 Jul 2024 14:28:01 &#43;0800</relative-time>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-lg px-3 new-discussion-timeline">
+      <div class="repository-content gist-content">
+        <div>
+          <div class="js-gist-file-update-container js-task-list-container file-box">
+            <div id="file-pytest" class="file my-2">
+              <div id="post-header" class="file-header d-flex flex-md-items-center flex-items-start sticky-header" style="z-index: 2">
+                <div class="file-info d-flex flex-md-items-center flex-items-start flex-order-1 flex-auto">
+                  <div class="text-mono f6 flex-auto pr-3 flex-order-2 flex-md-order-1 mt-2 mt-md-0">
+                    
+                    <summary id="toc-toggle" onclick="clickToc()" class="btn btn-octicon m-0 mr-2 p-2">
+                      <svg aria-hidden="true" viewBox="0 0 16 16" height="16" width="16" class="octicon octicon-list-unordered">
+                        <path fill-rule="evenodd" d="M2 4a1 1 0 100-2 1 1 0 000 2zm3.75-1.5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zM3 8a1 1 0 11-2 0 1 1 0 012 0zm-1 6a1 1 0 100-2 1 1 0 000 2z"></path>
+                      </svg>
+                    </summary>
+                    <details-menu class="SelectMenu" id="toc-details" style="display: none;">
+                      <div class="SelectMenu-modal rounded-3 mt-1" style="max-height: 340px;">
+                        <div class="SelectMenu-list SelectMenu-list--borderless p-2" style="overscroll-behavior: contain;" id="toc-list">
+                        </div>
+                      </div>
+                    </details-menu>
+                      1776 Words
+                    
+
+                  </div>
+                  <div class="file-actions flex-order-2 pt-0">
+                    
+                    
+                    <a class="muted-link mr-3" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      计算机科学
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      计算机网络
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="/tags/%E5%AE%9E%E8%B7%B5%E8%BF%87%E7%A8%8B">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      实践过程
+                    </a>
+                    
+                    
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="Box-body px-5 pb-5" style="z-index: 1">
+                <article class="markdown-body entry-content container-lg"><h1 id="题目-dns中继服务器的实现">题目 DNS中继服务器的实现</h1>
+<ul>
+<li>设计一个DNS服务器程序，读入“域名-IP地址”对照表（一个文件），当客户端查询域名对应的IP地址时，用域名检索该对照表，得到三种检索结果：
+<ul>
+<li>检索结果为IP地址0.0.0.0，则向客户端返回“域名不存在”的报错信息（不良网站拦截功能）</li>
+<li>检索结果为普通IP地址，则向客户返回这个地址（服务器功能）</li>
+<li>表中未检测到该域名，则向因特网DNS服务器发出查询，并将结果返回给客户端（中继功能）
+<ul>
+<li>考虑多个计算机上的客户端会同时查询，需要进行消息ID的转换</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="dns介绍">DNS介绍</h1>
+<h2 id="dns查询过程迭代查询">DNS查询过程(迭代查询)</h2>
+<ul>
+<li>客户端向DNS服务器发起查询请求</li>
+<li>DNS搜索本地解析库没有结果。向根域发起查询请求，根域告诉DNS服务器，.com服务器上有它需要的资源</li>
+<li>DNS服务器又向.com服务器发起请求，.com服务器告诉DNS服务器，.google.com上有它需要的资源</li>
+<li>DNS服务器又向.google.com服务器发起请求，得到解析记录，并返回给了客户端。用户提供一种名称，查询以得到另一种名称：域名-&gt;IP或IP-&gt;域名</li>
+</ul>
+<h2 id="dns报文">DNS报文</h2>
+<ul>
+<li>
+<p>构成
+<img src="/images/%E6%88%AA%E5%B1%8F2024-06-24%2021.06.06.png" alt=""></p>
+</li>
+<li>
+<p>格式</p>
+<ul>
+<li>除Header外其余四部分为可变长度(12字节长)</li>
+<li>Question: the question for the name server</li>
+<li>Answer: RRs answering the question</li>
+<li>Authority: RRs pointing toward an authority</li>
+<li>Additional: RRs holding additional information</li>
+<li>后三段格式相同，每段都是由0~n个资源记录(Resource Record)构成</li>
+</ul>
+</li>
+<li>
+<p>报头字段 12字节
+<img src="/images/%E6%88%AA%E5%B1%8F2024-06-24%2021.10.12.png" alt="Header Section Format"></p>
+<ul>
+<li>ID
+<ul>
+<li>由客户程序设置并由服务器返回结果。客户程序通过它来确定响应与查询是否匹配</li>
+</ul>
+</li>
+<li>QR：0表示查询报，1表示响应报</li>
+<li>OPCODE
+<ul>
+<li>通常值为0(标准查询)，其他值为1(反向查询)和2(服务器状态请求)</li>
+</ul>
+</li>
+<li>AA：权威答案</li>
+<li>TC：截断的
+<ul>
+<li>应答的总长度超过512字节时，只返回前512个字节</li>
+</ul>
+</li>
+<li>RD：期望递归
+<ul>
+<li>查询报中设置，响应报中返回</li>
+<li>告诉名字服务器处理递归查询</li>
+<li>如果该位为1，则递归查询</li>
+<li>如果该位为0，且被请求的名字服务器没有一个权威回答，就返回一个能解答该查询的其他名字服务器列表，这称为迭代查询</li>
+</ul>
+</li>
+<li>RA：递归可用
+<ul>
+<li>如果名字服务器支持递归查询，则在响应中该比特设置为1</li>
+</ul>
+</li>
+<li>Z：必须为0，保留字段</li>
+<li>RCODE：响应码，仅用于响应报
+<ul>
+<li>值为0(没有差错)</li>
+<li>值为3表示名字差错。从权威名字服务器返回，表示在查询中指定域名不存在</li>
+</ul>
+</li>
+<li>QDCOUNT
+<ul>
+<li>Number of entries in the question section</li>
+</ul>
+</li>
+<li>ANCOUNT
+<ul>
+<li>Number of RRs in the answer section</li>
+</ul>
+</li>
+<li>NSCOUNT
+<ul>
+<li>Number of name server RRs in authority records section</li>
+</ul>
+</li>
+<li>ARCOUNT
+<ul>
+<li>Number of RRs in additional records section</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Question Section Format
+<img src="/images/%E6%88%AA%E5%B1%8F2024-06-24%2021.25.28.png" alt=""></p>
+<ul>
+<li>QNAME
+<ul>
+<li>A domain name, i.e. <a href="https://www.bupt.edu.cn">www.bupt.edu.cn</a></li>
+</ul>
+</li>
+<li>QTYPE
+<ul>
+<li>A two octet code, type of the query, i.e. A(1),MX(15),CNAME(5),PTR(12),&hellip;</li>
+</ul>
+</li>
+<li>QCLASS
+<ul>
+<li>A two octet code, class of the query, i.e. IN(1)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Resource Record Format (RFC1035  4.1.3)
+<img src="/images/%E6%88%AA%E5%B1%8F2024-06-24%2021.28.04.png" alt=""></p>
+<ul>
+<li>NAME: 名字</li>
+<li>TYPE: RR的类型码(详见3.2，3.4)
+<ul>
+<li>A 即1，映射域名到IPv4地址</li>
+</ul>
+</li>
+<li>CLASS: 通常为IN(1)，指Internet数据</li>
+<li>TTL
+<ul>
+<li>客户程序保留该资源记录的秒数，稳定的资源记录生存时间值可以为2天，它确定了客户端DNS cache可以缓存该记录多长时间</li>
+</ul>
+</li>
+<li>RDLENGTH：资源数据长度
+<ul>
+<li>说明资源数据的字节数，对类型1（TYPE A记录）资源数据是4字节的IP地址</li>
+</ul>
+</li>
+<li>RDATA：资源数据</li>
+</ul>
+</li>
+<li>
+<p>Resource Record Data</p>
+<ul>
+<li>A 地址 (Type 1)
+<ul>
+<li>一个A记录定义了一个IP地址，它存储32bit的二进制数</li>
+</ul>
+</li>
+<li>AAAA  IPv6地址 (Type 28)
+<ul>
+<li>一个AAAA记录定义一个IPv6地址</li>
+</ul>
+</li>
+<li>PTR (Type 12)
+<ul>
+<li>指针记录用于指针查询。IP地址被看作是in-addr.arpa域下的一个域名（标识符串）</li>
+</ul>
+</li>
+<li>CNAME 规范名字(canonical name) (Type 5)
+<ul>
+<li>别名alias</li>
+</ul>
+</li>
+<li>HINFO 主机信息(Type 13)
+<ul>
+<li>主机CPU和操作系统</li>
+</ul>
+</li>
+<li>MX 邮件交换 (Type 15)
+<ul>
+<li>16bit整数优先值，以及域名</li>
+<li>如果一个目的主机有多个MX项，按优先值由小到大顺序使用</li>
+</ul>
+</li>
+<li>NS名字服务器(Type 2)
+<ul>
+<li>说明域的权威名字服务器</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="相关资料">相关资料</h2>
+<ul>
+<li>socket编程</li>
+<li>RFC1305协议文本</li>
+<li>软件工具wireshark</li>
+</ul>
+<h1 id="程序的设计和运行">程序的设计和运行</h1>
+<h2 id="windows中dns中继服务器运行">Windows中DNS中继服务器运行</h2>
+<ul>
+<li>ipconfig /all
+<ul>
+<li>DNS服务器：10.3.9.6/10.3.9.5/10.3.9.4</li>
+</ul>
+</li>
+<li>将DNS设置为127.0.0.1(本地主机)</li>
+<li>运行你的dnsrelay程序(在程序中将外部dns服务器设置为前面记下的DNS服务器)</li>
+<li>正常使用ping, ftp, IE等，名字解析工作正常</li>
+<li>局域网上的其他计算机将域名服务器指向DNS中继服务器的IP地址，ftp、IE等均能正常工作</li>
+</ul>
+<h2 id="其他命令">其他命令</h2>
+<ul>
+<li>nslookup <a href="https://www.bupt.edu.cn">www.bupt.edu.cn</a>
+<ul>
+<li>向名字服务器询问名字www.bupt.edu.cn的地址</li>
+</ul>
+</li>
+<li>ipconfig/displaydns
+<ul>
+<li>察看当前dns cache的内容以确认程序执行结果的正确性</li>
+</ul>
+</li>
+<li>ipconfig/flushdns
+<ul>
+<li>清除dns cache中缓存的所有DNS记录</li>
+</ul>
+</li>
+</ul>
+<h2 id="需考虑的问题">需考虑的问题</h2>
+<ul>
+<li>允许多个客户端的并发查询</li>
+<li>超时处理</li>
+<li>ID转换
+<img src="/images/%E6%88%AA%E5%B1%8F2024-06-25%2014.40.55.png" alt=""></li>
+</ul>
+<h2 id="编程实现">编程实现</h2>
+<ul>
+<li>定义报文中的常量值和报文结构</li>
+<li>结构与字节流相互转换</li>
+<li>封装DNS消息</li>
+<li>构建cache(哈希表)
+<ul>
+<li>LRU策略</li>
+</ul>
+</li>
+<li>ID和地址的映射</li>
+<li>线程管理</li>
+<li>字典树</li>
+<li>处理DNS报文</li>
+</ul>
+</article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="application/javascript" src='https://y-m-m.github.io/js/toc.js'></script>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/toc.css' />
+
+  
+<div id="gitalk-container" class="gitalk-container"></div>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/gitalk.css'>
+<script src='https://y-m-m.github.io/js/gitalk.min.js'></script>
+<script>
+  const gitalk = new Gitalk({
+    clientID: 'Ov23livxKNtTlPeMjV2H',
+    clientSecret: '6d3bc9f47a1296f29628a63701ea5624cd28a26b',
+    repo: 'y-m-m.github.io\/',
+    owner: 'Y-M-M',
+    admin: ['Y-M-M'],
+    id: eval("location.pathname"), 
+    distractionFreeMode: false 
+  });
+  (function() {
+    gitalk.render('gitalk-container');
+  })();
+</script>
+
+</div>
+
+  <div class="footer container-xl width-full p-responsive">
+  <div
+    class="position-relative d-flex flex-row-reverse flex-lg-row flex-wrap flex-lg-nowrap flex-justify-center flex-lg-justify-between flex-sm-items-center pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
+    <a aria-label="Homepage" title="GitHub" class="footer-octicon d-none d-lg-block mr-lg-4" href="https://y-m-m.github.io/">
+      <svg height="24" class="octicon octicon-mark-github" viewBox="0 0 16 16" version="1.1" width="24">
+        <path fill-rule="evenodd"
+          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+        </path>
+      </svg>
+    </a>
+    <ul class="list-style-none d-flex flex-wrap col-12 flex-justify-center flex-lg-justify-between mb-2 mb-lg-0">
+      
+      <li class="mr-3 mr-lg-0">Theme by <a href='https://github.com/MeiK2333/github-style'>github-style</a></li>
+      
+    </ul>
+  </div>
+  <div class="d-flex flex-justify-center pb-6">
+    <span class="f6 text-gray-light"></span>
+  </div>
+
+
+</div>
+</body>
+
+<script type="application/javascript" src="https://y-m-m.github.io/js/github-style.js"></script>
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+<script type="application/javascript" src='https://y-m-m.github.io/js/search.js'></script>
+
+
+
+</html>

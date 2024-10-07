@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script type="application/javascript" src='https://y-m-m.github.io/js/theme-mode.js'></script>
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/frameworks.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github-style.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/light.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/dark.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/syntax.css' />
+    <title>Introduction to linear algebra - 陈皮的博客</title>
+    
+    <link rel="icon" type="image/x-icon" href='/images/github-mark.png'>
+    
+    <meta name="theme-color" content="#1e2327">
+
+    
+    <meta name="description"
+  content="矩阵乘法 将矩阵的初等变换和矩阵乘法相联系 以矩阵诠释消元变化 左乘是行变换，右乘是列变换
+矩阵乘法的其他解释方式 将结果看作第一个矩阵中列向量按照第二个矩阵进行线性排列 或看作第二个矩阵中的行向量按照第一个矩阵进行线性排列的结果
+矩阵乘法的五种运算方式 常规方法 第一个矩阵列向量的线性组合 第二个矩阵行向量的线性组合 第一个矩阵的列乘以第二个矩阵的行 分块乘法 逆矩阵 逆矩阵 方阵的左逆等于右逆（其实就相当于AB=E中的A和B可以互换位置）
+方阵不可逆的解释 行/列向量中，有一行/列未做出贡献，不能完全构成单位矩阵中的向量 Ax = 0有非零解时（其实就相当与A的行列式等于0），方阵不可逆
+求解逆矩阵的方法 拆成列向量的形式，再求解线性方程组 增广矩阵的变换（解释：A的逆乘以增广矩阵，将增广矩阵分块来看）
+$ ABB^{-1}A^{-1} = E $
+$AA^{-1} = I$
+两边取转置 $ (A^{-1})^T(A)^T = I $ -&gt;二者互为转置，转置和逆两种运算对于单个矩阵来说可以颠倒 $ (A^T)^{-1}=(A^{-1})^T $
+消元：正确认识矩阵的概念 数学符号的含义 L：下三角矩阵 U：上三角矩阵
+消元的顺序 $ E_{32}E_{21} $ 是相对右侧向量而来的变化，要计算E，要看他们对右侧向量的叠加效果 先做第二行的变换再做第三行的变换，第二行的会影响第三行的…… $E_{21}会影响E_{32}$ 挪到右边去就没有这个影响了……（顺序会倒过来) 从下面的行开始做消元
+EA=U A=LU：如果不存在行变换，消元乘数可以直接写入L中
+消元时左乘E，对A进行行初等变换-&gt;对U进行行初等变换
+操作数？？ $ 大概是n^2&#43;(n-1)^2&#43;(n-2)^2&#43;···&#43;1^2 $
+$1/3n^3 (对n2积分)$ 如果在右侧加上常数向量b，则还需要再进行n^2次操作 微积分考虑连续状态下对求和，但线性代数是离散的
+数学名词的含义 置换矩阵：逆与转置相等
+向量空间 子空间 三维空间中，任意穿过原点的平面构成子空间 任意穿过原点的直线也构成子空间 一个平面与一条直线的并集不是子空间（加法不封闭） 一个平面与一条直线的交集是子空间 任意两个子空间的交集也依然是子空间 向量空间必须满足的条件：加法封闭和数乘封闭 零向量是个特殊的向量空间 两种构筑子空间的方法： 从几个向量，通过线性组合 在一个方程组中，通过让x满足特定条件（齐次线性方程组） 求解线性方程组 Ax = b有解，当且仅当b是A的各列向量的线性组合 即b属于A的列空间 A列的个数n等于未知数的个数 A行的个数m等于方程的个数 当b是零向量时，x是子空间，否则不是（否则不能穿过原点） 矩阵的秩r 自由变量：任意选取自由变量的值，再求解其他的 特解（特定的解）：自由向量赋值为0、1 有n-r个自由变量 行阶梯形矩阵
+" />
+<meta name="keywords"
+  content='blog, google analytics' />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://y-m-m.github.io/post/introduction-to-linear-algebra/" />
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Introduction to linear algebra - 陈皮的博客" />
+<meta name="twitter:description"
+  content="矩阵乘法 将矩阵的初等变换和矩阵乘法相联系 以矩阵诠释消元变化 左乘是行变换，右乘是列变换
+矩阵乘法的其他解释方式 将结果看作第一个矩阵中列向量按照第二个矩阵进行线性排列 或看作第二个矩阵中的行向量按照第一个矩阵进行线性排列的结果
+矩阵乘法的五种运算方式 常规方法 第一个矩阵列向量的线性组合 第二个矩阵行向量的线性组合 第一个矩阵的列乘以第二个矩阵的行 分块乘法 逆矩阵 逆矩阵 方阵的左逆等于右逆（其实就相当于AB=E中的A和B可以互换位置）
+方阵不可逆的解释 行/列向量中，有一行/列未做出贡献，不能完全构成单位矩阵中的向量 Ax = 0有非零解时（其实就相当与A的行列式等于0），方阵不可逆
+求解逆矩阵的方法 拆成列向量的形式，再求解线性方程组 增广矩阵的变换（解释：A的逆乘以增广矩阵，将增广矩阵分块来看）
+$ ABB^{-1}A^{-1} = E $
+$AA^{-1} = I$
+两边取转置 $ (A^{-1})^T(A)^T = I $ -&gt;二者互为转置，转置和逆两种运算对于单个矩阵来说可以颠倒 $ (A^T)^{-1}=(A^{-1})^T $
+消元：正确认识矩阵的概念 数学符号的含义 L：下三角矩阵 U：上三角矩阵
+消元的顺序 $ E_{32}E_{21} $ 是相对右侧向量而来的变化，要计算E，要看他们对右侧向量的叠加效果 先做第二行的变换再做第三行的变换，第二行的会影响第三行的…… $E_{21}会影响E_{32}$ 挪到右边去就没有这个影响了……（顺序会倒过来) 从下面的行开始做消元
+EA=U A=LU：如果不存在行变换，消元乘数可以直接写入L中
+消元时左乘E，对A进行行初等变换-&gt;对U进行行初等变换
+操作数？？ $ 大概是n^2&#43;(n-1)^2&#43;(n-2)^2&#43;···&#43;1^2 $
+$1/3n^3 (对n2积分)$ 如果在右侧加上常数向量b，则还需要再进行n^2次操作 微积分考虑连续状态下对求和，但线性代数是离散的
+数学名词的含义 置换矩阵：逆与转置相等
+向量空间 子空间 三维空间中，任意穿过原点的平面构成子空间 任意穿过原点的直线也构成子空间 一个平面与一条直线的并集不是子空间（加法不封闭） 一个平面与一条直线的交集是子空间 任意两个子空间的交集也依然是子空间 向量空间必须满足的条件：加法封闭和数乘封闭 零向量是个特殊的向量空间 两种构筑子空间的方法： 从几个向量，通过线性组合 在一个方程组中，通过让x满足特定条件（齐次线性方程组） 求解线性方程组 Ax = b有解，当且仅当b是A的各列向量的线性组合 即b属于A的列空间 A列的个数n等于未知数的个数 A行的个数m等于方程的个数 当b是零向量时，x是子空间，否则不是（否则不能穿过原点） 矩阵的秩r 自由变量：任意选取自由变量的值，再求解其他的 特解（特定的解）：自由向量赋值为0、1 有n-r个自由变量 行阶梯形矩阵
+" />
+<meta name="twitter:site" content="https://y-m-m.github.io/" />
+<meta name="twitter:creator" content="陈皮" />
+<meta name="twitter:image"
+  content="https://y-m-m.github.io/">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Introduction to linear algebra - 陈皮的博客">
+<meta property="og:description"
+  content="矩阵乘法 将矩阵的初等变换和矩阵乘法相联系 以矩阵诠释消元变化 左乘是行变换，右乘是列变换
+矩阵乘法的其他解释方式 将结果看作第一个矩阵中列向量按照第二个矩阵进行线性排列 或看作第二个矩阵中的行向量按照第一个矩阵进行线性排列的结果
+矩阵乘法的五种运算方式 常规方法 第一个矩阵列向量的线性组合 第二个矩阵行向量的线性组合 第一个矩阵的列乘以第二个矩阵的行 分块乘法 逆矩阵 逆矩阵 方阵的左逆等于右逆（其实就相当于AB=E中的A和B可以互换位置）
+方阵不可逆的解释 行/列向量中，有一行/列未做出贡献，不能完全构成单位矩阵中的向量 Ax = 0有非零解时（其实就相当与A的行列式等于0），方阵不可逆
+求解逆矩阵的方法 拆成列向量的形式，再求解线性方程组 增广矩阵的变换（解释：A的逆乘以增广矩阵，将增广矩阵分块来看）
+$ ABB^{-1}A^{-1} = E $
+$AA^{-1} = I$
+两边取转置 $ (A^{-1})^T(A)^T = I $ -&gt;二者互为转置，转置和逆两种运算对于单个矩阵来说可以颠倒 $ (A^T)^{-1}=(A^{-1})^T $
+消元：正确认识矩阵的概念 数学符号的含义 L：下三角矩阵 U：上三角矩阵
+消元的顺序 $ E_{32}E_{21} $ 是相对右侧向量而来的变化，要计算E，要看他们对右侧向量的叠加效果 先做第二行的变换再做第三行的变换，第二行的会影响第三行的…… $E_{21}会影响E_{32}$ 挪到右边去就没有这个影响了……（顺序会倒过来) 从下面的行开始做消元
+EA=U A=LU：如果不存在行变换，消元乘数可以直接写入L中
+消元时左乘E，对A进行行初等变换-&gt;对U进行行初等变换
+操作数？？ $ 大概是n^2&#43;(n-1)^2&#43;(n-2)^2&#43;···&#43;1^2 $
+$1/3n^3 (对n2积分)$ 如果在右侧加上常数向量b，则还需要再进行n^2次操作 微积分考虑连续状态下对求和，但线性代数是离散的
+数学名词的含义 置换矩阵：逆与转置相等
+向量空间 子空间 三维空间中，任意穿过原点的平面构成子空间 任意穿过原点的直线也构成子空间 一个平面与一条直线的并集不是子空间（加法不封闭） 一个平面与一条直线的交集是子空间 任意两个子空间的交集也依然是子空间 向量空间必须满足的条件：加法封闭和数乘封闭 零向量是个特殊的向量空间 两种构筑子空间的方法： 从几个向量，通过线性组合 在一个方程组中，通过让x满足特定条件（齐次线性方程组） 求解线性方程组 Ax = b有解，当且仅当b是A的各列向量的线性组合 即b属于A的列空间 A列的个数n等于未知数的个数 A行的个数m等于方程的个数 当b是零向量时，x是子空间，否则不是（否则不能穿过原点） 矩阵的秩r 自由变量：任意选取自由变量的值，再求解其他的 特解（特定的解）：自由向量赋值为0、1 有n-r个自由变量 行阶梯形矩阵
+" />
+<meta property="og:url" content="https://y-m-m.github.io/post/introduction-to-linear-algebra/" />
+<meta property="og:site_name" content="Introduction to linear algebra" />
+<meta property="og:image"
+  content="https://y-m-m.github.io/">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+<meta property="article:published_time" content="2022-12-11 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+  <div style="position: relative">
+  <header class="Header js-details-container Details px-3 px-md-4 px-lg-5 flex-wrap flex-md-nowrap open Details--on">
+    <div class="Header-item mobile-none" style="margin-top: -4px; margin-bottom: -4px;">
+      <a class="Header-link" href="https://y-m-m.github.io/">
+        <img class="octicon" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item d-md-none">
+      <button class="Header-link btn-link js-details-target" type="button"
+        onclick="document.querySelector('#header-search').style.display = document.querySelector('#header-search').style.display == 'none'? 'block': 'none'">
+        <svg height="24" class="octicon octicon-three-bars" viewBox="0 0 16 16" version="1.1" width="24">
+          <path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 2.75zm0 5A.75.75 0 011.75 7h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 7.75zM1.75 12a.75.75 0 100 1.5h12.5a.75.75 0 100-1.5H1.75z">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <div style="display: none;" id="header-search"
+      class="Header-item Header-item--full flex-column flex-md-row width-full flex-order-2 flex-md-order-none mr-0 mr-md-3 mt-3 mt-md-0 Details-content--hidden-not-important d-md-flex">
+      <div
+        class="Header-search header-search flex-auto js-site-search position-relative flex-self-stretch flex-md-self-auto mb-3 mb-md-0 mr-0 mr-md-3 scoped-search site-scoped-search js-jump-to">
+        <div class="position-relative">
+          
+          <form target="_blank" id="search-form" action="" accept-charset="UTF-8" method="get"
+            autocomplete="off">
+            <label
+              class="Header-search-label form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative d-flex flex-justify-between flex-items-center">
+              <input type="text"
+                class="Header-search-input form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable"
+                name="q" value="" placeholder="Search" autocomplete="off">
+            </label>
+          </form>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="Header-item Header-item--full flex-justify-center d-md-none position-relative">
+      <a class="Header-link " href="https://y-m-m.github.io/">
+        <img class="octicon octicon-mark-github v-align-middle" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item" style="margin-right: 0;">
+      <a href="javascript:void(0)" class="Header-link no-select" onclick="switchTheme()">
+        <svg style="fill: var(--color-profile-color-modes-toggle-moon);" class="no-select" viewBox="0 0 16 16"
+          version="1.1" width="16" height="16">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M4.52208 7.71754C7.5782 7.71754 10.0557 5.24006 10.0557 2.18394C10.0557 1.93498 10.0392 1.68986 10.0074 1.44961C9.95801 1.07727 10.3495 0.771159 10.6474 0.99992C12.1153 2.12716 13.0615 3.89999 13.0615 5.89383C13.0615 9.29958 10.3006 12.0605 6.89485 12.0605C3.95334 12.0605 1.49286 10.001 0.876728 7.24527C0.794841 6.87902 1.23668 6.65289 1.55321 6.85451C2.41106 7.40095 3.4296 7.71754 4.52208 7.71754Z">
+          </path>
+        </svg>
+      </a>
+    </div>
+  </header>
+</div>
+
+  <div id="search-result" class="container-lg px-3 new-discussion-timeline" style="display: none;">
+</div>
+
+  
+<div class="application-main">
+  <div>
+  <main>
+    <div class="gisthead pagehead bg-gray-light pb-0 pt-3 mb-4">
+      <div class="px-0">
+        <div class="mb-3 d-flex px-3 px-md-3 px-lg-5">
+          <div class="flex-auto min-width-0 width-fit mr-3">
+            <div class="d-flex">
+              <div class="d-none d-md-block">
+                <a class="avatar mr-2 flex-shrink-0" href="https://y-m-m.github.io/">
+                  <img class=" avatar-user"
+                    src="/images/me.png"
+                    width="32" height="32"></a>
+              </div>
+              <div class="d-flex flex-column">
+                <h1 class="break-word f3 text-normal mb-md-0 mb-1">
+                  <span class="author">
+                    <a href="https://y-m-m.github.io/">陈皮</a>
+                  </span>
+                  <span class="path-divider">/</span>
+                  <strong class="css-truncate css-truncate-target mr-1" style="max-width: 410px">
+                    <a href="https://y-m-m.github.io/post/introduction-to-linear-algebra/">Introduction to linear algebra</a>
+                  </strong>
+                </h1>
+                <div class="note m-0">
+                  Created <relative-time datetime="Sun, 11 Dec 2022 00:00:00 &#43;0000"
+                    class="no-wrap">
+                    Sun, 11 Dec 2022 00:00:00 &#43;0000</relative-time>
+
+                  
+                  <span class="file-info-divider"></span>
+                  Modified <relative-time datetime="Mon, 18 Mar 2024 20:12:38 &#43;0800"
+                    class="no-wrap">
+                    Mon, 18 Mar 2024 20:12:38 &#43;0800</relative-time>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-lg px-3 new-discussion-timeline">
+      <div class="repository-content gist-content">
+        <div>
+          <div class="js-gist-file-update-container js-task-list-container file-box">
+            <div id="file-pytest" class="file my-2">
+              <div id="post-header" class="file-header d-flex flex-md-items-center flex-items-start sticky-header" style="z-index: 2">
+                <div class="file-info d-flex flex-md-items-center flex-items-start flex-order-1 flex-auto">
+                  <div class="text-mono f6 flex-auto pr-3 flex-order-2 flex-md-order-1 mt-2 mt-md-0">
+                    
+                    <summary id="toc-toggle" onclick="clickToc()" class="btn btn-octicon m-0 mr-2 p-2">
+                      <svg aria-hidden="true" viewBox="0 0 16 16" height="16" width="16" class="octicon octicon-list-unordered">
+                        <path fill-rule="evenodd" d="M2 4a1 1 0 100-2 1 1 0 000 2zm3.75-1.5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zM3 8a1 1 0 11-2 0 1 1 0 012 0zm-1 6a1 1 0 100-2 1 1 0 000 2z"></path>
+                      </svg>
+                    </summary>
+                    <details-menu class="SelectMenu" id="toc-details" style="display: none;">
+                      <div class="SelectMenu-modal rounded-3 mt-1" style="max-height: 340px;">
+                        <div class="SelectMenu-list SelectMenu-list--borderless p-2" style="overscroll-behavior: contain;" id="toc-list">
+                        </div>
+                      </div>
+                    </details-menu>
+                      2171 Words
+                    
+
+                  </div>
+                  <div class="file-actions flex-order-2 pt-0">
+                    
+                    
+                    <a class="muted-link mr-3" href="/tags/%E6%95%B0%E5%AD%A6">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      数学
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      线性代数
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="/tags/%E7%AC%94%E8%AE%B0">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      笔记
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="/tags/mit">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      MIT
+                    </a>
+                    
+                    
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="Box-body px-5 pb-5" style="z-index: 1">
+                <article class="markdown-body entry-content container-lg"><h1 id="矩阵乘法">矩阵乘法</h1>
+<h2 id="将矩阵的初等变换和矩阵乘法相联系">将矩阵的初等变换和矩阵乘法相联系</h2>
+<p>以矩阵诠释消元变化 <br>
+左乘是行变换，右乘是列变换</p>
+<h2 id="矩阵乘法的其他解释方式">矩阵乘法的其他解释方式</h2>
+<p>将结果看作第一个矩阵中列向量按照第二个矩阵进行线性排列    <br>
+或看作第二个矩阵中的行向量按照第一个矩阵进行线性排列的结果</p>
+<h2 id="矩阵乘法的五种运算方式">矩阵乘法的五种运算方式</h2>
+<ul>
+<li>常规方法</li>
+<li>第一个矩阵列向量的线性组合</li>
+<li>第二个矩阵行向量的线性组合</li>
+<li>第一个矩阵的列乘以第二个矩阵的行</li>
+<li>分块乘法</li>
+</ul>
+<h1 id="逆矩阵">逆矩阵</h1>
+<h2 id="逆矩阵-1">逆矩阵</h2>
+<p>方阵的左逆等于右逆（其实就相当于AB=E中的A和B可以互换位置）</p>
+<h2 id="方阵不可逆的解释">方阵不可逆的解释</h2>
+<p>行/列向量中，有一行/列未做出贡献，不能完全构成单位矩阵中的向量  <br>
+Ax = 0有非零解时（其实就相当与A的行列式等于0），方阵不可逆</p>
+<h2 id="求解逆矩阵的方法">求解逆矩阵的方法</h2>
+<p>拆成列向量的形式，再求解线性方程组 <br>
+增广矩阵的变换（解释：A的逆乘以增广矩阵，将增广矩阵分块来看）</p>
+<ul>
+<li>
+<p>$ ABB^{-1}A^{-1} = E $</p>
+</li>
+<li>
+<p>$AA^{-1} = I$<br>
+两边取转置    <br>
+$ (A^{-1})^T(A)^T = I $
+-&gt;二者互为转置，转置和逆两种运算对于单个矩阵来说可以颠倒  <br>
+$ (A^T)^{-1}=(A^{-1})^T $</p>
+</li>
+</ul>
+<h1 id="消元正确认识矩阵的概念">消元：正确认识矩阵的概念</h1>
+<h2 id="数学符号的含义">数学符号的含义</h2>
+<p>L：下三角矩阵  <br>
+U：上三角矩阵</p>
+<h2 id="消元的顺序">消元的顺序</h2>
+<p><em>$ E_{32}E_{21} $</em>  <br>
+<em>是相对右侧向量而来的变化，要计算E，要看他们对右侧向量的叠加效果</em> <br>
+<em>先做第二行的变换再做第三行的变换，第二行的会影响第三行的…… <br>
+$E_{21}会影响E_{32}$ <br>
+挪到右边去就没有这个影响了……（顺序会倒过来)  <br>
+从下面的行开始做消元</em></p>
+<p>EA=U   <br>
+A=LU：如果不存在行变换，消元乘数可以直接写入L中</p>
+<p>消元时左乘E，对A进行行初等变换-&gt;对U进行行初等变换</p>
+<p><em><strong>操作数？？        <br>
+$ 大概是n^2+(n-1)^2+(n-2)^2+···+1^2 $</strong></em></p>
+<p><em><strong>$1/3n^3 (对n2积分)$</strong></em>  <br>
+<em><strong>如果在右侧加上常数向量b，则还需要再进行n^2次操作
+微积分考虑连续状态下对求和，但线性代数是离散的</strong></em></p>
+<h2 id="数学名词的含义">数学名词的含义</h2>
+<p>置换矩阵：逆与转置相等</p>
+<h1 id="向量空间">向量空间</h1>
+<h2 id="子空间">子空间</h2>
+<ul>
+<li>三维空间中，任意穿过原点的平面构成子空间</li>
+<li>任意穿过原点的直线也构成子空间</li>
+<li>一个平面与一条直线的并集不是子空间（加法不封闭）</li>
+<li>一个平面与一条直线的交集是子空间</li>
+<li>任意两个子空间的交集也依然是子空间</li>
+<li>向量空间必须满足的条件：加法封闭和数乘封闭</li>
+<li>零向量是个特殊的向量空间</li>
+</ul>
+<h2 id="两种构筑子空间的方法">两种构筑子空间的方法：</h2>
+<ul>
+<li>从几个向量，通过线性组合</li>
+<li>在一个方程组中，通过让x满足特定条件（齐次线性方程组）</li>
+</ul>
+<h1 id="求解线性方程组">求解线性方程组</h1>
+<ul>
+<li>Ax = b有解，当且仅当b是A的各列向量的线性组合</li>
+<li>即b属于A的列空间</li>
+<li>A列的个数n等于未知数的个数</li>
+<li>A行的个数m等于方程的个数</li>
+<li>当b是零向量时，x是子空间，否则不是（否则不能穿过原点）</li>
+</ul>
+<h2 id="矩阵的秩r">矩阵的秩r</h2>
+<p>自由变量：任意选取自由变量的值，再求解其他的    <br>
+特解（特定的解）：自由向量赋值为0、1 <br>
+有n-r个自由变量  <br>
+行阶梯形矩阵</p>
+<h2 id="ax--b方程组有解">Ax = b方程组有解</h2>
+<ul>
+<li>b在A的列向量构成的向量空间里</li>
+<li>如果A的行向量的线性组合等于0向量，那么b的同样的线性组合等于0（没有贡献的方程不能与其他方程有冲突）</li>
+</ul>
+<h2 id="求解非齐次线性方程组">求解非齐次线性方程组</h2>
+<ol>
+<li>寻找特解：将所有自由变量设为0</li>
+<li>加上任意令空间的向量</li>
+</ol>
+<h2 id="子空间的维数">子空间的维数</h2>
+<p>可以任意选取的自由向量个数，n - r</p>
+<h2 id="r与方程组的关系">r与方程组的关系</h2>
+<p><em>m表示行，n表示列</em></p>
+<ol>
+<li>r = n &lt; m时，方程组有唯一解或者无解</li>
+<li>r = m &lt; n时，方程组一定有无穷多个解，自由变量n - r个</li>
+<li>r = m = n时，方程组有唯一解</li>
+<li>r &lt; m 或r &lt; n 时，方程组无解或者有无穷多个解</li>
+</ol>
+<p><em>向量组中如果包含零向量，则不可能线性无关</em></p>
+<h2 id="列向量线性相关性和自由变量个数的关系">列向量线性相关性和自由变量个数的关系</h2>
+<ul>
+<li>如果矩阵的列线性无关，则 r =  n &lt;= m，没有自由变量</li>
+<li>如果矩阵的列线性相关，则 r &lt; n ，有自由变量</li>
+</ul>
+<p><em>向量组生成一个向量空间
+这个向量空间包含这个向量组的所有线性组合</em></p>
+<h1 id="向量的基">向量的基</h1>
+<h2 id="向量的一组基">向量的一组基</h2>
+<ul>
+<li>线性无关</li>
+<li>生成整个空间</li>
+</ul>
+<p><em>矩阵的秩 -&gt; 主向量的个数 -&gt; 向量空间的维数</em></p>
+<h1 id="四个子空间及其基本关系">四个子空间及其基本关系</h1>
+<ul>
+<li>C(A)，A的列空间 in $R^m$ (维数为r)</li>
+<li>N(A)，A的null space in $R^n$ （维数为n - r)</li>
+<li>$C(A^T)$，A的行空间（转置为列空间） in $R^n$ （维数为r）</li>
+<li>$N(A^T)$，A的左零空间  in $R^m$  (维数为m - r)</li>
+</ul>
+<h2 id="行变换不会对行空间产生影响但会影响列空间">行变换不会对行空间产生影响，但会影响列空间</h2>
+<p>A -&gt; R（经过行变换） <br>
+R中含有主元的行可作为一组基向量</p>
+<h2 id="对左零空间的解释">对左零空间的解释</h2>
+<p>$A^Ty = 0$   <br>
+$y^TA = 0$<br>
+一个行向量乘以A得到零向量</p>
+<h2 id="求解左零空间">求解左零空间</h2>
+<h3 id="高斯-若尔当消元法">高斯-若尔当消元法</h3>
+<p>$(A|I) -&gt; (I|A^T)$ <br>
+右侧单位矩阵将左侧矩阵A的变换记录了下来 <br>
+$(A|I) -&gt; (R|E)$  <br>
+EI = E  <br>
+EA = R <br>
+左侧的E中包含能让A的行向量线性组合为0向量的线性组合方式</p>
+<h2 id="r">R</h2>
+<p>行最简形矩阵</p>
+<h1 id="矩阵空间">矩阵空间</h1>
+<p>对于矩阵加法封闭、数乘封闭</p>
+<h2 id="矩阵空间的子空间">矩阵空间的子空间</h2>
+<p>3*3矩阵空间：维度9</p>
+<ul>
+<li>上三角矩阵：维度6</li>
+<li>对称矩阵：维度6</li>
+<li>上三角对称矩阵-&gt;对角矩阵：维度3</li>
+<li>上三角矩阵或对称矩阵：<strong>不是子空间</strong>  <br>
+<em>上三角矩阵和对称矩阵任意线性组合可得到整个$R^{3</em>3}$矩阵的向量空间*</li>
+</ul>
+<p><em><strong>两个子矩阵空间的维度之和等于他们并集和交集的维度之和</strong></em></p>
+<h2 id="子空间与零空间">子空间与零空间</h2>
+<p>$v_1+v_2+v_3+v_4 = 0$构成子空间  <br>
+与A = （1， 1， 1，1）的零空间等价 <br>
+<strong>$r_A = 1$，零空间的维度为3，则子空间是三维的</strong></p>
+<p><em><strong>仅由零点组成的空间是一维的</strong></em></p>
+<h1 id="拓扑结构与矩阵">拓扑结构与矩阵</h1>
+<p>用矩阵描述实际问题（电流为例） <br>
+m表示连线的个数，n表示节点的个数</p>
+<h2 id="ax0">Ax=0</h2>
+<p>x表示节点（等势点）</p>
+<ul>
+<li>以A来对x（点）做运算</li>
+<li>以结果向量表示电势差        <br>
+<em><strong>E=Ax, E表示电势差</strong></em></li>
+</ul>
+<h2 id="基尔霍夫电流定律kcl">基尔霍夫电流定律（KCL）</h2>
+<p>$A^Ty = 0$   <br>
+y表示电流</p>
+<ul>
+<li>以$A^T$来对y做运算</li>
+<li>以结果向量表示各个节点的合电流</li>
+<li>结果等于0向量，说明各个节点的流入等于流出  <br>
+***$A^T$y = f, f表示外部电流源###</li>
+</ul>
+<p><em><strong>欧姆定律x = Cy</strong></em></p>
+<h2 id="树">树</h2>
+<p>没有形成回路的图（行向量线性无关）</p>
+<h2 id="欧拉公式">欧拉公式</h2>
+<p>用线性代数证明欧拉公式  <br>
+<em><strong>相互无关的回路数目($dim N(A^T)$) = 边的数目(m) - (节点数目(n) - 1)</strong></em> <br>
+<em><strong>相互线性无关的回路数目+节点数目-边的数目 = 1</strong></em>  <br>
+<em><strong>#nodes-#edges+#loops=1</strong></em></p>
+</article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="application/javascript" src='https://y-m-m.github.io/js/toc.js'></script>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/toc.css' />
+
+  
+<div id="gitalk-container" class="gitalk-container"></div>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/gitalk.css'>
+<script src='https://y-m-m.github.io/js/gitalk.min.js'></script>
+<script>
+  const gitalk = new Gitalk({
+    clientID: 'Ov23livxKNtTlPeMjV2H',
+    clientSecret: '6d3bc9f47a1296f29628a63701ea5624cd28a26b',
+    repo: 'y-m-m.github.io\/',
+    owner: 'Y-M-M',
+    admin: ['Y-M-M'],
+    id: eval("location.pathname"), 
+    distractionFreeMode: false 
+  });
+  (function() {
+    gitalk.render('gitalk-container');
+  })();
+</script>
+
+</div>
+
+  <div class="footer container-xl width-full p-responsive">
+  <div
+    class="position-relative d-flex flex-row-reverse flex-lg-row flex-wrap flex-lg-nowrap flex-justify-center flex-lg-justify-between flex-sm-items-center pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
+    <a aria-label="Homepage" title="GitHub" class="footer-octicon d-none d-lg-block mr-lg-4" href="https://y-m-m.github.io/">
+      <svg height="24" class="octicon octicon-mark-github" viewBox="0 0 16 16" version="1.1" width="24">
+        <path fill-rule="evenodd"
+          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+        </path>
+      </svg>
+    </a>
+    <ul class="list-style-none d-flex flex-wrap col-12 flex-justify-center flex-lg-justify-between mb-2 mb-lg-0">
+      
+      <li class="mr-3 mr-lg-0">Theme by <a href='https://github.com/MeiK2333/github-style'>github-style</a></li>
+      
+    </ul>
+  </div>
+  <div class="d-flex flex-justify-center pb-6">
+    <span class="f6 text-gray-light"></span>
+  </div>
+
+
+</div>
+</body>
+
+<script type="application/javascript" src="https://y-m-m.github.io/js/github-style.js"></script>
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+<script type="application/javascript" src='https://y-m-m.github.io/js/search.js'></script>
+
+
+
+</html>

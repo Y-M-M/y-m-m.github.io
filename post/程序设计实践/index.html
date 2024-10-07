@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script type="application/javascript" src='https://y-m-m.github.io/js/theme-mode.js'></script>
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/frameworks.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github-style.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/light.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/dark.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/syntax.css' />
+    <title>程序设计实践 - 陈皮的博客</title>
+    
+    <link rel="icon" type="image/x-icon" href='/images/github-mark.png'>
+    
+    <meta name="theme-color" content="#1e2327">
+
+    
+    <meta name="description"
+  content="简介 张海滨 zhanghb@bupt.edu.cn 教材 程序设计实践 The Practice of Programming 人民邮电出版社 程序设计实践 机械工业出版社 20学时 10周讲解相关知识；12学时大作业，验收 课程内容 风格 设计与实现 接口 排错 测试 性能 可移植性 记法 考核方式 平时成绩 小作业 30% 大作业 70% 均提交至教学云平台，大作业需验收 大作业 题目：基于领域特定语言的客服机器人的设计与实现 描述：领域特定语言(DSL)可以提供一种相对简单的文法，用于特定领域的业务流程定制。本作业要求定义一个领域特定脚本语言，这个语言能够描述在线客服机器人(机器人客服是目前提升客服效率的重要技术，在银行、通信和商务等领域的复杂信息系统中有广泛的应用)的自动应答逻辑，并设计实现一个解释器解释执行这个脚本，可以根据用户的不同输入，根据脚本的逻辑设计给出相应的应答 基本要求 脚本语言的语法可以自由定义，只要与以上满足客服机器人自动应答逻辑的要求 程序输入输出形式不限，可以简化为纯命令行界面 应该输出几种不同的脚本范例，对不同范例解释执行之后会有不同的行为表现 评分标准 风格15分，代码注释6分，明明6分，其它3分 设计和实现30分，其中数据结构7分，模块划分7分，功能8分，文档8分 接口15分，程序间接口8分，人机接口7分 测试30分，测试桩15分，自动测试脚本15分 记法10分，文档中对此脚本语言的语法的准确描述 抄袭或有意被抄袭0分 养成使用版本管理工具的习惯 第一章 风格style 概述 代码风格因人而异 有争议的风格 遵从你所在组织的规范 与同一个文件中其他代码风格保持一致 与同一项目里其他文件的风格尽量保持一致 无争议的风格：命名风格，表达式和语句的风格，一致性和习惯用法，函数宏定义，避免神秘的数，注释风格等 程序的风格 命名的风格 名字要准确的表达用途 名字不是越长越好 全局变量可以用具有描述意义的长名字 局部变量用短名字会显得程序更简洁 类的成员的名字，不要再啰嗦重复类名 用动词或者动词&#43;名次定义函数名 返回布尔值的函数名应该是一个命题，通常使用is作为函数名中的动词 名字尽可能简单明了，不要用“否定之否定” 表达式和语句 使用表达式的自然形式，即常见的易于理解的形式 利用括号排除歧义，即使语法上不要求括号，也建议加上括号以便提高代码可读性 分解复杂的表达式 一致性和习惯用法 使用一致的缩进和花括号风格(例如两行以上一定加花括号) 使用大多数人最习惯的用法(for循环) 用else if处理多路选择，一个判断尽可能接近它所对应的动作 函数宏 避免宏定义参数中写很多东西。函数宏的缺点，直接替换，导致用到两次的参数被替换两次，执行两次，可能直接导致错误 函数宏的缺点，直接替换，导致用到两次的参数会被替换两次，执行两次，也可能导致性能错误 如果一定要用函数宏，不要吝啬括号 总结 C&#43;&#43; 尽可能使用inline函数 Java根本不支持函数宏 神秘的数 给所有数字起一个名字 直接使用字符形式的常量，不要使用它的整数形式 利用语言去计算对象的大小，从而减少代码修改负担，提高代码简洁性，可以定义一个通用的宏 尽可能让编译器来计算数值 注释的风格 注释与代码要始终保持一致 不要写没用的注释 用好的命名代替注释 用注释自动生成文档 阿里代码规约 https://github.com/alibaba/p3c
+" />
+<meta name="keywords"
+  content='blog, google analytics' />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://y-m-m.github.io/post/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%AE%9E%E8%B7%B5/" />
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="程序设计实践 - 陈皮的博客" />
+<meta name="twitter:description"
+  content="简介 张海滨 zhanghb@bupt.edu.cn 教材 程序设计实践 The Practice of Programming 人民邮电出版社 程序设计实践 机械工业出版社 20学时 10周讲解相关知识；12学时大作业，验收 课程内容 风格 设计与实现 接口 排错 测试 性能 可移植性 记法 考核方式 平时成绩 小作业 30% 大作业 70% 均提交至教学云平台，大作业需验收 大作业 题目：基于领域特定语言的客服机器人的设计与实现 描述：领域特定语言(DSL)可以提供一种相对简单的文法，用于特定领域的业务流程定制。本作业要求定义一个领域特定脚本语言，这个语言能够描述在线客服机器人(机器人客服是目前提升客服效率的重要技术，在银行、通信和商务等领域的复杂信息系统中有广泛的应用)的自动应答逻辑，并设计实现一个解释器解释执行这个脚本，可以根据用户的不同输入，根据脚本的逻辑设计给出相应的应答 基本要求 脚本语言的语法可以自由定义，只要与以上满足客服机器人自动应答逻辑的要求 程序输入输出形式不限，可以简化为纯命令行界面 应该输出几种不同的脚本范例，对不同范例解释执行之后会有不同的行为表现 评分标准 风格15分，代码注释6分，明明6分，其它3分 设计和实现30分，其中数据结构7分，模块划分7分，功能8分，文档8分 接口15分，程序间接口8分，人机接口7分 测试30分，测试桩15分，自动测试脚本15分 记法10分，文档中对此脚本语言的语法的准确描述 抄袭或有意被抄袭0分 养成使用版本管理工具的习惯 第一章 风格style 概述 代码风格因人而异 有争议的风格 遵从你所在组织的规范 与同一个文件中其他代码风格保持一致 与同一项目里其他文件的风格尽量保持一致 无争议的风格：命名风格，表达式和语句的风格，一致性和习惯用法，函数宏定义，避免神秘的数，注释风格等 程序的风格 命名的风格 名字要准确的表达用途 名字不是越长越好 全局变量可以用具有描述意义的长名字 局部变量用短名字会显得程序更简洁 类的成员的名字，不要再啰嗦重复类名 用动词或者动词&#43;名次定义函数名 返回布尔值的函数名应该是一个命题，通常使用is作为函数名中的动词 名字尽可能简单明了，不要用“否定之否定” 表达式和语句 使用表达式的自然形式，即常见的易于理解的形式 利用括号排除歧义，即使语法上不要求括号，也建议加上括号以便提高代码可读性 分解复杂的表达式 一致性和习惯用法 使用一致的缩进和花括号风格(例如两行以上一定加花括号) 使用大多数人最习惯的用法(for循环) 用else if处理多路选择，一个判断尽可能接近它所对应的动作 函数宏 避免宏定义参数中写很多东西。函数宏的缺点，直接替换，导致用到两次的参数被替换两次，执行两次，可能直接导致错误 函数宏的缺点，直接替换，导致用到两次的参数会被替换两次，执行两次，也可能导致性能错误 如果一定要用函数宏，不要吝啬括号 总结 C&#43;&#43; 尽可能使用inline函数 Java根本不支持函数宏 神秘的数 给所有数字起一个名字 直接使用字符形式的常量，不要使用它的整数形式 利用语言去计算对象的大小，从而减少代码修改负担，提高代码简洁性，可以定义一个通用的宏 尽可能让编译器来计算数值 注释的风格 注释与代码要始终保持一致 不要写没用的注释 用好的命名代替注释 用注释自动生成文档 阿里代码规约 https://github.com/alibaba/p3c
+" />
+<meta name="twitter:site" content="https://y-m-m.github.io/" />
+<meta name="twitter:creator" content="陈皮" />
+<meta name="twitter:image"
+  content="https://y-m-m.github.io/">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="程序设计实践 - 陈皮的博客">
+<meta property="og:description"
+  content="简介 张海滨 zhanghb@bupt.edu.cn 教材 程序设计实践 The Practice of Programming 人民邮电出版社 程序设计实践 机械工业出版社 20学时 10周讲解相关知识；12学时大作业，验收 课程内容 风格 设计与实现 接口 排错 测试 性能 可移植性 记法 考核方式 平时成绩 小作业 30% 大作业 70% 均提交至教学云平台，大作业需验收 大作业 题目：基于领域特定语言的客服机器人的设计与实现 描述：领域特定语言(DSL)可以提供一种相对简单的文法，用于特定领域的业务流程定制。本作业要求定义一个领域特定脚本语言，这个语言能够描述在线客服机器人(机器人客服是目前提升客服效率的重要技术，在银行、通信和商务等领域的复杂信息系统中有广泛的应用)的自动应答逻辑，并设计实现一个解释器解释执行这个脚本，可以根据用户的不同输入，根据脚本的逻辑设计给出相应的应答 基本要求 脚本语言的语法可以自由定义，只要与以上满足客服机器人自动应答逻辑的要求 程序输入输出形式不限，可以简化为纯命令行界面 应该输出几种不同的脚本范例，对不同范例解释执行之后会有不同的行为表现 评分标准 风格15分，代码注释6分，明明6分，其它3分 设计和实现30分，其中数据结构7分，模块划分7分，功能8分，文档8分 接口15分，程序间接口8分，人机接口7分 测试30分，测试桩15分，自动测试脚本15分 记法10分，文档中对此脚本语言的语法的准确描述 抄袭或有意被抄袭0分 养成使用版本管理工具的习惯 第一章 风格style 概述 代码风格因人而异 有争议的风格 遵从你所在组织的规范 与同一个文件中其他代码风格保持一致 与同一项目里其他文件的风格尽量保持一致 无争议的风格：命名风格，表达式和语句的风格，一致性和习惯用法，函数宏定义，避免神秘的数，注释风格等 程序的风格 命名的风格 名字要准确的表达用途 名字不是越长越好 全局变量可以用具有描述意义的长名字 局部变量用短名字会显得程序更简洁 类的成员的名字，不要再啰嗦重复类名 用动词或者动词&#43;名次定义函数名 返回布尔值的函数名应该是一个命题，通常使用is作为函数名中的动词 名字尽可能简单明了，不要用“否定之否定” 表达式和语句 使用表达式的自然形式，即常见的易于理解的形式 利用括号排除歧义，即使语法上不要求括号，也建议加上括号以便提高代码可读性 分解复杂的表达式 一致性和习惯用法 使用一致的缩进和花括号风格(例如两行以上一定加花括号) 使用大多数人最习惯的用法(for循环) 用else if处理多路选择，一个判断尽可能接近它所对应的动作 函数宏 避免宏定义参数中写很多东西。函数宏的缺点，直接替换，导致用到两次的参数被替换两次，执行两次，可能直接导致错误 函数宏的缺点，直接替换，导致用到两次的参数会被替换两次，执行两次，也可能导致性能错误 如果一定要用函数宏，不要吝啬括号 总结 C&#43;&#43; 尽可能使用inline函数 Java根本不支持函数宏 神秘的数 给所有数字起一个名字 直接使用字符形式的常量，不要使用它的整数形式 利用语言去计算对象的大小，从而减少代码修改负担，提高代码简洁性，可以定义一个通用的宏 尽可能让编译器来计算数值 注释的风格 注释与代码要始终保持一致 不要写没用的注释 用好的命名代替注释 用注释自动生成文档 阿里代码规约 https://github.com/alibaba/p3c
+" />
+<meta property="og:url" content="https://y-m-m.github.io/post/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%AE%9E%E8%B7%B5/" />
+<meta property="og:site_name" content="程序设计实践" />
+<meta property="og:image"
+  content="https://y-m-m.github.io/">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+<meta property="article:published_time" content="2024-09-11 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+  <div style="position: relative">
+  <header class="Header js-details-container Details px-3 px-md-4 px-lg-5 flex-wrap flex-md-nowrap open Details--on">
+    <div class="Header-item mobile-none" style="margin-top: -4px; margin-bottom: -4px;">
+      <a class="Header-link" href="https://y-m-m.github.io/">
+        <img class="octicon" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item d-md-none">
+      <button class="Header-link btn-link js-details-target" type="button"
+        onclick="document.querySelector('#header-search').style.display = document.querySelector('#header-search').style.display == 'none'? 'block': 'none'">
+        <svg height="24" class="octicon octicon-three-bars" viewBox="0 0 16 16" version="1.1" width="24">
+          <path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 2.75zm0 5A.75.75 0 011.75 7h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 7.75zM1.75 12a.75.75 0 100 1.5h12.5a.75.75 0 100-1.5H1.75z">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <div style="display: none;" id="header-search"
+      class="Header-item Header-item--full flex-column flex-md-row width-full flex-order-2 flex-md-order-none mr-0 mr-md-3 mt-3 mt-md-0 Details-content--hidden-not-important d-md-flex">
+      <div
+        class="Header-search header-search flex-auto js-site-search position-relative flex-self-stretch flex-md-self-auto mb-3 mb-md-0 mr-0 mr-md-3 scoped-search site-scoped-search js-jump-to">
+        <div class="position-relative">
+          
+          <form target="_blank" id="search-form" action="" accept-charset="UTF-8" method="get"
+            autocomplete="off">
+            <label
+              class="Header-search-label form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative d-flex flex-justify-between flex-items-center">
+              <input type="text"
+                class="Header-search-input form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable"
+                name="q" value="" placeholder="Search" autocomplete="off">
+            </label>
+          </form>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="Header-item Header-item--full flex-justify-center d-md-none position-relative">
+      <a class="Header-link " href="https://y-m-m.github.io/">
+        <img class="octicon octicon-mark-github v-align-middle" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item" style="margin-right: 0;">
+      <a href="javascript:void(0)" class="Header-link no-select" onclick="switchTheme()">
+        <svg style="fill: var(--color-profile-color-modes-toggle-moon);" class="no-select" viewBox="0 0 16 16"
+          version="1.1" width="16" height="16">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M4.52208 7.71754C7.5782 7.71754 10.0557 5.24006 10.0557 2.18394C10.0557 1.93498 10.0392 1.68986 10.0074 1.44961C9.95801 1.07727 10.3495 0.771159 10.6474 0.99992C12.1153 2.12716 13.0615 3.89999 13.0615 5.89383C13.0615 9.29958 10.3006 12.0605 6.89485 12.0605C3.95334 12.0605 1.49286 10.001 0.876728 7.24527C0.794841 6.87902 1.23668 6.65289 1.55321 6.85451C2.41106 7.40095 3.4296 7.71754 4.52208 7.71754Z">
+          </path>
+        </svg>
+      </a>
+    </div>
+  </header>
+</div>
+
+  <div id="search-result" class="container-lg px-3 new-discussion-timeline" style="display: none;">
+</div>
+
+  
+<div class="application-main">
+  <div>
+  <main>
+    <div class="gisthead pagehead bg-gray-light pb-0 pt-3 mb-4">
+      <div class="px-0">
+        <div class="mb-3 d-flex px-3 px-md-3 px-lg-5">
+          <div class="flex-auto min-width-0 width-fit mr-3">
+            <div class="d-flex">
+              <div class="d-none d-md-block">
+                <a class="avatar mr-2 flex-shrink-0" href="https://y-m-m.github.io/">
+                  <img class=" avatar-user"
+                    src="/images/me.png"
+                    width="32" height="32"></a>
+              </div>
+              <div class="d-flex flex-column">
+                <h1 class="break-word f3 text-normal mb-md-0 mb-1">
+                  <span class="author">
+                    <a href="https://y-m-m.github.io/">陈皮</a>
+                  </span>
+                  <span class="path-divider">/</span>
+                  <strong class="css-truncate css-truncate-target mr-1" style="max-width: 410px">
+                    <a href="https://y-m-m.github.io/post/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%AE%9E%E8%B7%B5/">程序设计实践</a>
+                  </strong>
+                </h1>
+                <div class="note m-0">
+                  Created <relative-time datetime="Wed, 11 Sep 2024 00:00:00 &#43;0000"
+                    class="no-wrap">
+                    Wed, 11 Sep 2024 00:00:00 &#43;0000</relative-time>
+
+                  
+                  <span class="file-info-divider"></span>
+                  Modified <relative-time datetime="Wed, 25 Sep 2024 09:35:05 &#43;0800"
+                    class="no-wrap">
+                    Wed, 25 Sep 2024 09:35:05 &#43;0800</relative-time>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-lg px-3 new-discussion-timeline">
+      <div class="repository-content gist-content">
+        <div>
+          <div class="js-gist-file-update-container js-task-list-container file-box">
+            <div id="file-pytest" class="file my-2">
+              <div id="post-header" class="file-header d-flex flex-md-items-center flex-items-start sticky-header" style="z-index: 2">
+                <div class="file-info d-flex flex-md-items-center flex-items-start flex-order-1 flex-auto">
+                  <div class="text-mono f6 flex-auto pr-3 flex-order-2 flex-md-order-1 mt-2 mt-md-0">
+                    
+                    <summary id="toc-toggle" onclick="clickToc()" class="btn btn-octicon m-0 mr-2 p-2">
+                      <svg aria-hidden="true" viewBox="0 0 16 16" height="16" width="16" class="octicon octicon-list-unordered">
+                        <path fill-rule="evenodd" d="M2 4a1 1 0 100-2 1 1 0 000 2zm3.75-1.5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zM3 8a1 1 0 11-2 0 1 1 0 012 0zm-1 6a1 1 0 100-2 1 1 0 000 2z"></path>
+                      </svg>
+                    </summary>
+                    <details-menu class="SelectMenu" id="toc-details" style="display: none;">
+                      <div class="SelectMenu-modal rounded-3 mt-1" style="max-height: 340px;">
+                        <div class="SelectMenu-list SelectMenu-list--borderless p-2" style="overscroll-behavior: contain;" id="toc-list">
+                        </div>
+                      </div>
+                    </details-menu>
+                      2524 Words
+                    
+
+                  </div>
+                  <div class="file-actions flex-order-2 pt-0">
+                    
+                    
+                    <a class="muted-link mr-3" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      计算机科学
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="/tags/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%AE%9E%E8%B7%B5">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      程序设计实践
+                    </a>
+                    
+                    
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="Box-body px-5 pb-5" style="z-index: 1">
+                <article class="markdown-body entry-content container-lg"><h1 id="简介">简介</h1>
+<ul>
+<li>张海滨
+<ul>
+<li><a href="mailto:zhanghb@bupt.edu.cn">zhanghb@bupt.edu.cn</a></li>
+</ul>
+</li>
+<li>教材
+<ul>
+<li>程序设计实践 The Practice of Programming 人民邮电出版社</li>
+<li>程序设计实践 机械工业出版社</li>
+</ul>
+</li>
+<li>20学时 10周讲解相关知识；12学时大作业，验收</li>
+<li>课程内容
+<ul>
+<li>风格</li>
+<li>设计与实现</li>
+<li>接口</li>
+<li>排错</li>
+<li>测试</li>
+<li>性能</li>
+<li>可移植性</li>
+<li>记法</li>
+</ul>
+</li>
+<li>考核方式
+<ul>
+<li>平时成绩 小作业 30%</li>
+<li>大作业 70%</li>
+<li>均提交至教学云平台，大作业需验收</li>
+</ul>
+</li>
+<li>大作业
+<ul>
+<li>题目：基于领域特定语言的客服机器人的设计与实现</li>
+<li>描述：领域特定语言(DSL)可以提供一种相对简单的文法，用于特定领域的业务流程定制。本作业要求定义一个领域特定脚本语言，这个语言能够描述在线客服机器人(机器人客服是目前提升客服效率的重要技术，在银行、通信和商务等领域的复杂信息系统中有广泛的应用)的自动应答逻辑，并设计实现一个解释器解释执行这个脚本，可以根据用户的不同输入，根据脚本的逻辑设计给出相应的应答</li>
+<li>基本要求
+<ul>
+<li>脚本语言的语法可以自由定义，只要与以上满足客服机器人自动应答逻辑的要求</li>
+<li>程序输入输出形式不限，可以简化为纯命令行界面</li>
+<li>应该输出几种不同的脚本范例，对不同范例解释执行之后会有不同的行为表现</li>
+</ul>
+</li>
+<li>评分标准
+<ul>
+<li>风格15分，代码注释6分，明明6分，其它3分</li>
+<li>设计和实现30分，其中数据结构7分，模块划分7分，功能8分，文档8分</li>
+<li>接口15分，程序间接口8分，人机接口7分</li>
+<li>测试30分，测试桩15分，自动测试脚本15分</li>
+<li>记法10分，文档中对此脚本语言的语法的准确描述</li>
+<li>抄袭或有意被抄袭0分</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>养成使用版本管理工具的习惯</li>
+</ul>
+<h1 id="第一章-风格style">第一章 风格style</h1>
+<h2 id="概述">概述</h2>
+<ul>
+<li>代码风格因人而异</li>
+<li>有争议的风格
+<ul>
+<li>遵从你所在组织的规范</li>
+<li>与同一个文件中其他代码风格保持一致</li>
+<li>与同一项目里其他文件的风格尽量保持一致</li>
+</ul>
+</li>
+<li>无争议的风格：命名风格，表达式和语句的风格，一致性和习惯用法，函数宏定义，避免神秘的数，注释风格等</li>
+</ul>
+<h2 id="程序的风格">程序的风格</h2>
+<h3 id="命名的风格">命名的风格</h3>
+<ul>
+<li>名字要准确的表达用途</li>
+<li>名字不是越长越好
+<ul>
+<li>全局变量可以用具有描述意义的长名字</li>
+<li>局部变量用短名字会显得程序更简洁</li>
+</ul>
+</li>
+<li>类的成员的名字，不要再啰嗦重复类名</li>
+<li>用动词或者动词+名次定义函数名</li>
+<li>返回布尔值的函数名应该是一个命题，通常使用is作为函数名中的动词</li>
+<li>名字尽可能简单明了，不要用“否定之否定”</li>
+</ul>
+<h3 id="表达式和语句">表达式和语句</h3>
+<ul>
+<li>使用表达式的自然形式，即常见的易于理解的形式</li>
+<li>利用括号排除歧义，即使语法上不要求括号，也建议加上括号以便提高代码可读性</li>
+<li>分解复杂的表达式</li>
+</ul>
+<h3 id="一致性和习惯用法">一致性和习惯用法</h3>
+<ul>
+<li>使用一致的缩进和花括号风格(例如两行以上一定加花括号)</li>
+<li>使用大多数人最习惯的用法(for循环)</li>
+<li>用else if处理多路选择，一个判断尽可能接近它所对应的动作</li>
+</ul>
+<h3 id="函数宏">函数宏</h3>
+<ul>
+<li>避免宏定义参数中写很多东西。函数宏的缺点，直接替换，导致用到两次的参数被替换两次，执行两次，可能直接导致错误</li>
+<li>函数宏的缺点，直接替换，导致用到两次的参数会被替换两次，执行两次，也可能导致性能错误</li>
+<li>如果一定要用函数宏，不要吝啬括号</li>
+</ul>
+<h3 id="总结">总结</h3>
+<ul>
+<li>C++ 尽可能使用inline函数</li>
+<li>Java根本不支持函数宏</li>
+</ul>
+<h3 id="神秘的数">神秘的数</h3>
+<ul>
+<li>给所有数字起一个名字</li>
+<li>直接使用字符形式的常量，不要使用它的整数形式</li>
+<li>利用语言去计算对象的大小，从而减少代码修改负担，提高代码简洁性，可以定义一个通用的宏</li>
+<li>尽可能让编译器来计算数值</li>
+</ul>
+<h2 id="注释的风格">注释的风格</h2>
+<ul>
+<li>注释与代码要始终保持一致</li>
+<li>不要写没用的注释</li>
+<li>用好的命名代替注释</li>
+<li><strong>用注释自动生成文档</strong></li>
+</ul>
+<h2 id="阿里代码规约">阿里代码规约</h2>
+<p><a href="https://github.com/alibaba/p3c">https://github.com/alibaba/p3c</a></p>
+<h1 id="设计与实现">设计与实现</h1>
+<h2 id="算法和数据结构">算法和数据结构</h2>
+<h3 id="查找">查找</h3>
+<ul>
+<li>数组下标访问
+<ul>
+<li>最简单，最快，最常用的“算法”</li>
+<li>应用条件
+<ul>
+<li>要查询的数据的索引都是不太大的整数</li>
+<li>这些整数的稀疏度不高</li>
+</ul>
+</li>
+<li>C标准库中，isdigit, isalpha等函数的实现，使用了数组下标直接访问</li>
+</ul>
+</li>
+<li>顺序查找
+<ul>
+<li>应用场景
+<ul>
+<li>要查询的数据特别少，例如少于10条</li>
+<li>被查找数据的排列顺序不能自由设定，例如字符串中查找</li>
+<li>查询条件太复杂，以至于匹配条件的开销大于查找</li>
+<li>更新频繁，却很少查找</li>
+</ul>
+</li>
+<li>有关字符串顺序查找的标准库
+<ul>
+<li>C: strchr, strstr</li>
+<li>C++: std::find</li>
+<li>Jaba: String.indexOf</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>二分查找
+<ul>
+<li>应用条件
+<ul>
+<li>数据有序</li>
+<li>数据基本有序，可以很快调整成有序</li>
+<li>数据无需，但是排序后更新次数远小于查找次数</li>
+</ul>
+</li>
+<li>高效，但应用条件苛刻</li>
+</ul>
+</li>
+</ul>
+<h3 id="排序">排序</h3>
+<ul>
+<li>排序算法
+<ul>
+<li>选择、冒泡、插入排序</li>
+<li>快速排序</li>
+<li>其他排序算法</li>
+</ul>
+</li>
+<li>算法复杂度O记法</li>
+</ul>
+<h3 id="可增长数组">可增长数组</h3>
+<ul>
+<li>为其中的指针申请内存</li>
+</ul>
+<h3 id="链表">链表</h3>
+<ul>
+<li>std::list</li>
+</ul>
+<h3 id="树">树</h3>
+<h3 id="散列表">散列表</h3>
+<ul>
+<li>索引：整数</li>
+<li>散列数组大小：13</li>
+<li>散列算法
+<ul>
+<li>字符串经过一个散列算法求得一个整数</li>
+<li>整数模除13得到散列数组下标</li>
+</ul>
+</li>
+<li>C++标准库：std::hash_map</li>
+</ul>
+<h3 id="如何选择">如何选择</h3>
+<ul>
+<li>要处理的数据有多少</li>
+<li>数据量在程序运行过程中会有多大的变化</li>
+<li>数据索引以及内容的分布有什么特点</li>
+<li>数据更新的频繁程度</li>
+<li>数据查询的频繁程序</li>
+<li>有现成的库可用吗</li>
+<li>程序的运行环境有什么限制</li>
+</ul>
+<h2 id="大作业">大作业</h2>
+<ul>
+<li>设计实现一个脚本解释器</li>
+</ul>
+<h3 id="脚本">脚本</h3>
+<ul>
+<li>为了特定目的，使用特定语法编写的一个文本文件，描述了一个流程，可以被一个解释器解释执行，以完成特定的功能</li>
+<li>文件-&gt;(Parser语法分析)-&gt;抽象语法树(AST)-&gt;(Interpreter)-&gt;展现(呼叫控制、媒体控制、自然语言分析-&gt;显示speak内容，输入客户意愿)</li>
+</ul>
+<h3 id="dsl和gpl">DSL和GPL</h3>
+<ul>
+<li>DSL 领域特定语言</li>
+<li>GPL 通用编程语言</li>
+</ul>
+<h3 id="需求">需求</h3>
+<ul>
+<li>实现一个语音客服机器人</li>
+<li>实现一个自动应答逻辑
+<ul>
+<li>处理用户的电话呼入</li>
+<li>借助媒体服务器播放提示音</li>
+<li>借助媒体服务器录音并将语音识别为文字</li>
+<li>借助自然语言分析引擎分析用户示意图</li>
+<li>根据用户意图决定下一步播放的提示音</li>
+</ul>
+</li>
+</ul>
+<h3 id="方案一">方案一</h3>
+<ul>
+<li>直接使用高级语言编程实现客服自动应答逻辑</li>
+<li>不同的逻辑编写不同的程序，需程序员不断参与</li>
+</ul>
+<h3 id="方案二">方案二</h3>
+<ul>
+<li>一个解释器</li>
+</ul>
+<h3 id="parser的实现">Parser的实现</h3>
+<ul>
+<li>脚本文件</li>
+<li>ParseFile</li>
+<li>行</li>
+<li>ParseLine</li>
+<li>Tokens(词法元素) 标识符，字符串，整数等</li>
+<li>根据每行的第一个Token调用不同的处理函数</li>
+</ul>
+<h3 id="解释程序">解释程序</h3>
+<ul>
+<li>获取脚本语法树，创建执行环境</li>
+<li>当前Step置为entryStep</li>
+<li>循环针对当前step做
+<ul>
+<li>执行Speak(语音合成，语音播放)</li>
+<li>如果本步骤是中介步骤，则结束循环，断开通话</li>
+<li>执行Listen(录音，语音识别，自然语言理解)</li>
+<li>获得下一个StepId</li>
+<li>将当前Step置为刚才获得的StepId对应的Step</li>
+</ul>
+</li>
+</ul>
+<h3 id="interpreter的执行环境">Interpreter的执行环境</h3>
+<ul>
+<li>当两个用户同时和机器人对话，解释器需要两个线程同时运行，每个线程服务一个用户</li>
+<li>同一份
+<ul>
+<li>脚本文件</li>
+<li>脚本语法树(可以调用一次Parser形成，多个线程公用)</li>
+</ul>
+</li>
+<li>两份
+<ul>
+<li>表示姓名和账单的变量表
+<ul>
+<li>用什么数据结构，如何构建</li>
+</ul>
+</li>
+<li>脚本的当前执行状态</li>
+</ul>
+</li>
+</ul>
+<h1 id="接口">接口</h1>
+<h2 id="程序与程序之间的接口">程序与程序之间的接口</h2>
+<ul>
+<li>库函数接口
+<ul>
+<li>接口说明
+<ul>
+<li>头文件</li>
+<li>联机main</li>
+<li>接口说明文档</li>
+<li>编程指南</li>
+</ul>
+</li>
+<li>信息隐藏
+<ul>
+<li>隐藏复杂的内部实现细节，暴露给调用者的概念尽可能的少</li>
+</ul>
+</li>
+<li>资源管理
+<ul>
+<li>库函数不能偷偷申请资源，如果申请应该负责释放</li>
+<li>谁申请睡释放</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="人与程序之间的接口">人与程序之间的接口</h2>
+</article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="application/javascript" src='https://y-m-m.github.io/js/toc.js'></script>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/toc.css' />
+
+  
+<div id="gitalk-container" class="gitalk-container"></div>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/gitalk.css'>
+<script src='https://y-m-m.github.io/js/gitalk.min.js'></script>
+<script>
+  const gitalk = new Gitalk({
+    clientID: 'Ov23livxKNtTlPeMjV2H',
+    clientSecret: '6d3bc9f47a1296f29628a63701ea5624cd28a26b',
+    repo: 'y-m-m.github.io\/',
+    owner: 'Y-M-M',
+    admin: ['Y-M-M'],
+    id: eval("location.pathname"), 
+    distractionFreeMode: false 
+  });
+  (function() {
+    gitalk.render('gitalk-container');
+  })();
+</script>
+
+</div>
+
+  <div class="footer container-xl width-full p-responsive">
+  <div
+    class="position-relative d-flex flex-row-reverse flex-lg-row flex-wrap flex-lg-nowrap flex-justify-center flex-lg-justify-between flex-sm-items-center pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
+    <a aria-label="Homepage" title="GitHub" class="footer-octicon d-none d-lg-block mr-lg-4" href="https://y-m-m.github.io/">
+      <svg height="24" class="octicon octicon-mark-github" viewBox="0 0 16 16" version="1.1" width="24">
+        <path fill-rule="evenodd"
+          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+        </path>
+      </svg>
+    </a>
+    <ul class="list-style-none d-flex flex-wrap col-12 flex-justify-center flex-lg-justify-between mb-2 mb-lg-0">
+      
+      <li class="mr-3 mr-lg-0">Theme by <a href='https://github.com/MeiK2333/github-style'>github-style</a></li>
+      
+    </ul>
+  </div>
+  <div class="d-flex flex-justify-center pb-6">
+    <span class="f6 text-gray-light"></span>
+  </div>
+
+
+</div>
+</body>
+
+<script type="application/javascript" src="https://y-m-m.github.io/js/github-style.js"></script>
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+<script type="application/javascript" src='https://y-m-m.github.io/js/search.js'></script>
+
+
+
+</html>

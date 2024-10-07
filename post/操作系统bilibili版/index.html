@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script type="application/javascript" src='https://y-m-m.github.io/js/theme-mode.js'></script>
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/frameworks.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github-style.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/light.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/dark.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/syntax.css' />
+    <title>操作系统bilibili版 - 陈皮的博客</title>
+    
+    <link rel="icon" type="image/x-icon" href='/images/github-mark.png'>
+    
+    <meta name="theme-color" content="#1e2327">
+
+    
+    <meta name="description"
+  content="第一章 操作系统的介绍 1.1_1 操作系统的概念、功能 操作系统控制和管理整个计算机系统的硬件和软件资源，并合理地组织调度计算机的工作和资源的分配，以提供给用户和其他软件方便的接口和环境；它是计算机系统中最基本的系统软件 操作系统是系统资源的管理者 补充：执行一个程序前需要将该程序放到内存中，才能被CPU处理 向上提供方便易用的服务 封装思想：操作系统把一些丑陋的硬件共嗯那个封装成简单易用的服务，使用户能更方便的使用计算机，用户无需关心底层硬件的原理，只需要对操作系统发出指令即可 GUI 图形化用户接口 联机命令接口=交互式命令接口 用户说一句，系统跟着做一句 脱机命令接口(批处理命令接口) 程序接口 可以在程序中进行系统调用来使用程序接口。普通用户不能直接使用程序接口，只能通过程序代码间接使用 例如，在写C语言&quot;Hello World&quot;程序时，在printf函数的底层就使用到了操作系统提供的显式相关的“系统调用” 系统调用类似于函数调用，是应用程序请求系统操作服务的唯一方式 在有的教材中，系统调用=广义指令 是最接近硬件的一层软件 需要实现对硬件机器的扩展 裸机：没有任何软件支持的计算机称为裸机 虚拟机：覆盖了软件的机器称为扩充机器，又称之为虚拟机 操作系统将CPU, 内存，磁盘，显示器，键盘等硬件合理地组织起来，让各种硬件能够相互协调配合，实现更多更复杂的功能 总结 1.1_2 操作系统的特征 并发 并发：两个或多个事件在同一时间间隔内发生。这些事件宏观上是同时发生的，但微观上是交替发生的。/并行：两个或多个事件在同一时刻同时发生 操作系统的并发性 计算机系统中“同时”运行着多个程序，这些程序宏观上看是同时运行着的，而微观上看是交替运行的。操作系统就是伴随着“多道程序技术”而出现的，因此，操作系统和程序并发是一起诞生的 注意 单核CPU同一时刻只能执行一个程序，多个程序只能并发执行 多核CPU同一时刻可以同时执行多个程序，多个程序可以并行地执行 是操作系统一个重要的基础特性 共享 资源共享，系统中的资源可供内存中多个并发执行的进程共同使用 两种共享方式 互斥共享方式 一个时间段内只允许一个进程访问该资源 同时共享方式 允许一个时间段内多个进程“同时”对它们进行访问 同时往往是宏观上的，微观上，这些进程可能是交替地对该资源进行访问的(分时共享) 并发和共享的关系 如果失去并发性，则系统中只有一个程序正在运行，则共享性失去存在的意义 如果失去共享性，则QQ和微信不能同时访问硬盘资源，就无法实现同时发送文件，也就无法并发 虚拟 虚拟是指把一个物理上的实体变为若干个逻辑上的对应物。物理实体(前者)是实际存在的，而逻辑上的对应物(后者)是用户感应到的 虚拟技术 空分复用技术(如虚拟存储技术) 时分复用技术(如虚拟处理器) 并发性与虚拟性的关系 如果失去了并发性，则一个时间段内系统中之运行一道程序，那么就失去了实现虚拟性的意义了 没有并发性，就谈不上虚拟性 异步 异步是指，在多道程序环境下，允许多个程序并发执行，但由于资源有限，进程的执行不是一贯到底的，而是走走停停，以不可预知的速度向前推进，这就是进程的异步性 由于并发运行的程序会争抢着使用系统资源，而系统中的资源有限，因此进程的执行不是一贯到底的，而是走走停停的，以不可预知的速度向前推进 并发性与异步性的关系 如果失去了并发性，即系统只能串行地运行各个程序，那么每个程序的执行会一贯到底，只有程序拥有并发性，才有可能导致异步性 总结 1.2 操作系统的发展和分类 手工操作阶段 主要缺点：用户独占全机、人际速度矛盾导致资源利用率低 批处理阶段——单道批处理系统 引入脱机输入/输出技术，并由监督程序负责控制作业的输入、输出 监督程序是操作系统的雏形 主要优点：缓解了一定程度的人机速度矛盾，资源利用率有所提升 批处理阶段——多道批处理系统 每次往内存中读入多道程序 操作系统正式诞生，用于支持多道程序并发运行 主要优点：多道程序并发执行，共享计算机资源。资源利用率大幅提升，CPU和其他资源更能保持“忙碌“状态，系统吞吐量大 主要缺点：用户响应时间长，没有人机交互功能(用户提交自己的作业之后就只能等待计算机处理完成，中间不能控制自己的作业执行。无法调试程序/无法在程序运行过程中输入一些参数) 分时操作系统 计算机以时间片为单位轮流为各个用户/作业服务，各个用户可通过终端与计算机进行交互 主要优点：用户请求可以被即时相应，解决了人机交互问题。允许多个用户同时使用一台计算机，并且用户对计算机的操作相互独立，感受不到别人的存在 主要缺点：不能优先处理一些紧急任务。操作系统对各个用户/作业都是完全公平的，循环地为每个用户/作业服务一个时间片，不区分任务的紧急性 实时操作系统 主要优点：能够优先响应一些紧急任务，某些紧急任务不需时间片排队 在实时操作系统的控制下，计算机系统接收到外部信号后及时进行处理，并且要在严格的时限内处理完事件。实时操作系统的主要特点是及时性和可靠性 分类 硬实时系统：必须在绝对严格的规定时间内完成处理 软实时系统：能接受偶尔违反时间规定 其他几种操作系统 网络操作系统 实现数据传送等功能，实现网络中各种资源的共(如文件共享)和各台计算机之间的通信 分布式操作系统：分布性和并行性。系统中各台计算机地位相同，任何工作都可以分布在这些计算机上，由它们并行、协同完成这个任务 个人计算机操作系统 总结 " />
+<meta name="keywords"
+  content='blog, google analytics' />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://y-m-m.github.io/post/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fbilibili%E7%89%88/" />
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="操作系统bilibili版 - 陈皮的博客" />
+<meta name="twitter:description"
+  content="第一章 操作系统的介绍 1.1_1 操作系统的概念、功能 操作系统控制和管理整个计算机系统的硬件和软件资源，并合理地组织调度计算机的工作和资源的分配，以提供给用户和其他软件方便的接口和环境；它是计算机系统中最基本的系统软件 操作系统是系统资源的管理者 补充：执行一个程序前需要将该程序放到内存中，才能被CPU处理 向上提供方便易用的服务 封装思想：操作系统把一些丑陋的硬件共嗯那个封装成简单易用的服务，使用户能更方便的使用计算机，用户无需关心底层硬件的原理，只需要对操作系统发出指令即可 GUI 图形化用户接口 联机命令接口=交互式命令接口 用户说一句，系统跟着做一句 脱机命令接口(批处理命令接口) 程序接口 可以在程序中进行系统调用来使用程序接口。普通用户不能直接使用程序接口，只能通过程序代码间接使用 例如，在写C语言&quot;Hello World&quot;程序时，在printf函数的底层就使用到了操作系统提供的显式相关的“系统调用” 系统调用类似于函数调用，是应用程序请求系统操作服务的唯一方式 在有的教材中，系统调用=广义指令 是最接近硬件的一层软件 需要实现对硬件机器的扩展 裸机：没有任何软件支持的计算机称为裸机 虚拟机：覆盖了软件的机器称为扩充机器，又称之为虚拟机 操作系统将CPU, 内存，磁盘，显示器，键盘等硬件合理地组织起来，让各种硬件能够相互协调配合，实现更多更复杂的功能 总结 1.1_2 操作系统的特征 并发 并发：两个或多个事件在同一时间间隔内发生。这些事件宏观上是同时发生的，但微观上是交替发生的。/并行：两个或多个事件在同一时刻同时发生 操作系统的并发性 计算机系统中“同时”运行着多个程序，这些程序宏观上看是同时运行着的，而微观上看是交替运行的。操作系统就是伴随着“多道程序技术”而出现的，因此，操作系统和程序并发是一起诞生的 注意 单核CPU同一时刻只能执行一个程序，多个程序只能并发执行 多核CPU同一时刻可以同时执行多个程序，多个程序可以并行地执行 是操作系统一个重要的基础特性 共享 资源共享，系统中的资源可供内存中多个并发执行的进程共同使用 两种共享方式 互斥共享方式 一个时间段内只允许一个进程访问该资源 同时共享方式 允许一个时间段内多个进程“同时”对它们进行访问 同时往往是宏观上的，微观上，这些进程可能是交替地对该资源进行访问的(分时共享) 并发和共享的关系 如果失去并发性，则系统中只有一个程序正在运行，则共享性失去存在的意义 如果失去共享性，则QQ和微信不能同时访问硬盘资源，就无法实现同时发送文件，也就无法并发 虚拟 虚拟是指把一个物理上的实体变为若干个逻辑上的对应物。物理实体(前者)是实际存在的，而逻辑上的对应物(后者)是用户感应到的 虚拟技术 空分复用技术(如虚拟存储技术) 时分复用技术(如虚拟处理器) 并发性与虚拟性的关系 如果失去了并发性，则一个时间段内系统中之运行一道程序，那么就失去了实现虚拟性的意义了 没有并发性，就谈不上虚拟性 异步 异步是指，在多道程序环境下，允许多个程序并发执行，但由于资源有限，进程的执行不是一贯到底的，而是走走停停，以不可预知的速度向前推进，这就是进程的异步性 由于并发运行的程序会争抢着使用系统资源，而系统中的资源有限，因此进程的执行不是一贯到底的，而是走走停停的，以不可预知的速度向前推进 并发性与异步性的关系 如果失去了并发性，即系统只能串行地运行各个程序，那么每个程序的执行会一贯到底，只有程序拥有并发性，才有可能导致异步性 总结 1.2 操作系统的发展和分类 手工操作阶段 主要缺点：用户独占全机、人际速度矛盾导致资源利用率低 批处理阶段——单道批处理系统 引入脱机输入/输出技术，并由监督程序负责控制作业的输入、输出 监督程序是操作系统的雏形 主要优点：缓解了一定程度的人机速度矛盾，资源利用率有所提升 批处理阶段——多道批处理系统 每次往内存中读入多道程序 操作系统正式诞生，用于支持多道程序并发运行 主要优点：多道程序并发执行，共享计算机资源。资源利用率大幅提升，CPU和其他资源更能保持“忙碌“状态，系统吞吐量大 主要缺点：用户响应时间长，没有人机交互功能(用户提交自己的作业之后就只能等待计算机处理完成，中间不能控制自己的作业执行。无法调试程序/无法在程序运行过程中输入一些参数) 分时操作系统 计算机以时间片为单位轮流为各个用户/作业服务，各个用户可通过终端与计算机进行交互 主要优点：用户请求可以被即时相应，解决了人机交互问题。允许多个用户同时使用一台计算机，并且用户对计算机的操作相互独立，感受不到别人的存在 主要缺点：不能优先处理一些紧急任务。操作系统对各个用户/作业都是完全公平的，循环地为每个用户/作业服务一个时间片，不区分任务的紧急性 实时操作系统 主要优点：能够优先响应一些紧急任务，某些紧急任务不需时间片排队 在实时操作系统的控制下，计算机系统接收到外部信号后及时进行处理，并且要在严格的时限内处理完事件。实时操作系统的主要特点是及时性和可靠性 分类 硬实时系统：必须在绝对严格的规定时间内完成处理 软实时系统：能接受偶尔违反时间规定 其他几种操作系统 网络操作系统 实现数据传送等功能，实现网络中各种资源的共(如文件共享)和各台计算机之间的通信 分布式操作系统：分布性和并行性。系统中各台计算机地位相同，任何工作都可以分布在这些计算机上，由它们并行、协同完成这个任务 个人计算机操作系统 总结 " />
+<meta name="twitter:site" content="https://y-m-m.github.io/" />
+<meta name="twitter:creator" content="陈皮" />
+<meta name="twitter:image"
+  content="https://y-m-m.github.io/">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="操作系统bilibili版 - 陈皮的博客">
+<meta property="og:description"
+  content="第一章 操作系统的介绍 1.1_1 操作系统的概念、功能 操作系统控制和管理整个计算机系统的硬件和软件资源，并合理地组织调度计算机的工作和资源的分配，以提供给用户和其他软件方便的接口和环境；它是计算机系统中最基本的系统软件 操作系统是系统资源的管理者 补充：执行一个程序前需要将该程序放到内存中，才能被CPU处理 向上提供方便易用的服务 封装思想：操作系统把一些丑陋的硬件共嗯那个封装成简单易用的服务，使用户能更方便的使用计算机，用户无需关心底层硬件的原理，只需要对操作系统发出指令即可 GUI 图形化用户接口 联机命令接口=交互式命令接口 用户说一句，系统跟着做一句 脱机命令接口(批处理命令接口) 程序接口 可以在程序中进行系统调用来使用程序接口。普通用户不能直接使用程序接口，只能通过程序代码间接使用 例如，在写C语言&quot;Hello World&quot;程序时，在printf函数的底层就使用到了操作系统提供的显式相关的“系统调用” 系统调用类似于函数调用，是应用程序请求系统操作服务的唯一方式 在有的教材中，系统调用=广义指令 是最接近硬件的一层软件 需要实现对硬件机器的扩展 裸机：没有任何软件支持的计算机称为裸机 虚拟机：覆盖了软件的机器称为扩充机器，又称之为虚拟机 操作系统将CPU, 内存，磁盘，显示器，键盘等硬件合理地组织起来，让各种硬件能够相互协调配合，实现更多更复杂的功能 总结 1.1_2 操作系统的特征 并发 并发：两个或多个事件在同一时间间隔内发生。这些事件宏观上是同时发生的，但微观上是交替发生的。/并行：两个或多个事件在同一时刻同时发生 操作系统的并发性 计算机系统中“同时”运行着多个程序，这些程序宏观上看是同时运行着的，而微观上看是交替运行的。操作系统就是伴随着“多道程序技术”而出现的，因此，操作系统和程序并发是一起诞生的 注意 单核CPU同一时刻只能执行一个程序，多个程序只能并发执行 多核CPU同一时刻可以同时执行多个程序，多个程序可以并行地执行 是操作系统一个重要的基础特性 共享 资源共享，系统中的资源可供内存中多个并发执行的进程共同使用 两种共享方式 互斥共享方式 一个时间段内只允许一个进程访问该资源 同时共享方式 允许一个时间段内多个进程“同时”对它们进行访问 同时往往是宏观上的，微观上，这些进程可能是交替地对该资源进行访问的(分时共享) 并发和共享的关系 如果失去并发性，则系统中只有一个程序正在运行，则共享性失去存在的意义 如果失去共享性，则QQ和微信不能同时访问硬盘资源，就无法实现同时发送文件，也就无法并发 虚拟 虚拟是指把一个物理上的实体变为若干个逻辑上的对应物。物理实体(前者)是实际存在的，而逻辑上的对应物(后者)是用户感应到的 虚拟技术 空分复用技术(如虚拟存储技术) 时分复用技术(如虚拟处理器) 并发性与虚拟性的关系 如果失去了并发性，则一个时间段内系统中之运行一道程序，那么就失去了实现虚拟性的意义了 没有并发性，就谈不上虚拟性 异步 异步是指，在多道程序环境下，允许多个程序并发执行，但由于资源有限，进程的执行不是一贯到底的，而是走走停停，以不可预知的速度向前推进，这就是进程的异步性 由于并发运行的程序会争抢着使用系统资源，而系统中的资源有限，因此进程的执行不是一贯到底的，而是走走停停的，以不可预知的速度向前推进 并发性与异步性的关系 如果失去了并发性，即系统只能串行地运行各个程序，那么每个程序的执行会一贯到底，只有程序拥有并发性，才有可能导致异步性 总结 1.2 操作系统的发展和分类 手工操作阶段 主要缺点：用户独占全机、人际速度矛盾导致资源利用率低 批处理阶段——单道批处理系统 引入脱机输入/输出技术，并由监督程序负责控制作业的输入、输出 监督程序是操作系统的雏形 主要优点：缓解了一定程度的人机速度矛盾，资源利用率有所提升 批处理阶段——多道批处理系统 每次往内存中读入多道程序 操作系统正式诞生，用于支持多道程序并发运行 主要优点：多道程序并发执行，共享计算机资源。资源利用率大幅提升，CPU和其他资源更能保持“忙碌“状态，系统吞吐量大 主要缺点：用户响应时间长，没有人机交互功能(用户提交自己的作业之后就只能等待计算机处理完成，中间不能控制自己的作业执行。无法调试程序/无法在程序运行过程中输入一些参数) 分时操作系统 计算机以时间片为单位轮流为各个用户/作业服务，各个用户可通过终端与计算机进行交互 主要优点：用户请求可以被即时相应，解决了人机交互问题。允许多个用户同时使用一台计算机，并且用户对计算机的操作相互独立，感受不到别人的存在 主要缺点：不能优先处理一些紧急任务。操作系统对各个用户/作业都是完全公平的，循环地为每个用户/作业服务一个时间片，不区分任务的紧急性 实时操作系统 主要优点：能够优先响应一些紧急任务，某些紧急任务不需时间片排队 在实时操作系统的控制下，计算机系统接收到外部信号后及时进行处理，并且要在严格的时限内处理完事件。实时操作系统的主要特点是及时性和可靠性 分类 硬实时系统：必须在绝对严格的规定时间内完成处理 软实时系统：能接受偶尔违反时间规定 其他几种操作系统 网络操作系统 实现数据传送等功能，实现网络中各种资源的共(如文件共享)和各台计算机之间的通信 分布式操作系统：分布性和并行性。系统中各台计算机地位相同，任何工作都可以分布在这些计算机上，由它们并行、协同完成这个任务 个人计算机操作系统 总结 " />
+<meta property="og:url" content="https://y-m-m.github.io/post/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fbilibili%E7%89%88/" />
+<meta property="og:site_name" content="操作系统bilibili版" />
+<meta property="og:image"
+  content="https://y-m-m.github.io/">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+<meta property="article:published_time" content="2024-09-11 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+  <div style="position: relative">
+  <header class="Header js-details-container Details px-3 px-md-4 px-lg-5 flex-wrap flex-md-nowrap open Details--on">
+    <div class="Header-item mobile-none" style="margin-top: -4px; margin-bottom: -4px;">
+      <a class="Header-link" href="https://y-m-m.github.io/">
+        <img class="octicon" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item d-md-none">
+      <button class="Header-link btn-link js-details-target" type="button"
+        onclick="document.querySelector('#header-search').style.display = document.querySelector('#header-search').style.display == 'none'? 'block': 'none'">
+        <svg height="24" class="octicon octicon-three-bars" viewBox="0 0 16 16" version="1.1" width="24">
+          <path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 2.75zm0 5A.75.75 0 011.75 7h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 7.75zM1.75 12a.75.75 0 100 1.5h12.5a.75.75 0 100-1.5H1.75z">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <div style="display: none;" id="header-search"
+      class="Header-item Header-item--full flex-column flex-md-row width-full flex-order-2 flex-md-order-none mr-0 mr-md-3 mt-3 mt-md-0 Details-content--hidden-not-important d-md-flex">
+      <div
+        class="Header-search header-search flex-auto js-site-search position-relative flex-self-stretch flex-md-self-auto mb-3 mb-md-0 mr-0 mr-md-3 scoped-search site-scoped-search js-jump-to">
+        <div class="position-relative">
+          
+          <form target="_blank" id="search-form" action="" accept-charset="UTF-8" method="get"
+            autocomplete="off">
+            <label
+              class="Header-search-label form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative d-flex flex-justify-between flex-items-center">
+              <input type="text"
+                class="Header-search-input form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable"
+                name="q" value="" placeholder="Search" autocomplete="off">
+            </label>
+          </form>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="Header-item Header-item--full flex-justify-center d-md-none position-relative">
+      <a class="Header-link " href="https://y-m-m.github.io/">
+        <img class="octicon octicon-mark-github v-align-middle" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item" style="margin-right: 0;">
+      <a href="javascript:void(0)" class="Header-link no-select" onclick="switchTheme()">
+        <svg style="fill: var(--color-profile-color-modes-toggle-moon);" class="no-select" viewBox="0 0 16 16"
+          version="1.1" width="16" height="16">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M4.52208 7.71754C7.5782 7.71754 10.0557 5.24006 10.0557 2.18394C10.0557 1.93498 10.0392 1.68986 10.0074 1.44961C9.95801 1.07727 10.3495 0.771159 10.6474 0.99992C12.1153 2.12716 13.0615 3.89999 13.0615 5.89383C13.0615 9.29958 10.3006 12.0605 6.89485 12.0605C3.95334 12.0605 1.49286 10.001 0.876728 7.24527C0.794841 6.87902 1.23668 6.65289 1.55321 6.85451C2.41106 7.40095 3.4296 7.71754 4.52208 7.71754Z">
+          </path>
+        </svg>
+      </a>
+    </div>
+  </header>
+</div>
+
+  <div id="search-result" class="container-lg px-3 new-discussion-timeline" style="display: none;">
+</div>
+
+  
+<div class="application-main">
+  <div>
+  <main>
+    <div class="gisthead pagehead bg-gray-light pb-0 pt-3 mb-4">
+      <div class="px-0">
+        <div class="mb-3 d-flex px-3 px-md-3 px-lg-5">
+          <div class="flex-auto min-width-0 width-fit mr-3">
+            <div class="d-flex">
+              <div class="d-none d-md-block">
+                <a class="avatar mr-2 flex-shrink-0" href="https://y-m-m.github.io/">
+                  <img class=" avatar-user"
+                    src="/images/me.png"
+                    width="32" height="32"></a>
+              </div>
+              <div class="d-flex flex-column">
+                <h1 class="break-word f3 text-normal mb-md-0 mb-1">
+                  <span class="author">
+                    <a href="https://y-m-m.github.io/">陈皮</a>
+                  </span>
+                  <span class="path-divider">/</span>
+                  <strong class="css-truncate css-truncate-target mr-1" style="max-width: 410px">
+                    <a href="https://y-m-m.github.io/post/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fbilibili%E7%89%88/">操作系统bilibili版</a>
+                  </strong>
+                </h1>
+                <div class="note m-0">
+                  Created <relative-time datetime="Wed, 11 Sep 2024 00:00:00 &#43;0000"
+                    class="no-wrap">
+                    Wed, 11 Sep 2024 00:00:00 &#43;0000</relative-time>
+
+                  
+                  <span class="file-info-divider"></span>
+                  Modified <relative-time datetime="Mon, 23 Sep 2024 22:42:41 &#43;0800"
+                    class="no-wrap">
+                    Mon, 23 Sep 2024 22:42:41 &#43;0800</relative-time>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-lg px-3 new-discussion-timeline">
+      <div class="repository-content gist-content">
+        <div>
+          <div class="js-gist-file-update-container js-task-list-container file-box">
+            <div id="file-pytest" class="file my-2">
+              <div id="post-header" class="file-header d-flex flex-md-items-center flex-items-start sticky-header" style="z-index: 2">
+                <div class="file-info d-flex flex-md-items-center flex-items-start flex-order-1 flex-auto">
+                  <div class="text-mono f6 flex-auto pr-3 flex-order-2 flex-md-order-1 mt-2 mt-md-0">
+                    
+                    <summary id="toc-toggle" onclick="clickToc()" class="btn btn-octicon m-0 mr-2 p-2">
+                      <svg aria-hidden="true" viewBox="0 0 16 16" height="16" width="16" class="octicon octicon-list-unordered">
+                        <path fill-rule="evenodd" d="M2 4a1 1 0 100-2 1 1 0 000 2zm3.75-1.5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zM3 8a1 1 0 11-2 0 1 1 0 012 0zm-1 6a1 1 0 100-2 1 1 0 000 2z"></path>
+                      </svg>
+                    </summary>
+                    <details-menu class="SelectMenu" id="toc-details" style="display: none;">
+                      <div class="SelectMenu-modal rounded-3 mt-1" style="max-height: 340px;">
+                        <div class="SelectMenu-list SelectMenu-list--borderless p-2" style="overscroll-behavior: contain;" id="toc-list">
+                        </div>
+                      </div>
+                    </details-menu>
+                      5396 Words
+                    
+
+                  </div>
+                  <div class="file-actions flex-order-2 pt-0">
+                    
+                    
+                    <a class="muted-link mr-3" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      计算机科学
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      操作系统
+                    </a>
+                    
+                    
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="Box-body px-5 pb-5" style="z-index: 1">
+                <article class="markdown-body entry-content container-lg"><h1 id="第一章-操作系统的介绍">第一章 操作系统的介绍</h1>
+<h2 id="11_1-操作系统的概念功能">1.1_1 操作系统的概念、功能</h2>
+<ul>
+<li>操作系统控制和管理整个计算机系统的硬件和软件资源，并合理地组织调度计算机的工作和资源的分配，以提供给用户和其他软件方便的接口和环境；它是计算机系统中最基本的系统软件
+<ul>
+<li>操作系统是系统资源的管理者
+<ul>
+<li>补充：执行一个程序前需要将该程序放到内存中，才能被CPU处理</li>
+</ul>
+</li>
+<li>向上提供方便易用的服务
+<ul>
+<li>封装思想：操作系统把一些丑陋的硬件共嗯那个封装成简单易用的服务，使用户能更方便的使用计算机，用户无需关心底层硬件的原理，只需要对操作系统发出指令即可</li>
+<li>GUI 图形化用户接口</li>
+<li>联机命令接口=交互式命令接口
+<ul>
+<li>用户说一句，系统跟着做一句</li>
+</ul>
+</li>
+<li>脱机命令接口(批处理命令接口)</li>
+<li>程序接口
+<ul>
+<li>可以在程序中进行系统调用来使用程序接口。普通用户不能直接使用程序接口，只能通过程序代码间接使用</li>
+<li>例如，在写C语言&quot;Hello World&quot;程序时，在printf函数的底层就使用到了操作系统提供的显式相关的“系统调用”</li>
+<li>系统调用类似于函数调用，是应用程序请求系统操作服务的唯一方式</li>
+<li>在有的教材中，系统调用=广义指令</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>是最接近硬件的一层软件
+<ul>
+<li>需要实现对硬件机器的扩展</li>
+<li>裸机：没有任何软件支持的计算机称为裸机</li>
+<li>虚拟机：覆盖了软件的机器称为扩充机器，又称之为虚拟机</li>
+<li>操作系统将CPU, 内存，磁盘，显示器，键盘等硬件合理地组织起来，让各种硬件能够相互协调配合，实现更多更复杂的功能</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="总结">总结</h3>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2024-09-11%2019.53.51.png" alt=""></p>
+<h2 id="11_2-操作系统的特征">1.1_2 操作系统的特征</h2>
+<h3 id="并发">并发</h3>
+<ul>
+<li>并发：两个或多个事件在同一时间间隔内发生。这些事件宏观上是同时发生的，但微观上是交替发生的。/并行：两个或多个事件在同一时刻同时发生</li>
+<li>操作系统的并发性
+<ul>
+<li>计算机系统中“同时”运行着多个程序，这些程序宏观上看是同时运行着的，而微观上看是交替运行的。操作系统就是伴随着“多道程序技术”而出现的，因此，操作系统和程序并发是一起诞生的</li>
+</ul>
+</li>
+<li>注意
+<ul>
+<li>单核CPU同一时刻只能执行一个程序，多个程序只能并发执行</li>
+<li>多核CPU同一时刻可以同时执行多个程序，多个程序可以并行地执行</li>
+</ul>
+</li>
+<li>是操作系统一个重要的基础特性</li>
+</ul>
+<h3 id="共享">共享</h3>
+<ul>
+<li>资源共享，系统中的资源可供内存中多个并发执行的进程共同使用</li>
+<li>两种共享方式
+<ul>
+<li>互斥共享方式
+<ul>
+<li>一个时间段内只允许一个进程访问该资源</li>
+</ul>
+</li>
+<li>同时共享方式
+<ul>
+<li>允许一个时间段内多个进程“同时”对它们进行访问</li>
+<li>同时往往是宏观上的，微观上，这些进程可能是交替地对该资源进行访问的(分时共享)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>并发和共享的关系
+<ul>
+<li>如果失去并发性，则系统中只有一个程序正在运行，则共享性失去存在的意义</li>
+<li>如果失去共享性，则QQ和微信不能同时访问硬盘资源，就无法实现同时发送文件，也就无法并发</li>
+</ul>
+</li>
+</ul>
+<h3 id="虚拟">虚拟</h3>
+<ul>
+<li>虚拟是指把一个物理上的实体变为若干个逻辑上的对应物。物理实体(前者)是实际存在的，而逻辑上的对应物(后者)是用户感应到的</li>
+<li>虚拟技术
+<ul>
+<li>空分复用技术(如虚拟存储技术)</li>
+<li>时分复用技术(如虚拟处理器)</li>
+</ul>
+</li>
+<li>并发性与虚拟性的关系
+<ul>
+<li>如果失去了并发性，则一个时间段内系统中之运行一道程序，那么就失去了实现虚拟性的意义了</li>
+<li>没有并发性，就谈不上虚拟性</li>
+</ul>
+</li>
+</ul>
+<h3 id="异步">异步</h3>
+<ul>
+<li>异步是指，在多道程序环境下，允许多个程序并发执行，但由于资源有限，进程的执行不是一贯到底的，而是走走停停，以不可预知的速度向前推进，这就是进程的异步性</li>
+<li>由于并发运行的程序会争抢着使用系统资源，而系统中的资源有限，因此进程的执行不是一贯到底的，而是走走停停的，以不可预知的速度向前推进</li>
+<li>并发性与异步性的关系
+<ul>
+<li>如果失去了并发性，即系统只能串行地运行各个程序，那么每个程序的执行会一贯到底，只有程序拥有并发性，才有可能导致异步性</li>
+</ul>
+</li>
+</ul>
+<h3 id="总结-1">总结</h3>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2024-09-11%2022.16.20.png" alt=""></p>
+<h2 id="12-操作系统的发展和分类">1.2 操作系统的发展和分类</h2>
+<ul>
+<li>手工操作阶段
+<ul>
+<li>主要缺点：用户独占全机、人际速度矛盾导致资源利用率低</li>
+</ul>
+</li>
+<li>批处理阶段——单道批处理系统
+<ul>
+<li>引入脱机输入/输出技术，并由监督程序负责控制作业的输入、输出</li>
+<li>监督程序是操作系统的雏形</li>
+<li>主要优点：缓解了一定程度的人机速度矛盾，资源利用率有所提升</li>
+</ul>
+</li>
+<li>批处理阶段——多道批处理系统
+<ul>
+<li>每次往内存中读入多道程序</li>
+<li>操作系统正式诞生，用于支持多道程序并发运行</li>
+<li>主要优点：多道程序并发执行，共享计算机资源。资源利用率大幅提升，CPU和其他资源更能保持“忙碌“状态，系统吞吐量大</li>
+<li>主要缺点：用户响应时间长，没有人机交互功能(用户提交自己的作业之后就只能等待计算机处理完成，中间不能控制自己的作业执行。无法调试程序/无法在程序运行过程中输入一些参数)</li>
+</ul>
+</li>
+<li>分时操作系统
+<ul>
+<li>计算机以时间片为单位轮流为各个用户/作业服务，各个用户可通过终端与计算机进行交互</li>
+<li>主要优点：用户请求可以被即时相应，解决了人机交互问题。允许多个用户同时使用一台计算机，并且用户对计算机的操作相互独立，感受不到别人的存在</li>
+<li>主要缺点：不能优先处理一些紧急任务。操作系统对各个用户/作业都是完全公平的，循环地为每个用户/作业服务一个时间片，不区分任务的紧急性</li>
+</ul>
+</li>
+<li>实时操作系统
+<ul>
+<li>主要优点：能够优先响应一些紧急任务，某些紧急任务不需时间片排队</li>
+<li>在实时操作系统的控制下，计算机系统接收到外部信号后及时进行处理，并且要在严格的时限内处理完事件。实时操作系统的主要特点是及时性和可靠性</li>
+<li>分类
+<ul>
+<li>硬实时系统：必须在绝对严格的规定时间内完成处理</li>
+<li>软实时系统：能接受偶尔违反时间规定</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>其他几种操作系统
+<ul>
+<li>网络操作系统 实现数据传送等功能，实现网络中各种资源的共(如文件共享)和各台计算机之间的通信</li>
+<li>分布式操作系统：分布性和并行性。系统中各台计算机地位相同，任何工作都可以分布在这些计算机上，由它们并行、协同完成这个任务</li>
+<li>个人计算机操作系统</li>
+</ul>
+</li>
+</ul>
+<h3 id="总结-2">总结</h3>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2024-09-11%2022.29.42.png" alt=""></p>
+<h2 id="13_1-操作系统的运行机制">1.3_1 操作系统的运行机制</h2>
+<ul>
+<li>预备知识：程序是如何运行的？
+<ul>
+<li>C语言代码-(编译器)-&gt;机器指令</li>
+<li>指令：处理器能识别、执行的最基本命令</li>
+</ul>
+</li>
+<li>内核程序vs.应用程序
+<ul>
+<li>内核程序：实现操作系统的程序，很多内核程序组成了“操作系统内核”，或简称“内核”，内核是操作系统最重要最核心的部分，也是最接近硬件的部分，内核实现管理功能
+<ul>
+<li>甚至可以说，一个操作系统只要有内核就够了(Docker-&gt;仅需Linux内核)</li>
+<li>操作系统的功能未必都在内核中，如图形化用户界面GUI</li>
+</ul>
+</li>
+<li>应用程序：运行在操作系统之上，只能使用非特权指令</li>
+</ul>
+</li>
+<li>特权指令vs.非特权指令
+<ul>
+<li>特权指令：只允许“管理者”——即操作系统内核来使用</li>
+<li>非特权指令</li>
+<li>CPU设计和生产的时候就划分了特权指令和非特权指令</li>
+</ul>
+</li>
+<li>内核态vs.用户态(CPU的状态)
+<ul>
+<li>内核态，正在运行内核程序，此时可以执行特权指令</li>
+<li>用户态，正在运行应用程序，只能执行非特权指令</li>
+<li>CPU中有一个寄存器叫程序状态字寄存器(PSW)，其中有个二进制位，1表示“内核态”，0表示“用户态”</li>
+<li>别名：内核态=核心态=管态，用户态=目态</li>
+</ul>
+</li>
+<li>内核态、用户态的切换
+<ul>
+<li>开机时，CPU为内核态，操作系统内核程序先上CPU运行</li>
+<li>开机完成后，用户可以启动某个应用程序</li>
+<li>操作系统内核程序在合适的时候主动让出CPU，让该应用程序上CPU运行(操作系统内核在让出CPU之前，会用一条特权指令把PSW的标志位设置为“用户态”)</li>
+<li>应用程序运行在“用户态”</li>
+<li>黑客在应用程序中植入一条特权指令，但是自己又处于“用户态”</li>
+<li>这个非法时间会引发一个中断信号(CPU检测到<strong>中断</strong>信号后，会立即变为“核心态”，并停止运行当前的应用程序，转而运行处理中断信号的内核程序)</li>
+<li>“中断”使操作系统再次夺回CPU的控制权</li>
+<li>操作系统会对引发中断的事件进行处理，处理完了再把CPU使用权交给别的应用程序</li>
+<li>总结
+<ul>
+<li>内核态-&gt;用户态：执行一条<strong>特权指令</strong>——修改PSW的标志位为用户态，这个动作意味着操作系统将主动让出CPU使用权</li>
+<li>用户态-&gt;内核态：由“中断”引发，硬件自动完成变态过程，触发中断信号意味着操作系统将强行夺回CPU的使用权。
+<ul>
+<li>但凡需要操作系统介入的地方，都会触发中断信号
+<img src="/images/%E6%88%AA%E5%B1%8F2024-09-11%2022.47.16.png" alt=""></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="13_2-中断和异常">1.3_2 中断和异常</h2>
+<ul>
+<li>中断的作用
+<ul>
+<li>“中断”是让操作系统内核夺回CPU使用权的唯一途径</li>
+<li>能够使CPU从用户态变为内核态</li>
+</ul>
+</li>
+<li>中断的类型
+<ul>
+<li>内中断(也称异常、例外)
+<ul>
+<li>与当前执行的指令有关，中断信号来源于CPU内部</li>
+<li>若当前执行的指令是非法的，则会引发一个中断信号</li>
+<li>例
+<ul>
+<li>试图在用户态下执行特权指令</li>
+<li>执行除法指令时发现除数为0</li>
+<li>有时候应用程序想请求操作系统的服务，此时会执行一条特殊指令——陷入指令，该指令会引发一个内部中断信号
+<ul>
+<li>系统调用通过陷入指令完成</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>分类：陷阱、陷入trap，故障(由错误条件引起，可能被内核程序修复)，中止(由致命错误引起，内核程序无法修复该错误，因此一般不再将CPU使用权还给引发终止的应用程序，而是直接终止该应用程序。如：整数除0、非法使用特权指令)</li>
+</ul>
+</li>
+<li>外中断(也称中断)
+<ul>
+<li>与当前执行的指令无关，中断信号来源于CPU外部</li>
+<li>例
+<ul>
+<li>时钟中断——由时钟部件发来的中断信号</li>
+<li>I/O中断——由输入/输出设备发来的中断信号</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>中断机制的基本原理
+<ul>
+<li>不同的中断信号，需要不同的中断处理程序来处理。</li>
+<li>当CPU检测到中断信号后，会根据中断信号的类型去查询“中断向量表”，以此来找到相应的中断处理程序在内存中的存放位置</li>
+</ul>
+</li>
+</ul>
+<h3 id="总结-3">总结</h3>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2024-09-12%2008.21.55.png" alt=""></p>
+<h2 id="133-系统调用">1.3.3 系统调用</h2>
+<ul>
+<li>系统调用是操作系统提供给应用程序(程序员/编程人员)使用的接口，可以理解为一种可供应用程序调用的特殊函数，应用程序可以通过系统调用来请求获得操作系统内核的服务</li>
+<li>系统调用与库函数的区别
+<ul>
+<li>应用程序通过库函数请求系统调用</li>
+</ul>
+</li>
+</ul>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: center">普通应用程序</th>
+          <th style="text-align: center">可直接进行系统调用，也可使用库函数。有的库函数涉及系统调用，有的不涉及</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">编程语言</td>
+          <td style="text-align: center">向上提供库函数，以隐藏系统调用的一些细节，使程序员编程更加方便</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">操作系统</td>
+          <td style="text-align: center">向上提供系统调用，使得上层程序能够请求内核的服务</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">裸机</td>
+          <td style="text-align: center"></td>
+      </tr>
+  </tbody>
+</table>
+<ul>
+<li>系统调用(按功能分类)
+<ul>
+<li>设备管理</li>
+<li>文件管理</li>
+<li>进程控制</li>
+<li>进程通信</li>
+<li>内存管理</li>
+</ul>
+</li>
+<li>凡事与共享资源有关的操作(如存储分配，I/O操作，文件管理等)，都必须通过系统调用的方式向操作系统内核提出服务请求，由操作系统内核代为完成，这样可以保证系统的稳定性和安全性，防止用户进行非法操作</li>
+<li>系统调用的过程
+<ul>
+<li>传参指令1 系统调用类型</li>
+<li>传参指令2 其他参数</li>
+<li>陷入指令-&gt;内中断信号，转入相应的中断处理程序(用户态)</li>
+<li>系统调用入口程序</li>
+<li>系统调用的处理程序(核心态)</li>
+<li>返回应用程序</li>
+<li>注意
+<ul>
+<li>陷入指令是在用户态执行的，执行陷入指令之后引发一个内中断，使CPU进入核心态</li>
+<li>发出系统调用请求是在用户态，而对系统调用的相应处理在核心态下进行</li>
+<li>陷入指令=trap指令=访管指令</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="总结-4">总结</h3>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2024-09-12%2008.50.57.png" alt=""></p>
+<h2 id="14_1-操作系统体系结构上">1.4_1 操作系统体系结构(上)</h2>
+<ul>
+<li>大内核(宏内核/单内核)
+<ul>
+<li>内核态进行进程管理、存储管理、设备管理、时钟管理、中断处理、原语</li>
+</ul>
+</li>
+<li>微内核
+<ul>
+<li>内核态进行时钟管理、中断处理、原语，用户态进行进程管理、存储管理、设备管理
+<img src="/images/%E6%88%AA%E5%B1%8F2024-09-12%2008.54.32.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2024-09-12%2008.57.06.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2024-09-12%2009.01.25.png" alt=""></li>
+</ul>
+</li>
+<li>分层结构</li>
+<li>模块化</li>
+<li>外核</li>
+</ul>
+<h3 id="总结-5">总结</h3>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2024-09-12%2009.03.08.png" alt=""></p>
+<ul>
+<li>典型的大内核/宏内核/单内核操作系统：Linux, UNIX</li>
+<li>典型的微内核操作系统: Windows NT</li>
+</ul>
+<h2 id="14_2-操作系统体系结构下">1.4_2 操作系统体系结构(下)</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2024-09-12%2009.16.05.png" alt=""></p>
+<h2 id="15-操作系统的引导">1.5 操作系统的引导</h2>
+<ul>
+<li>什么是操作系统引导</li>
+<li>磁盘里有哪些相关数据
+<ul>
+<li>磁盘
+<ul>
+<li>主引导记录(MBR)，包含磁盘引导程序和分区表</li>
+<li>C盘，是这个磁盘的活动分区，安装了操作系统
+<ul>
+<li>引导记录PBR(负责找到启动管理器)</li>
+<li>根目录</li>
+<li>其他</li>
+</ul>
+</li>
+<li>D盘</li>
+<li>E盘</li>
+<li>F盘</li>
+</ul>
+</li>
+<li>CPU
+<ul>
+<li>RAM，会因断电而流失</li>
+<li>ROM(BIOS基本输入输出系统) 包含：ROM引导程序，即自举程序，不会因为断电而流失</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>开机过程
+<ul>
+<li>开机后，从一个特定贮存地址开始，取指令，执行ROM引导程序(先进行硬件自检，再开机)</li>
+<li>将磁盘的第一块——主引导记录MBR读入内存，执行磁盘引导程序，扫描分区表</li>
+<li>从活动分区(又称主分区，即安装了操作系统的分区)读入分区引导记录，执行其中的程序PBR</li>
+<li>从根目录下找到完整的操作系统初始化程序(即启动管理器)并执行，完成“开机”的一系列操作</li>
+</ul>
+</li>
+</ul>
+<h2 id="16-虚拟机">1.6 虚拟机</h2>
+<ul>
+<li>传统计算机
+<img src="/images/%E6%88%AA%E5%B1%8F2024-09-12%2009.47.43.png" alt=""></li>
+<li>虚拟机
+<ul>
+<li>使用虚拟化技术，将一台物理机器虚拟化为多台虚拟机器(VM)，每个虚拟机器都可以独立运行一个操作系统</li>
+<li>同义术语：虚拟机管理程序/虚拟机监控程序/Virtual Machine Monitor/Hypervisor</li>
+</ul>
+</li>
+<li>虚拟机管理程序
+<ul>
+<li>第一类虚拟机管理程序
+<ul>
+<li>上层操作系统运行虚拟内核空间</li>
+</ul>
+</li>
+<li>第二类操作系统
+<ul>
+<li>在宿主操作系统之上安装并启动多个操作系统
+<img src="/images/%E6%88%AA%E5%B1%8F2024-09-12%2009.54.43.png" alt=""></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>两类虚拟机管理程序(VMM)的对比
+<img src="/images/%E6%88%AA%E5%B1%8F2024-09-12%2009.55.55.png" alt=""></li>
+</ul>
+<h1 id="第二章-进程管理">第二章 进程管理</h1>
+<h2 id="21_1-进程的概念组成特征">2.1_1 进程的概念、组成、特征</h2>
+<ul>
+<li>进程的概念
+<ul>
+<li>程序：静态的，就是个存放在磁盘里的可执行文件，就是一系列的指令集合</li>
+<li>进程：是动态的，是程序的一次执行过程(同一个程序多次执行会对应多个进程)</li>
+</ul>
+</li>
+<li>进程实体的组成
+<ul>
+<li>PCB</li>
+<li>程序段</li>
+<li>数据段</li>
+</ul>
+</li>
+<li>进程控制块(PCB)
+<ul>
+<li>给操作系统使用</li>
+<li><strong>进程存在的唯一标志</strong>，当进程被创建时，操作系统为其创建PCB，当进程结束时，会回收其PCB</li>
+<li>需保存的信息
+<ul>
+<li>进程描述信息(进程标识符PID，用户标识符PID)</li>
+<li>进程控制和管理信息(CPU、磁盘、网络流量使用情况统计，进程当前状态：就绪态/阻塞态/运行态)</li>
+<li>资源分配清单(正在使用哪些文件，正在使用哪些内存区域，正在使用哪些I/O设备)</li>
+<li>处理机相关信息(PSW、PC等等各种寄存器的值，用于实现进程切换)</li>
+</ul>
+</li>
+<li>操作系统对进程进行管理工作所需的信息都保存在PCB中</li>
+</ul>
+</li>
+<li>程序段
+<ul>
+<li>程序的代码(指令序列)</li>
+</ul>
+</li>
+<li>数据段
+<ul>
+<li>运行过程中产生的各种数据，如：程序中定义的变量</li>
+</ul>
+</li>
+<li>进程是进程实体的运行过程，是系统进行资源分配和调度的一个独立单位</li>
+<li>一个进程被“调度”，就是指操作系统决定让这个进程上CPU运行</li>
+<li>同时挂三个QQ号，会对应三个QQ进程，它们的PCB、数据段各不相同，但程序段的内容都是相通的(都是运行着相同的QQ程序)</li>
+<li>进程的特征
+<ul>
+<li>动态性
+<ul>
+<li>进程最基本的特征</li>
+<li>进程是程序的一次执行过程，是动态地产生、变化和消亡的</li>
+</ul>
+</li>
+<li>并发性
+<ul>
+<li>内存中有多个进程实体，各进程可并发执行</li>
+</ul>
+</li>
+<li>独立性
+<ul>
+<li>进程是能独立运行、独立获得资源、独立接收调度的基本单位</li>
+</ul>
+</li>
+<li>异步性
+<ul>
+<li>各进程按各自独立的、不可预知的速度向前推进，操作系统要提供“进程同步机制”来解决异步问题</li>
+<li>会导致进程执行结果的不一致性</li>
+</ul>
+</li>
+<li>结构性
+<ul>
+<li>每个进程都会配置一个PCB。结构上看，进程由程序段、数据段、PCB组成</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="总结-6">总结</h3>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2024-09-23%2022.41.35.png" alt=""></p>
+</article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="application/javascript" src='https://y-m-m.github.io/js/toc.js'></script>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/toc.css' />
+
+  
+<div id="gitalk-container" class="gitalk-container"></div>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/gitalk.css'>
+<script src='https://y-m-m.github.io/js/gitalk.min.js'></script>
+<script>
+  const gitalk = new Gitalk({
+    clientID: 'Ov23livxKNtTlPeMjV2H',
+    clientSecret: '6d3bc9f47a1296f29628a63701ea5624cd28a26b',
+    repo: 'y-m-m.github.io\/',
+    owner: 'Y-M-M',
+    admin: ['Y-M-M'],
+    id: eval("location.pathname"), 
+    distractionFreeMode: false 
+  });
+  (function() {
+    gitalk.render('gitalk-container');
+  })();
+</script>
+
+</div>
+
+  <div class="footer container-xl width-full p-responsive">
+  <div
+    class="position-relative d-flex flex-row-reverse flex-lg-row flex-wrap flex-lg-nowrap flex-justify-center flex-lg-justify-between flex-sm-items-center pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
+    <a aria-label="Homepage" title="GitHub" class="footer-octicon d-none d-lg-block mr-lg-4" href="https://y-m-m.github.io/">
+      <svg height="24" class="octicon octicon-mark-github" viewBox="0 0 16 16" version="1.1" width="24">
+        <path fill-rule="evenodd"
+          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+        </path>
+      </svg>
+    </a>
+    <ul class="list-style-none d-flex flex-wrap col-12 flex-justify-center flex-lg-justify-between mb-2 mb-lg-0">
+      
+      <li class="mr-3 mr-lg-0">Theme by <a href='https://github.com/MeiK2333/github-style'>github-style</a></li>
+      
+    </ul>
+  </div>
+  <div class="d-flex flex-justify-center pb-6">
+    <span class="f6 text-gray-light"></span>
+  </div>
+
+
+</div>
+</body>
+
+<script type="application/javascript" src="https://y-m-m.github.io/js/github-style.js"></script>
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+<script type="application/javascript" src='https://y-m-m.github.io/js/search.js'></script>
+
+
+
+</html>

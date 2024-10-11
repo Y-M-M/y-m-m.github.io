@@ -149,7 +149,7 @@
                 </path>
               </svg>
               Posts
-              <span class="Counter">33</span>
+              <span class="Counter">36</span>
             </a>
           </nav>
           <div class="profile-color-modes js-promo-color-modes-banner-profile isInitialToggle">
@@ -428,7 +428,7 @@
         </path>
       </svg>
       Posts
-      <span class="Counter ">33</span>
+      <span class="Counter ">36</span>
     </a>
   </nav>
 </div>
@@ -679,6 +679,17 @@
 		</svg>
 		
 		命令行
+	</a>
+	
+	<a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%93%88%E5%B8%8C%E8%A1%A8/">
+		
+		<svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+			<path fill-rule="evenodd"
+				d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+			</path>
+		</svg>
+		
+		哈希表
 	</a>
 	
 	<a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%A0%86%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/">
@@ -1005,6 +1016,90 @@
         
       
       <ul>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/c&#43;&#43;unorderedmap/">C&#43;&#43; unorderedmap的用法</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <h1 id="什么是unorderedmap">什么是unorderedmap？</h1>
+<ul>
+<li>一个关联容器，包含具有唯一键的键值对</li>
+</ul>
+<h1 id="使用unorderdmap有什么好处">使用unorderdmap有什么好处？</h1>
+<ul>
+<li>元素的搜索、插入和删除时间复杂度O(1)</li>
+</ul>
+<h1 id="原理是什么">原理是什么？</h1>
+<ul>
+<li>在内部，元素不按任何特定顺序排序，而是组织到存储桶中</li>
+<li>元素放入哪个存储桶完全取决于其键的哈希值，具有相同哈希码的键出现在同一个存储桶中</li>
+</ul>
+<h1 id="如何使用">如何使用？</h1>
+<h2 id="初始化">初始化</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">u</span> <span class="o">=</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s">&#34;RED&#34;</span><span class="p">,</span> <span class="s">&#34;#FF0000&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s">&#34;GREEN&#34;</span><span class="p">,</span> <span class="s">&#34;#00FF00&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s">&#34;BLUE&#34;</span><span class="p">,</span> <span class="s">&#34;#0000FF&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span></code></pre></div><h2 id="相关函数">相关函数</h2>
+<ul>
+<li>operator= 为容器赋值</li>
+<li>begin/cbegin 返回指向开头的iterator</li>
+<li>end/cend 返回指向结尾的迭代器</li>
+<li>empty 检查容器是否为空</li>
+<li>size 返回元素的数目</li>
+<li>clear 清空容器</li>
+<li>insert 插入元素或节点(C++17以后)</li>
+<li>insert_range(C++23) 插入一系列元素</li>
+<li>erase 擦除元素</li>
+<li>extract(C++17) 从其他容器中提取节点</li>
+<li>merge(C++17) 从其他容器中接入节点</li>
+<li>operator[] 获取特定元素</li>
+<li>count 返回能匹配到特定key的元素数目</li>
+<li>find 根据key寻找元素</li>
+<li>bucket_count 返回桶的数目</li>
+<li>max_bucket_count 返回最大的桶的数目</li>
+<li>bucket_size 返回指定桶的大小</li>
+<li>bucket 返回指定的桶</li>
+<li>load_factor 返回每个桶拥有的元素的数目的平均数</li>
+<li>hash_function 返回对key进行操作的哈希函数</li>
+<li>operator==(C++11)</li>
+<li>operator!=(C++11)</li>
+</ul>
+<h1 id="参考资料">参考资料</h1>
+<p><a href="https://en.cppreference.com/w/cpp/container/unordered_map">cppreference</a></p>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学与技术
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Fri, 11 Oct 2024 00:00:00 &#43;0000" class="no-wrap"
+                title=" Fri, 11 Oct 2024 00:00:00 &#43;0000">
+                Fri, 11 Oct 2024 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
         
         <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
           <div class="col-12 d-inline-block">

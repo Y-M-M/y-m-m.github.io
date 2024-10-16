@@ -153,9 +153,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Wed, 09 Oct 2024 09:34:27 &#43;0800"
+                  Modified <relative-time datetime="Wed, 16 Oct 2024 09:27:30 &#43;0800"
                     class="no-wrap">
-                    Wed, 09 Oct 2024 09:34:27 &#43;0800</relative-time>
+                    Wed, 16 Oct 2024 09:27:30 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -185,7 +185,7 @@
                         </div>
                       </div>
                     </details-menu>
-                      3701 Words
+                      4848 Words
                     
 
                   </div>
@@ -690,6 +690,203 @@
 <li>db 数据库的连接情况</li>
 <li>log 日志开关的打开/关闭</li>
 <li>cfg 当前配置情况，重新加载配置</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>配置文件
+<ul>
+<li>规划配置项
+<ul>
+<li>总的原则：提取不适合写死在程序中的数据作为配置文件中的配置项</li>
+<li>因为网络环境的变化而变化的数据
+<ul>
+<li>本地的IP地址，端口</li>
+<li>目的地的IP地址，端口</li>
+</ul>
+</li>
+<li>因为主机资源情况变化的数据
+<ul>
+<li>线程池的大小</li>
+<li>消息队列的最大长度限制</li>
+</ul>
+</li>
+<li>因为用户的偏好而变化的数据
+<ul>
+<li>字符编码，UTF-8还是GBK？</li>
+<li>语言，中文还是英文？</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>配置项生效
+<ul>
+<li>有些重要的配置，修改后需要重启生效</li>
+<li>有的配置通过命令在线生效
+<ul>
+<li>使用命令行单项修改配置，同步修改配置文件</li>
+<li>修改配置文件，使用命令行整体重新加载</li>
+</ul>
+</li>
+<li>这两种配置需要谨慎区分，前者应该尽可能少</li>
+</ul>
+</li>
+<li>配置文件的格式
+<ul>
+<li>一个程序的多个配置文件的格式应该统一
+<ul>
+<li>一开始就桂华好，选择一个合适的文件夹</li>
+<li>其他人在后期的程序修改中，不要私自添加其他格式的文件</li>
+</ul>
+</li>
+<li>常用格式
+<ul>
+<li>经典的ini格式,[xxx]分节，没节配置名字和取值</li>
+<li>XML格式</li>
+<li>JSON格式</li>
+</ul>
+</li>
+<li>配置文件一定要允许加注释
+<ul>
+<li>配置文件中的注释和程序中的注释一样重要</li>
+<li>#开头的注释行</li>
+<li>XML等格式本身支持的注释方式</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>兼容性
+<ul>
+<li>新增的配置项，必须是可选配置项</li>
+<li>不选时的默认行为，应该是上一个版本不包含此配置项的行为</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>错误信息
+<ul>
+<li>好的例子
+<ul>
+<li>cc编译器输出的错误信息</li>
+<li>ssh连接失败输出的错误信息</li>
+<li>git 命令使用错误时的输出信息</li>
+</ul>
+</li>
+<li>输出完整准确的错误信息</li>
+</ul>
+</li>
+<li>日志文件
+<ul>
+<li>是了解程序的过往运行状况的主要参考，是排错的主要依据</li>
+<li>哪些内容需要写入日志文件
+<ul>
+<li>错误信息
+<ul>
+<li>在输出到标准输出，或者输出到前端页面的同时，需要同时写入日志文件</li>
+</ul>
+</li>
+<li>重要的程序运行信息
+<ul>
+<li>程序启动，关闭</li>
+<li>重要的通信链路连接断开</li>
+<li>重要的模块加载卸载</li>
+</ul>
+</li>
+<li>需要可控写入日志文件的内容
+<ul>
+<li>详细的业务运行信息，模块之间的交互的借口信息</li>
+<li>这些信息往往内容过多，可能需要有开关分级控制</li>
+<li>开关可以使用命令行接口，实现不同的命令实现
+<ul>
+<li>trace db on 开始数据库sql语句的日志</li>
+<li>trace db off 关闭数据库sql语句的日志</li>
+<li>trace http on 开启http接口的原始消息写入日志</li>
+<li>trace http off 关闭http接口的原始消息写入日志</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>日志的要求
+<ul>
+<li>一般要求
+<ul>
+<li>详略得当，文字简练，完整，准确</li>
+<li>格式朴素，防止日志“内卷”</li>
+</ul>
+</li>
+<li>每行日志的要素
+<ul>
+<li>时间戳(可以精确到毫秒甚至微妙)</li>
+<li>发生的模块标识</li>
+<li>时间简要说明</li>
+<li>时间参数的详细列表(例如记录模块间交互的借口消息的日志)</li>
+</ul>
+</li>
+<li>日志文件的大小控制
+<ul>
+<li>日志文件不能积累太大，否则阅读，搜索，下载都是比较麻烦的事情</li>
+<li>跟就程序特点，可以设置每天，或者每周，每月一个日志文件</li>
+<li>要有自动备份，删除的机制，不要让日志占满了所有存储空间</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>GUI
+<ul>
+<li>分类
+<ul>
+<li>终端类型</li>
+<li>呈现方式</li>
+</ul>
+</li>
+<li>GUI的开发技术
+<ul>
+<li>直接调用原生(Native) API
+<ul>
+<li>MFC, GTK</li>
+</ul>
+</li>
+<li>调用进一步封装的库
+<ul>
+<li>Qt, Swing, Unity 3D</li>
+</ul>
+</li>
+<li>DSL+解释器
+<ul>
+<li>QML/Qt, XAML/WPF</li>
+</ul>
+</li>
+<li>HTML+CSS+JS+浏览器引擎
+<ul>
+<li>Electron</li>
+</ul>
+</li>
+<li>HTML+CSS+JS+浏览器(WEB应用)</li>
+</ul>
+</li>
+<li>HTML+CSS+JS
+<ul>
+<li>HTML -&gt; HTML Parser -&gt; DOM树</li>
+<li>CSS -&gt; CSS Parser -&gt; CSSOM树</li>
+<li>JS -&gt; JS Parser -&gt; JS抽象语法树 -&gt; JS解释器
+<img src="/images/%E6%88%AA%E5%B1%8F2024-10-16%2009.11.50.png" alt=""></li>
+</ul>
+</li>
+<li>JQuery.js</li>
+<li>Vue.js</li>
+<li>AngularJS</li>
+<li>React + JSX
+<ul>
+<li>HTML + 基于React的JSX</li>
+<li>BABEL翻译</li>
+<li>HTML + 基于React的纯JS</li>
+<li>浏览器解析</li>
+<li>DOM树</li>
+<li>更新</li>
 </ul>
 </li>
 </ul>

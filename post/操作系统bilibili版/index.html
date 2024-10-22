@@ -150,9 +150,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Mon, 21 Oct 2024 19:04:56 &#43;0800"
+                  Modified <relative-time datetime="Tue, 22 Oct 2024 22:47:55 &#43;0800"
                     class="no-wrap">
-                    Mon, 21 Oct 2024 19:04:56 &#43;0800</relative-time>
+                    Tue, 22 Oct 2024 22:47:55 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -182,7 +182,7 @@
                         </div>
                       </div>
                     </details-menu>
-                      11993 Words
+                      17694 Words
                     
 
                   </div>
@@ -1306,7 +1306,635 @@ CPU执行了关中断指令之后，就不再例行检查中断信号，直到�
 </li>
 </ul>
 <h2 id="22_5-调度算法1">2.2_5 调度算法(1)</h2>
+<h3 id="先来先服务fcfs"><strong>先来先服务(FCFS)</strong></h3>
+<ul>
+<li>算法思想
+<ul>
+<li>主要从“公平”的角度考虑</li>
+</ul>
+</li>
+<li>算法规则
+<ul>
+<li>按照作业/进程到达的先后顺序进行服务</li>
+</ul>
+</li>
+<li>用于作业/进程调度
+<ul>
+<li>用于作业调度时，考虑的是哪个作业先到达后被队列</li>
+<li>用于进程调度时，考虑的是哪个进程先到达就绪队列</li>
+</ul>
+</li>
+<li>是否可抢占？
+<ul>
+<li>非抢占式算法</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>周转时间 = 完成时间 - 到达时间
+带权周转时间 = 周转时间 / 运行时间
+等待时间 = 周转时间 - 运行时间( - I/O操作时间)</p>
+</blockquote>
+<ul>
+<li>优缺点
+<ul>
+<li>优点：公平、算法实现简单</li>
+<li>缺点：排在长作业(进程)后面的短作业需要等待很长时间，带权周转时间很大，对短作业来说用户体验不好(FCFS算法对长作业有利，对短作业不利)</li>
+</ul>
+</li>
+<li>是否会导致饥饿
+<ul>
+<li>不会</li>
+</ul>
+</li>
+</ul>
+<h3 id="短作业优先sjf"><strong>短作业优先(SJF)</strong></h3>
+<ul>
+<li>算法思想
+<ul>
+<li>追求最少的平均等待时间，最少的平均周转时间、最少的平均平均带权周转时间</li>
+<li>选择当前已到达且运行时间最短的作业/进程</li>
+</ul>
+</li>
+<li>算法规则
+<ul>
+<li>最短的作业/进程优先得到服务(要求服务时间最短)</li>
+</ul>
+</li>
+<li>用于作业/进程调度
+<ul>
+<li>既可用于作业调度，也可用于进程调度</li>
+<li>用于进程调度时称为“<strong>短进程优先(SPF)算法</strong>”</li>
+</ul>
+</li>
+<li>是否可抢占？
+<ul>
+<li>SJF和SPF是<strong>非抢占式</strong>的算法。但也有抢占式的版本——<strong>最短剩余时间优先算法(SRTN)</strong></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>最短剩余时间优先算法：
+每当有进程加入，就绪队列改变时就需要调度，如果新到达的进程剩余时间比当前运行的进程剩余时间更短，则由新进程抢占处理机，当前运行进程重新回到就绪队列。
+当一个进程完成时也需要调度</p>
+</blockquote>
+<ul>
+<li>注意细节
+<ul>
+<li>默认是非抢占式的</li>
+<li>相比于其他算法(如FCFS), SJF可以获得较少的平均等待时间、平均周转时间</li>
+</ul>
+</li>
+<li>优缺点
+<ul>
+<li>优点：“最短的”平均等待时间、平均周转时间</li>
+<li>缺点：不公平。对短作业有利，对长作业不利，可能产生饥饿现象。另外，作业/进程的运行时间是由用户提供的，并不一定真实，不一定能做到真正的短作业优先</li>
+</ul>
+</li>
+<li>是否会导致饥饿
+<ul>
+<li>会。如果源源不断地有短作业/进程到来，可能使长作业/进程长时间得不到服务，产生“饥饿”现象。如果一直得不到服务，则称为“饿死”</li>
+</ul>
+</li>
+</ul>
+<h3 id="高响应比优先hrrn"><strong>高响应比优先(HRRN)</strong></h3>
+<ul>
+<li>算法思想
+<ul>
+<li>要综合考虑作业/进程的等待时间和要求服务的时间</li>
+</ul>
+</li>
+<li>算法规则
+<ul>
+<li>在每次调度时先计算各个作业/进程的响应比，选择响应比最高的作业/进程为其服务</li>
+<li>如果响应比相等，则等待时间长者优先</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>响应比 = (等待时间 + 要求服务时间) / 要求服务时间
+响应比 ≥ 1</p>
+</blockquote>
+<ul>
+<li>用于作业/进程调度
+<ul>
+<li>既可用于作业调度，也可用于进程调度</li>
+</ul>
+</li>
+<li>是否可抢占？
+<ul>
+<li>非抢占式的算法。因此只有当前运行的作业/进程主动放弃处理机时，才需要调度，才需要计算响应比</li>
+</ul>
+</li>
+<li>优缺点
+<ul>
+<li>优点：综合考虑了等待时间和运行时间(要求服务时间)
+<ul>
+<li>等待时间相同时，要求服务时间短的优先(SJF的优点)</li>
+<li>要求服务时间相同时，等待时间常德优先(FCFS的优点)</li>
+<li>对于长作业来说，随着等待时间越来越久，其响应比也会越来越大，从而避免了长作业饥饿的问题</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>是否会导致饥饿
+<ul>
+<li>不会</li>
+</ul>
+</li>
+</ul>
+<h3 id="总结-13">总结</h3>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2024-10-22%2019.46.10.png" alt=""></p>
 <h2 id="22_6-调度算法2">2.2_6 调度算法(2)</h2>
+<h3 id="时间片轮转调度算法rr">时间片轮转调度算法(RR)</h3>
+<ul>
+<li>算法思想
+<ul>
+<li>公平地、轮流地为各个进程服务，让每个进程在一定时间间隔内都可以得到响应</li>
+<li>伴随着分时操作系统的诞生而诞生</li>
+</ul>
+</li>
+<li>算法规则
+<ul>
+<li>按照各进程到达就绪队列的顺序，轮流让各个进程执行一个时间片(如100ms)</li>
+<li>若进程未在一个时间片内执行完成，则剥夺处理机，将进程重新放回到就绪队列队尾重新排序</li>
+</ul>
+</li>
+<li>用于作业/进程调度
+<ul>
+<li>用于进程调度(只有作业放入内存建立了相应的进程后，才能被分配处理机时间片)</li>
+</ul>
+</li>
+<li>是否可抢占？
+<ul>
+<li>若进程未能在时间片内运行完，将被强行剥夺处理机使用权，因此时间片轮转调度算法属于抢占式的算法</li>
+<li>由时钟装置发出时钟中断来通知CPU时间片已到</li>
+</ul>
+</li>
+<li>注意
+<ul>
+<li>如果时间片太大，使得每个进程都可以在一个时间片内就完成，则时间片轮转调度算法退化为先来先服务调度算法，并且会增大进程响应时间，因此时间片不能太大</li>
+<li>另一方面，进程调度、切换是有时间代价的(保存、恢复运行环境)，因此如果时间片太小，会导致进程切换过于频繁，系统会话大量的时间来处理进程切换，从而导致实际用于进程执行的时间比例减少。可见时间片也不能太小。(一般来说，设计时间片时要让切换进程的开销占比不超过1%)</li>
+</ul>
+</li>
+<li>优缺点
+<ul>
+<li>优点：公平；响应快，适于分时操作系统</li>
+<li>缺点：由于高频率的进程切换，因此会有一定开销；不区分任务的紧急程度</li>
+</ul>
+</li>
+<li>是否会导致饥饿
+<ul>
+<li>不会</li>
+</ul>
+</li>
+</ul>
+<h3 id="优先级调度算法">优先级调度算法</h3>
+<ul>
+<li>算法思想
+<ul>
+<li>随着计算机的发展，特别是实时操作系统的出现，越来越多的应用场景需要根据任务的紧急程度来决定处理顺序</li>
+</ul>
+</li>
+<li>算法规则
+<ul>
+<li>每个作业/进程有各自的优先级，调度时选择优先级最高的作业/进程</li>
+</ul>
+</li>
+<li>用于作业/进程调度
+<ul>
+<li>既可用于作业调度，也用于进程调度。甚至，还会用于在之后会学习的I/O调度中</li>
+</ul>
+</li>
+<li>是否可抢占？
+<ul>
+<li>抢占式、非抢占式都有</li>
+<li><strong>非抢占式</strong>只需在进<strong>程主动放弃处理机时</strong>进行调度即可，而<strong>抢占式</strong>还需在<strong>就绪队列变化时</strong>，检查是否会发生抢占</li>
+</ul>
+</li>
+<li>补充
+<ul>
+<li>就绪队列未必只有一个，可以按照不同优先级来组织；另外，也可以把优先级高的进程排在更靠近队头的位置</li>
+<li>根据优先级是否可以动态改变，可将优先级分为<strong>静态优先级</strong>和<strong>动态优先级</strong>两种</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>静态优先级：创建进程时确定，之后一直不变
+动态优先级：创建进程时有一个初始值，之后会根据情况动态地去调整优先级</p>
+</blockquote>
+<ul>
+<li>通常：系统进程优先级高于用户进程；前台进程优先级高于后台进程；操作系统更偏好I/O进程(I/O繁忙进程)</li>
+</ul>
+<blockquote>
+<p>I/O设备和CPU可以并行工作。如果有先让I/O繁忙型进程优先运行的话，则越有可能让I/O设备尽早地投入工作，则资源利用率、系统吞吐量都会得到提升
+与I/O型进程相对的是计算型进程(或称CPU繁忙型进程)</p>
+</blockquote>
+<ul>
+<li>动态优先级如何调整
+<ul>
+<li>可以从追求公平、提升资源利用率等角度考虑</li>
+<li>如果某进程在就绪队列中等待了很长时间，则可以适当提升其优先级(如高响应比优先算法)</li>
+<li>如果某进程占用处理机运行了很长时间，则可以适当降低其优先级</li>
+<li>如果发现一个进程频繁地进行I/O操作，则可适当提升其优先级</li>
+</ul>
+</li>
+<li>优缺点
+<ul>
+<li>优点：用优先级区分紧急程度、重要程度，适用于实时操作系统。可灵活地调整对各种作业/进程的偏好程度</li>
+<li>缺点：若源源不断地有高优先级进程到来，则可能导致饥饿</li>
+</ul>
+</li>
+<li>是否会导致饥饿
+<ul>
+<li>会</li>
+</ul>
+</li>
+</ul>
+<h3 id="多级反馈队列调度算法">多级反馈队列调度算法</h3>
+<ul>
+<li>算法思想
+<ul>
+<li>对其他调度算法的折中权衡</li>
+</ul>
+</li>
+<li>算法规则
+<ul>
+<li>设置多级就绪队列，各级队列优先级从高到低，时间片从小到大</li>
+<li>新进程到达时先进入第1级队列，按FCFS原则排队等待分配时间片，若用完时间片进程还未结束，则进程进入下一级队列队尾。如果此时已经是在最下级的队列，则重新放回该队列队尾</li>
+<li>只有第k级队列为空时，才会为k+1级队头的进程分配时间片</li>
+<li>被抢占处理机的进程重新放回原队列队尾</li>
+</ul>
+</li>
+<li>用于作业/进程调度
+<ul>
+<li>用于进程调度</li>
+</ul>
+</li>
+<li>是否可抢占？
+<ul>
+<li>抢占式算法</li>
+<li>在k级队列的进程运行过程中，若更上级的队列(1~k-1级)中进入了一个新进程，则由于新进程处于优先级更高的队列中，因此新进程会抢占处理机，原来运行的进程放回k级队列队尾</li>
+</ul>
+</li>
+<li>优缺点
+<ul>
+<li>优点
+<ul>
+<li>对各类进程相对公平(FCFS的优点)；</li>
+<li>每个新到达的进程都可以很快就得到响应(RR的优点)；</li>
+<li>短进程只用较少的时间就可以完成(SPF的优点)；</li>
+<li>不必实现估计进程的运行时间(避免用户作假)；</li>
+<li>可灵活地调整对各类进程的偏好程度，比如CPU密集型进程、I/O密集型进程(拓展:可以将因I/O而阻塞的进程重新放回原队列，这样I/O进程就可以保持较高优先级)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>是否会导致饥饿
+<ul>
+<li>会</li>
+</ul>
+</li>
+</ul>
+<h3 id="总结-14">总结</h3>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2024-10-22%2021.11.04.png" alt=""></p>
+<h2 id="22_7-调度算法3">2.2_7 调度算法(3)</h2>
+<h3 id="多级队列调度算法">多级队列调度算法</h3>
+<ul>
+<li>系统中按进程类型设置多个队列，进程创建成功后插入某个队列</li>
+<li>进程分类
+<ul>
+<li>系统进程(如内存管理进程) 优先级最高</li>
+<li>交互式进程(如游戏、打字软件)</li>
+<li>批处理进程(如AI模型训练、视频特效渲染) 优先级最低</li>
+</ul>
+</li>
+<li>固定优先级/时间片划分
+<ul>
+<li>固定优先级
+<ul>
+<li>高优先级空时第优先级进程才被调度</li>
+</ul>
+</li>
+<li>时间片划分
+<ul>
+<li>如三个队列分配时间50%, 40%, 10%</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>各队列可采用不同的调度策略
+<ul>
+<li>系统进程队列采用优先级调度</li>
+<li>交互式队列采用RR</li>
+<li>批处理队列采用FCFS</li>
+<li>按实际情况来定</li>
+</ul>
+</li>
+</ul>
+<h2 id="23_1-进程同步进程互斥">2.3_1 进程同步、进程互斥</h2>
+<h3 id="什么是进程同步">什么是进程同步</h3>
+<blockquote>
+<p>知识点回顾：进程具有异步性的特征
+异步性是指，各并发执行的进程以各自独立的、不可预知的速度向前推进
+管道通信中，读进程与谢进程并发地运行，由于并发必然导致<strong>异步性</strong>，因此“写数据”和“读数据”两个操作执行的先后顺序是不确定的；而实际应用中，又必须按照“写数据-&gt;读数据“的顺序来执行的
+如何解决这种异步问题，就是“进程同步”所讨论的内容</p>
+</blockquote>
+<ul>
+<li>同步亦称<strong>直接制约关系</strong>，它是指未完成某种任务而尽力的两个或多个进程，这些进程因为需要在某些位置上协调它们的工作次序而产生的制约关系。进程间的直接制约关系就是源于它们之间的相互合作</li>
+</ul>
+<h3 id="什么是进程互斥">什么是进程互斥</h3>
+<ul>
+<li>进程的“并发”需要“共享”支持，各个并发执行的进程不可避免的需要共享一些系统资源(比如内存，又比如打印机、摄像头这样的I/O设备)</li>
+<li>两种资源共享方式
+<ul>
+<li>互斥共享方式
+<ul>
+<li>系统中的某些资源，虽然可以提供给多个进程使用，但一个时间段内只允许一个进程访问该资源</li>
+</ul>
+</li>
+<li>同时共享方式
+<ul>
+<li>系统中的某些资源，允许一个时间段内由多个进程“同时”对它们进行访问</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>临界资源：一个时间段内只允许一个进程使用的资源
+互斥：亦称简介制约关系。对临界资源的访问，必须互斥的进行
+进程互斥：当一个进程访问某临界资源时，另一个想要访问该临界资源的进程必须等待。当前访问临界资源的进程访问结束，释放该资源之后，另一个进程才能去访问临界资源</p>
+</blockquote>
+<ul>
+<li>对临界资源的互斥访问，可以在逻辑上分为如下四个部分
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">do</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">entry</span> <span class="n">section</span><span class="p">;</span> <span class="c1">// 进入区
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">critical</span> <span class="n">section</span><span class="p">;</span> <span class="c1">// 临界区
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">exit</span> <span class="n">section</span><span class="p">;</span> <span class="c1">// 退出区
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">reminder</span> <span class="n">section</span><span class="p">;</span> <span class="c1">// 剩余区
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span> <span class="k">while</span><span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+</span></span></code></pre></div><ul>
+<li>进入区
+<ul>
+<li>负责检查是否可进入临界区，若可进入，则应设置正在访问临界资源的标志(可理解为“上锁”)，以阻止其他进程同时进入临界区</li>
+</ul>
+</li>
+<li>临界区(临界段)
+<ul>
+<li>访问临界资源的那段代码</li>
+</ul>
+</li>
+<li>退出区
+<ul>
+<li>负责解除正在访问临界资源的标志(可理解为“解锁”)</li>
+</ul>
+</li>
+<li>剩余区
+<ul>
+<li>做其他处理</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>原则
+<ul>
+<li>空闲让进
+<ul>
+<li>临界区空闲时，可以允许一个请求进入临界区的进程立即进入临界区</li>
+</ul>
+</li>
+<li>忙则等待
+<ul>
+<li>当已有进程进入临界区时，其他试图进入临界区的进程必须等待</li>
+</ul>
+</li>
+<li>有限等待
+<ul>
+<li>对请求访问的进程，应保证能在有限时间内进入临界区(保证不会饥饿)</li>
+</ul>
+</li>
+<li>让权等待
+<ul>
+<li>当进程不能进入临界区时，应立即释放处理机，防止进程忙等待</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>忙等待：进程暂时无法往下推进，但一直占用处理机</p>
+</blockquote>
+<h3 id="总结-15">总结</h3>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2024-10-22%2021.52.24.png" alt=""></p>
+<h2 id="23_2-进程互斥的软件实现方法">2.3_2 进程互斥的软件实现方法</h2>
+<h3 id="单标志法">单标志法</h3>
+<ul>
+<li>算法思想
+<ul>
+<li>一个进程在访问完临界区后会把使用临界区的权限转交给另一个进程，也就是说每个进程进入临界区的权限只能被另一个进程赋予</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">turn</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// turn 表示当前允许进入临界区的进程号码
+</span></span></span><span class="line"><span class="cl"><span class="c1">// P0进程：
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">while</span> <span class="p">(</span><span class="n">turn</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">critical</span> <span class="n">section</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">turn</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">remainder</span> <span class="n">section</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// P1进程
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">while</span> <span class="p">(</span><span class="n">turn</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">);</span>  <span class="c1">// 进入区
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">critical</span> <span class="n">section</span><span class="p">;</span>   <span class="c1">// 临界区
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">turn</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>           <span class="c1">// 退出区
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">remainder</span> <span class="n">section</span><span class="p">;</span>  <span class="c1">// 剩余区
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 该算法可以实现“同一时刻最多只允许一个进程访问临界区”
+</span></span></span></code></pre></div></li>
+<li>主要问题
+<ul>
+<li>违背“空闲让进”原则</li>
+</ul>
+</li>
+</ul>
+<h3 id="双标志先检查">双标志先检查</h3>
+<ul>
+<li>算法思想
+<ul>
+<li>设置一个布尔型数组flag[]，数组中各个元素用来标记个<strong>进程想进入临界区的意愿</strong>，比如&quot;flag[0] = true&rdquo;，意味着0号进程P0现在想要进入临界区。</li>
+<li>每个进程在进入临界区之前先<strong>检查</strong>当前有没有别的进程想进入临界区，如果没有，则把自身对应的标志flag[i]设为true，之后开始访问临界区</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl">  <span class="kt">bool</span> <span class="n">flag</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span> <span class="c1">// 表示进入临界区意愿的数组
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">flag</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">flag</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span> <span class="c1">// 刚开始设置为两个进程都不想进入临界区
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// P0进程
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">while</span> <span class="p">(</span><span class="n">flag</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">flag</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">critical</span> <span class="n">section</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">flag</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">remainder</span> <span class="n">section</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// P1进程
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">while</span> <span class="p">(</span><span class="n">flag</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span> <span class="c1">// 如果此时P0想进入临界区，P1就一直循环等待
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">flag</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span> <span class="c1">// 标记为P1进程想要进入临界区
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">critical</span> <span class="n">section</span><span class="p">;</span> <span class="c1">// 访问临界区
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">flag</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span> <span class="c1">// 访问完临界区，修改标记为P1不想使用临界区
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">remainder</span> <span class="n">section</span><span class="p">;</span>
+</span></span></code></pre></div></li>
+<li>主要问题：违反“忙则等待”原则
+<ul>
+<li>原因：进入区的“检查”和“上锁”两个处理不是一气呵成的。“检查”后，“上锁”前可能发生进程切换</li>
+</ul>
+</li>
+</ul>
+<h3 id="双标志后检查">双标志后检查</h3>
+<ul>
+<li>算法思想
+<ul>
+<li>双标志先检查法的改版，先“上锁”后“检查”</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">flag</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="n">flag</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">flag</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// P0进程
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">flag</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">while</span> <span class="p">(</span><span class="n">flag</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">critical</span> <span class="n">section</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">flag</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">remainder</span> <span class="n">section</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// P1进程
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">flag</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span> <span class="c1">// 标记为P1进程想要进入临界区
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">while</span> <span class="p">(</span><span class="n">flag</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span> <span class="c1">// 如果此时P0想进入临界区，P1就一直循环等待
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">critical</span> <span class="n">section</span><span class="p">;</span> <span class="c1">// 访问临界区
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">flag</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span> <span class="c1">// 访问完临界区，修改标记为P1不想使用临界区
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">remainder</span> <span class="n">section</span><span class="p">;</span>
+</span></span></code></pre></div></li>
+<li>问题
+<ul>
+<li>虽然解决了“忙则等待”的问题，但是又违背了“空闲让进”和“有限等待”原则，会因各进程都长期无法访问临界资源而产生“饥饿”现象</li>
+</ul>
+</li>
+</ul>
+<h3 id="peterson算法">Peterson算法</h3>
+<ul>
+<li>算法思想
+<ul>
+<li>结合双标志法、单标志法的思想</li>
+<li>如果双方都争着想进入临界区，那可以让进程尝试“孔融让梨”(谦让)，做一个有礼貌的进程</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">flag</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>  <span class="c1">// 表示进入临界区意愿的数组，初始值都是false(背后的含义：“表达意愿”)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">int</span> <span class="n">turn</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  <span class="c1">// turn 表示优先让哪个进程进入临界区
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="c1">// P0进程
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">flag</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">turn</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">while</span> <span class="p">(</span><span class="n">flag</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">turn</span> <span class="o">==</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">critical</span> <span class="n">section</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">flag</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">remainder</span> <span class="n">section</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// P1进程
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">flag</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">turn</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">while</span> <span class="p">(</span><span class="n">flag</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">turn</span> <span class="o">==</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">critical</span> <span class="n">section</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">flag</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">remainder</span> <span class="n">section</span><span class="p">;</span>
+</span></span></code></pre></div></li>
+<li>优点
+<ul>
+<li>用软件方法解决了进程互斥问题，遵循了空闲让进、忙则等待、有限等待三个原则</li>
+</ul>
+</li>
+<li>缺点
+<ul>
+<li>依然未遵循让权等待原则
+<img src="/images/%E6%88%AA%E5%B1%8F2024-10-22%2022.29.12.png" alt=""></li>
+</ul>
+</li>
+</ul>
+<h2 id="23_3-进程互斥的硬件实现方法">2.3_3 进程互斥的硬件实现方法</h2>
+<h3 id="中断屏蔽方法">中断屏蔽方法</h3>
+<ul>
+<li>利用“开/关中断指令”实现</li>
+<li>进程访问临界区之前，关中断</li>
+<li>进程访问完金街区，再执行开中断指令，才有可能有别的进程上处理机并访问临界区</li>
+<li>优点：简单、搞笑</li>
+<li>缺点：不适用于多处理机；知识用于操作系统内核进程，不适用于内核进程</li>
+</ul>
+<blockquote>
+<p>因为开/关中断指令只能运行在内核态，这组指令如果能让用户随意使用会很危险</p>
+</blockquote>
+<h3 id="testandset指令">TestAndSet指令</h3>
+<ul>
+<li>简称TS指令，也有地方称为TestAndSetLock指令，或TSL指令</li>
+<li>TSL指令是用硬件实现的，执行的过程不允许被中断，只能一气呵成</li>
+<li>逻辑(实际上是由硬件实现)</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">// 布尔型共享变量lock表示当前临界区是否被加锁
+</span></span></span><span class="line"><span class="cl"><span class="c1">// true表示已加锁，false表示未加锁
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">bool</span> <span class="nf">TestAndSet</span> <span class="p">(</span><span class="kt">bool</span> <span class="o">*</span><span class="n">lock</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">bool</span> <span class="n">old</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">old</span> <span class="o">=</span> <span class="o">*</span><span class="n">lock</span><span class="p">;</span> <span class="c1">// old用来存放lock原来的值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="o">*</span><span class="n">lock</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span> <span class="c1">// 无论之前是否已加锁，都将lock设为true
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">return</span> <span class="n">old</span><span class="p">;</span> <span class="c1">// 返回lock原来的值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 以下是使用TSL指令实现互斥的算法逻辑
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">while</span> <span class="p">(</span><span class="n">TestAndSet</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">lock</span><span class="p">));</span> <span class="c1">// “上锁”并“检查”
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">临界区代码段</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">lock</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span> <span class="c1">//“解锁”
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">剩余代码段</span><span class="p">...</span>
+</span></span></code></pre></div><ul>
+<li>优点
+<ul>
+<li>TSL指令把“上锁”和“检查”操作用硬件的方式变成了一气呵成的原子操作</li>
+<li>实现简单，无需像软件实现方法那样严格检查是否会有逻辑漏洞；适用于多处理机环境</li>
+</ul>
+</li>
+<li>缺点
+<ul>
+<li>不满足“让权等待”的原则</li>
+</ul>
+</li>
+</ul>
+<h3 id="swap指令">Swap指令</h3>
+<ul>
+<li>有的地方也叫Exchange指令，或简称XCHG指令</li>
+<li>用硬件实现，执行的过程不允许被中断，只能一气呵成</li>
+<li>逻辑</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">// Swap指令的作用是交换两个变量的值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">Swap</span> <span class="p">(</span><span class="kt">bool</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="kt">bool</span> <span class="o">*</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">boo</span> <span class="n">temp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">temp</span> <span class="o">=</span> <span class="o">*</span><span class="n">a</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">*</span><span class="n">a</span> <span class="o">=</span> <span class="o">*</span><span class="n">b</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">*</span><span class="n">b</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 以下是用Swap指令实现互斥的算法逻辑
+</span></span></span><span class="line"><span class="cl"><span class="c1">// lock表示当前临界区是否被加锁
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">bool</span> <span class="n">old</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">while</span> <span class="p">(</span><span class="n">old</span> <span class="o">==</span> <span class="nb">true</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Swap</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">lock</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">old</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="err">临界区代码</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">lock</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="err">剩余区代码段</span><span class="p">...</span>
+</span></span></code></pre></div><ul>
+<li>优点
+<ul>
+<li>实现简单，无需像软件实现方法那样严格检查是否会有逻辑漏洞；适用于多处理机环境</li>
+</ul>
+</li>
+<li>缺点
+<ul>
+<li>不满足“让权等待”原则，暂时无法进入临界区的进程会占用CPU并之心循环TSL指令，从而导致“忙等”</li>
+</ul>
+</li>
+</ul>
+<h3 id="总结-16">总结</h3>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2024-10-22%2022.47.31.png" alt=""></p>
 </article>
               </div>
             </div>

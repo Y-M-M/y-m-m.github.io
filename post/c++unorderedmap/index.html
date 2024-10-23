@@ -18,7 +18,7 @@
 
     
     <meta name="description"
-  content="什么是unorderedmap？ 一个关联容器，包含具有唯一键的键值对 使用unorderdmap有什么好处？ 元素的搜索、插入和删除时间复杂度O(1) 原理是什么？ 在内部，元素不按任何特定顺序排序，而是组织到存储桶中 元素放入哪个存储桶完全取决于其键的哈希值，具有相同哈希码的键出现在同一个存储桶中 如何使用？ 初始化 std::unordered_map&lt;std::string, std::string&gt; u = { {&#34;RED&#34;, &#34;#FF0000&#34;}, {&#34;GREEN&#34;, &#34;#00FF00&#34;}, {&#34;BLUE&#34;, &#34;#0000FF&#34;} }; 相关函数 operator= 为容器赋值 begin/cbegin 返回指向开头的iterator end/cend 返回指向结尾的迭代器 empty 检查容器是否为空 size 返回元素的数目 clear 清空容器 insert 插入元素或节点(C&#43;&#43;17以后) insert_range(C&#43;&#43;23) 插入一系列元素 erase 擦除元素 extract(C&#43;&#43;17) 从其他容器中提取节点 merge(C&#43;&#43;17) 从其他容器中接入节点 operator[] 获取特定元素 count 返回能匹配到特定key的元素数目 find 根据key寻找元素 bucket_count 返回桶的数目 max_bucket_count 返回最大的桶的数目 bucket_size 返回指定桶的大小 bucket 返回指定的桶 load_factor 返回每个桶拥有的元素的数目的平均数 hash_function 返回对key进行操作的哈希函数 operator==(C&#43;&#43;11) operator!=(C&#43;&#43;11) 特别的用法 operator[] unordered_map hashtable; hashtable[1] = 2; // 相当于添加(1, 2)这个元素 例题 leetcode 1.两数之和
+  content="什么是unorderedmap？ 一个关联容器，包含具有唯一键的键值对 使用unorderdmap有什么好处？ 元素的搜索、插入和删除时间复杂度O(1) 原理是什么？ 在内部，元素不按任何特定顺序排序，而是组织到存储桶中 元素放入哪个存储桶完全取决于其键的哈希值，具有相同哈希码的键出现在同一个存储桶中 如何使用？ 初始化 std::unordered_map&lt;std::string, std::string&gt; u = { {&#34;RED&#34;, &#34;#FF0000&#34;}, {&#34;GREEN&#34;, &#34;#00FF00&#34;}, {&#34;BLUE&#34;, &#34;#0000FF&#34;} }; 相关函数 operator= 为容器赋值 begin/cbegin 返回指向开头的iterator end/cend 返回指向结尾的迭代器 empty 检查容器是否为空 size 返回元素的数目 clear 清空容器 insert 插入元素或节点(C&#43;&#43;17以后) insert_range(C&#43;&#43;23) 插入一系列元素 erase 擦除元素 extract(C&#43;&#43;17) 从其他容器中提取节点 merge(C&#43;&#43;17) 从其他容器中接入节点 operator[] 获取特定元素 count 返回能匹配到特定key的元素数目 find 根据key寻找元素 返回迭代器 bucket_count 返回桶的数目 max_bucket_count 返回最大的桶的数目 bucket_size 返回指定桶的大小 bucket 返回指定的桶 load_factor 返回每个桶拥有的元素的数目的平均数 hash_function 返回对key进行操作的哈希函数 operator==(C&#43;&#43;11) operator!=(C&#43;&#43;11) 特别的用法 operator[] unordered_map hashtable; hashtable[1] = 2; // 相当于添加(1, 2)这个元素 例题 leetcode 1.两数之和
 参考资料 cppreference
 " />
 <meta name="keywords"
@@ -30,7 +30,7 @@
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="C&#43;&#43; unorderedmap的用法 - 陈皮的博客" />
 <meta name="twitter:description"
-  content="什么是unorderedmap？ 一个关联容器，包含具有唯一键的键值对 使用unorderdmap有什么好处？ 元素的搜索、插入和删除时间复杂度O(1) 原理是什么？ 在内部，元素不按任何特定顺序排序，而是组织到存储桶中 元素放入哪个存储桶完全取决于其键的哈希值，具有相同哈希码的键出现在同一个存储桶中 如何使用？ 初始化 std::unordered_map&lt;std::string, std::string&gt; u = { {&#34;RED&#34;, &#34;#FF0000&#34;}, {&#34;GREEN&#34;, &#34;#00FF00&#34;}, {&#34;BLUE&#34;, &#34;#0000FF&#34;} }; 相关函数 operator= 为容器赋值 begin/cbegin 返回指向开头的iterator end/cend 返回指向结尾的迭代器 empty 检查容器是否为空 size 返回元素的数目 clear 清空容器 insert 插入元素或节点(C&#43;&#43;17以后) insert_range(C&#43;&#43;23) 插入一系列元素 erase 擦除元素 extract(C&#43;&#43;17) 从其他容器中提取节点 merge(C&#43;&#43;17) 从其他容器中接入节点 operator[] 获取特定元素 count 返回能匹配到特定key的元素数目 find 根据key寻找元素 bucket_count 返回桶的数目 max_bucket_count 返回最大的桶的数目 bucket_size 返回指定桶的大小 bucket 返回指定的桶 load_factor 返回每个桶拥有的元素的数目的平均数 hash_function 返回对key进行操作的哈希函数 operator==(C&#43;&#43;11) operator!=(C&#43;&#43;11) 特别的用法 operator[] unordered_map hashtable; hashtable[1] = 2; // 相当于添加(1, 2)这个元素 例题 leetcode 1.两数之和
+  content="什么是unorderedmap？ 一个关联容器，包含具有唯一键的键值对 使用unorderdmap有什么好处？ 元素的搜索、插入和删除时间复杂度O(1) 原理是什么？ 在内部，元素不按任何特定顺序排序，而是组织到存储桶中 元素放入哪个存储桶完全取决于其键的哈希值，具有相同哈希码的键出现在同一个存储桶中 如何使用？ 初始化 std::unordered_map&lt;std::string, std::string&gt; u = { {&#34;RED&#34;, &#34;#FF0000&#34;}, {&#34;GREEN&#34;, &#34;#00FF00&#34;}, {&#34;BLUE&#34;, &#34;#0000FF&#34;} }; 相关函数 operator= 为容器赋值 begin/cbegin 返回指向开头的iterator end/cend 返回指向结尾的迭代器 empty 检查容器是否为空 size 返回元素的数目 clear 清空容器 insert 插入元素或节点(C&#43;&#43;17以后) insert_range(C&#43;&#43;23) 插入一系列元素 erase 擦除元素 extract(C&#43;&#43;17) 从其他容器中提取节点 merge(C&#43;&#43;17) 从其他容器中接入节点 operator[] 获取特定元素 count 返回能匹配到特定key的元素数目 find 根据key寻找元素 返回迭代器 bucket_count 返回桶的数目 max_bucket_count 返回最大的桶的数目 bucket_size 返回指定桶的大小 bucket 返回指定的桶 load_factor 返回每个桶拥有的元素的数目的平均数 hash_function 返回对key进行操作的哈希函数 operator==(C&#43;&#43;11) operator!=(C&#43;&#43;11) 特别的用法 operator[] unordered_map hashtable; hashtable[1] = 2; // 相当于添加(1, 2)这个元素 例题 leetcode 1.两数之和
 参考资料 cppreference
 " />
 <meta name="twitter:site" content="https://y-m-m.github.io/" />
@@ -42,7 +42,7 @@
 <meta property="og:type" content="article" />
 <meta property="og:title" content="C&#43;&#43; unorderedmap的用法 - 陈皮的博客">
 <meta property="og:description"
-  content="什么是unorderedmap？ 一个关联容器，包含具有唯一键的键值对 使用unorderdmap有什么好处？ 元素的搜索、插入和删除时间复杂度O(1) 原理是什么？ 在内部，元素不按任何特定顺序排序，而是组织到存储桶中 元素放入哪个存储桶完全取决于其键的哈希值，具有相同哈希码的键出现在同一个存储桶中 如何使用？ 初始化 std::unordered_map&lt;std::string, std::string&gt; u = { {&#34;RED&#34;, &#34;#FF0000&#34;}, {&#34;GREEN&#34;, &#34;#00FF00&#34;}, {&#34;BLUE&#34;, &#34;#0000FF&#34;} }; 相关函数 operator= 为容器赋值 begin/cbegin 返回指向开头的iterator end/cend 返回指向结尾的迭代器 empty 检查容器是否为空 size 返回元素的数目 clear 清空容器 insert 插入元素或节点(C&#43;&#43;17以后) insert_range(C&#43;&#43;23) 插入一系列元素 erase 擦除元素 extract(C&#43;&#43;17) 从其他容器中提取节点 merge(C&#43;&#43;17) 从其他容器中接入节点 operator[] 获取特定元素 count 返回能匹配到特定key的元素数目 find 根据key寻找元素 bucket_count 返回桶的数目 max_bucket_count 返回最大的桶的数目 bucket_size 返回指定桶的大小 bucket 返回指定的桶 load_factor 返回每个桶拥有的元素的数目的平均数 hash_function 返回对key进行操作的哈希函数 operator==(C&#43;&#43;11) operator!=(C&#43;&#43;11) 特别的用法 operator[] unordered_map hashtable; hashtable[1] = 2; // 相当于添加(1, 2)这个元素 例题 leetcode 1.两数之和
+  content="什么是unorderedmap？ 一个关联容器，包含具有唯一键的键值对 使用unorderdmap有什么好处？ 元素的搜索、插入和删除时间复杂度O(1) 原理是什么？ 在内部，元素不按任何特定顺序排序，而是组织到存储桶中 元素放入哪个存储桶完全取决于其键的哈希值，具有相同哈希码的键出现在同一个存储桶中 如何使用？ 初始化 std::unordered_map&lt;std::string, std::string&gt; u = { {&#34;RED&#34;, &#34;#FF0000&#34;}, {&#34;GREEN&#34;, &#34;#00FF00&#34;}, {&#34;BLUE&#34;, &#34;#0000FF&#34;} }; 相关函数 operator= 为容器赋值 begin/cbegin 返回指向开头的iterator end/cend 返回指向结尾的迭代器 empty 检查容器是否为空 size 返回元素的数目 clear 清空容器 insert 插入元素或节点(C&#43;&#43;17以后) insert_range(C&#43;&#43;23) 插入一系列元素 erase 擦除元素 extract(C&#43;&#43;17) 从其他容器中提取节点 merge(C&#43;&#43;17) 从其他容器中接入节点 operator[] 获取特定元素 count 返回能匹配到特定key的元素数目 find 根据key寻找元素 返回迭代器 bucket_count 返回桶的数目 max_bucket_count 返回最大的桶的数目 bucket_size 返回指定桶的大小 bucket 返回指定的桶 load_factor 返回每个桶拥有的元素的数目的平均数 hash_function 返回对key进行操作的哈希函数 operator==(C&#43;&#43;11) operator!=(C&#43;&#43;11) 特别的用法 operator[] unordered_map hashtable; hashtable[1] = 2; // 相当于添加(1, 2)这个元素 例题 leetcode 1.两数之和
 参考资料 cppreference
 " />
 <meta property="og:url" content="https://y-m-m.github.io/post/c&#43;&#43;unorderedmap/" />
@@ -156,9 +156,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Tue, 22 Oct 2024 16:14:16 &#43;0800"
+                  Modified <relative-time datetime="Wed, 23 Oct 2024 11:22:21 &#43;0800"
                     class="no-wrap">
-                    Tue, 22 Oct 2024 16:14:16 &#43;0800</relative-time>
+                    Wed, 23 Oct 2024 11:22:21 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -188,7 +188,7 @@
                         </div>
                       </div>
                     </details-menu>
-                      419 Words
+                      424 Words
                     
 
                   </div>
@@ -202,6 +202,15 @@
                         </path>
                       </svg>
                       计算机科学与技术
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/c&#43;&#43;">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      C&#43;&#43;
                     </a>
                     
                     
@@ -247,7 +256,11 @@
 <li>merge(C++17) 从其他容器中接入节点</li>
 <li>operator[] 获取特定元素</li>
 <li>count 返回能匹配到特定key的元素数目</li>
-<li>find 根据key寻找元素</li>
+<li>find 根据key寻找元素
+<ul>
+<li>返回迭代器</li>
+</ul>
+</li>
 <li>bucket_count 返回桶的数目</li>
 <li>max_bucket_count 返回最大的桶的数目</li>
 <li>bucket_size 返回指定桶的大小</li>

@@ -648,17 +648,6 @@
 		python基础
 	</a>
 	
-	<a class="muted-link mr-3" href="https://y-m-m.github.io/tags/python%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/">
-		
-		<svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-			<path fill-rule="evenodd"
-				d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-			</path>
-		</svg>
-		
-		python程序设计
-	</a>
-	
 	<a class="muted-link mr-3" href="https://y-m-m.github.io/tags/templates/">
 		
 		<svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
@@ -1049,6 +1038,191 @@
         
       
       <ul>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/leetcode134%E5%8A%A0%E6%B2%B9%E7%AB%99/">leetcode 134 加油站</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <p><a href="https://leetcode.cn/problems/gas-station/description/">leetcode 134</a></p>
+<h1 id="题目">题目</h1>
+<ul>
+<li>
+<p>在一条环路上有 n 个加油站，其中第 i 个加油站有汽油 gas[i] 升。</p>
+</li>
+<li>
+<p>你有一辆油箱容量无限的的汽车，从第 i 个加油站开往第 i+1 个加油站需要消耗汽油 cost[i] 升。你从其中的一个加油站出发，开始时油箱为空。</p>
+</li>
+<li>
+<p>给定两个整数数组 gas 和 cost ，如果你可以按顺序绕环路行驶一周，则返回出发时加油站的编号，否则返回 -1 。如果存在解，则 保证 它是 唯一 的。</p>
+</li>
+</ul>
+<h1 id="示例">示例</h1>
+<h2 id="示例一">示例一</h2>
+<ul>
+<li>输入: gas = [1,2,3,4,5], cost = [3,4,5,1,2]</li>
+<li>输出: 3</li>
+<li>解释:
+<ul>
+<li>从 3 号加油站(索引为 3 处)出发，可获得 4 升汽油。此时油箱有 = 0 + 4 = 4 升汽油</li>
+<li>开往 4 号加油站，此时油箱有 4 - 1 + 5 = 8 升汽油</li>
+<li>开往 0 号加油站，此时油箱有 8 - 2 + 1 = 7 升汽油</li>
+<li>开往 1 号加油站，此时油箱有 7 - 3 + 2 = 6 升汽油</li>
+<li>开往 2 号加油站，此时油箱有 6 - 4 + 3 = 5 升汽油</li>
+<li>开往 3 号加油站，你需要消耗 5 升汽油，正好足够你返回到 3 号加油站。</li>
+<li>因此，3 可为起始索引。</li>
+</ul>
+</li>
+</ul>
+<h2 id="示例二">示例二</h2>
+<ul>
+<li>输入: gas = [2,3,4], cost = [3,4,3]</li>
+<li>输出: -1</li>
+<li>解释:
+<ul>
+<li>你不能从 0 号或 1 号加油站出发，因为没有足够的汽油可以让你行驶到下一个加油站。</li>
+<li>我们从 2 号加油站出发，可以获得 4 升汽油。 此时油箱有 = 0 + 4 = 4 升汽油</li>
+<li>开往 0 号加油站，此时油箱有 4 - 3 + 2 = 3 升汽油</li>
+<li>开往 1 号加油站，此时油箱有 3 - 3 + 3 = 3 升汽油</li>
+<li>你无法返回 2 号加油站，因为返程需要消耗 4 升汽油，但是你的油箱只有 3 升汽油。</li>
+<li>因此，无论怎样，你都不可能绕环路行驶一周。</li>
+</ul>
+</li>
+</ul>
+<h1 id="提示">提示</h1>
+<ul>
+<li>gas.length == n</li>
+<li>cost.length == n</li>
+<li>1 &lt;= n &lt;= 10<!-- raw HTML omitted -->5<!-- raw HTML omitted --></li>
+<li>0 &lt;= gas[i], cost[i] &lt;= 10<!-- raw HTML omitted -->4<!-- raw HTML omitted --></li>
+</ul>
+<h1 id="难度">难度</h1>
+<ul>
+<li>中等</li>
+</ul>
+<h1 id="题解">题解</h1>
+<h2 id="方法一">方法一</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">canCompleteCircuit</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">gas</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">cost</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">rest_gas</span><span class="p">(</span><span class="n">gas</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">first</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">min_gas</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">rest_gas</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">i</span><span class="p">)</span> <span class="n">rest_gas</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">gas</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span> <span class="n">rest_gas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">rest_gas</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">gas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">cost</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">rest_gas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">min_gas</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">first</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">rest_gas</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                <span class="n">min_gas</span> <span class="o">=</span> <span class="n">rest_gas</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">rest_gas</span><span class="p">.</span><span class="n">back</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span> <span class="k">return</span> <span class="n">first</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><ul>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+<li>分析
+<ul>
+<li>容易发现规律：
+<ul>
+<li>如果走过所有加油站后，油的余量大于0，即gas的所有项之和大于cost的所有项之和，则有解(?如何证明)</li>
+<li>建立rest_gas的数组，存储从0加油站出发，经过每个加油站之后油的余量。解即为从油余量最小的加油站的下一站出发</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="方法二力扣官方题解">方法二(力扣官方题解)</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">canCompleteCircuit</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">gas</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">cost</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">gas</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">sumOfGas</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">sumOfCost</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="p">(</span><span class="n">cnt</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">cnt</span><span class="p">)</span> <span class="o">%</span> <span class="n">n</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">sumOfGas</span> <span class="o">+=</span> <span class="n">gas</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">                <span class="n">sumOfCost</span> <span class="o">+=</span> <span class="n">cost</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">sumOfCost</span> <span class="o">&gt;</span> <span class="n">sumOfGas</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="n">cnt</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">cnt</span> <span class="o">==</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">cnt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><ul>
+<li>提交结果
+<ul>
+<li>通过</li>
+<li><a href="https://leetcode.cn/problems/gas-station/solutions/1/jia-you-zhan-by-leetcode-solution/">分析</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="参考资料">参考资料</h2>
+<p><a href="https://leetcode.cn/problems/gas-station/solutions/1/jia-you-zhan-by-leetcode-solution/">leetcode 134 官方题解</a></p>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学与技术
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                算法题
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/leetcode">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                leetcode
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Sun, 06 Oct 2024 00:00:00 &#43;0000" class="no-wrap"
+                title=" Sun, 06 Oct 2024 00:00:00 &#43;0000">
+                Sun, 06 Oct 2024 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
         
         <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
           <div class="col-12 d-inline-block">
@@ -2246,176 +2420,6 @@ public:
                   </path>
                 </svg>
                 操作系统
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Wed, 11 Sep 2024 00:00:00 &#43;0000" class="no-wrap"
-                title=" Wed, 11 Sep 2024 00:00:00 &#43;0000">
-                Wed, 11 Sep 2024 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%AE%9E%E8%B7%B5/">程序设计实践</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <h1 id="简介">简介</h1>
-<ul>
-<li>张海滨
-<ul>
-<li><a href="mailto:zhanghb@bupt.edu.cn">zhanghb@bupt.edu.cn</a></li>
-</ul>
-</li>
-<li>教材
-<ul>
-<li>程序设计实践 The Practice of Programming 人民邮电出版社</li>
-<li>程序设计实践 机械工业出版社</li>
-</ul>
-</li>
-<li>20学时 10周讲解相关知识；12学时大作业，验收</li>
-<li>课程内容
-<ul>
-<li>风格</li>
-<li>设计与实现</li>
-<li>接口</li>
-<li>排错</li>
-<li>测试</li>
-<li>性能</li>
-<li>可移植性</li>
-<li>记法</li>
-</ul>
-</li>
-<li>考核方式
-<ul>
-<li>平时成绩 小作业 30%</li>
-<li>大作业 70%</li>
-<li>均提交至教学云平台，大作业需验收</li>
-</ul>
-</li>
-<li>大作业
-<ul>
-<li>题目：基于领域特定语言的客服机器人的设计与实现</li>
-<li>描述：领域特定语言(DSL)可以提供一种相对简单的文法，用于特定领域的业务流程定制。本作业要求定义一个领域特定脚本语言，这个语言能够描述在线客服机器人(机器人客服是目前提升客服效率的重要技术，在银行、通信和商务等领域的复杂信息系统中有广泛的应用)的自动应答逻辑，并设计实现一个解释器解释执行这个脚本，可以根据用户的不同输入，根据脚本的逻辑设计给出相应的应答</li>
-<li>基本要求
-<ul>
-<li>脚本语言的语法可以自由定义，只要与以上满足客服机器人自动应答逻辑的要求</li>
-<li>程序输入输出形式不限，可以简化为纯命令行界面</li>
-<li>应该输出几种不同的脚本范例，对不同范例解释执行之后会有不同的行为表现</li>
-</ul>
-</li>
-<li>评分标准
-<ul>
-<li>风格15分，代码注释6分，命名6分，其它3分</li>
-<li>设计和实现30分，其中数据结构7分，模块划分7分，功能8分，文档8分</li>
-<li>接口15分，程序间接口8分，人机接口7分</li>
-<li>测试30分，测试桩15分，自动测试脚本15分</li>
-<li>记法10分，文档中对此脚本语言的语法的准确描述</li>
-<li>抄袭或有意被抄袭0分</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>养成使用版本管理工具的习惯</li>
-</ul>
-<h1 id="第一章-风格style">第一章 风格style</h1>
-<h2 id="概述">概述</h2>
-<ul>
-<li>代码风格因人而异</li>
-<li>有争议的风格
-<ul>
-<li>遵从你所在组织的规范</li>
-<li>与同一个文件中其他代码风格保持一致</li>
-<li>与同一项目里其他文件的风格尽量保持一致</li>
-</ul>
-</li>
-<li>无争议的风格：命名风格，表达式和语句的风格，一致性和习惯用法，函数宏定义，避免神秘的数，注释风格等</li>
-</ul>
-<h2 id="程序的风格">程序的风格</h2>
-<h3 id="命名的风格">命名的风格</h3>
-<ul>
-<li>名字要准确的表达用途</li>
-<li>名字不是越长越好
-<ul>
-<li>全局变量可以用具有描述意义的长名字</li>
-<li>局部变量用短名字会显得程序更简洁</li>
-</ul>
-</li>
-<li>类的成员的名字，不要再啰嗦重复类名</li>
-<li>用动词或者动词+名次定义函数名</li>
-<li>返回布尔值的函数名应该是一个命题，通常使用is作为函数名中的动词</li>
-<li>名字尽可能简单明了，不要用“否定之否定”</li>
-</ul>
-<h3 id="表达式和语句">表达式和语句</h3>
-<ul>
-<li>使用表达式的自然形式，即常见的易于理解的形式</li>
-<li>利用括号排除歧义，即使语法上不要求括号，也建议加上括号以便提高代码可读性</li>
-<li>分解复杂的表达式</li>
-</ul>
-<h3 id="一致性和习惯用法">一致性和习惯用法</h3>
-<ul>
-<li>使用一致的缩进和花括号风格(例如两行以上一定加花括号)</li>
-<li>使用大多数人最习惯的用法(for循环)</li>
-<li>用else if处理多路选择，一个判断尽可能接近它所对应的动作</li>
-</ul>
-<h3 id="函数宏">函数宏</h3>
-<ul>
-<li>避免宏定义参数中写很多东西。函数宏的缺点，直接替换，导致用到两次的参数被替换两次，执行两次，可能直接导致错误</li>
-<li>函数宏的缺点，直接替换，导致用到两次的参数会被替换两次，执行两次，也可能导致性能错误</li>
-<li>如果一定要用函数宏，不要吝啬括号</li>
-</ul>
-<h3 id="总结">总结</h3>
-<ul>
-<li>C++ 尽可能使用inline函数</li>
-<li>Java根本不支持函数宏</li>
-</ul>
-<h3 id="神秘的数">神秘的数</h3>
-<ul>
-<li>给所有数字起一个名字</li>
-<li>直接使用字符形式的常量，不要使用它的整数形式</li>
-<li>利用语言去计算对象的大小，从而减少代码修改负担，提高代码简洁性，可以定义一个通用的宏</li>
-<li>尽可能让编译器来计算数值</li>
-</ul>
-<h2 id="注释的风格">注释的风格</h2>
-<ul>
-<li>注释与代码要始终保持一致</li>
-<li>不要写没用的注释</li>
-<li>用好的命名代替注释</li>
-<li><strong>用注释自动生成文档</strong></li>
-</ul>
-<h2 id="阿里代码规约">阿里代码规约</h2>
-<p><a href="https://github.com/alibaba/p3c">https://github.com/alibaba/p3c</a></p>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机科学
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%AE%9E%E8%B7%B5">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                程序设计实践
               </a>
               
               

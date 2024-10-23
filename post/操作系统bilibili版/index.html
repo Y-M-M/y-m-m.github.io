@@ -150,9 +150,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Tue, 22 Oct 2024 22:47:55 &#43;0800"
+                  Modified <relative-time datetime="Wed, 23 Oct 2024 17:08:34 &#43;0800"
                     class="no-wrap">
-                    Tue, 22 Oct 2024 22:47:55 &#43;0800</relative-time>
+                    Wed, 23 Oct 2024 17:08:34 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -182,7 +182,7 @@
                         </div>
                       </div>
                     </details-menu>
-                      17694 Words
+                      20608 Words
                     
 
                   </div>
@@ -1935,6 +1935,325 @@ CPU执行了关中断指令之后，就不再例行检查中断信号，直到�
 </ul>
 <h3 id="总结-16">总结</h3>
 <p><img src="/images/%E6%88%AA%E5%B1%8F2024-10-22%2022.47.31.png" alt=""></p>
+<h2 id="234-互斥锁">2.3——4 互斥锁</h2>
+<h3 id="什么是互斥锁">什么是互斥锁？</h3>
+<ul>
+<li>解决临界区最简单的工具</li>
+<li>以工程在进入临界区时获得锁，在退出临界区时释放锁</li>
+<li>函数acquire()获得锁，函数release()释放锁</li>
+<li>每个互斥锁有一个布尔变量available表示锁是否可用</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="n">acquire</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="n">available</span><span class="p">)</span> <span class="p">;</span> <span class="c1">// 忙等待
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">available</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>  <span class="c1">// 获得锁
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">release</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">available</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>   <span class="c1">// 释放锁
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></div><ul>
+<li>acquire()或release()的执行必须是原子操作，因此互斥锁通常采用硬件机制来实现</li>
+<li>互斥锁的主要缺点是忙等待；通常用于多处理器系统，一个线程可以在一个处理器上等待，不影响其他线程的执行</li>
+<li>需要连续循环忙等的互斥锁，都可称为自旋锁(spin lock)，如TSL指令、swap指令、单标志法</li>
+<li>特性
+<ul>
+<li>需忙等，进程时间片用完才下处理机，违反“让权等待”</li>
+<li>优点：等待期间不用切换进程上下文，多处理器系统中，若上锁的时间段，则等待时间代价很低</li>
+<li>常用于多处理器系统，一个核忙等，其他核照常工作，并快速释放临界区</li>
+<li>不太适用于丹处理机系统，忙等的过程中不可能解锁</li>
+</ul>
+</li>
+</ul>
+<h2 id="23_5-信号量机制">2.3_5 信号量机制</h2>
+<ul>
+<li>用户进程可以通过使用操作系统提供的<strong>一对原语</strong>来<strong>对信号量进行操作</strong>，从而很方便的实现了进程互斥、进程同步</li>
+<li>信号量其实就是一个<strong>变量</strong>(可以是一个整数，也可以是更复杂的记录型变量)，可以用一个信号量来表示系统中某种资源的数量</li>
+</ul>
+<blockquote>
+<p>原语是一种特殊的程序段，其执行只能一气呵成，不可被中断。原语是由关中断/开中断指令实现的。软件解决方案的主要问题是由“进入区的各种操作无法一气呵成”，因此如果能把进入区、退出区的操作都用“原语”实现，使这些操作能“一气呵成”就能避免问题
+一对原语：<strong>wait(S)原语和signal(S)原语</strong>，可以把原语理解为我们自己写的函数，函数名分别为wait和signal，括号里的信号量S其实就是函数调用时传入的一个参数
+wait, singal原语常简称为P, V操作，因此，做题的时候常把wait(S), signal(S)两个操作分别写为<strong>P(S), V(S)</strong></p>
+</blockquote>
+<h3 id="整型信号量">整型信号量</h3>
+<ul>
+<li>用一个整数型的变量作为信号量，用来表示系统中某种资源的数量</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">S</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 初始化整型信号量s，表示当前系统中可用的打印机资源数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">wait</span> <span class="p">(</span><span class="kt">int</span> <span class="n">S</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// wait原语，相当于“进入区”
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">while</span> <span class="p">(</span><span class="n">S</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">);</span>   <span class="c1">// 如果资源数不够，就一直循环等待
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">S</span> <span class="o">=</span> <span class="n">S</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>        <span class="c1">// 如果资源数够，则占用一个资源
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">signal</span> <span class="p">(</span><span class="kt">int</span> <span class="n">S</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// signal原语，相当于“退出区”
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">S</span> <span class="o">=</span> <span class="n">S</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>          <span class="c1">// 使用完资源后，在退出去释放资源
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 进程P0
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">wait</span><span class="p">(</span><span class="n">S</span><span class="p">);</span> <span class="c1">// 进入区，申请资源
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">使用打印机资源</span><span class="p">...</span> <span class="c1">// 临界区，访问资源
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">signal</span><span class="p">(</span><span class="n">S</span><span class="p">);</span> <span class="c1">// 退出区，释放资源
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">...</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 进程P1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">wait</span><span class="p">(</span><span class="n">S</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="err">使用打印机资源</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">signal</span><span class="p">(</span><span class="n">S</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">...</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 进程Pn
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">wait</span><span class="p">(</span><span class="n">S</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="err">使用打印机资源</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">signal</span><span class="p">(</span><span class="n">S</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">...</span>
+</span></span></code></pre></div><ul>
+<li>与普通整数变量的区别：对信号量的操作只有三种，即 初始化、P操作、V操作</li>
+<li>“检查”和“上锁”一气呵成，避免了并发、异步导致的问题</li>
+<li>存在的问题
+<ul>
+<li>不满足“让权等待”原则，会发生“忙等”</li>
+</ul>
+</li>
+</ul>
+<h3 id="记录型信号量">记录型信号量</h3>
+<ul>
+<li>整型信号量的缺陷是存在“忙等”的问题，因此人们又提出了“记录型信号量”，即用记录型数据结构表示的信号量</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cm">/*记录型信号量的定义 */</span>
+</span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">int</span> <span class="n">value</span><span class="p">;</span>   <span class="c1">// 剩余资源数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">struct</span> <span class="nc">process</span> <span class="o">*</span><span class="n">L</span><span class="p">;</span> <span class="c1">// 等待队列
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span> <span class="n">semaphore</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* 某进程需要使用资源时，通过wait原语申请 */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">wait</span> <span class="p">(</span><span class="n">semaphore</span> <span class="n">S</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">S</span><span class="p">.</span><span class="n">value</span><span class="o">--</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">S</span><span class="p">.</span><span class="n">value</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">block</span> <span class="p">(</span><span class="n">S</span><span class="p">.</span><span class="n">L</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 如果剩余资源数不够，使用block原语使进程从运行态进入阻塞态，并把它挂到信号量S的等待队列(即阻塞队列)中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*进程使用完资源后，通过signal原语释放*/</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">signal</span> <span class="p">(</span><span class="n">semaphore</span> <span class="n">S</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">s</span><span class="p">.</span><span class="n">value</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">S</span><span class="p">.</span><span class="n">value</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">wakeup</span><span class="p">(</span><span class="n">S</span><span class="p">.</span><span class="n">L</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 释放资源后，若还有别的进程在等待这种资源，则使用wakeup原语唤醒等待队列中的一个进程，该进程从阻塞态变为就绪态
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// P0进程
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">wait</span><span class="p">(</span><span class="n">S</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="err">使用打印机</span>
+</span></span><span class="line"><span class="cl"><span class="nf">signal</span><span class="p">(</span><span class="n">S</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">...</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// P1进程
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">wait</span><span class="p">(</span><span class="n">S</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="err">使用打印机</span>
+</span></span><span class="line"><span class="cl"><span class="nf">signal</span><span class="p">(</span><span class="n">S</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">...</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// P2进程
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">wait</span><span class="p">(</span><span class="n">S</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="err">使用打印机</span>
+</span></span><span class="line"><span class="cl"><span class="nf">signal</span><span class="p">(</span><span class="n">S</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">...</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// P3进程
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">wait</span><span class="p">(</span><span class="n">S</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="err">使用打印机</span>
+</span></span><span class="line"><span class="cl"><span class="nf">signal</span><span class="p">(</span><span class="n">S</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">...</span>
+</span></span></code></pre></div><h3 id="总结-17">总结</h3>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2024-10-23%2016.09.34.png" alt=""></p>
+<h2 id="23_6-用信号量实现进程互斥同步前驱关系">2.3_6 用信号量实现进程互斥、同步、前驱关系</h2>
+<h3 id="实现进程互斥">实现进程互斥</h3>
+<ol>
+<li>分析并发进程的关键活动，划定临界区(如：对临界资源打印机的访问就应放在临界区)</li>
+<li>设置互斥信号量mutex，初值为1
+<ul>
+<li>mutex表示“进入临界区的名额”</li>
+</ul>
+</li>
+<li>在进入区(mutex)&ndash;申请资源</li>
+<li>再退出区(mutex)&ndash;释放资源</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cm">/*记录型信号量的定义*/</span>
+</span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">int</span> <span class="n">value</span><span class="p">;</span> <span class="c1">// 剩余资源数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">struct</span> <span class="nc">process</span> <span class="o">*</span><span class="n">L</span><span class="p">;</span> <span class="c1">// 等待队列
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span> <span class="n">semaphore</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*信号量机制实现互斥*/</span>
+</span></span><span class="line"><span class="cl"><span class="n">semaphore</span> <span class="n">mutex</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 初始化信号量 (简写)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="n">P1</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="p">...</span>
+</span></span><span class="line"><span class="cl">  <span class="n">P</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span> <span class="c1">// 使用临界资源前需要加锁
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="err">临界区代码段</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl">  <span class="n">V</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span> <span class="c1">// 使用临界资源后需要解锁
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">P2</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="p">...</span>
+</span></span><span class="line"><span class="cl">  <span class="n">P</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="err">临界区代码段</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl">  <span class="n">V</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><ul>
+<li>注意
+<ul>
+<li>对不同的临界资源需要设置不同的互斥信号量</li>
+<li>P, V操作必须成对出现，缺少P(mutex)就不能保证临界资源的互斥访问。缺少V(mutex)会导致资源永不被释放，等待进程永不被唤醒</li>
+</ul>
+</li>
+</ul>
+<h3 id="实现进程同步">实现进程同步</h3>
+<ul>
+<li>进程同步：让各并发进程按要求有序地推进</li>
+</ul>
+<ol>
+<li>分析什么地方需要实现“同步关系”，即必须保证“一前一后”执行的两个操作(或两句代码)</li>
+<li>设置同步信号量S，初始为0</li>
+<li>在“前操作”之后执行V(S)</li>
+<li>在“后操作”之前执行P(S)</li>
+</ol>
+<ul>
+<li>例：P2的代码4必须在P1的代码2之后进行操作</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cm">/*信号量机制实现同步*/</span>
+</span></span><span class="line"><span class="cl"><span class="n">semaphore</span> <span class="n">S</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 初始化同步信号量，初始值为0
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="n">P1</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="err">代码</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="err">代码</span><span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">V</span><span class="p">(</span><span class="n">S</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="err">代码</span><span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">P2</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">P</span><span class="p">(</span><span class="n">S</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="err">代码</span><span class="mi">4</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="err">代码</span><span class="mi">5</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="err">代码</span><span class="mi">6</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><ul>
+<li>理解
+<ul>
+<li>信号量S代表“某种资源”，刚开始是没有这种资源的。P2需要使用这种资源，而又只能由P1产生这种资源</li>
+</ul>
+</li>
+</ul>
+<h3 id="实现进程的前驱关系">实现进程的前驱关系</h3>
+<ul>
+<li>每一对前驱关系都是一个进程同步问题</li>
+</ul>
+<ol>
+<li>要为每一对前驱关系各设置一个同步信号量</li>
+<li>在“前操作”之后对相应的同步信号量执行V操作</li>
+<li>在“后操作”之前对相应的同步信号量执行P操作
+<img src="/images/%E6%88%AA%E5%B1%8F2024-10-23%2016.41.54.png" alt=""></li>
+</ol>
+<h3 id="总结-18">总结</h3>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2024-10-23%2016.44.28.png" alt=""></p>
+<h2 id="23_7-生产者-消费者问题">2.3_7 生产者-消费者问题</h2>
+<h3 id="问题描述">问题描述</h3>
+<ul>
+<li>系统中有一组生产者进程和一组消费者进程，生产者进程每次生产一个产品放入缓冲区，消费者进程每次从缓冲区中取出一个产品并使用</li>
+<li>生产者、消费者共享一个初始为空、大小为n的缓冲区</li>
+<li>只有缓冲区没满时，生产者才能把产品放入缓冲区，否则必须等待
+<ul>
+<li>缓冲区没满-&gt;生产者生产</li>
+</ul>
+</li>
+<li>只有缓冲区不空时，消费者才能从中取出产品，否则必须等待
+<ul>
+<li>缓冲区没空-&gt;消费者消费</li>
+</ul>
+</li>
+<li>缓冲区是临界资源，个进程必须互斥地访问
+<ul>
+<li>互斥关系</li>
+</ul>
+</li>
+<li>PV操作题目分析步骤
+<ul>
+<li>关系分析。找出题目中描述的各个进程，分析它们之间的同步、互斥关系</li>
+<li>整理思路。根据各进程的操作流程确定P, V操作的大致顺序</li>
+<li>设置信号量。并更具题目条件确定信号量初值(互斥信号量初值一般为1，同步信号量的初始值要看对应资源的初始值是多少)</li>
+</ul>
+</li>
+</ul>
+<h3 id="问题分析">问题分析</h3>
+<ul>
+<li>分析信号量的值
+<ul>
+<li>semaphore mutex = 1; // 互斥信号量，实现对缓冲区的互斥访问</li>
+<li>semaphore empty = n; // 同步信号量，表示空闲缓冲区的数量</li>
+<li>semaphore full = 0;  // 同步信号量，表示产品的数量，也即非缓冲区的数量</li>
+</ul>
+</li>
+</ul>
+<h3 id="如何实现">如何实现</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="n">semaphore</span> <span class="n">mutex</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 互斥信号量，实现对缓冲区的互斥访问
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">semaphore</span> <span class="n">empty</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span> <span class="c1">// 同步信号量，表示空闲缓冲区的数量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">semaphore</span> <span class="n">full</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  <span class="c1">// 同步信号量，表示产品的数量，也即非缓冲区的数量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="n">producer</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="err">生产一个产品</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">P</span><span class="p">(</span><span class="n">empty</span><span class="p">);</span> <span class="c1">// 消耗一个空闲缓冲区
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">P</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="err">把产品放入缓冲区</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">V</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">V</span><span class="p">(</span><span class="n">full</span><span class="p">);</span>  <span class="c1">// 增加一个产品
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">consumer</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">P</span><span class="p">(</span><span class="n">full</span><span class="p">);</span> <span class="c1">// 消耗一个产品(非空缓冲区)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">P</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="err">从缓冲区取走一个产品</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">V</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">V</span><span class="p">(</span><span class="n">empty</span><span class="p">);</span> <span class="c1">// 增加一个空闲缓冲区
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="err">使用产品</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><ul>
+<li>实现互斥是在同一进程中进行一对PV操作</li>
+<li>实现两进程的同步关系，是在其中一个进程中执行P，另一个进程中执行V</li>
+</ul>
+<h3 id="思考">思考</h3>
+<ul>
+<li>能否改变相邻P, V操作的顺序
+<ul>
+<li>不能</li>
+<li>生产者与消费者循环等待被对方唤醒，出现“死锁”</li>
+<li>实现互斥的P操作一定要在实现同步的P操作之后</li>
+<li>V操作不会导致进程阻塞，因此两个V操作顺序可以交换
+<img src="/images/%E6%88%AA%E5%B1%8F2024-10-23%2017.02.51.png" alt=""></li>
+</ul>
+</li>
+<li>能否把使用产品的代码放到PV操作之间？
+<ul>
+<li>会对系统的效能产生影响</li>
+<li>应该使访问临界区的时间段尽可能短</li>
+</ul>
+</li>
+</ul>
+<h3 id="总结-19">总结</h3>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2024-10-23%2017.05.19.png" alt=""></p>
 </article>
               </div>
             </div>

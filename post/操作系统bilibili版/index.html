@@ -150,9 +150,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Wed, 23 Oct 2024 22:49:43 &#43;0800"
+                  Modified <relative-time datetime="Thu, 24 Oct 2024 09:52:56 &#43;0800"
                     class="no-wrap">
-                    Wed, 23 Oct 2024 22:49:43 &#43;0800</relative-time>
+                    Thu, 24 Oct 2024 09:52:56 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -182,7 +182,7 @@
                         </div>
                       </div>
                     </details-menu>
-                      21646 Words
+                      23368 Words
                     
 
                   </div>
@@ -2390,6 +2390,208 @@ wait, singal原语常简称为P, V操作，因此，做题的时候常把wait(S)
 </ul>
 </li>
 </ul>
+<h3 id="如何实现-2">如何实现</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="n">semaphore</span> <span class="n">offer1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  <span class="c1">// 桌子上组合一的数量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">semaphore</span> <span class="n">offer2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  <span class="c1">// 桌子上组合二的数量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">semaphore</span> <span class="n">offer3</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  <span class="c1">// 桌子上组合三的数量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">semaphore</span> <span class="n">finish</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  <span class="c1">// 抽烟是否完成
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="n">provider</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">      <span class="err">将组合一放在桌上</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">V</span><span class="p">(</span><span class="n">offer1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">      <span class="err">将组合二放桌上</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">V</span><span class="p">(</span><span class="n">offer2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">2</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">      <span class="err">将组合三放桌上</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">V</span><span class="p">(</span><span class="n">offer3</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="n">i</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">P</span><span class="p">(</span><span class="n">finish</span><span class="p">);</span> <span class="c1">// 保证刚刚开始的时候provider可以提供
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">smoker1</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">P</span><span class="p">(</span><span class="n">offer1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="err">从桌子上拿走组合一，卷烟，抽掉</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">V</span><span class="p">(</span><span class="n">finish</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">smoker2</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">P</span><span class="p">(</span><span class="n">offer2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="err">从桌子上拿走组合二，卷烟，抽掉</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">V</span><span class="p">(</span><span class="n">finish</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">smoker3</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">P</span><span class="p">(</span><span class="n">offer3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="err">从桌子上拿走组合三，卷烟，抽掉</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">V</span><span class="p">(</span><span class="n">finish</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><ul>
+<li>缓冲区大小为1，同一时刻，四个同步信号量中至多有一个的值为1</li>
+</ul>
+<h3 id="知识回顾与重要考点">知识回顾与重要考点</h3>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2024-10-24%2009.04.23.png" alt=""></p>
+<h2 id="23_10-读者-写者问题">2.3_10 读者-写者问题</h2>
+<h3 id="问题描述-3">问题描述</h3>
+<ul>
+<li>有读者和写者两组并发进程，共享一个文件，当两个或两个以上的读进程同时访问共享数据时不会产生副作用，但若某个写进程和其他进程(读进程和或写进程)同时访问共享数据时则可能导致数据不一致的错误
+<ul>
+<li>允许多个读者可以同时对文件执行读操作</li>
+<li>只允许一个写者往文件中写信息</li>
+<li>任一写者在完成写操作之前不允许其他读者或写者工作</li>
+<li>写者执行写操作前，应让已有的读者和写者全部退出</li>
+</ul>
+</li>
+</ul>
+<h3 id="问题分析-3">问题分析</h3>
+<ul>
+<li>关系分析。找出题目中描述的各个进程，分析它们之间的同步、互斥关系
+<ul>
+<li>互斥关系：写进程-写进程、写进程-读进程</li>
+</ul>
+</li>
+<li>整理思路。根据各进程的操作流程确定P, V操作的大致顺序</li>
+<li>设置信号量。设置需要的信号量，并根据题目条件确定信号量的初值</li>
+</ul>
+<h3 id="如何实现-3">如何实现</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="n">semaphore</span> <span class="n">rw</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 用于实现对共享文件的互斥访问
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  <span class="c1">// 记录当前有几个读进程在访问文件
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">semaphore</span> <span class="n">mutex</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>   <span class="c1">// 用于保证对count变量的互斥访问
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">semaphore</span> <span class="n">w</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 用于实现“写优先” (有排队功能，相对公平的先来先服务原则)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="n">writer</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">P</span><span class="p">(</span><span class="n">w</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">P</span><span class="p">(</span><span class="n">rw</span><span class="p">);</span> <span class="c1">// 写之前“加锁”
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="err">写文件</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">V</span><span class="p">(</span><span class="n">rx</span><span class="p">);</span> <span class="c1">// 写完了“解锁”
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">V</span><span class="p">(</span><span class="n">w</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">reader</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">P</span><span class="p">(</span><span class="n">w</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">P</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">// 由第一个读进程负责读之前“加锁”
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="n">P</span><span class="p">(</span><span class="n">rw</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">count</span><span class="o">++</span><span class="p">;</span> <span class="c1">// 访问文件的进程数+1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">V</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">V</span><span class="p">(</span><span class="n">w</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="err">读文件</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl">    <span class="n">P</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cout</span><span class="o">--</span><span class="p">;</span> <span class="c1">// 访问文件的读进程数-1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">cout</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="n">V</span><span class="p">(</span><span class="n">rw</span><span class="p">);</span> <span class="c1">// 读完了“解锁”
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">V</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><ul>
+<li>注意：对count的检查和赋值无法一气呵成</li>
+<li>潜在的问题(不添加信号量w时)
+<ul>
+<li>只要有读进程还在读，写进程就要一直阻塞等待，可能“饿死”</li>
+<li>因此，这种算法中，读进程是优先的</li>
+</ul>
+</li>
+</ul>
+<h3 id="核心思想">核心思想</h3>
+<ul>
+<li>设置计数器count用来记录当前正在访问共享文件的读进程数</li>
+<li>可以用count的值来判断当前进入的进程是否是第一个/最后一个读进程，从而做出不同的处理</li>
+<li>另外，对count的检查和赋值不能一气呵成导致了一些错误，如果要实现“一气呵成”，应该用互斥信号量</li>
+</ul>
+<h2 id="23_11-哲学家进餐问题">2.3_11 哲学家进餐问题</h2>
+<h3 id="问题描述-4">问题描述</h3>
+<ul>
+<li>一张圆桌上坐着5名哲学家，每两个哲学家之间的桌上摆一根筷子，桌子的中间是一碗米饭。</li>
+<li>哲学家们倾注毕生的精力用于思考和进餐，哲学家思考时，并不影响他人。</li>
+<li>只有当哲学家饥饿时，才试图拿起左、右两根筷子(一根一根地拿起)</li>
+<li>如果筷子已在他人受伤，则需等待。</li>
+<li>饥饿的哲学家只有同时拿起两根筷子才可以进餐，当进餐完毕后，放下筷子继续思考</li>
+</ul>
+<h3 id="问题分析-4">问题分析</h3>
+<ul>
+<li>关系分析
+<ul>
+<li>系统中有5个哲学家进程，5位哲学家与左右邻居对其中间的筷子的访问是互斥关系</li>
+</ul>
+</li>
+<li>整理思路
+<ul>
+<li>这个问题中只有互斥关系</li>
+<li>每个哲学家进程需要同时持有两个临界资源才能开始吃饭</li>
+<li>如果避免临界资源分配不当造成的死锁问题，是哲学家问题的精髓</li>
+</ul>
+</li>
+<li>信号量设置
+<ul>
+<li>互斥信号量数组chopstick[5]={1, 1, 1, 1, 1}用于实现对5个筷子的互斥访问</li>
+<li>并对哲学家按0~4编号，哲学家i左边的筷子为编号i，右边的筷子编号为(i + 1) % 5</li>
+</ul>
+</li>
+</ul>
+<h3 id="如何实现-4">如何实现</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="n">semaphore</span> <span class="n">chopstick</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">Pi</span> <span class="p">()</span> <span class="p">{</span> <span class="c1">// i号哲学家的进程
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">P</span><span class="p">(</span><span class="n">chopstick</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span> <span class="c1">// 拿左筷子
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">P</span><span class="p">(</span><span class="n">chopstick</span><span class="p">[(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">5</span><span class="p">]);</span> <span class="c1">// 拿右筷子
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="err">吃饭</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl">    <span class="n">V</span><span class="p">(</span><span class="n">chopstick</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span> <span class="c1">// 放左筷子
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">V</span><span class="p">(</span><span class="n">chopstick</span><span class="p">[(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">5</span><span class="p">]);</span> <span class="c1">// 放右筷子
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><ul>
+<li>
+<p>死锁</p>
+<ul>
+<li>当所有哲学家都拿起左筷子时，会造成死锁</li>
+</ul>
+</li>
+<li>
+<p>如何防止死锁？</p>
+<ul>
+<li>最多允许四个哲学家同时进餐(增加信号量count)</li>
+<li>要求奇数号哲学家先拿左边的筷子，偶数号哲学家相反(避免了占有一支筷子之后等待另一支筷子的情形)</li>
+<li>个哲学家拿筷子这件事必须互斥的执行</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="n">semaphore</span> <span class="n">chopstick</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">semaphore</span> <span class="n">mutex</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">Pi</span> <span class="p">()</span> <span class="p">{</span> <span class="c1">// i号哲学家的进程
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">P</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">P</span><span class="p">(</span><span class="n">chopstick</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span> <span class="c1">// 拿左筷子
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">P</span><span class="p">(</span><span class="n">chopstick</span><span class="p">[(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">5</span><span class="p">]);</span> <span class="c1">// 拿右筷子
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">V</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="err">吃饭</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl">    <span class="n">V</span><span class="p">(</span><span class="n">chopstick</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span> <span class="c1">// 放左筷子
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">V</span><span class="p">(</span><span class="n">chopstick</span><span class="p">[(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">5</span><span class="p">]);</span> <span class="c1">// 放右筷子
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 当一个哲学家两支筷子都拿起之后，其他哲学家才能开始拿筷子
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 即便有其他能拿到两支筷子，也不能执行
+</span></span></span></code></pre></div><h3 id="知识回顾与重要考点-1">知识回顾与重要考点</h3>
+<ul>
+<li>哲学家进餐问题的关键在于解决进程死锁</li>
+<li>这些进程之间只存在互斥关系，但每个进程都需要同时持有两个临界资源，因此就有“死锁”问题的隐患</li>
+</ul>
+<h2 id="23_12-管程">2.3_12 管程</h2>
+<h2 id="24_1-死锁的概念">2.4_1 死锁的概念</h2>
 </article>
               </div>
             </div>

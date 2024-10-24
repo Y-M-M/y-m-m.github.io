@@ -150,9 +150,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Wed, 23 Oct 2024 17:08:34 &#43;0800"
+                  Modified <relative-time datetime="Wed, 23 Oct 2024 22:49:43 &#43;0800"
                     class="no-wrap">
-                    Wed, 23 Oct 2024 17:08:34 &#43;0800</relative-time>
+                    Wed, 23 Oct 2024 22:49:43 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -182,7 +182,7 @@
                         </div>
                       </div>
                     </details-menu>
-                      20608 Words
+                      21646 Words
                     
 
                   </div>
@@ -2254,6 +2254,142 @@ wait, singal原语常简称为P, V操作，因此，做题的时候常把wait(S)
 </ul>
 <h3 id="总结-19">总结</h3>
 <p><img src="/images/%E6%88%AA%E5%B1%8F2024-10-23%2017.05.19.png" alt=""></p>
+<h2 id="23_8-多生产者-多消费者问题">2.3_8 多生产者-多消费者问题</h2>
+<h3 id="问题描述-1">问题描述</h3>
+<ul>
+<li>桌子上有一只盘子，每次只能向其中放入一个水果。爸爸专向盘子中放苹果，妈妈专向盘子中放橘子，儿子专等着吃盘子中的橘子，女儿专等着吃盘子中的苹果。只有盘子空时，爸爸或妈妈才可向盘子中放一个水果。仅当盘子中有自己需要的水果时，儿子或女儿可以从盘子中取出水果。用PV操作实现上述过程</li>
+</ul>
+<h3 id="问题分析-1">问题分析</h3>
+<ul>
+<li>
+<p>关系分析</p>
+<ul>
+<li>互斥关系
+<ul>
+<li>对缓冲区(盘子)的访问要互斥的进行</li>
+</ul>
+</li>
+<li>同步关系
+<ol>
+<li>父亲将苹果放入盘子后，女儿才能取苹果</li>
+<li>母亲将橘子放入盘子后，儿子才能取橘子</li>
+<li>只有盘子为空时，父亲或母亲才能放入水果
+<ul>
+<li>“盘子为空”这个事件可以由儿子或女儿触发，事件发生之后才允许父亲或母亲放水果</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p>整理思路</p>
+<ul>
+<li>根据各进程的操作流程确定P, V操作的大致顺序</li>
+<li>互斥：在临界区前后分别PV</li>
+<li>同步：前V后P</li>
+</ul>
+</li>
+<li>
+<p>设置信号量</p>
+<ul>
+<li>设置需要的信号量，并根据题目条件确定信号量初值</li>
+<li>互斥信号量初值一般为1，同步信号量的初值要看对应资源的初始值是多少</li>
+</ul>
+</li>
+</ul>
+<h3 id="如何实现-1">如何实现</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="n">semaphore</span> <span class="n">mutex</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 实现互斥访问盘子(缓冲区)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">semaphore</span> <span class="n">apple</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 盘子中有几个苹果
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">semaphore</span> <span class="n">orange</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 盘子中有几个橘子
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">semaphore</span> <span class="n">plate</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 盘子中还可以放多少个水果
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="n">dad</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="err">准备一个苹果</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">P</span><span class="p">(</span><span class="n">plate</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">P</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="err">把苹果放入盘子</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">V</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">V</span><span class="p">(</span><span class="n">apple</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">mom</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="err">准备一个橘子</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">P</span><span class="p">(</span><span class="n">plate</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">P</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="err">把橘子放入盘子</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">V</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">V</span><span class="p">(</span><span class="n">orange</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">daughter</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">P</span><span class="p">(</span><span class="n">apple</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">P</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="err">从盘中取出苹果</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">V</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">V</span><span class="p">(</span><span class="n">plate</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="err">吃掉苹果</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">son</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">P</span><span class="p">(</span><span class="n">orange</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">P</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="err">从盘子中取出橘子</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">V</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">V</span><span class="p">(</span><span class="n">plate</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="err">吃掉橘子</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><ul>
+<li><strong>注意</strong>：即使不设置专门的互斥变量mutex，也不会出现多个进程同时访问盘子的现象</li>
+</ul>
+<blockquote>
+<p>原因在于：本题中的缓冲区大小为1，在任何时刻，apple、orange、plate三个同步信号量中最多只有一个是1。因此在任何时刻，最多只有一个进程的P操作不会被阻塞，并顺利地进入临界区</p>
+</blockquote>
+<h3 id="总结-20">总结</h3>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2024-10-23%2022.39.41.png" alt=""></p>
+<h2 id="23_9-吸烟者问题">2.3_9 吸烟者问题</h2>
+<h3 id="问题描述-2">问题描述</h3>
+<ul>
+<li>假设一个系统有三个抽烟者进程和一个供应者进程</li>
+<li>每个抽烟者不停地卷烟并不停抽掉它，但是要卷起并抽掉一只烟，抽烟者需要有三种材料：烟草、纸和胶水</li>
+<li>三个抽烟者中，第一个拥有烟草，第二个拥有纸，第三个拥有胶水</li>
+<li>供应者进程无限地提供三种材料，供应者每次将两种材料放桌子上，拥有剩下哪种材料的抽烟者卷一根烟并抽掉它，并给供应者进程一个信号告诉完成了，供应者就会放另外两种材料在桌上，这个过程一直重复(让三个抽烟者轮流地抽烟)</li>
+</ul>
+<h3 id="问题分析-2">问题分析</h3>
+<ul>
+<li>关系分析
+<ul>
+<li>同步关系
+<ul>
+<li>桌子上有组合一-&gt;第一个抽烟者取走东西</li>
+<li>桌子上有组合二-&gt;第二个抽烟者取走东西</li>
+<li>桌子上有组合三-&gt;第三个抽烟者取走东西</li>
+<li>发出完成信号-&gt;供应者将下一个组合放到桌子上</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="设置信号量">设置信号量</h3>
+<ul>
+<li>可以不设置互斥信号量</li>
+<li>同步信号量
+<ul>
+<li>offer1 = 0</li>
+<li>offer2 = 0</li>
+<li>offer3 = 0</li>
+<li>finish = 0</li>
+</ul>
+</li>
+</ul>
 </article>
               </div>
             </div>

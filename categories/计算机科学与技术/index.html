@@ -1082,7 +1082,8 @@
 
             <div>
               <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <h1 id="题目">题目</h1>
+                <p><a href="https://leetcode.cn/problems/redundant-connection/description/">leetcode 684 冗余连接</a></p>
+<h1 id="题目">题目</h1>
 <blockquote>
 <p>树可以看成是一个连通且 无环 的 无向 图。
 给定往一棵 n 个节点 (节点值 1～n) 的树中添加一条边后的图。添加的边的两个顶点包含在 1 到 n 中间，且这条附加的边不属于树中已存在的边。图的信息记录于长度为 n 的二维数组 edges ，edges[i] = [ai, bi] 表示图中在 ai 和 bi 之间存在一条边。
@@ -1182,7 +1183,45 @@ edges 中无重复元素
 
             <div>
               <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                
+                <h1 id="什么是并查集">什么是并查集？</h1>
+<ul>
+<li>并查集是一种用于管理元素所属集合的数据结构，实现为一个森林，其中每棵树表示一个集合，树中的节点表示对应集合中的元素。</li>
+</ul>
+<h1 id="核心思想">核心思想</h1>
+<ul>
+<li>提取树的重点特征：父亲结点-&gt;祖先结点</li>
+<li>拥有相同的祖先节点的子节点属于同一个集合</li>
+<li>被边连通的两个节点并入同一个集合(两棵树的合并)</li>
+<li>为了简化操作，可将将节点与其祖先节点直接连通，将祖先节点作为其父亲节点，即压缩操作</li>
+</ul>
+<h1 id="并查集的创建">并查集的创建</h1>
+<ul>
+<li>创建father数组，存储每个节点的父亲节点，初始的父亲节点为它本身</li>
+<li>对于每一条边，取它连通的两个节点；对每一个节点，通过Find函数返回其祖先节点，并进行路径压缩</li>
+</ul>
+<h2 id="find">Find()</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">Find</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">parent</span><span class="p">,</span> <span class="kt">int</span> <span class="n">index</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 返回祖先节点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">!=</span> <span class="n">index</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">parent</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Find</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">parent</span><span class="p">[</span><span class="n">index</span><span class="p">]);</span> <span class="c1">// 路径压缩
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">parent</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span></code></pre></div><ul>
+<li>当边连通的两个节点祖先不同时，进行连通操作</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">Union</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">parent</span><span class="p">,</span> <span class="kt">int</span> <span class="n">index1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">index2</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 如果边连接的两个节点祖先不同，则将其中一个节点的祖先并入另一个节点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">parent</span><span class="p">[</span><span class="n">Find</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">index1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">Find</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">index2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span></code></pre></div><p><img src="/images/%E6%88%AA%E5%B1%8F2024-10-27%2009.26.57.png" alt=""></p>
+<h1 id="元素的删除">元素的删除</h1>
+<ul>
+<li>将要删除的结点的父亲节点设为它自己即可</li>
+</ul>
+<h1 id="例题">例题</h1>
+<p><a href="https://y-m-m.github.io/post/leetcode684%E5%86%97%E4%BD%99%E8%BF%9E%E6%8E%A5/">leetcode684冗余连接 题解</a></p>
+<h1 id="参考资料">参考资料</h1>
+<p><a href="https://oi-wiki.org/ds/dsu/">OI Wiki</a>
+<a href="https://www.bilibili.com/video/BV1jv411a7LK/?spm_id_from=333.337.search-card.all.click&amp;vd_source=827ffaf4738d7f1c1cad64fcb9ed3890">bilibili视频</a></p>
               </div>
             </div>
 

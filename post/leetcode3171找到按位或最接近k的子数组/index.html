@@ -18,7 +18,7 @@
 
     
     <meta name="description"
-  content="题目 给你一个数组 nums 和一个整数 k 。 你需要找到 nums 的一个子数组，满足子数组中所有元素按位或运算 OR 的值与 k 的 绝对差 尽可能 小 。 换言之，你需要选择一个子数组 nums[l..r] 满足 |k - (nums[l] OR nums[l &#43; 1] &hellip; OR nums[r])| 最小。 请你返回 最小 的绝对差值。 子数组 是数组中连续的 非空 元素序列。 示例 示例1 输入：nums = [1,2,4,5], k = 3 输出：0 解释： 子数组 nums[0..1] 的按位 OR 运算值为 3 ，得到最小差值 |3 - 3| = 0 。 示例2 输入：nums = [1,3,1,3], k = 2 输出：1 解释： 子数组 nums[1..1] 的按位 OR 运算值为 3 ，得到最小差值 |3 - 2| = 1 。 示例3 输入：nums = [1], k = 10 输出：9 解释： 只有一个子数组，按位 OR 运算值为 1 ，得到最小差值 |10 - 1| = 9 。 提示 1 &lt;= nums.length &lt;= 105 1 &lt;= nums[i] &lt;= 109 1 &lt;= k &lt;= 109 相关标签 位运算 线段树 数组 二分查找 难度 困难 题解 解法一 class Solution { public: int minimumDifference(vector&lt;int&gt;&amp; nums, int k) { int n = nums.size(); vector&lt;int&gt; differ(n); for (int i = 0; i &lt; n; i&#43;&#43;) { differ[i] = abs(nums[i] - k); } vector&lt;int&gt; or_results(n); or_results[0] = nums[0]; for (int i = 1; i &lt; n; i&#43;&#43;) { or_results[i] = or_results[i - 1] | nums[i]; int now_differ = abs(or_results[i] - k); if (now_differ &lt; differ[i]) { differ[i] = now_differ; } else { or_results[i] = nums[i]; } } int min_differ = differ[0]; for (int i = 1; i &lt; n; i&#43;&#43;) { min_differ = min(min_differ, differ[i]); } return min_differ; } }; 提交结果 758/813个通过的测试样例 解答错误 例 输入 nums = [10,75,60,36,17] k = 54 输出 6 预期结果 1 0001010 10 1001011 75 0111100 60 0100100 36 0010001 17 0110110 k 60 | 36 = 0111100 60 | 36 | 17 = 0111101 36 | 17 = 0110101 显然 36|17 更接近k，但相比较36而言，60 | 36更接近k，故36的位置存储的应该是60 | 36，因此，在之后的17的位置只会比较60|36|17 与 17，无法得到36|17 分析 联想到最大子段和问题，考虑使用动态规划 以i遍历数组，以当前i结尾的最优子数组，为 以i-1结尾的最优子数组｜i 和 i 这两者中的更优者 出现问题的原因：随着或的次数的增加，与k的差的绝对值并非单调递减 " />
+  content="题目 给你一个数组 nums 和一个整数 k 。 你需要找到 nums 的一个子数组，满足子数组中所有元素按位或运算 OR 的值与 k 的 绝对差 尽可能 小 。 换言之，你需要选择一个子数组 nums[l..r] 满足 |k - (nums[l] OR nums[l &#43; 1] &hellip; OR nums[r])| 最小。 请你返回 最小 的绝对差值。 子数组 是数组中连续的 非空 元素序列。 示例 示例1 输入：nums = [1,2,4,5], k = 3 输出：0 解释： 子数组 nums[0..1] 的按位 OR 运算值为 3 ，得到最小差值 |3 - 3| = 0 。 示例2 输入：nums = [1,3,1,3], k = 2 输出：1 解释： 子数组 nums[1..1] 的按位 OR 运算值为 3 ，得到最小差值 |3 - 2| = 1 。 示例3 输入：nums = [1], k = 10 输出：9 解释： 只有一个子数组，按位 OR 运算值为 1 ，得到最小差值 |10 - 1| = 9 。 提示 1 &lt;= nums.length &lt;= 105 1 &lt;= nums[i] &lt;= 109 1 &lt;= k &lt;= 109 难度 困难 题解 解法一 class Solution { public: int minimumDifference(vector&lt;int&gt;&amp; nums, int k) { int n = nums.size(); vector&lt;int&gt; differ(n); for (int i = 0; i &lt; n; i&#43;&#43;) { differ[i] = abs(nums[i] - k); } vector&lt;int&gt; or_results(n); or_results[0] = nums[0]; for (int i = 1; i &lt; n; i&#43;&#43;) { or_results[i] = or_results[i - 1] | nums[i]; int now_differ = abs(or_results[i] - k); if (now_differ &lt; differ[i]) { differ[i] = now_differ; } else { or_results[i] = nums[i]; } } int min_differ = differ[0]; for (int i = 1; i &lt; n; i&#43;&#43;) { min_differ = min(min_differ, differ[i]); } return min_differ; } }; 提交结果 758/813个通过的测试样例 解答错误 例 输入 nums = [10,75,60,36,17] k = 54 输出 6 预期结果 1 0001010 10 1001011 75 0111100 60 0100100 36 0010001 17 0110110 k 60 | 36 = 0111100 60 | 36 | 17 = 0111101 36 | 17 = 0110101 显然 36|17 更接近k，但相比较36而言，60 | 36更接近k，故36的位置存储的应该是60 | 36，因此，在之后的17的位置只会比较60|36|17 与 17，无法得到36|17 分析 联想到最大子段和问题，考虑使用动态规划 以i遍历数组，以当前i结尾的最优子数组，为 以i-1结尾的最优子数组｜i 和 i 这两者中的更优者 出现问题的原因：随着或的次数的增加，与k的差的绝对值并非单调递减 " />
 <meta name="keywords"
   content='blog, google analytics' />
 <meta name="robots" content="noodp" />
@@ -28,7 +28,7 @@
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="leetcode 3171 找到按位或最接近k的子数组 - 陈皮的博客" />
 <meta name="twitter:description"
-  content="题目 给你一个数组 nums 和一个整数 k 。 你需要找到 nums 的一个子数组，满足子数组中所有元素按位或运算 OR 的值与 k 的 绝对差 尽可能 小 。 换言之，你需要选择一个子数组 nums[l..r] 满足 |k - (nums[l] OR nums[l &#43; 1] &hellip; OR nums[r])| 最小。 请你返回 最小 的绝对差值。 子数组 是数组中连续的 非空 元素序列。 示例 示例1 输入：nums = [1,2,4,5], k = 3 输出：0 解释： 子数组 nums[0..1] 的按位 OR 运算值为 3 ，得到最小差值 |3 - 3| = 0 。 示例2 输入：nums = [1,3,1,3], k = 2 输出：1 解释： 子数组 nums[1..1] 的按位 OR 运算值为 3 ，得到最小差值 |3 - 2| = 1 。 示例3 输入：nums = [1], k = 10 输出：9 解释： 只有一个子数组，按位 OR 运算值为 1 ，得到最小差值 |10 - 1| = 9 。 提示 1 &lt;= nums.length &lt;= 105 1 &lt;= nums[i] &lt;= 109 1 &lt;= k &lt;= 109 相关标签 位运算 线段树 数组 二分查找 难度 困难 题解 解法一 class Solution { public: int minimumDifference(vector&lt;int&gt;&amp; nums, int k) { int n = nums.size(); vector&lt;int&gt; differ(n); for (int i = 0; i &lt; n; i&#43;&#43;) { differ[i] = abs(nums[i] - k); } vector&lt;int&gt; or_results(n); or_results[0] = nums[0]; for (int i = 1; i &lt; n; i&#43;&#43;) { or_results[i] = or_results[i - 1] | nums[i]; int now_differ = abs(or_results[i] - k); if (now_differ &lt; differ[i]) { differ[i] = now_differ; } else { or_results[i] = nums[i]; } } int min_differ = differ[0]; for (int i = 1; i &lt; n; i&#43;&#43;) { min_differ = min(min_differ, differ[i]); } return min_differ; } }; 提交结果 758/813个通过的测试样例 解答错误 例 输入 nums = [10,75,60,36,17] k = 54 输出 6 预期结果 1 0001010 10 1001011 75 0111100 60 0100100 36 0010001 17 0110110 k 60 | 36 = 0111100 60 | 36 | 17 = 0111101 36 | 17 = 0110101 显然 36|17 更接近k，但相比较36而言，60 | 36更接近k，故36的位置存储的应该是60 | 36，因此，在之后的17的位置只会比较60|36|17 与 17，无法得到36|17 分析 联想到最大子段和问题，考虑使用动态规划 以i遍历数组，以当前i结尾的最优子数组，为 以i-1结尾的最优子数组｜i 和 i 这两者中的更优者 出现问题的原因：随着或的次数的增加，与k的差的绝对值并非单调递减 " />
+  content="题目 给你一个数组 nums 和一个整数 k 。 你需要找到 nums 的一个子数组，满足子数组中所有元素按位或运算 OR 的值与 k 的 绝对差 尽可能 小 。 换言之，你需要选择一个子数组 nums[l..r] 满足 |k - (nums[l] OR nums[l &#43; 1] &hellip; OR nums[r])| 最小。 请你返回 最小 的绝对差值。 子数组 是数组中连续的 非空 元素序列。 示例 示例1 输入：nums = [1,2,4,5], k = 3 输出：0 解释： 子数组 nums[0..1] 的按位 OR 运算值为 3 ，得到最小差值 |3 - 3| = 0 。 示例2 输入：nums = [1,3,1,3], k = 2 输出：1 解释： 子数组 nums[1..1] 的按位 OR 运算值为 3 ，得到最小差值 |3 - 2| = 1 。 示例3 输入：nums = [1], k = 10 输出：9 解释： 只有一个子数组，按位 OR 运算值为 1 ，得到最小差值 |10 - 1| = 9 。 提示 1 &lt;= nums.length &lt;= 105 1 &lt;= nums[i] &lt;= 109 1 &lt;= k &lt;= 109 难度 困难 题解 解法一 class Solution { public: int minimumDifference(vector&lt;int&gt;&amp; nums, int k) { int n = nums.size(); vector&lt;int&gt; differ(n); for (int i = 0; i &lt; n; i&#43;&#43;) { differ[i] = abs(nums[i] - k); } vector&lt;int&gt; or_results(n); or_results[0] = nums[0]; for (int i = 1; i &lt; n; i&#43;&#43;) { or_results[i] = or_results[i - 1] | nums[i]; int now_differ = abs(or_results[i] - k); if (now_differ &lt; differ[i]) { differ[i] = now_differ; } else { or_results[i] = nums[i]; } } int min_differ = differ[0]; for (int i = 1; i &lt; n; i&#43;&#43;) { min_differ = min(min_differ, differ[i]); } return min_differ; } }; 提交结果 758/813个通过的测试样例 解答错误 例 输入 nums = [10,75,60,36,17] k = 54 输出 6 预期结果 1 0001010 10 1001011 75 0111100 60 0100100 36 0010001 17 0110110 k 60 | 36 = 0111100 60 | 36 | 17 = 0111101 36 | 17 = 0110101 显然 36|17 更接近k，但相比较36而言，60 | 36更接近k，故36的位置存储的应该是60 | 36，因此，在之后的17的位置只会比较60|36|17 与 17，无法得到36|17 分析 联想到最大子段和问题，考虑使用动态规划 以i遍历数组，以当前i结尾的最优子数组，为 以i-1结尾的最优子数组｜i 和 i 这两者中的更优者 出现问题的原因：随着或的次数的增加，与k的差的绝对值并非单调递减 " />
 <meta name="twitter:site" content="https://y-m-m.github.io/" />
 <meta name="twitter:creator" content="陈皮" />
 <meta name="twitter:image"
@@ -38,7 +38,7 @@
 <meta property="og:type" content="article" />
 <meta property="og:title" content="leetcode 3171 找到按位或最接近k的子数组 - 陈皮的博客">
 <meta property="og:description"
-  content="题目 给你一个数组 nums 和一个整数 k 。 你需要找到 nums 的一个子数组，满足子数组中所有元素按位或运算 OR 的值与 k 的 绝对差 尽可能 小 。 换言之，你需要选择一个子数组 nums[l..r] 满足 |k - (nums[l] OR nums[l &#43; 1] &hellip; OR nums[r])| 最小。 请你返回 最小 的绝对差值。 子数组 是数组中连续的 非空 元素序列。 示例 示例1 输入：nums = [1,2,4,5], k = 3 输出：0 解释： 子数组 nums[0..1] 的按位 OR 运算值为 3 ，得到最小差值 |3 - 3| = 0 。 示例2 输入：nums = [1,3,1,3], k = 2 输出：1 解释： 子数组 nums[1..1] 的按位 OR 运算值为 3 ，得到最小差值 |3 - 2| = 1 。 示例3 输入：nums = [1], k = 10 输出：9 解释： 只有一个子数组，按位 OR 运算值为 1 ，得到最小差值 |10 - 1| = 9 。 提示 1 &lt;= nums.length &lt;= 105 1 &lt;= nums[i] &lt;= 109 1 &lt;= k &lt;= 109 相关标签 位运算 线段树 数组 二分查找 难度 困难 题解 解法一 class Solution { public: int minimumDifference(vector&lt;int&gt;&amp; nums, int k) { int n = nums.size(); vector&lt;int&gt; differ(n); for (int i = 0; i &lt; n; i&#43;&#43;) { differ[i] = abs(nums[i] - k); } vector&lt;int&gt; or_results(n); or_results[0] = nums[0]; for (int i = 1; i &lt; n; i&#43;&#43;) { or_results[i] = or_results[i - 1] | nums[i]; int now_differ = abs(or_results[i] - k); if (now_differ &lt; differ[i]) { differ[i] = now_differ; } else { or_results[i] = nums[i]; } } int min_differ = differ[0]; for (int i = 1; i &lt; n; i&#43;&#43;) { min_differ = min(min_differ, differ[i]); } return min_differ; } }; 提交结果 758/813个通过的测试样例 解答错误 例 输入 nums = [10,75,60,36,17] k = 54 输出 6 预期结果 1 0001010 10 1001011 75 0111100 60 0100100 36 0010001 17 0110110 k 60 | 36 = 0111100 60 | 36 | 17 = 0111101 36 | 17 = 0110101 显然 36|17 更接近k，但相比较36而言，60 | 36更接近k，故36的位置存储的应该是60 | 36，因此，在之后的17的位置只会比较60|36|17 与 17，无法得到36|17 分析 联想到最大子段和问题，考虑使用动态规划 以i遍历数组，以当前i结尾的最优子数组，为 以i-1结尾的最优子数组｜i 和 i 这两者中的更优者 出现问题的原因：随着或的次数的增加，与k的差的绝对值并非单调递减 " />
+  content="题目 给你一个数组 nums 和一个整数 k 。 你需要找到 nums 的一个子数组，满足子数组中所有元素按位或运算 OR 的值与 k 的 绝对差 尽可能 小 。 换言之，你需要选择一个子数组 nums[l..r] 满足 |k - (nums[l] OR nums[l &#43; 1] &hellip; OR nums[r])| 最小。 请你返回 最小 的绝对差值。 子数组 是数组中连续的 非空 元素序列。 示例 示例1 输入：nums = [1,2,4,5], k = 3 输出：0 解释： 子数组 nums[0..1] 的按位 OR 运算值为 3 ，得到最小差值 |3 - 3| = 0 。 示例2 输入：nums = [1,3,1,3], k = 2 输出：1 解释： 子数组 nums[1..1] 的按位 OR 运算值为 3 ，得到最小差值 |3 - 2| = 1 。 示例3 输入：nums = [1], k = 10 输出：9 解释： 只有一个子数组，按位 OR 运算值为 1 ，得到最小差值 |10 - 1| = 9 。 提示 1 &lt;= nums.length &lt;= 105 1 &lt;= nums[i] &lt;= 109 1 &lt;= k &lt;= 109 难度 困难 题解 解法一 class Solution { public: int minimumDifference(vector&lt;int&gt;&amp; nums, int k) { int n = nums.size(); vector&lt;int&gt; differ(n); for (int i = 0; i &lt; n; i&#43;&#43;) { differ[i] = abs(nums[i] - k); } vector&lt;int&gt; or_results(n); or_results[0] = nums[0]; for (int i = 1; i &lt; n; i&#43;&#43;) { or_results[i] = or_results[i - 1] | nums[i]; int now_differ = abs(or_results[i] - k); if (now_differ &lt; differ[i]) { differ[i] = now_differ; } else { or_results[i] = nums[i]; } } int min_differ = differ[0]; for (int i = 1; i &lt; n; i&#43;&#43;) { min_differ = min(min_differ, differ[i]); } return min_differ; } }; 提交结果 758/813个通过的测试样例 解答错误 例 输入 nums = [10,75,60,36,17] k = 54 输出 6 预期结果 1 0001010 10 1001011 75 0111100 60 0100100 36 0010001 17 0110110 k 60 | 36 = 0111100 60 | 36 | 17 = 0111101 36 | 17 = 0110101 显然 36|17 更接近k，但相比较36而言，60 | 36更接近k，故36的位置存储的应该是60 | 36，因此，在之后的17的位置只会比较60|36|17 与 17，无法得到36|17 分析 联想到最大子段和问题，考虑使用动态规划 以i遍历数组，以当前i结尾的最优子数组，为 以i-1结尾的最优子数组｜i 和 i 这两者中的更优者 出现问题的原因：随着或的次数的增加，与k的差的绝对值并非单调递减 " />
 <meta property="og:url" content="https://y-m-m.github.io/post/leetcode3171%E6%89%BE%E5%88%B0%E6%8C%89%E4%BD%8D%E6%88%96%E6%9C%80%E6%8E%A5%E8%BF%91k%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84/" />
 <meta property="og:site_name" content="leetcode 3171 找到按位或最接近k的子数组" />
 <meta property="og:image"
@@ -150,9 +150,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Thu, 10 Oct 2024 09:12:31 &#43;0800"
+                  Modified <relative-time datetime="Thu, 31 Oct 2024 22:46:29 &#43;0800"
                     class="no-wrap">
-                    Thu, 10 Oct 2024 09:12:31 &#43;0800</relative-time>
+                    Thu, 31 Oct 2024 22:46:29 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -182,7 +182,7 @@
                         </div>
                       </div>
                     </details-menu>
-                      656 Words
+                      640 Words
                     
 
                   </div>
@@ -214,6 +214,42 @@
                         </path>
                       </svg>
                       leetcode
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E4%BD%8D%E8%BF%90%E7%AE%97">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      位运算
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%BA%BF%E6%AE%B5%E6%A0%91">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      线段树
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%95%B0%E7%BB%84">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      数组
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      二分查找
                     </a>
                     
                     
@@ -267,13 +303,6 @@
 <li>1 &lt;= nums.length &lt;= 10<!-- raw HTML omitted -->5<!-- raw HTML omitted --></li>
 <li>1 &lt;= nums[i] &lt;= 10<!-- raw HTML omitted -->9<!-- raw HTML omitted --></li>
 <li>1 &lt;= k &lt;= 10<!-- raw HTML omitted -->9<!-- raw HTML omitted --></li>
-</ul>
-<h1 id="相关标签">相关标签</h1>
-<ul>
-<li>位运算</li>
-<li>线段树</li>
-<li>数组</li>
-<li>二分查找</li>
 </ul>
 <h1 id="难度">难度</h1>
 <ul>

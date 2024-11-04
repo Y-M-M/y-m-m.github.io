@@ -177,9 +177,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Sat, 02 Nov 2024 22:14:17 &#43;0800"
+                  Modified <relative-time datetime="Mon, 04 Nov 2024 20:39:58 &#43;0800"
                     class="no-wrap">
-                    Sat, 02 Nov 2024 22:14:17 &#43;0800</relative-time>
+                    Mon, 04 Nov 2024 20:39:58 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -209,7 +209,7 @@
                         </div>
                       </div>
                     </details-menu>
-                      1626 Words
+                      1801 Words
                     
 
                   </div>
@@ -404,8 +404,12 @@ l(y) = y - lowbit(y) + 1 = x + b - lowbit(b) + 1 ≥ x + 1 &gt; x
 <li>u &lt; fa[u]
 <ul>
 <li>树上的任何一个节点u大于任何一个u的后代，小于任何一个u的祖先</li>
+<li>点u的lowbit严格小于fa[u]的lowbit</li>
 </ul>
 </li>
+<li>点x的高度是log<!-- raw HTML omitted -->2<!-- raw HTML omitted -->lowbit(x)，即x二进制最低位1的位数</li>
+<li>c[u]真包含于c[v]，其中v是u的任一祖先</li>
+<li>对于任意v&rsquo; &gt; u，若v&rsquo;不是u的祖先，则c[v‘]和c[u]不相交</li>
 </ul>
 <h2 id="操作">操作</h2>
 <h3 id="区间查询">区间查询</h3>
@@ -427,7 +431,20 @@ l(y) = y - lowbit(y) + 1 = x + b - lowbit(b) + 1 ≥ x + 1 &gt; x
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><blockquote>
+</span></span></code></pre></div><h3 id="单点修改">单点修改</h3>
+<ul>
+<li>单点修改a[x]
+<ul>
+<li>遍历并修改管辖了a[x]的所有c[y]</li>
+<li>循环执行如下操作</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>修改c[x]
+x = x + lowbit(x)</p>
+</blockquote>
+<blockquote>
 <p>3171
 3165
 2286</p>

@@ -149,7 +149,7 @@
                 </path>
               </svg>
               Posts
-              <span class="Counter">49</span>
+              <span class="Counter">50</span>
             </a>
           </nav>
           <div class="profile-color-modes js-promo-color-modes-banner-profile isInitialToggle">
@@ -428,7 +428,7 @@
         </path>
       </svg>
       Posts
-      <span class="Counter ">49</span>
+      <span class="Counter ">50</span>
     </a>
   </nav>
 </div>
@@ -473,18 +473,8 @@
                 <h1 id="数状数组">数状数组</h1>
 <h2 id="介绍">介绍</h2>
 <ul>
-<li>数状数组
-<ul>
-<li>一种支持单点修改和区间查询的代码量小的数据结构</li>
-</ul>
-</li>
-<li>线段树
-<ul>
-<li>用来维护<strong>区间信息</strong>的数据结构</li>
-<li>可以在O(logN)的时间复杂度内实现单点修改，区间修改，区间查询等操作
+<li>一种支持单点修改和区间查询的代码量小的数据结构
 普通数状数组维护的信息及运算要满足<strong>结合律</strong>和<strong>可差分</strong></li>
-</ul>
-</li>
 </ul>
 <pre tabindex="0"><code>什么是可差分？
   具有逆运算的运算，即已知x * y和x可以求出y
@@ -521,6 +511,51 @@
 </blockquote>
 <h2 id="观察树状数组">观察树状数组</h2>
 <p><img src="/images/%E6%88%AA%E5%B1%8F2024-09-30%2021.51.07.png" alt="树状数组样例"></p>
+<h3 id="基本性质-管辖区间">基本性质 管辖区间</h3>
+<ul>
+<li>很容易发现
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">树状数组元素</th>
+          <th style="text-align: left">管辖区间</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">c[1]</td>
+          <td style="text-align: left">[1&hellip;1]</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">c[2]</td>
+          <td style="text-align: left">[1&hellip;2]</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">c[3]</td>
+          <td style="text-align: left">[3&hellip;3]</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">c[4]</td>
+          <td style="text-align: left">[1&hellip;4]</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">&hellip;</td>
+          <td style="text-align: left"></td>
+      </tr>
+  </tbody>
+</table>
+</li>
+<li>c[x]的管辖区间[x - lowbit(x) + 1, x]</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">lowbit</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// x的二进制中，最低的1以及后面所有的0组成的数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">return</span> <span class="n">x</span> <span class="o">&amp;</span> <span class="o">-</span><span class="n">x</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3 id="树形态的性质">树形态的性质</h3>
+<blockquote>
+<p>l(x) = x - lowbit(x) + 1
+x = s * 2<!-- raw HTML omitted -->k + 1<!-- raw HTML omitted --> + 2 <!-- raw HTML omitted -->k<!-- raw HTML omitted -->, lowbit(x) = 2<!-- raw HTML omitted -->k<!-- raw HTML omitted -->
+c[x]与c[y]的管辖范围不相交-&gt;[l(x), x]与[l(y), y]不相交</p>
               </div>
             </div>
 
@@ -552,15 +587,6 @@
                   </path>
                 </svg>
                 树状数组
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%BA%BF%E6%AE%B5%E6%A0%91">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                线段树
               </a>
               
               

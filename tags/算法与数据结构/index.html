@@ -149,7 +149,7 @@
                 </path>
               </svg>
               Posts
-              <span class="Counter">49</span>
+              <span class="Counter">50</span>
             </a>
           </nav>
           <div class="profile-color-modes js-promo-color-modes-banner-profile isInitialToggle">
@@ -428,7 +428,7 @@
         </path>
       </svg>
       Posts
-      <span class="Counter ">49</span>
+      <span class="Counter ">50</span>
     </a>
   </nav>
 </div>
@@ -441,7 +441,7 @@
       
       <div class="TableObject border-bottom border-gray-light py-3">
         <div class="user-repo-search-results-summary TableObject-item TableObject-item--primary v-align-top">
-          <strong>2</strong>
+          <strong>3</strong>
           results
           for <strong>算法与数据结构</strong>
         </div>
@@ -464,6 +464,124 @@
           <div class="col-12 d-inline-block">
             <div class="d-inline-block mb-1">
               <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/%E7%BA%BF%E6%AE%B5%E6%A0%91/">数状数组</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <p><a href="https://y-m-m.github.io/post/%E6%95%B0%E7%8A%B6%E6%95%B0%E7%BB%84/">相关 数状数组</a></p>
+<h1 id="介绍">介绍</h1>
+<ul>
+<li>线段树
+<ul>
+<li>用来维护<strong>区间信息</strong>的数据结构</li>
+<li>可以在O(logN)的时间复杂度内实现单点修改，区间修改，区间查询等操作</li>
+</ul>
+</li>
+</ul>
+<h1 id="线段树是什么样的">线段树是什么样的？</h1>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2024-11-10%2022.25.40.png" alt=""></p>
+<ul>
+<li>将每个长度不为1的区间划分成左右两个区间递归求解</li>
+<li>图中红色字体标明的区间，表示该节点管辖的位置区间</li>
+</ul>
+<blockquote>
+<p>$d_i$的左儿子为$d_{2 * i}$，右儿子为$d_{2 * i + 1}$
+$d_i$表示的区间是[s, t]，$d_{2 * i}$表示的区间是[s, $\frac{s + t}{2}$]，$d_{2 * i + 1}$表示的区间是$[\frac{s + t}{2} + 1, t]$</p>
+</blockquote>
+<h1 id="建树">建树</h1>
+<ul>
+<li>递归</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">build</span><span class="p">(</span><span class="kt">int</span> <span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">t</span><span class="p">,</span> <span class="kt">int</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 对 [s,t] 区间建立线段树,当前根的编号为 p
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="o">==</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">d</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">s</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="p">((</span><span class="n">t</span> <span class="o">-</span> <span class="n">s</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 移位运算符的优先级小于加减法，所以加上括号
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// 如果写成 (s + t) &gt;&gt; 1 可能会超出 int 范围
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">build</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">p</span> <span class="o">*</span> <span class="mi">2</span><span class="p">),</span> <span class="n">build</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">p</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 递归对左右区间建树
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">d</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">p</span> <span class="o">*</span> <span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">d</span><span class="p">[(</span><span class="n">p</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h1 id="区间查询">区间查询</h1>
+<ul>
+<li>如果要查询的区间是[l, r]，则可将其拆成至多O(logn)个极大的区间，合并即可</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">getsum</span><span class="p">(</span><span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">,</span> <span class="kt">int</span> <span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">t</span><span class="p">,</span> <span class="kt">int</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// [l, r] 为查询区间, [s, t] 为当前节点包含的区间, p 为当前节点的编号
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;=</span> <span class="n">s</span> <span class="o">&amp;&amp;</span> <span class="n">t</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">d</span><span class="p">[</span><span class="n">p</span><span class="p">];</span>  <span class="c1">// 当前区间为询问区间的子集时直接返回当前区间的和
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="p">((</span><span class="n">t</span> <span class="o">-</span> <span class="n">s</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">),</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">)</span> <span class="n">sum</span> <span class="o">+=</span> <span class="n">getsum</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">p</span> <span class="o">*</span> <span class="mi">2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 如果左儿子代表的区间 [s, m] 与询问区间有交集, 则递归查询左儿子
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">&gt;</span> <span class="n">m</span><span class="p">)</span> <span class="n">sum</span> <span class="o">+=</span> <span class="n">getsum</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">p</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 如果右儿子代表的区间 [m + 1, t] 与询问区间有交集, 则递归查询右儿子
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">return</span> <span class="n">sum</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h1 id="区间修改">区间修改</h1>
+<ul>
+<li><strong>懒惰标记</strong>
+<ul>
+<li>修改区间[l, r]时，只修改节点并标记(懒惰标记)，而不修改其子节点</li>
+<li>等到下一次访问带有标记的节点时再进行</li>
+</ul>
+</li>
+</ul>
+<h1 id="参考资料">参考资料</h1>
+<p><a href="https://oi-wiki.org/ds/seg/">OI Wiki线段树</a>
+<a href="https://www.cnblogs.com/RioTian/p/13409694.html">博客 线段树</a></p>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学与技术
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                算法与数据结构
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%BA%BF%E6%AE%B5%E6%A0%91">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                线段树
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Sun, 10 Nov 2024 00:00:00 &#43;0000" class="no-wrap"
+                title=" Sun, 10 Nov 2024 00:00:00 &#43;0000">
+                Sun, 10 Nov 2024 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
                 <a href="https://y-m-m.github.io/post/%E6%95%B0%E7%8A%B6%E6%95%B0%E7%BB%84/">数状数组</a>
               </h3>
             </div>
@@ -473,18 +591,8 @@
                 <h1 id="数状数组">数状数组</h1>
 <h2 id="介绍">介绍</h2>
 <ul>
-<li>数状数组
-<ul>
-<li>一种支持单点修改和区间查询的代码量小的数据结构</li>
-</ul>
-</li>
-<li>线段树
-<ul>
-<li>用来维护<strong>区间信息</strong>的数据结构</li>
-<li>可以在O(logN)的时间复杂度内实现单点修改，区间修改，区间查询等操作
+<li>一种支持单点修改和区间查询的代码量小的数据结构
 普通数状数组维护的信息及运算要满足<strong>结合律</strong>和<strong>可差分</strong></li>
-</ul>
-</li>
 </ul>
 <pre tabindex="0"><code>什么是可差分？
   具有逆运算的运算，即已知x * y和x可以求出y
@@ -521,6 +629,51 @@
 </blockquote>
 <h2 id="观察树状数组">观察树状数组</h2>
 <p><img src="/images/%E6%88%AA%E5%B1%8F2024-09-30%2021.51.07.png" alt="树状数组样例"></p>
+<h3 id="基本性质-管辖区间">基本性质 管辖区间</h3>
+<ul>
+<li>很容易发现
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">树状数组元素</th>
+          <th style="text-align: left">管辖区间</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">c[1]</td>
+          <td style="text-align: left">[1&hellip;1]</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">c[2]</td>
+          <td style="text-align: left">[1&hellip;2]</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">c[3]</td>
+          <td style="text-align: left">[3&hellip;3]</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">c[4]</td>
+          <td style="text-align: left">[1&hellip;4]</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">&hellip;</td>
+          <td style="text-align: left"></td>
+      </tr>
+  </tbody>
+</table>
+</li>
+<li>c[x]的管辖区间[x - lowbit(x) + 1, x]</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">lowbit</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// x的二进制中，最低的1以及后面所有的0组成的数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">return</span> <span class="n">x</span> <span class="o">&amp;</span> <span class="o">-</span><span class="n">x</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3 id="树形态的性质">树形态的性质</h3>
+<blockquote>
+<p>l(x) = x - lowbit(x) + 1
+x = s * 2<!-- raw HTML omitted -->k + 1<!-- raw HTML omitted --> + 2 <!-- raw HTML omitted -->k<!-- raw HTML omitted -->, lowbit(x) = 2<!-- raw HTML omitted -->k<!-- raw HTML omitted -->
+c[x]与c[y]的管辖范围不相交-&gt;[l(x), x]与[l(y), y]不相交</p>
               </div>
             </div>
 
@@ -552,15 +705,6 @@
                   </path>
                 </svg>
                 树状数组
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%BA%BF%E6%AE%B5%E6%A0%91">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                线段树
               </a>
               
               

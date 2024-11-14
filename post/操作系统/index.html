@@ -150,9 +150,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Tue, 12 Nov 2024 09:12:02 &#43;0800"
+                  Modified <relative-time datetime="Tue, 12 Nov 2024 10:51:45 &#43;0800"
                     class="no-wrap">
-                    Tue, 12 Nov 2024 09:12:02 &#43;0800</relative-time>
+                    Tue, 12 Nov 2024 10:51:45 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -182,7 +182,7 @@
                         </div>
                       </div>
                     </details-menu>
-                      43375 Words
+                      43572 Words
                     
 
                   </div>
@@ -3715,14 +3715,30 @@ wait, singal原语常简称为P, V操作，因此，做题的时候常把wait(S)
 </ul>
 <h3 id="虚拟内存的定义和特征">虚拟内存的定义和特征</h3>
 <ul>
-<li>定义
+<li>
+<p>定义</p>
 <ul>
 <li>基于局部性原理，在程序装入时，可以将程序中很快会用到的部分装入内存，暂时用不到的部分留在外存，就可以让程序开始执行</li>
 <li>在程序执行过程中，当所访问的信息不在内存时，由操作系统负责将所需信息从外存调入内存，然后继续执行程序</li>
 <li>若内存空间不够，由操作系统负责将内存中暂时用不到的信息换出到外存</li>
+<li>Page is needed -&gt; reference to it
+<ul>
+<li>invalid reference -&gt; abort</li>
+<li>not-in-memory -&gt; bring to memory</li>
 </ul>
 </li>
-<li>特征
+<li>valid-invalid bit</li>
+<li>Page fault(缺页中断)
+<img src="/images/%E6%88%AA%E5%B1%8F2024-11-12%2010.06.10.png" alt=""></li>
+<li>EAT
+<ul>
+<li>(1 - ρ) * memory access + p(page fault overhead + [swap page out] + swap page in + restart overhead)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>特征</p>
 <ul>
 <li>多次性：无需在作业运行时一次性全部装入内存，而是允许被分成多次调入内存</li>
 <li>对换性：在作业运行时无需一直常驻内存，而是允许在作业运行过程中，将作业换入、换出</li>
@@ -3760,16 +3776,38 @@ wait, singal原语常简称为P, V操作，因此，做题的时候常把wait(S)
 </ul>
 <h3 id="总结-33">总结</h3>
 <p><img src="/images/%E6%88%AA%E5%B1%8F2024-11-07%2010.51.39.png" alt=""></p>
-<h2 id="32_2-请求分页管理方式">3.2_2 请求分页管理方式</h2>
+<h2 id="32_2-请求分页管理方式-demand-paging">3.2_2 请求分页管理方式 Demand Paging</h2>
 <ul>
 <li>若程序执行过程中，当所访问的信息不在内存时，由操作系统负责将所需信息从外存调入内存，然后继续执行程序
 <ul>
 <li>操作系统要提供请求调页功能，将缺失页面从外存调入内存</li>
+<li>Demand Paging
+<ul>
+<li>Less I/O needed</li>
+<li>Less memory needed</li>
+<li>Faster response</li>
+<li>More users</li>
 </ul>
 </li>
-<li>若内存空间不够，由操作系统负责将内存中暂时用不到的信息换出到外存
+</ul>
+</li>
+<li>若内存空间不够，由操作系统负责将内存中暂时用不到的信息换出到外存 Page Replacement
 <ul>
 <li>操作系统要提供页面置换功能，将暂时用不到的页面换出外存</li>
+</ul>
+</li>
+<li>Page is needed -&gt; reference to it
+<ul>
+<li>invalid reference -&gt; abort</li>
+<li>not-in-memory -&gt; bring to memory</li>
+</ul>
+</li>
+<li>valid-invalid bit</li>
+<li>Page fault(缺页中断)
+<img src="/images/%E6%88%AA%E5%B1%8F2024-11-12%2010.06.10.png" alt=""></li>
+<li>EAT
+<ul>
+<li>(1 - ρ) * memory access + p(page fault overhead + [swap page out] + swap page in + restart overhead)</li>
 </ul>
 </li>
 </ul>
@@ -3783,11 +3821,20 @@ wait, singal原语常简称为P, V操作，因此，做题的时候常把wait(S)
 <ul>
 <li>过程
 <ul>
-<li>要访问的页面不在内存</li>
+<li>要访问的页面不在内存 valid-invalid bit</li>
 <li>产生缺页中断，由操作系统的缺页中断处理程序处理中断</li>
 <li>此时缺页的进程阻塞，放入阻塞队列，调页完成后再将其唤醒，放回就绪队列</li>
-<li>如果内存中有空闲块，则为进程分配一个空闲块，将所缺页面装入该块，并修改页表中相应的页表项</li>
-<li>如果内存中没有空闲块，则由页面置换算法选择一个页面淘汰，若该页面在内存期间被修改过，则要将其协会外存。为修改过的页面不用写回外存</li>
+<li>Find the location of the desired page on disk -&gt; Find a free frame</li>
+<li>如果内存中有空闲块，则为进程分配一个空闲块，将所缺页面装入该块，并修改页表中相应的页表项
+<ul>
+<li>If there is a free frame, use it</li>
+</ul>
+</li>
+<li>如果内存中没有空闲块，则由页面置换算法选择一个页面淘汰，若该页面在内存期间被修改过，则要将其写回外存。为修改过的页面不用写回外存
+<ul>
+<li>If there is no free frame, user a page replacement algorithm to select a victim frame</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>缺页中断属于内中断
@@ -3811,7 +3858,7 @@ wait, singal原语常简称为P, V操作，因此，做题的时候常把wait(S)
 <img src="/images/%E6%88%AA%E5%B1%8F2024-11-07%2011.11.56.png" alt=""></p>
 <h3 id="总结-34">总结</h3>
 <p><img src="/images/%E6%88%AA%E5%B1%8F2024-11-07%2011.13.40.png" alt=""></p>
-<h2 id="32_3-页面置换算法">3.2_3 页面置换算法</h2>
+<h2 id="32_3-页面置换算法-page-replacement">3.2_3 页面置换算法 Page Replacement</h2>
 <h3 id="最佳置换算法opt">最佳置换算法(OPT)</h3>
 <ul>
 <li>每次选择淘汰的页面将是以后永不使用，或者在最长时间内不再被访问的页面，这样可以保证最低的缺页率</li>
@@ -3823,6 +3870,7 @@ wait, singal原语常简称为P, V操作，因此，做题的时候常把wait(S)
 </li>
 <li>理想化算法，在实际应用中无法实现
 <img src="/images/%E6%88%AA%E5%B1%8F2024-11-07%2020.39.26.png" alt=""></li>
+<li>作为其他算法的评价依据</li>
 </ul>
 <h3 id="先进先出算法fifo">先进先出算法(FIFO)</h3>
 <ul>
@@ -3834,17 +3882,21 @@ wait, singal原语常简称为P, V操作，因此，做题的时候常把wait(S)
 <li>当为进程分配的物理块数增大时，却也次数不减反增的异常现象</li>
 </ul>
 </li>
-<li>只有FIFO算法会产生Belady异常</li>
+<li>只有FIFO算法会产生Belady异常(Belady&rsquo;s Anomaly)</li>
 <li>实现简单，但算法性能差
 <img src="/images/%E6%88%AA%E5%B1%8F2024-11-07%2020.46.17.png" alt="">
 <img src="/images/%E6%88%AA%E5%B1%8F2024-11-07%2020.46.29.png" alt=""></li>
 </ul>
-<h3 id="最近最久未使用置换算法lru">最近最久未使用置换算法(LRU)</h3>
+<h3 id="最近最久未使用置换算法lru-least-recently-usedlru-algorithm">最近最久未使用置换算法(LRU) Least Recently Used(LRU) Algorithm</h3>
 <ul>
 <li>每次淘汰的页面是最近最近未使用的页面</li>
 <li>实现方法
 <ul>
-<li>赋予每个页面对应的页表项，用访问字段记录该页面上自上次被访问以来所经历的时间t</li>
+<li>赋予每个页面对应的页表项，用访问字段记录该页面上自上次被访问以来所经历的时间t
+<ul>
+<li>Counter implementation</li>
+</ul>
+</li>
 <li>当需要淘汰一个页面时，选择现有页面中t值最大的，即最近最久未使用的页面</li>
 </ul>
 </li>

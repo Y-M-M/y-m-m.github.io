@@ -153,9 +153,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Wed, 06 Nov 2024 09:35:05 &#43;0800"
+                  Modified <relative-time datetime="Wed, 13 Nov 2024 09:06:56 &#43;0800"
                     class="no-wrap">
-                    Wed, 06 Nov 2024 09:35:05 &#43;0800</relative-time>
+                    Wed, 13 Nov 2024 09:06:56 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -185,7 +185,7 @@
                         </div>
                       </div>
                     </details-menu>
-                      10053 Words
+                      10725 Words
                     
 
                   </div>
@@ -1506,6 +1506,115 @@ C++98 目前绝大部分编译器支持的C++标准；标准模版库STL，运�
 C++11 支持auto, decltype, 支持列比哦啊初始化，基于范围的for循环
 C++14, C++17, C++20</p>
 </blockquote>
+<ul>
+<li>变量的作用域
+<ul>
+<li>将i 定义在for循环外</li>
+</ul>
+</li>
+<li>strdup函数
+<ul>
+<li>申请一块新的内存复制了字符串并返回</li>
+<li>这个函数违背了“接口不应偷偷申请内存”这个原则，这个函数一直不被C语言的系列标准接纳，有的系统支持，有的则坚决不支持，经常会引起一些移植性的问题</li>
+</ul>
+</li>
+<li>字节序
+<ul>
+<li>大端存储 (网络序)</li>
+<li>小端存储 x86(低地址存放低位)</li>
+<li>htonl(i)主机序到网络序的转换</li>
+<li>条件编译越少越好</li>
+<li>不要为了实现可移植性随意增加</li>
+</ul>
+</li>
+</ul>
+<h2 id="系统程序员需要注意的问题">系统程序员需要注意的问题</h2>
+<ul>
+<li>如果命令的行为发生改变，那么应该另起一个名字或者增加选项</li>
+</ul>
+<h2 id="国际化">国际化</h2>
+<ul>
+<li>
+<p>语言</p>
+</li>
+<li>
+<p>字符编码</p>
+<ul>
+<li>将现有的语言文字符号用什么样的二进制来表示</li>
+<li>URF-8编码</li>
+<li>GBK编码</li>
+</ul>
+</li>
+<li>
+<p>UNICODE</p>
+<ul>
+<li>将每一个有意义的字母，符号，文字都给出一个唯一的身份编号</li>
+<li>实现
+<ul>
+<li>程序将文字呈现给用户</li>
+<li>用户将文字输入到程序</li>
+<li>程序之间的文字传递</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>语言环境</p>
+<ul>
+<li>zh_CN.UTF-8</li>
+<li>zh-语言</li>
+<li>CN-区域</li>
+<li>UTF-8字符编码方式</li>
+</ul>
+</li>
+<li>
+<p>国际化工具</p>
+<ul>
+<li>gettext</li>
+</ul>
+</li>
+</ul>
+<h2 id="如何让程序的可移植性更好一些">如何让程序的可移植性更好一些</h2>
+<ul>
+<li>选择更高级的语言，如Java</li>
+<li>不同环境下存在差异的语言特性，最好不要使用</li>
+<li>谨慎启用语言的高版本特性</li>
+<li>谨慎启用高版本的库</li>
+<li>尽可能使用全球通用的字符编码</li>
+<li>条件允许的情况下，将程序在尽可能多的环境下编译，测试，今早发现程序中的一些一致性问题</li>
+<li><strong>做好设计，尽可能让那些系统依赖性高的代码集中在一起，隐藏在同一接口后面，让大部分代码和系统无关</strong></li>
+<li>必要的地方，使用条件编译(最好不要使用)</li>
+</ul>
+<h1 id="记法">记法</h1>
+<ul>
+<li>基于一个可打印字符集合，用集合中的字符的特定组合来形式化表达特定的数据或者逻辑的方法</li>
+<li>人与程序接口的重要组成部分</li>
+</ul>
+<h2 id="数据格式化记法">数据格式化记法</h2>
+<ul>
+<li>printf
+<ul>
+<li>printf(&quot;%d %9.2f %-10.10s\n&quot;, 100, 123.456, &ldquo;abcdefghijklmn&rdquo;);</li>
+</ul>
+</li>
+<li>strftime
+<ul>
+<li>%Y 4位年份</li>
+<li>%m 2位月份</li>
+<li>%d 2位日期</li>
+<li>%T时分秒信息 HH:MM:SS</li>
+</ul>
+</li>
+</ul>
+<h2 id="设计一个数据格式化记法">设计一个数据格式化记法</h2>
+<ul>
+<li>记法的解释执行
+<ul>
+<li>正则表达式</li>
+<li>算术表达式</li>
+</ul>
+</li>
+</ul>
 </article>
               </div>
             </div>

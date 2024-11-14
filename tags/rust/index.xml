@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rust on 陈皮的博客</title>
+    <link>https://y-m-m.github.io/tags/rust/</link>
+    <description>Recent content in Rust on 陈皮的博客</description>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 12 Nov 2024 09:35:02 +0800</lastBuildDate>
+    <atom:link href="https://y-m-m.github.io/tags/rust/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>python I/O程序的输入输出</title>
+      <link>https://y-m-m.github.io/post/rust/</link>
+      <pubDate>Tue, 12 Nov 2024 00:00:00 +0000</pubDate>
+      <guid>https://y-m-m.github.io/post/rust/</guid>
+      <description>&lt;h1 id=&#34;11-rust简介&#34;&gt;1.1 Rust简介&lt;/h1&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;可靠+高效&lt;/li&gt;&#xA;&lt;li&gt;可用来替换C/C++，很多常见的bug在编译时就可以被消灭&lt;/li&gt;&#xA;&lt;li&gt;适用于以下场景&#xA;&lt;ul&gt;&#xA;&lt;li&gt;需要运行时的速度&lt;/li&gt;&#xA;&lt;li&gt;需要内存安全&lt;/li&gt;&#xA;&lt;li&gt;更好的利用多处理器&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;与其他语言比较&#xA;&lt;ul&gt;&#xA;&lt;li&gt;C/C++ 性能非常好，但类型系统和内存都不太安全&lt;/li&gt;&#xA;&lt;li&gt;Java/C# 拥有GC，能保证内存安全，也有很多优秀特性，但性能不行&lt;/li&gt;&#xA;&lt;li&gt;Rust&#xA;&lt;ul&gt;&#xA;&lt;li&gt;安全&lt;/li&gt;&#xA;&lt;li&gt;无需GC&lt;/li&gt;&#xA;&lt;li&gt;易于维护、调试，代码安全高效&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;特别擅长的领域&#xA;&lt;ul&gt;&#xA;&lt;li&gt;高性能Web Service&lt;/li&gt;&#xA;&lt;li&gt;WebAssembly&lt;/li&gt;&#xA;&lt;li&gt;命令行工具&lt;/li&gt;&#xA;&lt;li&gt;网络编程&lt;/li&gt;&#xA;&lt;li&gt;嵌入式设备&lt;/li&gt;&#xA;&lt;li&gt;系统编程&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;Rust 与 FireFox&lt;/li&gt;&#xA;&lt;li&gt;Rust的用户和案例&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Google&lt;/li&gt;&#xA;&lt;li&gt;Amazon&lt;/li&gt;&#xA;&lt;li&gt;System76&lt;/li&gt;&#xA;&lt;li&gt;蚂蚁金服&lt;/li&gt;&#xA;&lt;li&gt;斯坦福和密歇根大学&lt;/li&gt;&#xA;&lt;li&gt;微软&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;Rust的优点&#xA;&lt;ul&gt;&#xA;&lt;li&gt;性能&lt;/li&gt;&#xA;&lt;li&gt;安全性&lt;/li&gt;&#xA;&lt;li&gt;无所畏惧的并发&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;缺点&#xA;&lt;ul&gt;&#xA;&lt;li&gt;难学&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;注意&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Rust有很多独有的概念，和现在大多数主流语言都不同&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h1 id=&#34;12-安装rust&#34;&gt;1.2 安装Rust&lt;/h1&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Mac or Linux&#xA;&lt;ul&gt;&#xA;&lt;li&gt;curl &lt;a href=&#34;https://sh.rustup.rs&#34;&gt;https://sh.rustup.rs&lt;/a&gt; -sSf | sh&lt;/li&gt;&#xA;&lt;li&gt;添加环境变量&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;更新Rust&#xA;&lt;ul&gt;&#xA;&lt;li&gt;rustup update&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;卸载Rust&#xA;&lt;ul&gt;&#xA;&lt;li&gt;rustup self uninstall&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;安装验证&#xA;&lt;ul&gt;&#xA;&lt;li&gt;rustc &amp;ndash;version&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;本地文档&#xA;&lt;ul&gt;&#xA;&lt;li&gt;rustup doc&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;开发工具&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Visual Studio Code&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Rust插件&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;Clion&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Rust插件&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
+    </item>
+  </channel>
+</rss>

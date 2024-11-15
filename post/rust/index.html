@@ -10,7 +10,7 @@
     <link rel="stylesheet" href='https://y-m-m.github.io/css/light.css' />
     <link rel="stylesheet" href='https://y-m-m.github.io/css/dark.css' />
     <link rel="stylesheet" href='https://y-m-m.github.io/css/syntax.css' />
-    <title>python I/O程序的输入输出 - 陈皮的博客</title>
+    <title>Rust入门 - 陈皮的博客</title>
     
     <link rel="icon" type="image/x-icon" href='/images/github-mark.png'>
     
@@ -18,7 +18,8 @@
 
     
     <meta name="description"
-  content="1.1 Rust简介 可靠&#43;高效 可用来替换C/C&#43;&#43;，很多常见的bug在编译时就可以被消灭 适用于以下场景 需要运行时的速度 需要内存安全 更好的利用多处理器 与其他语言比较 C/C&#43;&#43; 性能非常好，但类型系统和内存都不太安全 Java/C# 拥有GC，能保证内存安全，也有很多优秀特性，但性能不行 Rust 安全 无需GC 易于维护、调试，代码安全高效 特别擅长的领域 高性能Web Service WebAssembly 命令行工具 网络编程 嵌入式设备 系统编程 Rust 与 FireFox Rust的用户和案例 Google Amazon System76 蚂蚁金服 斯坦福和密歇根大学 微软 Rust的优点 性能 安全性 无所畏惧的并发 缺点 难学 注意 Rust有很多独有的概念，和现在大多数主流语言都不同 1.2 安装Rust Mac or Linux curl https://sh.rustup.rs -sSf | sh 添加环境变量 更新Rust rustup update 卸载Rust rustup self uninstall 安装验证 rustc &ndash;version 本地文档 rustup doc 开发工具 Visual Studio Code Rust插件 Clion Rust插件 " />
+  content="第一章 Rust入门 1.1 Rust简介 可靠&#43;高效 可用来替换C/C&#43;&#43;，很多常见的bug在编译时就可以被消灭 适用于以下场景 需要运行时的速度 需要内存安全 更好的利用多处理器 与其他语言比较 C/C&#43;&#43; 性能非常好，但类型系统和内存都不太安全 Java/C# 拥有GC，能保证内存安全，也有很多优秀特性，但性能不行 Rust 安全 无需GC 易于维护、调试，代码安全高效 特别擅长的领域 高性能Web Service WebAssembly 命令行工具 网络编程 嵌入式设备 系统编程 Rust 与 FireFox Rust的用户和案例 Google Amazon System76 蚂蚁金服 斯坦福和密歇根大学 微软 Rust的优点 性能 安全性 无所畏惧的并发 缺点 难学 注意 Rust有很多独有的概念，和现在大多数主流语言都不同 1.2 安装Rust Mac or Linux curl https://sh.rustup.rs -sSf | sh 添加环境变量 更新Rust rustup update 卸载Rust rustup self uninstall 安装验证 rustc &ndash;version 本地文档 rustup doc 开发工具 Visual Studio Code Rust插件 Clion Rust插件 1.3 Hello World! // fn 新建函数 fn main() { // main函数是每个Rust可执行程序最先运行的代码 println!(&#34;Hello, world!&#34;); } // Rust的缩进是4个空格，而非tab键 // pritln!是一个Rust macro(宏)而非函数，函数没有! // &#34;Hello world&#34;是字符串，是println!的参数 // 代码以分号结束 // 编译和运行是单独的两步 // rustc 文件名-&gt;可执行文件 // rustc 是预编译的语言 ，可以先编译程序，然后把可执行文件交给别人运行 // rustc 只适合简单的Rust程序 1.4 Cargo 什么是Cargo? Cargo是Rust的构建系统和包管理工具 构建代码、下载依赖的库、构建这些库&hellip; 安装Rust的时候会安装Cargo cargo &ndash;version 使用Cargo创建项目 cargo new hello_cargo
+" />
 <meta name="keywords"
   content='blog, google analytics' />
 <meta name="robots" content="noodp" />
@@ -26,9 +27,10 @@
 
 
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="python I/O程序的输入输出 - 陈皮的博客" />
+<meta name="twitter:title" content="Rust入门 - 陈皮的博客" />
 <meta name="twitter:description"
-  content="1.1 Rust简介 可靠&#43;高效 可用来替换C/C&#43;&#43;，很多常见的bug在编译时就可以被消灭 适用于以下场景 需要运行时的速度 需要内存安全 更好的利用多处理器 与其他语言比较 C/C&#43;&#43; 性能非常好，但类型系统和内存都不太安全 Java/C# 拥有GC，能保证内存安全，也有很多优秀特性，但性能不行 Rust 安全 无需GC 易于维护、调试，代码安全高效 特别擅长的领域 高性能Web Service WebAssembly 命令行工具 网络编程 嵌入式设备 系统编程 Rust 与 FireFox Rust的用户和案例 Google Amazon System76 蚂蚁金服 斯坦福和密歇根大学 微软 Rust的优点 性能 安全性 无所畏惧的并发 缺点 难学 注意 Rust有很多独有的概念，和现在大多数主流语言都不同 1.2 安装Rust Mac or Linux curl https://sh.rustup.rs -sSf | sh 添加环境变量 更新Rust rustup update 卸载Rust rustup self uninstall 安装验证 rustc &ndash;version 本地文档 rustup doc 开发工具 Visual Studio Code Rust插件 Clion Rust插件 " />
+  content="第一章 Rust入门 1.1 Rust简介 可靠&#43;高效 可用来替换C/C&#43;&#43;，很多常见的bug在编译时就可以被消灭 适用于以下场景 需要运行时的速度 需要内存安全 更好的利用多处理器 与其他语言比较 C/C&#43;&#43; 性能非常好，但类型系统和内存都不太安全 Java/C# 拥有GC，能保证内存安全，也有很多优秀特性，但性能不行 Rust 安全 无需GC 易于维护、调试，代码安全高效 特别擅长的领域 高性能Web Service WebAssembly 命令行工具 网络编程 嵌入式设备 系统编程 Rust 与 FireFox Rust的用户和案例 Google Amazon System76 蚂蚁金服 斯坦福和密歇根大学 微软 Rust的优点 性能 安全性 无所畏惧的并发 缺点 难学 注意 Rust有很多独有的概念，和现在大多数主流语言都不同 1.2 安装Rust Mac or Linux curl https://sh.rustup.rs -sSf | sh 添加环境变量 更新Rust rustup update 卸载Rust rustup self uninstall 安装验证 rustc &ndash;version 本地文档 rustup doc 开发工具 Visual Studio Code Rust插件 Clion Rust插件 1.3 Hello World! // fn 新建函数 fn main() { // main函数是每个Rust可执行程序最先运行的代码 println!(&#34;Hello, world!&#34;); } // Rust的缩进是4个空格，而非tab键 // pritln!是一个Rust macro(宏)而非函数，函数没有! // &#34;Hello world&#34;是字符串，是println!的参数 // 代码以分号结束 // 编译和运行是单独的两步 // rustc 文件名-&gt;可执行文件 // rustc 是预编译的语言 ，可以先编译程序，然后把可执行文件交给别人运行 // rustc 只适合简单的Rust程序 1.4 Cargo 什么是Cargo? Cargo是Rust的构建系统和包管理工具 构建代码、下载依赖的库、构建这些库&hellip; 安装Rust的时候会安装Cargo cargo &ndash;version 使用Cargo创建项目 cargo new hello_cargo
+" />
 <meta name="twitter:site" content="https://y-m-m.github.io/" />
 <meta name="twitter:creator" content="陈皮" />
 <meta name="twitter:image"
@@ -36,11 +38,12 @@
 
 
 <meta property="og:type" content="article" />
-<meta property="og:title" content="python I/O程序的输入输出 - 陈皮的博客">
+<meta property="og:title" content="Rust入门 - 陈皮的博客">
 <meta property="og:description"
-  content="1.1 Rust简介 可靠&#43;高效 可用来替换C/C&#43;&#43;，很多常见的bug在编译时就可以被消灭 适用于以下场景 需要运行时的速度 需要内存安全 更好的利用多处理器 与其他语言比较 C/C&#43;&#43; 性能非常好，但类型系统和内存都不太安全 Java/C# 拥有GC，能保证内存安全，也有很多优秀特性，但性能不行 Rust 安全 无需GC 易于维护、调试，代码安全高效 特别擅长的领域 高性能Web Service WebAssembly 命令行工具 网络编程 嵌入式设备 系统编程 Rust 与 FireFox Rust的用户和案例 Google Amazon System76 蚂蚁金服 斯坦福和密歇根大学 微软 Rust的优点 性能 安全性 无所畏惧的并发 缺点 难学 注意 Rust有很多独有的概念，和现在大多数主流语言都不同 1.2 安装Rust Mac or Linux curl https://sh.rustup.rs -sSf | sh 添加环境变量 更新Rust rustup update 卸载Rust rustup self uninstall 安装验证 rustc &ndash;version 本地文档 rustup doc 开发工具 Visual Studio Code Rust插件 Clion Rust插件 " />
+  content="第一章 Rust入门 1.1 Rust简介 可靠&#43;高效 可用来替换C/C&#43;&#43;，很多常见的bug在编译时就可以被消灭 适用于以下场景 需要运行时的速度 需要内存安全 更好的利用多处理器 与其他语言比较 C/C&#43;&#43; 性能非常好，但类型系统和内存都不太安全 Java/C# 拥有GC，能保证内存安全，也有很多优秀特性，但性能不行 Rust 安全 无需GC 易于维护、调试，代码安全高效 特别擅长的领域 高性能Web Service WebAssembly 命令行工具 网络编程 嵌入式设备 系统编程 Rust 与 FireFox Rust的用户和案例 Google Amazon System76 蚂蚁金服 斯坦福和密歇根大学 微软 Rust的优点 性能 安全性 无所畏惧的并发 缺点 难学 注意 Rust有很多独有的概念，和现在大多数主流语言都不同 1.2 安装Rust Mac or Linux curl https://sh.rustup.rs -sSf | sh 添加环境变量 更新Rust rustup update 卸载Rust rustup self uninstall 安装验证 rustc &ndash;version 本地文档 rustup doc 开发工具 Visual Studio Code Rust插件 Clion Rust插件 1.3 Hello World! // fn 新建函数 fn main() { // main函数是每个Rust可执行程序最先运行的代码 println!(&#34;Hello, world!&#34;); } // Rust的缩进是4个空格，而非tab键 // pritln!是一个Rust macro(宏)而非函数，函数没有! // &#34;Hello world&#34;是字符串，是println!的参数 // 代码以分号结束 // 编译和运行是单独的两步 // rustc 文件名-&gt;可执行文件 // rustc 是预编译的语言 ，可以先编译程序，然后把可执行文件交给别人运行 // rustc 只适合简单的Rust程序 1.4 Cargo 什么是Cargo? Cargo是Rust的构建系统和包管理工具 构建代码、下载依赖的库、构建这些库&hellip; 安装Rust的时候会安装Cargo cargo &ndash;version 使用Cargo创建项目 cargo new hello_cargo
+" />
 <meta property="og:url" content="https://y-m-m.github.io/post/rust/" />
-<meta property="og:site_name" content="python I/O程序的输入输出" />
+<meta property="og:site_name" content="Rust入门" />
 <meta property="og:image"
   content="https://y-m-m.github.io/">
 <meta property="og:image:width" content="2048">
@@ -140,7 +143,7 @@
                   </span>
                   <span class="path-divider">/</span>
                   <strong class="css-truncate css-truncate-target mr-1" style="max-width: 410px">
-                    <a href="https://y-m-m.github.io/post/rust/">python I/O程序的输入输出</a>
+                    <a href="https://y-m-m.github.io/post/rust/">Rust入门</a>
                   </strong>
                 </h1>
                 <div class="note m-0">
@@ -150,9 +153,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Tue, 12 Nov 2024 09:35:02 &#43;0800"
+                  Modified <relative-time datetime="Thu, 14 Nov 2024 20:31:24 &#43;0800"
                     class="no-wrap">
-                    Tue, 12 Nov 2024 09:35:02 &#43;0800</relative-time>
+                    Thu, 14 Nov 2024 20:31:24 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -182,7 +185,7 @@
                         </div>
                       </div>
                     </details-menu>
-                      332 Words
+                      1634 Words
                     
 
                   </div>
@@ -214,7 +217,8 @@
 
 
               <div class="Box-body px-5 pb-5" style="z-index: 1">
-                <article class="markdown-body entry-content container-lg"><h1 id="11-rust简介">1.1 Rust简介</h1>
+                <article class="markdown-body entry-content container-lg"><h1 id="第一章-rust入门">第一章 Rust入门</h1>
+<h2 id="11-rust简介">1.1 Rust简介</h2>
 <ul>
 <li>可靠+高效</li>
 <li>可用来替换C/C++，很多常见的bug在编译时就可以被消灭</li>
@@ -277,7 +281,7 @@
 </ul>
 </li>
 </ul>
-<h1 id="12-安装rust">1.2 安装Rust</h1>
+<h2 id="12-安装rust">1.2 安装Rust</h2>
 <ul>
 <li>Mac or Linux
 <ul>
@@ -320,7 +324,171 @@
 </ul>
 </li>
 </ul>
-</article>
+<h2 id="13-hello-world">1.3 Hello World!</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Rust" data-lang="Rust"><span class="line"><span class="cl"><span class="c1">// fn 新建函数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">  </span><span class="c1">// main函数是每个Rust可执行程序最先运行的代码
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;Hello, world!&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// Rust的缩进是4个空格，而非tab键
+</span></span></span><span class="line"><span class="cl"><span class="c1">// pritln!是一个Rust macro(宏)而非函数，函数没有!
+</span></span></span><span class="line"><span class="cl"><span class="c1">// &#34;Hello world&#34;是字符串，是println!的参数
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 代码以分号结束
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// 编译和运行是单独的两步
+</span></span></span><span class="line"><span class="cl"><span class="c1">// rustc 文件名-&gt;可执行文件
+</span></span></span><span class="line"><span class="cl"><span class="c1">// rustc 是预编译的语言 ，可以先编译程序，然后把可执行文件交给别人运行
+</span></span></span><span class="line"><span class="cl"><span class="c1">// rustc 只适合简单的Rust程序
+</span></span></span></code></pre></div><h2 id="14-cargo">1.4 Cargo</h2>
+<h3 id="什么是cargo">什么是Cargo?</h3>
+<ul>
+<li>Cargo是Rust的构建系统和包管理工具
+<ul>
+<li>构建代码、下载依赖的库、构建这些库&hellip;</li>
+</ul>
+</li>
+<li>安装Rust的时候会安装Cargo
+<ul>
+<li>cargo &ndash;version</li>
+</ul>
+</li>
+</ul>
+<h3 id="使用cargo创建项目">使用Cargo创建项目</h3>
+<ul>
+<li>
+<p>cargo new hello_cargo</p>
+<ul>
+<li>创建项目
+<ul>
+<li>.toml</li>
+<li>src目录
+<ul>
+<li>main.rs</li>
+</ul>
+</li>
+<li>初始化git仓库
+<ul>
+<li>.gitgnore</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Cargo.toml</p>
+<ul>
+<li>TOML格式，是Cargo的配置格式</li>
+<li>[package]是一个区域标题，表示下方内容使用来配置包的
+<ul>
+<li>name 项目名</li>
+<li>version 项目版本</li>
+<li>edition 使用Rust版本</li>
+</ul>
+</li>
+<li>dependencies 项目依赖项</li>
+<li>在Rust里面，代码的包称作create</li>
+</ul>
+</li>
+<li>
+<p>src/main.rs</p>
+<ul>
+<li>源代码都放在src目录下</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="p">[</span><span class="n">package</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;hello_cargo&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;0.1.0&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">edition</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;2021&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">[</span><span class="n">dependencies</span><span class="p">]</span><span class="w">
+</span></span></span></code></pre></div><h3 id="使用cargo构建项目">使用Cargo构建项目</h3>
+<ul>
+<li>cargo build
+<ul>
+<li>创建可执行文件 target/debug/可执行文件名</li>
+</ul>
+</li>
+<li>第一次运行cargo build会在顶层目录生成cargo.lock文件
+<ul>
+<li>该文件负责追踪项目依赖的精确版本</li>
+<li>不需要手动修改该文件</li>
+</ul>
+</li>
+</ul>
+<h3 id="构建运行cargo项目">构建+运行cargo项目</h3>
+<ul>
+<li>cargo run
+<ul>
+<li>编译代码+执行结果</li>
+<li>如果之前编译成功过，并且源代码没有改变，那么就会直接运行二进制文件</li>
+</ul>
+</li>
+</ul>
+<h3 id="检查">检查</h3>
+<ul>
+<li>cargo check
+<ul>
+<li>检查代码，确保能通过编译，但是不产生任何可执行文件</li>
+<li>要比cargo build快得多
+<ul>
+<li>编写代码的时候可以连续反复的使用cargo check检查代码，提高效率</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="为发布构建">为发布构建</h3>
+<ul>
+<li>cargo build &ndash;release
+<ul>
+<li>编译时会进行优化
+<ul>
+<li>代码会运行的更快，但是编译时间更长</li>
+</ul>
+</li>
+<li>会在target/release而不是target/debug生成可执行文件</li>
+</ul>
+</li>
+</ul>
+<h3 id="尽量使用cargo">!尽量使用Cargo</h3>
+<h1 id="猜数游戏">猜数游戏</h1>
+<h2 id="21-一次猜测">2.1 一次猜测</h2>
+<ul>
+<li>目标
+<ul>
+<li>生成一个1到100间的随机数</li>
+<li>提示玩家输入一个猜测</li>
+<li>猜完之后，程序会提示猜测是太小了还是太大了</li>
+<li>如果猜测正确，那么打印出一个庆祝信息，程序退出</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Rust" data-lang="Rust"><span class="line"><span class="cl"><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">io</span><span class="p">;</span><span class="w"> </span><span class="c1">// prelude 获得用户输入/打印输出
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;猜数!&#34;</span><span class="p">);</span><span class="w"> </span><span class="c1">// 宏，输出
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;猜测一个数&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// let mut foo = 1;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="c1">// let bar = foo; // immutable 默认不可变
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="c1">// foo = 2;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">guess</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">String</span>::<span class="n">new</span><span class="p">();</span><span class="w"> </span><span class="c1">// 返回字符串的标准实例(utf-8编码),可以按照需求扩展大小
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="c1">// ::表明new()是String的一个关联函数，针对类型本身来实现，new创建空白字符串
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">io</span>::<span class="n">stdin</span><span class="p">().</span><span class="n">read_line</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">guess</span><span class="p">).</span><span class="n">expect</span><span class="p">(</span><span class="s">&#34;无法读取行&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 将用户输入赋值给字符串guess，guess必须是可变来行的，&amp;表示是字符串的引用
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="c1">// 引用在Rust里默认不可变 mut让引用变成可变
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="c1">// readline 返回io::Result&lt;usize&gt;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="c1">// io::Result 枚举类型 Ok操作成功, Err操作失败，附带失败原因
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="c1">// expect，Result上定义的方法，假如io::Result返回的是err，expect将中断这个信息，并显示传入的字符串信息；如果返回Ok，将提取Ok中附加的值，返回给用户
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;你猜测的数是: </span><span class="si">{}</span><span class="s">&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">guess</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 花括号：占位符，会被替换成后面的变量的值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div></article>
               </div>
             </div>
           </div>

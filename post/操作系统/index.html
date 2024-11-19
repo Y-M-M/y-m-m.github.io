@@ -150,9 +150,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Mon, 18 Nov 2024 10:18:57 &#43;0800"
+                  Modified <relative-time datetime="Tue, 19 Nov 2024 11:02:34 &#43;0800"
                     class="no-wrap">
-                    Mon, 18 Nov 2024 10:18:57 &#43;0800</relative-time>
+                    Tue, 19 Nov 2024 11:02:34 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -182,7 +182,7 @@
                         </div>
                       </div>
                     </details-menu>
-                      50694 Words
+                      50837 Words
                     
 
                   </div>
@@ -3902,6 +3902,20 @@ wait, singal原语常简称为P, V操作，因此，做题的时候常把wait(S)
 </li>
 <li>性能好，但实现困难，开销大</li>
 <li>性能最接近最佳置换算法</li>
+<li>实现方法
+<ul>
+<li>堆栈</li>
+<li>引用位(二次机会)
+<ul>
+<li>引用时，置为1</li>
+<li>查找时，将所有1置位0，替换出0</li>
+<li>优点：时间少</li>
+<li>缺点：没有严格按时间排序
+<img src="/images/%E6%88%AA%E5%B1%8F2024-11-19%2010.38.55.png" alt=""></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 <h3 id="时钟置换算法clock">时钟置换算法(CLOCK)</h3>
 <ul>
@@ -3930,6 +3944,24 @@ wait, singal原语常简称为P, V操作，因此，做题的时候常把wait(S)
 </ul>
 </li>
 </ul>
+<h3 id="lfu">LFU</h3>
+<ul>
+<li>Keep a counter of the number of references that hav been made to each page</li>
+<li>LFU
+<ul>
+<li>替换count最小的页</li>
+</ul>
+</li>
+</ul>
+<h3 id="mfu">MFU</h3>
+<ul>
+<li>Keep a counter of the number of references that hav been made to each page</li>
+<li>MFU
+<ul>
+<li>替换count最大的页</li>
+</ul>
+</li>
+</ul>
 <h3 id="总结-35">总结</h3>
 <p><img src="/images/%E6%88%AA%E5%B1%8F2024-11-07%2021.10.45.png" alt=""></p>
 <h2 id="32_4-页面分配策略抖动工作集">3.2_4 页面分配策略、抖动、工作集</h2>
@@ -3941,14 +3973,29 @@ wait, singal原语常简称为P, V操作，因此，做题的时候常把wait(S)
 </ul>
 <h3 id="页面分配置换策略">页面分配、置换策略</h3>
 <ul>
-<li>固定分配
+<li>帧分配算法
+<ul>
+<li>固定分配 fixed allocation
 <ul>
 <li>操作系统为每个进程分配一组固定数目的物理块，在进程运行期间不再改变，驻留集大小不变</li>
+</ul>
+</li>
+<li>Proportional allocation
+<ul>
+<li>根据进程的大小分配</li>
+<li>按比例</li>
+</ul>
+</li>
+<li>Priority Allocation
+<ul>
+<li>根据优先级分配</li>
 </ul>
 </li>
 <li>可变分配
 <ul>
 <li>先为每个进程分配一定数目的物理块，在进程运行期间，可根据情况作适当的增加或减少，即，驻留集大小可变</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>置换范围策略
@@ -4050,7 +4097,7 @@ wait, singal原语常简称为P, V操作，因此，做题的时候常把wait(S)
 </ul>
 </li>
 </ol>
-<h3 id="抖动颠簸现象">抖动(颠簸)现象</h3>
+<h3 id="抖动颠簸现象-thrashing">抖动(颠簸)现象 Thrashing</h3>
 <ul>
 <li>频繁的页面调度行为</li>
 <li>原因：进程频繁访问的页面数目高于可用的物理块数(分配给进程的物理块不够)</li>
@@ -4237,7 +4284,7 @@ wait, singal原语常简称为P, V操作，因此，做题的时候常把wait(S)
 <h2 id="41_2-文件的逻辑结构">4.1_2 文件的逻辑结构</h2>
 <blockquote>
 <p>文件的逻辑结构：在用户看来，文件内部的数据应该是如何组织起来的
-文件的物理结构：在操作系统看来，文件的数据时如何存放在外存中的</p>
+文件的物理结构：在操作系统看来，文件的数据是如何存放在外存中的</p>
 </blockquote>
 <h3 id="无结构文件">无结构文件</h3>
 <ul>

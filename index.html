@@ -151,7 +151,7 @@
                 </path>
               </svg>
               Posts
-              <span class="Counter">61</span>
+              <span class="Counter">63</span>
             </a>
           </nav>
           <div class="profile-color-modes js-promo-color-modes-banner-profile isInitialToggle">
@@ -430,7 +430,7 @@
         </path>
       </svg>
       Posts
-      <span class="Counter ">61</span>
+      <span class="Counter ">63</span>
     </a>
   </nav>
 </div>
@@ -520,6 +520,308 @@ With Jekyll, something that looked like</p>
                 </div>
 
                 <p class="mb-0 f6 text-gray">
+                  
+                </p>
+              </div>
+            </div>
+          </li>
+          
+          <li class="col-12 col-md-6 col-lg-6 mb-3 d-flex flex-content-stretch">
+            <div
+              class="Box pinned-item-list-item d-flex p-3 width-full js-pinned-item-list-item public source reorderable sortable-button-item">
+              <div class="pinned-item-list-item-content">
+                <div class="d-flex width-full flex-items-center position-relative">
+                  <svg class="octicon octicon-repo mr-2 text-gray flex-shrink-0" viewBox="0 0 16 16" version="1.1"
+                    width="16" height="16">
+                    <path fill-rule="evenodd"
+                      d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z">
+                    </path>
+                  </svg>
+                  <a class="text-bold flex-auto min-width-0" href="https://y-m-m.github.io/post/leetcode632%E6%9C%80%E5%B0%8F%E5%8C%BA%E9%97%B4/">
+                    <span class="repo" title="leetcode 632 最小区间">leetcode 632 最小区间</span>
+                  </a>
+                </div>
+
+
+                <div name="summary" class="pinned-item-desc text-gray text-small d-block mt-2 mb-3">
+                  <h1 id="题目">题目</h1>
+<blockquote>
+<p>你有 k 个 非递减排列 的整数列表。找到一个 最小 区间，使得 k 个列表中的每个列表至少有一个数包含在其中。        <br>
+我们定义如果 b-a &lt; d-c 或者在 b-a == d-c 时 a &lt; c，则区间 [a,b] 比 [c,d] 小。</p>
+</blockquote>
+<h1 id="示例">示例</h1>
+<h2 id="示例一">示例一</h2>
+<blockquote>
+<p>输入：nums = [[4,10,15,24,26], [0,9,12,20], [5,18,22,30]]                  <br>
+输出：[20,24]         <br>
+解释：           <br>
+列表 1：[4, 10, 15, 24, 26]，24 在区间 [20,24] 中。         <br>
+列表 2：[0, 9, 12, 20]，20 在区间 [20,24] 中。             <br>
+列表 3：[5, 18, 22, 30]，22 在区间 [20,24] 中。</p>
+</blockquote>
+<h2 id="示例二">示例二</h2>
+<blockquote>
+<p>输入：nums = [[1,2,3],[1,2,3],[1,2,3]]          <br>
+输出：[1,1]</p>
+</blockquote>
+<h1 id="提示">提示</h1>
+<ul>
+<li>nums.length == k</li>
+<li>1 &lt;= k &lt;= 3500</li>
+<li>1 &lt;= nums[i].length &lt;= 50</li>
+<li>$-10^5$ &lt;= nums[i][j] &lt;= $10^5$</li>
+<li>nums[i] 按非递减顺序排列</li>
+</ul>
+<h1 id="题解">题解</h1>
+<h2 id="方法一">方法一</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">smallestRange</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">region</span><span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">region</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">times</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">ans</span><span class="p">;</span> <span class="c1">// 区域的长度
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">;</span> <span class="c1">// 区域的左右边界
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">mx</span><span class="p">,</span> <span class="n">mn</span><span class="p">;</span> <span class="c1">// 区域里的最大、最小值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="kt">int</span> <span class="n">mxpos</span><span class="p">,</span> <span class="n">mnpos</span><span class="p">;</span> <span class="c1">// 位于哪个数组中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>    
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">mx</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">region</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">mn</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">region</span><span class="p">[</span><span class="mi">0</span><span class="p">]];</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">mxpos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">mnpos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="kt">int</span> <span class="n">newnum</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">region</span><span class="p">[</span><span class="n">i</span><span class="p">]];</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">if</span> <span class="p">(</span><span class="n">newnum</span> <span class="o">&gt;</span> <span class="n">mx</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">mx</span> <span class="o">=</span> <span class="n">newnum</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">mxpos</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">if</span> <span class="p">(</span><span class="n">newnum</span> <span class="o">&lt;</span> <span class="n">mn</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">mn</span> <span class="o">=</span> <span class="n">newnum</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">mnpos</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">times</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ans</span> <span class="o">=</span> <span class="n">mx</span> <span class="o">-</span> <span class="n">mn</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">l</span> <span class="o">=</span> <span class="n">mn</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">mx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span> 
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">mx</span> <span class="o">-</span> <span class="n">mn</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">ans</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">ans</span> <span class="o">=</span> <span class="n">mx</span> <span class="o">-</span> <span class="n">mn</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">l</span> <span class="o">=</span> <span class="n">mn</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">mx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">times</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="o">++</span><span class="n">region</span><span class="p">[</span><span class="n">mnpos</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">nums</span><span class="p">[</span><span class="n">mnpos</span><span class="p">].</span><span class="n">size</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">res</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">res</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">l</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">res</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">r</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><ul>
+<li>提交
+<ul>
+<li>超出时间限制</li>
+<li>93/94个通过的测试样例</li>
+</ul>
+</li>
+<li>分析
+<ul>
+<li>每个数组取一个数，得到nums.size()个数，对这些数进行比较，取得最大值mx和最小值mn, 即为当前的区间边界</li>
+<li>删掉最小值，取该数组中更大的一个值，循环执行</li>
+<li>问题：每次对所有数组中的数进行比较，重复</li>
+</ul>
+</li>
+</ul>
+<h2 id="方法二">方法二</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">smallestRange</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">rangeLeft</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rangeRight</span> <span class="o">=</span> <span class="n">INT_MAX</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">next</span><span class="p">(</span><span class="n">size</span><span class="p">);</span> <span class="c1">// 每个数组的指针，初始都指向0
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        
+</span></span><span class="line"><span class="cl">        <span class="k">auto</span> <span class="n">cmp</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">u</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">v</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">nums</span><span class="p">[</span><span class="n">u</span><span class="p">][</span><span class="n">next</span><span class="p">[</span><span class="n">u</span><span class="p">]]</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="n">next</span><span class="p">[</span><span class="n">v</span><span class="p">]];</span>
+</span></span><span class="line"><span class="cl">        <span class="p">};</span>
+</span></span><span class="line"><span class="cl">        <span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="k">decltype</span><span class="p">(</span><span class="n">cmp</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">pq</span><span class="p">(</span><span class="n">cmp</span><span class="p">);</span>  <span class="c1">// 优先级队列实现小顶堆
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">int</span> <span class="n">minValue</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">maxValue</span> <span class="o">=</span> <span class="n">INT_MIN</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pq</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">maxValue</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">maxValue</span><span class="p">,</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]);</span> <span class="c1">// 元素0的最大值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">row</span> <span class="o">=</span> <span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">();</span> <span class="c1">// 弹出对应的值最小的指针
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">pq</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="n">minValue</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">next</span><span class="p">[</span><span class="n">row</span><span class="p">]];</span> <span class="c1">// 最小值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">if</span> <span class="p">(</span><span class="n">maxValue</span> <span class="o">-</span> <span class="n">minValue</span> <span class="o">&lt;</span> <span class="n">rangeRight</span> <span class="o">-</span> <span class="n">rangeLeft</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 当前区间最小，更新区间
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="n">rangeLeft</span> <span class="o">=</span> <span class="n">minValue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">rangeRight</span> <span class="o">=</span> <span class="n">maxValue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">next</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">row</span><span class="p">].</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 已经遍历到某一个数组的结束位置
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="o">++</span><span class="n">next</span><span class="p">[</span><span class="n">row</span><span class="p">];</span> <span class="c1">// 最小值所在的数组下标后移
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">maxValue</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">maxValue</span><span class="p">,</span> <span class="n">nums</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">next</span><span class="p">[</span><span class="n">row</span><span class="p">]]);</span> <span class="c1">// 看新加入的数是否比最大值大
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">pq</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">row</span><span class="p">);</span> <span class="c1">// 在堆中加入row
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="p">{</span><span class="n">rangeLeft</span><span class="p">,</span> <span class="n">rangeRight</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><ul>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+<li>分析
+<ul>
+<li>思路与方法一相同</li>
+<li>额外通过一个小顶堆来记录和维护不同的数组当前元素的大小顺序(堆中记录的是数组的编号)</li>
+<li>优先级队列实现小顶堆</li>
+</ul>
+</li>
+</ul>
+<h1 id="参考资料">参考资料</h1>
+<p><a href="https://leetcode.cn/problems/smallest-range-covering-elements-from-k-lists/">leetcode官方题解</a></p>
+                </div>
+
+                <p class="mb-0 f6 text-gray">
+                  
+                  
+                  <a href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    计算机科学与技术
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    算法题
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/leetcode" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    leetcode
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/%E8%B4%AA%E5%BF%83" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    贪心
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/%E6%95%B0%E7%BB%84" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    数组
+                  </a>
+                  
+                  
+                </p>
+              </div>
+            </div>
+          </li>
+          
+          <li class="col-12 col-md-6 col-lg-6 mb-3 d-flex flex-content-stretch">
+            <div
+              class="Box pinned-item-list-item d-flex p-3 width-full js-pinned-item-list-item public source reorderable sortable-button-item">
+              <div class="pinned-item-list-item-content">
+                <div class="d-flex width-full flex-items-center position-relative">
+                  <svg class="octicon octicon-repo mr-2 text-gray flex-shrink-0" viewBox="0 0 16 16" version="1.1"
+                    width="16" height="16">
+                    <path fill-rule="evenodd"
+                      d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z">
+                    </path>
+                  </svg>
+                  <a class="text-bold flex-auto min-width-0" href="https://y-m-m.github.io/post/c&#43;&#43;%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99/">
+                    <span class="repo" title="C&#43;&#43; 文件读写">C&#43;&#43; 文件读写</span>
+                  </a>
+                </div>
+
+
+                <div name="summary" class="pinned-item-desc text-gray text-small d-block mt-2 mb-3">
+                  <h1 id="头文件">头文件</h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;fstream&gt;</span><span class="cp">
+</span></span></span></code></pre></div><h1 id="数据类型">数据类型</h1>
+<ul>
+<li>ofstream 输出文件流，用于创建文件并向文件中写入信息</li>
+<li>ifstream 输入文件流，用于从文件中读取信息</li>
+<li>fstream 文件流，且同时具有ofstream和ifstream两种功能</li>
+</ul>
+<h1 id="打开文件">打开文件</h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="n">o</span><span class="o">/</span><span class="n">i</span><span class="o">/</span><span class="err">空</span><span class="n">fstream</span> <span class="n">file</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">file</span><span class="p">.</span><span class="n">open</span><span class="p">(</span><span class="err">&#39;文件名&#39;</span><span class="p">,</span> <span class="n">ios</span><span class="o">::</span><span class="n">out</span> <span class="o">|</span> <span class="n">ios</span><span class="o">::</span><span class="n">in</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// out写入模式
+</span></span></span><span class="line"><span class="cl"><span class="c1">// in读出模式
+</span></span></span></code></pre></div><h1 id="读文件">读文件</h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="n">file</span><span class="p">.</span><span class="n">getline</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>
+</span></span></code></pre></div><h1 id="写文件">写文件</h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="n">file</span> <span class="o">&lt;&lt;</span> <span class="n">data</span><span class="p">;</span>
+</span></span></code></pre></div><h1 id="关闭文件">关闭文件</h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="n">file</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
+</span></span></code></pre></div><h1 id="参考资料">参考资料</h1>
+<p><a href="https://blog.csdn.net/kingstar158/article/details/6859379">csdn</a>
+<a href="https://www.runoob.com/cplusplus/cpp-files-streams.html">菜鸟教程</a></p>
+                </div>
+
+                <p class="mb-0 f6 text-gray">
+                  
+                  
+                  <a href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    计算机科学与技术
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    文件读写
+                  </a>
+                  
                   
                 </p>
               </div>
@@ -727,177 +1029,6 @@ With Jekyll, something that looked like</p>
             </div>
           </li>
           
-          <li class="col-12 col-md-6 col-lg-6 mb-3 d-flex flex-content-stretch">
-            <div
-              class="Box pinned-item-list-item d-flex p-3 width-full js-pinned-item-list-item public source reorderable sortable-button-item">
-              <div class="pinned-item-list-item-content">
-                <div class="d-flex width-full flex-items-center position-relative">
-                  <svg class="octicon octicon-repo mr-2 text-gray flex-shrink-0" viewBox="0 0 16 16" version="1.1"
-                    width="16" height="16">
-                    <path fill-rule="evenodd"
-                      d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z">
-                    </path>
-                  </svg>
-                  <a class="text-bold flex-auto min-width-0" href="https://y-m-m.github.io/post/leetcode3244%E6%96%B0%E5%A2%9E%E9%81%93%E8%B7%AF%E5%90%8E%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%9D%E7%A6%BB%E4%B8%80/">
-                    <span class="repo" title="leetcode 3244 新增道路后的最短距离二">leetcode 3244 新增道路后的最短距离二</span>
-                  </a>
-                </div>
-
-
-                <div name="summary" class="pinned-item-desc text-gray text-small d-block mt-2 mb-3">
-                  <p><a href="https://leetcode.cn/problems/shortest-distance-after-road-addition-queries-ii/description/">leetcode 3244 新增道路后的最短距离二</a></p>
-<h1 id="题目">题目</h1>
-<blockquote>
-<p>给你一个整数 n 和一个二维整数数组 queries。                              <br>
-有 n 个城市，编号从 0 到 n - 1。初始时，每个城市 i 都有一条单向道路通往城市 i + 1（ 0 &lt;= i &lt; n - 1）。                      <br>
-queries[i] = [$u_i, v_i$] 表示新建一条从城市 $u_i$ 到城市 $v_i$ 的单向道路。每次查询后，你需要找到从城市 0 到城市 n - 1 的最短路径的长度。                   <br>
-所有查询中不会存在两个查询都满足 queries[i][0] &lt; queries[j][0] &lt; queries[i][1] &lt; queries[j][1]。                              <br>
-返回一个数组 answer，对于范围 [0, queries.length - 1] 中的每个 i，answer[i] 是处理完前 i + 1 个查询后，从城市 0 到城市 n - 1 的最短路径的长度。</p>
-                </div>
-
-                <p class="mb-0 f6 text-gray">
-                  
-                  
-                  <a href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    计算机科学与技术
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    算法题
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/%E8%B4%AA%E5%BF%83" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    贪心
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/%E5%9B%BE" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    图
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/%E6%95%B0%E7%BB%84" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    数组
-                  </a>
-                  
-                  
-                </p>
-              </div>
-            </div>
-          </li>
-          
-          <li class="col-12 col-md-6 col-lg-6 mb-3 d-flex flex-content-stretch">
-            <div
-              class="Box pinned-item-list-item d-flex p-3 width-full js-pinned-item-list-item public source reorderable sortable-button-item">
-              <div class="pinned-item-list-item-content">
-                <div class="d-flex width-full flex-items-center position-relative">
-                  <svg class="octicon octicon-repo mr-2 text-gray flex-shrink-0" viewBox="0 0 16 16" version="1.1"
-                    width="16" height="16">
-                    <path fill-rule="evenodd"
-                      d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z">
-                    </path>
-                  </svg>
-                  <a class="text-bold flex-auto min-width-0" href="https://y-m-m.github.io/post/leetcode3243%E6%96%B0%E5%A2%9E%E9%81%93%E8%B7%AF%E5%90%8E%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%9D%E7%A6%BB%E4%B8%80/">
-                    <span class="repo" title="leetcode 3243 新增道路后的最短距离一">leetcode 3243 新增道路后的最短距离一</span>
-                  </a>
-                </div>
-
-
-                <div name="summary" class="pinned-item-desc text-gray text-small d-block mt-2 mb-3">
-                  <p><a href="https://leetcode.cn/problems/shortest-distance-after-road-addition-queries-i/description/">leetcode 3243 新增道路后的最短距离一</a></p>
-<h1 id="题目">题目</h1>
-<blockquote>
-<p>给你一个整数 n 和一个二维整数数组 queries。                              <br>
-有 n 个城市，编号从 0 到 n - 1。初始时，每个城市 i 都有一条单向道路通往城市 i + 1（ 0 &lt;= i &lt; n - 1）。                      <br>
-queries[i] = [$u_i, v_i$] 表示新建一条从城市 $u_i$ 到城市 $v_i$ 的单向道路。每次查询后，你需要找到从城市 0 到城市 n - 1 的最短路径的长度。                              <br>
-返回一个数组 answer，对于范围 [0, queries.length - 1] 中的每个 i，answer[i] 是处理完前 i + 1 个查询后，从城市 0 到城市 n - 1 的最短路径的长度。</p>
-</blockquote>
-<h1 id="示例">示例</h1>
-<h2 id="示例一">示例一</h2>
-<blockquote>
-<p>输入： n = 5, queries = [[2, 4], [0, 2], [0, 4]]            <br>
-输出： [3, 2, 1]
-解释
-<img src="/images/%E6%88%AA%E5%B1%8F2024-11-19%2008.55.01.png" alt=""></p>
-                </div>
-
-                <p class="mb-0 f6 text-gray">
-                  
-                  
-                  <a href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    计算机科学与技术
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    算法题
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/%E5%B9%BF%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    广度优先搜索
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/%E5%9B%BE" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    图
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/%E6%95%B0%E7%BB%84" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    数组
-                  </a>
-                  
-                  
-                </p>
-              </div>
-            </div>
-          </li>
-          
         </ol>
       </div>
     </div>
@@ -914,6 +1045,18 @@ queries[i] = [$u_i, v_i$] 表示新建一条从城市 $u_i$ 到城市 $v_i$ 的�
   "title": "Migrate%20to%20Hugo%20from%20Jekyll",
   "link": "https://y-m-m.github.io/post/migrate-from-jekyll/",
   "publishDate": "2014-03-10%2000:00:00"
+},
+
+{
+  "title": "leetcode%20632%20%e6%9c%80%e5%b0%8f%e5%8c%ba%e9%97%b4",
+  "link": "https://y-m-m.github.io/post/leetcode632%E6%9C%80%E5%B0%8F%E5%8C%BA%E9%97%B4/",
+  "publishDate": "2024-11-24%2000:00:00"
+},
+
+{
+  "title": "C&#43;&#43;%20%e6%96%87%e4%bb%b6%e8%af%bb%e5%86%99",
+  "link": "https://y-m-m.github.io/post/c&#43;&#43;%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99/",
+  "publishDate": "2024-11-23%2000:00:00"
 },
 
 {

@@ -544,7 +544,45 @@ With Jekyll, something that looked like</p>
 
 
                 <div name="summary" class="pinned-item-desc text-gray text-small d-block mt-2 mb-3">
-                  
+                  <h1 id="什么是priority_queue">什么是priority_queue?</h1>
+<ul>
+<li>container adaptor</li>
+<li>基于堆排序(默认最小堆)</li>
+<li>插入和提取的时间复杂度O(log(N))</li>
+<li>查找最大/最小元素的时间复杂度O(N)</li>
+</ul>
+<h1 id="构造">构造</h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="n">priority_queue</span> <span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">greater</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">gq</span><span class="p">;</span>
+</span></span></code></pre></div><ul>
+<li>int表示在优先级队列中存储的数据类型</li>
+<li>vector<!-- raw HTML omitted -->是用于存储这些元素的内部容器类型</li>
+<li>greater<!-- raw HTML omitted --> 自定义比较函数，最大堆</li>
+</ul>
+<h1 id="函数">函数</h1>
+<ul>
+<li>empty() 返回队列是否为空</li>
+<li>size() 返回队列大小</li>
+<li>top() 返回队列最顶层元素的引用</li>
+<li>push() 在队列末尾添加元素</li>
+<li>swap() 交换两个队列的内容
+<ul>
+<li>要求类型必须一致，大小可以不一致</li>
+</ul>
+</li>
+<li>emplace() 将新元素插入到队列中(就地插入)</li>
+<li>pop() 用于删除具有最高优先级的元素</li>
+</ul>
+<h1 id="通过lambda表达式自定义比较函数">通过lambda表达式自定义比较函数</h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">cmp</span> <span class="o">=</span> <span class="p">[](</span><span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="p">(</span><span class="n">left</span> <span class="o">^</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">right</span> <span class="o">^</span> <span class="mi">1</span><span class="p">);</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="k">decltype</span><span class="p">(</span><span class="n">cmp</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">lambda_priority_queue</span><span class="p">(</span><span class="n">cmp</span><span class="p">);</span>
+</span></span></code></pre></div><ul>
+<li>lambda表达式中，如果返回true，说明left的优先级更低(输入是顺序)，返回false，说明right的优先级更低(输入是逆序)</li>
+</ul>
+<h1 id="相关题目">相关题目</h1>
+<p><a href="https://y-m-m.github.io/post/leetcode743%E7%BD%91%E7%BB%9C%E5%BB%B6%E8%BF%9F%E6%97%B6%E9%97%B4/">leetcode 743 网络延迟时间</a>
+<a href="https://y-m-m.github.io/post/leetcode632%E6%9C%80%E5%B0%8F%E5%8C%BA%E9%97%B4/">leetcode 632 最小区间</a></p>
+<h1 id="参考资料">参考资料</h1>
+<p><a href="https://en.cppreference.com/w/cpp/container/priority_queue">cppreference</a></p>
                 </div>
 
                 <p class="mb-0 f6 text-gray">

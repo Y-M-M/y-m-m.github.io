@@ -150,9 +150,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Wed, 20 Nov 2024 17:35:03 &#43;0800"
+                  Modified <relative-time datetime="Tue, 26 Nov 2024 11:21:13 &#43;0800"
                     class="no-wrap">
-                    Wed, 20 Nov 2024 17:35:03 &#43;0800</relative-time>
+                    Tue, 26 Nov 2024 11:21:13 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -182,7 +182,7 @@
                         </div>
                       </div>
                     </details-menu>
-                      53839 Words
+                      54037 Words
                     
 
                   </div>
@@ -4105,7 +4105,17 @@ wait, singal原语常简称为P, V操作，因此，做题的时候常把wait(S)
 <h3 id="进程工作集-wss_i-working-set-of-process-p_i">进程工作集 $WSS_i$ working set of Process $P_i$</h3>
 <ul>
 <li>工作集：在某段时间间隔里，进程实际访问页面的集合</li>
-<li>工作集带下可能小于窗口尺寸。实际应用中，操作系统可以统计进程的工作集大小，根据工作集大小给进程分配若干内存块</li>
+<li>工作集带下可能小于窗口尺寸。实际应用中，操作系统可以统计进程的工作集大小，根据工作集大小给进程分配若干内存块
+<ul>
+<li>Keeping Track of the Working Set</li>
+<li>Establish “acceptable” page-fault rate.
+<ul>
+<li>If actual rate too low, process loses frame.</li>
+<li>If actual rate too high, process gains frame.</li>
+</ul>
+</li>
+</ul>
+</li>
 <li>驻留集大小不能小于工作集大小，否则进程运行过程中将频繁缺页</li>
 </ul>
 <h3 id="总结-36">总结</h3>
@@ -4124,7 +4134,7 @@ wait, singal原语常简称为P, V操作，因此，做题的时候常把wait(S)
 <li>open 系统调用——打开文件</li>
 <li>seek 系统调用——把读写指针移到某个位置</li>
 <li>read 系统调用——从读写指针所指位置读入若干数据(从磁盘读入内存)</li>
-<li>write系统调用——将内存中的指定数据写回磁盘</li>
+<li>write 系统调用——将内存中的指定数据写回磁盘</li>
 </ul>
 <h3 id="内存映射文件的访问方式">内存映射文件的访问方式</h3>
 <ul>
@@ -4137,7 +4147,7 @@ wait, singal原语常简称为P, V操作，因此，做题的时候常把wait(S)
 </ul>
 </li>
 <li>文件的读入、写出由操作系统自动完成</li>
-<li>进程关闭文件时，操作系统自动将文件被修改的数据写回磁盘</li>
+<li>进程<strong>关闭文件</strong>时，操作系统自动<strong>将文件被修改的数据写回磁盘</strong></li>
 </ul>
 </li>
 </ul>
@@ -4146,9 +4156,45 @@ wait, singal原语常简称为P, V操作，因此，做题的时候常把wait(S)
 <li>多个进程映射同一个文件，实现共享</li>
 <li>在物理内存中，一个文件对应同一份数据，当一个进程修改文件数据时，另一个进程可以立马“看到”</li>
 </ul>
+<h3 id="allocating-kernel-memory">Allocating Kernel Memory</h3>
+<ul>
+<li>Buddy System Allocator
+<img src="/images/%E6%88%AA%E5%B1%8F2024-11-26%2010.02.51.png" alt=""></li>
+<li>Slab Allocation
+<img src="/images/%E6%88%AA%E5%B1%8F2024-11-26%2010.03.41.png" alt=""></li>
+<li>Prepaging
+<ul>
+<li>at process startup</li>
+<li>Prepage all or some of the pages a process will need, before they are referenced</li>
+<li>But if prepaged pages are unused, I/O and memory was wasted</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>页面增大(唯一的缺点是浪费了空间)
+碎片增大
+页表减小
+I/O次数越少
+局部性越好</p>
+</blockquote>
+<ul>
+<li>TLB
+<ul>
+<li>TLB Reach = (TLB Size) X (Page Size)</li>
+<li>Ideally, the working set of each process is stored in the TLB. Otherwise there is a high degree of page faults.</li>
+<li>缺页率会受程序结构的影响</li>
+</ul>
+</li>
+<li>I/O Interlock
+<ul>
+<li>Pages that are used for copying a file from a device must be locked from being selected for eviction by a page replacement algorithm.</li>
+</ul>
+</li>
+</ul>
 <h3 id="总结-37">总结</h3>
 <p><img src="/images/%E6%88%AA%E5%B1%8F2024-11-07%2021.45.23.png" alt=""></p>
-<h2 id="41_1-初识文件管理">4.1_1 初识文件管理</h2>
+<h1 id="第四章-文件管理">第四章 文件管理</h1>
+<h2 id="41_1-初识文件管理-file-system-inerface">4.1_1 初识文件管理 File-System inerface</h2>
 <ul>
 <li>文件——一组有意义的信息/数据集合
 <ul>
@@ -4195,7 +4241,7 @@ wait, singal原语常简称为P, V操作，因此，做题的时候常把wait(S)
 <li>由一些二进制或字符流组成，又称“流式文件”</li>
 </ul>
 </li>
-<li>有结构文件(如数据库表, excel)
+<li>有结构文件(如数据库表, excel) 定长/变长
 <ul>
 <li>由一组相似的记录组成，又称“记录式文件”</li>
 <li>记录是一组相关数据项的结合</li>
@@ -4414,7 +4460,7 @@ wait, singal原语常简称为P, V操作，因此，做题的时候常把wait(S)
 <li>单机目录结构不适于多用户操作系统</li>
 </ul>
 </li>
-<li>两集目录结构
+<li>两级目录结构
 <ul>
 <li>主文件目录 MFD(Master File Directory)
 <ul>
@@ -4486,7 +4532,7 @@ wait, singal原语常简称为P, V操作，因此，做题的时候常把wait(S)
 </ul>
 <h3 id="连续分配">连续分配</h3>
 <ul>
-<li>每个文件在磁盘上占有一组连续的块
+<li>每个文件在磁盘上占有一组<strong>连续的块</strong>
 <ul>
 <li>读取某个磁盘块时，需要移动磁头，访问的两个磁盘块相隔越远，移动磁头所需时间越长</li>
 </ul>
@@ -5057,6 +5103,7 @@ wait, singal原语常简称为P, V操作，因此，做题的时候常把wait(S)
 </ul>
 </li>
 </ul>
+<h1 id="第五章-io设备">第五章 I/O设备</h1>
 <h2 id="51_1-i-o设备的概念和分类">5.1_1 I-O设备的概念和分类</h2>
 <h3 id="io设备的基本概念和分类">I/O设备的基本概念和分类</h3>
 <ul>

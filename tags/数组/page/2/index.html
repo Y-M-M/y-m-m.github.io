@@ -1154,6 +1154,75 @@ n 皇后问题 研究的是如何将 n 个皇后放置在 n×n 的棋盘上，�
 </ul>
 </li>
 </ul>
+<h2 id="方法二">方法二</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;</span> <span class="n">solveNQueens</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;</span> <span class="n">solutions</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">quenes</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">find_pos</span><span class="p">(</span><span class="n">solutions</span><span class="p">,</span> <span class="n">quenes</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">solutions</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">find_pos</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;&amp;</span> <span class="n">solutions</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">quenes</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">n</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span><span class="n">col</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="o">&amp;</span><span class="n">dig1</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="o">&amp;</span><span class="n">dig2</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">row</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">row</span> <span class="o">==</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">addans</span><span class="p">(</span><span class="n">solutions</span><span class="p">,</span> <span class="n">quenes</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> 
+</span></span><span class="line"><span class="cl">        <span class="k">else</span> 
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">available</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="p">(</span><span class="n">col</span> <span class="o">|</span> <span class="n">dig1</span> <span class="o">|</span> <span class="n">dig2</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="p">(</span><span class="n">available</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="kt">int</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">available</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">-</span><span class="n">available</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">available</span> <span class="o">=</span> <span class="n">available</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">available</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="kt">int</span> <span class="n">column</span> <span class="o">=</span> <span class="n">__builtin_ctz</span><span class="p">(</span><span class="n">pos</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">quenes</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">=</span> <span class="n">column</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">find_pos</span><span class="p">(</span><span class="n">solutions</span><span class="p">,</span> <span class="n">quenes</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">col</span> <span class="o">|</span> <span class="n">pos</span><span class="p">,</span> <span class="p">(</span><span class="n">dig1</span> <span class="o">|</span> <span class="n">pos</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">dig2</span> <span class="o">|</span> <span class="n">pos</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">quenes</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">addans</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;</span> <span class="o">&amp;</span><span class="n">solutions</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">quenes</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">asolution</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">string</span> <span class="n">row</span> <span class="o">=</span> <span class="n">string</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="sc">&#39;.&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">row</span><span class="p">[</span><span class="n">quenes</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="sc">&#39;Q&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">asolution</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">row</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">solutions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">asolution</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><ul>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+<li>分析
+<ul>
+<li>位运算 + 回溯</li>
+<li>利用int代替unordered_set</li>
+<li>小技巧
+<ul>
+<li>num &amp; (num - 1) 可将最低位的1置为0</li>
+<li>(1 &laquo; n) - 1 &amp; (~num) 可将num中所有值为0的数置为1，并且不会影响更高位的0(其中n是num的位数)</li>
+<li>用上一行的dig表示这一行的dig
+<ul>
+<li>(dig1 | pos) &raquo; 1</li>
+<li>(dig2 | pos) &laquo; 1</li>
+</ul>
+</li>
+<li>在函数调用时，不修改现在的dig和col值，而是现在的值构造表达式传入函数，这样在回溯时就无需把值修改回原来的样子了</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 <h1 id="参考资料">参考资料</h1>
 <p><a href="https://leetcode.cn/problems/n-queens/solutions/398929/nhuang-hou-by-leetcode-solution/">leetcode官方题解</a></p>
               </div>

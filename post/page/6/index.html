@@ -149,7 +149,7 @@
                 </path>
               </svg>
               Posts
-              <span class="Counter">72</span>
+              <span class="Counter">73</span>
             </a>
           </nav>
           <div class="profile-color-modes js-promo-color-modes-banner-profile isInitialToggle">
@@ -428,7 +428,7 @@
         </path>
       </svg>
       Posts
-      <span class="Counter ">72</span>
+      <span class="Counter ">73</span>
     </a>
   </nav>
 </div>
@@ -1335,6 +1335,146 @@
         
       
       <ul>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/%E6%95%B0%E7%8A%B6%E6%95%B0%E7%BB%84/">数状数组</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <h1 id="数状数组">数状数组</h1>
+<h2 id="介绍">介绍</h2>
+<ul>
+<li>一种支持单点修改和区间查询的代码量小的数据结构
+普通数状数组维护的信息及运算要满足<strong>结合律</strong>和<strong>可差分</strong></li>
+</ul>
+<pre tabindex="0"><code>什么是可差分？
+  具有逆运算的运算，即已知x * y和x可以求出y
+</code></pre><ul>
+<li>树状数组和线段树有什么区别？
+<ul>
+<li>树状数组能解决的问题是线段树的子集，树状数组能做的，线段树一定可以，线段树能做的，树状数组不一定可以</li>
+<li>树状数组代码要远比线段树短，时间效率常数更小</li>
+</ul>
+</li>
+</ul>
+<h2 id="为什么要使用树状数组">为什么要使用树状数组？</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2024-09-30%2021.04.37.png" alt="原数组">  <br>
+观察如图所示的数组，数组a长度为n    <br>
+每次求前m项和的时间复杂度为O(n)，如果要反复求前m项和，需要花费太多时间。有没有什么办法能降低其时间复杂度呢？</p>
+<p>考虑<strong>前缀和数组</strong>，数组中每个位置记录从a<!-- raw HTML omitted -->0<!-- raw HTML omitted -->开始到这个位置的所有数字之和，每次想要求前m项和时只需将索引为m-1的数字取出来即可</p>
+<p>看起来很好，存在什么问题呢？     <br>
+<strong>单点修改</strong>太麻烦。每次只要a<!-- raw HTML omitted -->i<!-- raw HTML omitted -->发生改变，前缀和数组中后续所有数字都需要改变。</p>
+<p>还有什么更好的办法吗？   <br>
+可维护一个新的数据结构，如下
+<img src="/images/%E6%88%AA%E5%B1%8F2024-09-30%2021.09.17.png" alt=""> <br>
+在这个数据结构中，若要计算所有数字之和，只需取最上面一层61即可，计算前三个数字之和只需要第二层(从下面数)的14与第一层的1即可，依次类推</p>
+<p>很容易就可以发现，每一行从下标0开始，1、3、5等奇数序号的数字在求前m项和时完全不会用到，无需额外存储</p>
+<p>去掉奇数项之后  <br>
+<img src="/images/%E6%88%AA%E5%B1%8F2024-09-30%2021.18.19.png" alt="剩下需要额外存储的数"></p>
+<p>为这些数字构建一个新的数组c <br>
+<img src="/images/%E6%88%AA%E5%B1%8F2024-09-30%2021.19.16.png" alt="所获新数组"><br>
+数组c就是树状数组，在树状数组中，可以很容易的完成单点修改、单点查询、区间修改、区间查询等操作。</p>
+<p><em>神奇的是，新数组的长度刚好为n</em></p>
+<p>为什么呢？        <br>
+(1 + 2 + 4 + 8 + &hellip; + n/2) + 1 = n - 1 + 1 = n</p>
+<blockquote>
+<p>对n个数，取出n/2，从n/2开始加，每次加剩下的1/2，一直加到剩下的数字不可二分(1)为止，加上剩下的1就可以恢复原状，即n</p>
+</blockquote>
+<h2 id="观察树状数组">观察树状数组</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2024-09-30%2021.51.07.png" alt="树状数组样例"></p>
+<h3 id="基本性质-管辖区间">基本性质 管辖区间</h3>
+<ul>
+<li>很容易发现
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">树状数组元素</th>
+          <th style="text-align: left">管辖区间</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">c[1]</td>
+          <td style="text-align: left">[1&hellip;1]</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">c[2]</td>
+          <td style="text-align: left">[1&hellip;2]</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">c[3]</td>
+          <td style="text-align: left">[3&hellip;3]</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">c[4]</td>
+          <td style="text-align: left">[1&hellip;4]</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">&hellip;</td>
+          <td style="text-align: left"></td>
+      </tr>
+  </tbody>
+</table>
+</li>
+<li>c[x]的管辖区间[x - lowbit(x) + 1, x]</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">lowbit</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// x的二进制中，最低的1以及后面所有的0组成的数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">return</span> <span class="n">x</span> <span class="o">&amp;</span> <span class="o">-</span><span class="n">x</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3 id="树形态的性质">树形态的性质</h3>
+<blockquote>
+<p>l(x) = x - lowbit(x) + 1
+x = s * 2<!-- raw HTML omitted -->k + 1<!-- raw HTML omitted --> + 2 <!-- raw HTML omitted -->k<!-- raw HTML omitted -->, lowbit(x) = 2<!-- raw HTML omitted -->k<!-- raw HTML omitted -->
+c[x]与c[y]的管辖范围不相交-&gt;[l(x), x]与[l(y), y]不相交</p>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学与技术
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                算法与数据结构
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                树状数组
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Sun, 29 Sep 2024 00:00:00 &#43;0000" class="no-wrap"
+                title=" Sun, 29 Sep 2024 00:00:00 &#43;0000">
+                Sun, 29 Sep 2024 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
         
         <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
           <div class="col-12 d-inline-block">
@@ -2624,153 +2764,6 @@ public:
               <relative-time datetime=" Sat, 23 Mar 2024 00:00:00 &#43;0000" class="no-wrap"
                 title=" Sat, 23 Mar 2024 00:00:00 &#43;0000">
                 Sat, 23 Mar 2024 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9Cbilibili%E7%89%88/">计算机网络bilibili版</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <p>bilibili 计算机网络微课堂</p>
-<h1 id="p1-概述">P1 概述</h1>
-<h2 id="11-计算机网络在信息时代的作用">1.1 计算机网络在信息时代的作用</h2>
-<h2 id="12-因特网概述">1.2 因特网概述</h2>
-<h3 id="网络互联网和因特网">网络、互联网和因特网</h3>
-<ul>
-<li>网络Network：若干节点Node和连接这些节点的链路Link组成</li>
-<li>多个网络还可以通过路由器互联起来，这样就构成了一个范围更大的网络，即互联网，因此，互联网是“网络的网络”</li>
-<li>因特网Internet是世界上最大的互联网络</li>
-<li>区别Internet（因特网，采用TCP/IP协议） 和 internet（互联网）</li>
-</ul>
-<h3 id="因特网发展的三个阶段">因特网发展的三个阶段</h3>
-<ul>
-<li>从单个网络ARPANET向互联网发展</li>
-<li>逐步建成三级结构的因特网</li>
-<li>逐步形成了多层次的ISP结构的因特网</li>
-</ul>
-<h3 id="基于isp的三层结构的因特网">基于ISP的三层结构的因特网</h3>
-<ul>
-<li>因特网服务提供者ISP(Internet Service Provider)</li>
-<li>国际性区域（主干网） 第一层ISP</li>
-<li>区域性或国家性覆盖规模 第二层ISP 大公司</li>
-<li>本地ISP 校园网、企业网、住宅用户、无线移动</li>
-</ul>
-<h3 id="因特网的标准化工作">因特网的标准化工作</h3>
-<ul>
-<li>因特网的标准化工作对因特网的发展起到了非常重要的作用</li>
-<li>面向公众
-<ul>
-<li>RFC技术文档可以免费下载</li>
-<li>任何人都可以随时用电子邮件发表对某个文档的意见或建议</li>
-</ul>
-</li>
-<li>因特网协会ISOC是一个国际性组织，它负责对因特网进行全面管理，以及在世界范围内促进其发展和作用</li>
-<li>制定因特网的正式标准需要经过以下4个阶段：
-<ul>
-<li>因特网草案（还不是RFC文档）</li>
-<li>建议标准（从这个阶段开始就成为RFC文档）</li>
-<li>草案标准</li>
-<li>因特网标准</li>
-</ul>
-</li>
-</ul>
-<h3 id="因特网的组成">因特网的组成</h3>
-<ul>
-<li>边缘部分：由多有连接在因特网上的主机组成，是用户直接使用的，用来进行通信和资源共享</li>
-<li>核心部分：由大量网络和连接这些网络的路由器组成，这部分市委边缘部分提供服务的（提供连通性和交换）
-<ul>
-<li>路由器：专用计算机，不称之为主机，是实现分组交换的关键部件，转发收到的分组</li>
-</ul>
-</li>
-</ul>
-<h2 id="13-三种交换方式">1.3 三种交换方式</h2>
-<h3 id="电路交换circuit-switching">电路交换circuit switching</h3>
-<ul>
-<li>电话两两连接</li>
-<li>中间介质：电话交换机</li>
-<li>电话交换机接通电话线的方式</li>
-<li>从通信资源的分配角度来看，交换就是按照某种方式动态地分配传输线路的资源</li>
-<li>用户线为单个用户所有</li>
-<li>电话交换机之间的中继线共用</li>
-<li>电路交换的三个步骤
-<ul>
-<li>建立连接（分配通信资源）</li>
-<li>通话（一直占用通信资源）</li>
-<li>释放连接（归还通信资源）</li>
-</ul>
-</li>
-<li>使用电路交换来传送计算机数据时，其线路的传输效率往往很低</li>
-<li>比特流直达终点</li>
-<li>优点
-<ul>
-<li>通信时延小</li>
-<li>有序传输</li>
-<li>没有冲突</li>
-<li>适用范围广（模拟信号、数字信号）</li>
-<li>实时性强</li>
-<li>控制简单</li>
-</ul>
-</li>
-<li>缺点
-<ul>
-<li>建立连接时间长</li>
-<li>线路独占、使用效率低</li>
-<li>灵活性差</li>
-<li>难以规格化（不同类型、不同速率的终端难以进行通信，难以进行差错控制）</li>
-</ul>
-</li>
-</ul>
-<h3 id="分组交换packet-switching">分组交换Packet Switching</h3>
-<ul>
-<li>
-<p>计算机网络通常采用</p>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机科学
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机网络
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AC%94%E8%AE%B0">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                笔记
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Thu, 07 Mar 2024 00:00:00 &#43;0000" class="no-wrap"
-                title=" Thu, 07 Mar 2024 00:00:00 &#43;0000">
-                Thu, 07 Mar 2024 00:00:00 &#43;0000
               </relative-time>
             </div>
           </div>

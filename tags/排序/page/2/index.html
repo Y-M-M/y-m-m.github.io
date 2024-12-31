@@ -10,7 +10,7 @@
     <link rel="stylesheet" href='https://y-m-m.github.io/css/light.css' />
     <link rel="stylesheet" href='https://y-m-m.github.io/css/dark.css' />
     <link rel="stylesheet" href='https://y-m-m.github.io/css/syntax.css' />
-    <title>Lambda表达式 - 陈皮的博客</title>
+    <title>排序 - 陈皮的博客</title>
     
     <link rel="icon" type="image/x-icon" href='/images/github-mark.png'>
     
@@ -22,11 +22,11 @@
 <meta name="keywords"
   content='blog, google analytics' />
 <meta name="robots" content="noodp" />
-<link rel="canonical" href="https://y-m-m.github.io/tags/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/" />
+<link rel="canonical" href="https://y-m-m.github.io/tags/%E6%8E%92%E5%BA%8F/" />
 
 
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="Lambda表达式 - 陈皮的博客" />
+<meta name="twitter:title" content="排序 - 陈皮的博客" />
 <meta name="twitter:description"
   content="" />
 <meta name="twitter:site" content="https://y-m-m.github.io/" />
@@ -36,11 +36,11 @@
 
 
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Lambda表达式 - 陈皮的博客">
+<meta property="og:title" content="排序 - 陈皮的博客">
 <meta property="og:description"
   content="" />
-<meta property="og:url" content="https://y-m-m.github.io/tags/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/" />
-<meta property="og:site_name" content="Lambda表达式" />
+<meta property="og:url" content="https://y-m-m.github.io/tags/%E6%8E%92%E5%BA%8F/" />
+<meta property="og:site_name" content="排序" />
 <meta property="og:image"
   content="https://y-m-m.github.io/">
 <meta property="og:image:width" content="2048">
@@ -49,7 +49,7 @@
 
 
 
-<link href="/tags/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/index.xml" rel="alternate" type="application/rss+xml" title="陈皮的博客" />
+<link href="/tags/%E6%8E%92%E5%BA%8F/index.xml" rel="alternate" type="application/rss+xml" title="陈皮的博客" />
 
 
 
@@ -441,9 +441,9 @@
       
       <div class="TableObject border-bottom border-gray-light py-3">
         <div class="user-repo-search-results-summary TableObject-item TableObject-item--primary v-align-top">
-          <strong>1</strong>
+          <strong>11</strong>
           results
-          for <strong>Lambda表达式</strong>
+          for <strong>排序</strong>
         </div>
         <div class="TableObject-item text-right v-align-top">
           <a class="issues-reset-query text-normal d-inline-block ml-3" href="https://y-m-m.github.io//post/">
@@ -464,81 +464,20 @@
           <div class="col-12 d-inline-block">
             <div class="d-inline-block mb-1">
               <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/c&#43;&#43;lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/">C&#43;&#43;中lambda表达式的用法</a>
+                <a href="https://y-m-m.github.io/post/leetcode1847%E6%9C%80%E8%BF%91%E7%9A%84%E6%88%BF%E9%97%B4/">leetcode 1847 最近的房间</a>
               </h3>
             </div>
 
             <div>
               <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <h1 id="什么是lambda表达式">什么是lambda表达式？</h1>
-<ul>
-<li>一种定义匿名函数对象的简便方法</li>
-<li>使用位置
-<ul>
-<li>被调用的位置</li>
-<li>作为参数传递给函数的位置</li>
-</ul>
-</li>
-</ul>
-<h1 id="定义">定义</h1>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="p">[</span><span class="n">capture</span><span class="p">]</span> <span class="p">(</span><span class="n">parameters</span><span class="p">)</span> <span class="k">mutable</span><span class="o">-&gt;</span><span class="k">return</span><span class="o">-</span><span class="n">type</span> <span class="p">{</span><span class="n">statement</span><span class="p">}</span>
-</span></span></code></pre></div><ul>
-<li>capture
-<ul>
-<li>[=]通过值捕获所有变量(只有lambda体中提及的对象才会被捕获)
-<ul>
-<li>[变量名] 通过值捕获指定变量</li>
-</ul>
-</li>
-<li>[&amp;]通过引用捕获所有变量
-<ul>
-<li>[&amp;变量名] 通过引用捕获制定变量</li>
-</ul>
-</li>
-<li>this指针
-<ul>
-<li>在类成员函数体中使用Lamada表达式，如果需要访问封闭类的成员函数和数据成员，需要将this指针传递给capture子句</li>
-<li>C++17模式以及更高版本中，可以在capture子句中指定*this通过值捕获this指针，通过值捕获会将整个Lambda闭包复制到调用Lambda的每个站点，在并行或异步操作中非常有用</li>
-</ul>
-</li>
-</ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl">  <span class="p">[</span><span class="o">&amp;</span><span class="n">total</span><span class="p">,</span> <span class="n">factor</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl">  <span class="p">[</span><span class="n">factor</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">total</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl">  <span class="p">[</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">factor</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl">  <span class="p">[</span><span class="o">=</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">total</span><span class="p">]</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl">  <span class="k">struct</span> <span class="nc">S</span> <span class="p">{</span> <span class="kt">void</span> <span class="nf">f</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">);</span> <span class="p">};</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="kt">void</span> <span class="n">S</span><span class="o">::</span><span class="n">f</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="p">[</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">i</span><span class="p">]{};</span>      <span class="c1">// OK
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="p">[</span><span class="o">&amp;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">i</span><span class="p">]{};</span>     <span class="c1">// ERROR: i preceded by &amp; when &amp; is the default
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="p">[</span><span class="o">=</span><span class="p">,</span> <span class="k">this</span><span class="p">]{};</span>   <span class="c1">// ERROR: this when = is the default
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="p">[</span><span class="o">=</span><span class="p">,</span> <span class="o">*</span><span class="k">this</span><span class="p">]{</span> <span class="p">};</span> <span class="c1">// OK: captures this by value. See below.
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]{};</span>      <span class="c1">// ERROR: i repeated
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="p">}</span>
-</span></span></code></pre></div></li>
-<li>parameters
-<ul>
-<li>类似函数的参数列表</li>
-<li>C++14中，可传入类型为auto的参数，参数列表中每个auto实例等效于一个不同类型的参数</li>
-</ul>
-</li>
-<li>说明符
-<ul>
-<li>mutable 允许函数体修改各个复制捕获的对象，以及调用其非const成员函数</li>
-<li>constexpr 显式指定函数调用运算符为 constexpr 函数。此说明符不存在时，若函数调用运算符恰好满足针对 constexpr 函数的所有要求，则它也会是 constexpr；  (C++17 起)</li>
-<li>consteval 指定函数调用运算符为立即函数。不能同时使用 consteval 和 constexpr。(C++20 起)</li>
-</ul>
-</li>
-<li>return-type
-<ul>
-<li>前面必须包含&rsquo;-&gt;'</li>
-</ul>
-</li>
-</ul>
-<h1 id="参考资料">参考资料</h1>
-<p><a href="https://learn.microsoft.com/zh-cn/cpp/cpp/lambda-expressions-in-cpp?view=msvc-170">Microsoft Learn Challenge</a>
-<a href="https://blog.csdn.net/gongjianbo1992/article/details/105128849">CSDN</a>
-<a href="https://oi-wiki.org/lang/lambda/">OI Wiki</a></p>
+                <p><a href="https://leetcode.cn/problems/closest-room/description/">leetcode 1847 最近的房间</a></p>
+<h1 id="题目">题目</h1>
+<blockquote>
+<p>一个酒店里有 n 个房间，这些房间用二维整数数组 rooms 表示，其中 rooms[i] = [roomIdi, sizei] 表示有一个房间号为 roomId<!-- raw HTML omitted -->i<!-- raw HTML omitted --> 的房间且它的面积为 size<!-- raw HTML omitted -->i<!-- raw HTML omitted -->。每一个房间号 roomId<!-- raw HTML omitted -->i<!-- raw HTML omitted --> 保证是 独一无二 的。    <br>
+同时给你 k 个查询，用二维数组 queries 表示，其中 queries[j] = [preferred<!-- raw HTML omitted -->j<!-- raw HTML omitted -->, minSize<!-- raw HTML omitted -->j<!-- raw HTML omitted -->] 。第 j 个查询的答案是满足如下条件的房间 id ：             <br>
+房间的面积 至少 为 minSize<!-- raw HTML omitted -->j<!-- raw HTML omitted --> ，且abs(id - preferred<!-- raw HTML omitted -->j<!-- raw HTML omitted -->) 的值 最小 ，其中 abs(x) 是 x 的绝对值。
+如果差的绝对值有 相等 的，选择 最小 的 id 。如果 没有满足条件的房间 ，答案为 -1 。           <br>
+请你返回长度为 k 的数组 answer ，其中 answer[j] 为第 j 个查询的结果。</p>
               </div>
             </div>
 
@@ -554,30 +493,48 @@
                 计算机科学与技术
               </a>
               
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F">
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
                 <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
                   <path fill-rule="evenodd"
                     d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
                   </path>
                 </svg>
-                lambda表达式
+                算法题
               </a>
               
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/c&#43;&#43;">
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/leetcode">
                 <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
                   <path fill-rule="evenodd"
                     d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
                   </path>
                 </svg>
-                c&#43;&#43;
+                leetcode
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%95%B0%E7%BB%84">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                数组
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                二分查找
               </a>
               
               
 
               Created
-              <relative-time datetime=" Mon, 25 Nov 2024 00:00:00 &#43;0000" class="no-wrap"
-                title=" Mon, 25 Nov 2024 00:00:00 &#43;0000">
-                Mon, 25 Nov 2024 00:00:00 &#43;0000
+              <relative-time datetime=" Wed, 16 Oct 2024 00:00:00 &#43;0000" class="no-wrap"
+                title=" Wed, 16 Oct 2024 00:00:00 &#43;0000">
+                Wed, 16 Oct 2024 00:00:00 &#43;0000
               </relative-time>
             </div>
           </div>
@@ -587,7 +544,7 @@
       <div class="paginate-container">
         <div class="BtnGroup">
           
-          <button class="btn btn-outline BtnGroup-item" disabled="disabled">Previous</button>
+          <a rel="nofollow" class="btn btn-outline BtnGroup-item" href="/tags/%E6%8E%92%E5%BA%8F/">Previous</a>
           
           
           <button class="btn btn-outline BtnGroup-item" disabled="disabled">Next</button>

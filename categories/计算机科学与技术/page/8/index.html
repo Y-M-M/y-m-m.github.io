@@ -149,7 +149,7 @@
                 </path>
               </svg>
               Posts
-              <span class="Counter">85</span>
+              <span class="Counter">86</span>
             </a>
           </nav>
           <div class="profile-color-modes js-promo-color-modes-banner-profile isInitialToggle">
@@ -428,7 +428,7 @@
         </path>
       </svg>
       Posts
-      <span class="Counter ">85</span>
+      <span class="Counter ">86</span>
     </a>
   </nav>
 </div>
@@ -1379,6 +1379,165 @@
         
       
       <ul>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/%E8%AE%A1%E7%BD%91%E8%AF%BE%E8%AE%BE/">计算机网络课程设计</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <h1 id="题目-dns中继服务器的实现">题目 DNS中继服务器的实现</h1>
+<ul>
+<li>设计一个DNS服务器程序，读入“域名-IP地址”对照表（一个文件），当客户端查询域名对应的IP地址时，用域名检索该对照表，得到三种检索结果：
+<ul>
+<li>检索结果为IP地址0.0.0.0，则向客户端返回“域名不存在”的报错信息（不良网站拦截功能）</li>
+<li>检索结果为普通IP地址，则向客户返回这个地址（服务器功能）</li>
+<li>表中未检测到该域名，则向因特网DNS服务器发出查询，并将结果返回给客户端（中继功能）
+<ul>
+<li>考虑多个计算机上的客户端会同时查询，需要进行消息ID的转换</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="dns介绍">DNS介绍</h1>
+<h2 id="dns查询过程迭代查询">DNS查询过程(迭代查询)</h2>
+<ul>
+<li>客户端向DNS服务器发起查询请求</li>
+<li>DNS搜索本地解析库没有结果。向根域发起查询请求，根域告诉DNS服务器，.com服务器上有它需要的资源</li>
+<li>DNS服务器又向.com服务器发起请求，.com服务器告诉DNS服务器，.google.com上有它需要的资源</li>
+<li>DNS服务器又向.google.com服务器发起请求，得到解析记录，并返回给了客户端。用户提供一种名称，查询以得到另一种名称：域名-&gt;IP或IP-&gt;域名</li>
+</ul>
+<h2 id="dns报文">DNS报文</h2>
+<ul>
+<li>
+<p>构成
+<img src="/images/%E6%88%AA%E5%B1%8F2024-06-24%2021.06.06.png" alt=""></p>
+</li>
+<li>
+<p>格式</p>
+<ul>
+<li>除Header外其余四部分为可变长度(12字节长)</li>
+<li>Question: the question for the name server</li>
+<li>Answer: RRs answering the question</li>
+<li>Authority: RRs pointing toward an authority</li>
+<li>Additional: RRs holding additional information</li>
+<li>后三段格式相同，每段都是由0~n个资源记录(Resource Record)构成</li>
+</ul>
+</li>
+<li>
+<p>报头字段 12字节
+<img src="/images/%E6%88%AA%E5%B1%8F2024-06-24%2021.10.12.png" alt="Header Section Format"></p>
+<ul>
+<li>ID
+<ul>
+<li>由客户程序设置并由服务器返回结果。客户程序通过它来确定响应与查询是否匹配</li>
+</ul>
+</li>
+<li>QR：0表示查询报，1表示响应报</li>
+<li>OPCODE
+<ul>
+<li>通常值为0(标准查询)，其他值为1(反向查询)和2(服务器状态请求)</li>
+</ul>
+</li>
+<li>AA：权威答案</li>
+<li>TC：截断的
+<ul>
+<li>应答的总长度超过512字节时，只返回前512个字节</li>
+</ul>
+</li>
+<li>RD：期望递归
+<ul>
+<li>查询报中设置，响应报中返回</li>
+<li>告诉名字服务器处理递归查询</li>
+<li>如果该位为1，则递归查询</li>
+<li>如果该位为0，且被请求的名字服务器没有一个权威回答，就返回一个能解答该查询的其他名字服务器列表，这称为迭代查询</li>
+</ul>
+</li>
+<li>RA：递归可用
+<ul>
+<li>如果名字服务器支持递归查询，则在响应中该比特设置为1</li>
+</ul>
+</li>
+<li>Z：必须为0，保留字段</li>
+<li>RCODE：响应码，仅用于响应报
+<ul>
+<li>值为0(没有差错)</li>
+<li>值为3表示名字差错。从权威名字服务器返回，表示在查询中指定域名不存在</li>
+</ul>
+</li>
+<li>QDCOUNT
+<ul>
+<li>Number of entries in the question section</li>
+</ul>
+</li>
+<li>ANCOUNT
+<ul>
+<li>Number of RRs in the answer section</li>
+</ul>
+</li>
+<li>NSCOUNT
+<ul>
+<li>Number of name server RRs in authority records section</li>
+</ul>
+</li>
+<li>ARCOUNT
+<ul>
+<li>Number of RRs in additional records section</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Question Section Format
+<img src="/images/%E6%88%AA%E5%B1%8F2024-06-24%2021.25.28.png" alt=""></p>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机网络
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%AE%9E%E8%B7%B5%E8%BF%87%E7%A8%8B">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                实践过程
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Tue, 25 Jun 2024 00:00:00 &#43;0000" class="no-wrap"
+                title=" Tue, 25 Jun 2024 00:00:00 &#43;0000">
+                Tue, 25 Jun 2024 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
         
         <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
           <div class="col-12 d-inline-block">

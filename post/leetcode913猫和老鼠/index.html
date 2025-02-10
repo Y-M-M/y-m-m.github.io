@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script type="application/javascript" src='https://y-m-m.github.io/js/theme-mode.js'></script>
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/frameworks.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github-style.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/light.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/dark.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/syntax.css' />
+    <title>leetcode 913 猫和老鼠 - 陈皮的博客</title>
+    
+    <link rel="icon" type="image/x-icon" href='/images/github-mark.png'>
+    
+    <meta name="theme-color" content="#1e2327">
+
+    
+    <meta name="description"
+  content="leetcode 913 猫和老鼠
+题目 两位玩家分别扮演猫和老鼠，在一张 无向 图上进行游戏，两人轮流行动。 图的形式是：graph[a] 是一个列表，由满足 ab 是图中的一条边的所有节点 b 组成。 老鼠从节点 1 开始，第一个出发；猫从节点 2 开始，第二个出发。在节点 0 处有一个洞。 在每个玩家的行动中，他们 必须 沿着图中与所在当前位置连通的一条边移动。例如，如果老鼠在节点 1 ，那么它必须移动到 graph[1] 中的任一节点。 此外，猫无法移动到洞中（节点 0）。 然后，游戏在出现以下三种情形之一时结束： 如果猫和老鼠出现在同一个节点，猫获胜。 如果老鼠到达洞中，老鼠获胜。 如果某一位置重复出现（即，玩家的位置和移动顺序都与上一次行动相同），游戏平局。 给你一张图 graph ，并假设两位玩家都都以最佳状态参与游戏： 如果老鼠获胜，则返回 1； 如果猫获胜，则返回 2； 如果平局，则返回 0 。
+示例 示例一 输入：graph = [[2,5],[3],[0,4,5],[1,4,5],[2,3],[0,2,3]] 输出：0
+示例二 输入：graph = [[1,3],[0],[3],[0,2]] 输出：1
+提示 3 &lt;= graph.length &lt;= 50 1 &lt;= graph[i].length &lt; graph.length 0 &lt;= graph[i][j] &lt; graph.length graph[i][j] != i graph[i] 互不相同 猫和老鼠在游戏中总是可以移动 题解 动态规划解法(本题不适用) const int MOUSE_WIN = 1; const int CAT_WIN = 2; const int DRAW = 0; const int MAXN = 51; class Solution { public: int n; // 位置的个数 int dp[MAXN][MAXN][MAXN*(MAXN-1)*2]; // dp数组，老鼠的位置&#43;猫的位置&#43;轮次 vector&lt;vector&lt;int&gt;&gt; graph; // 存储路径 int catMouseGame(vector&lt;vector&lt;int&gt;&gt;&amp; graph) { this-&gt;n = graph.size(); this-&gt;graph = graph; memset(dp, -1, sizeof(dp)); // 初始化dp数组为-1 return getResult(1, 2, 0); // 老鼠的位置在1，猫的位置在2，初始为0次 } int getResult(int mouse, int cat, int turns) { if (turns == 2 * n * (n - 1)) { // 平局 return DRAW; } if (dp[mouse][cat][turns] &lt; 0) { if (mouse == 0) { // 老鼠进洞 dp[mouse][cat][turns] = MOUSE_WIN; // 老鼠获胜 } else if (cat == mouse) { // 老鼠和猫相遇 dp[mouse][cat][turns] = CAT_WIN; // 猫获胜 } else { getNextResult(mouse, cat, turns); // 以下一个状态的结果作为本状态的结果 } } return dp[mouse][cat][turns]; // 返回本状态的结果 } void getNextResult(int mouse, int cat, int turns) { int curMove = turns % 2 == 0 ? mouse : cat; // 判断本次是老鼠移动还是猫移动 int defaultResult = curMove == mouse ? CAT_WIN : MOUSE_WIN; // 如果当前是老鼠移动的话，默认猫赢，否则默认老鼠赢 int result = defaultResult; for (int next : graph[curMove]) { // 遍历当前能移动到的位置 if (curMove == cat &amp;&amp; next == 0) { // 猫不能往0位置移动 continue; } int nextMouse = curMove == mouse ? next : mouse; int nextCat = curMove == cat ? next : cat; int nextResult = getResult(nextMouse, nextCat, turns &#43; 1); // 向一个方向移动 if (nextResult != defaultResult) { // 找到能让自己赢的一次移动 result = nextResult; if (result != DRAW) { break; } } } dp[mouse][cat][turns] = result; } }; 分析 用一个函数实现移动策略，根据游戏已经进行的轮数的奇偶性决定当前轮到的玩家。对于特定玩家的移动，实现方法如下： 如果当前玩家存在一种移动方法到达非必败状态，则用该状态更新游戏结果。 如果该移动方法到达必胜状态，则将当前状态（移动前的状态）设为必胜状态，结束遍历其他可能的移动。 如果该移动方法到达必和状态，则将当前状态（移动前的状态）设为必和状态，继续遍历其他可能的移动，因为可能存在到达必胜状态的移动方法。 如果当前玩家的任何移动方法都到达必败状态，则将当前状态（移动前的状态）设为必败状态。 由于老鼠可能的位置有 n 个，猫可能的位置有 n−1 个，游戏轮数最大为 2n(n−1)，因此动态规划的状态数是 O(n4)，对于每个状态需要 O(n) 的时间计算状态值，因此总时间复杂度是 O(n5)，该时间复杂度会超出时间限制，因此自顶向下的动态规划不适用于这道题。 拓扑排序 class Solution { public: const int MOUSE_TURN = 0, CAT_TURN = 1; const int DRAW = 0, MOUSE_WIN = 1, CAT_WIN = 2; vector&lt;vector&lt;int&gt;&gt; graph; vector&lt;vector&lt;vector&lt;int&gt;&gt;&gt; degrees; vector&lt;vector&lt;vector&lt;int&gt;&gt;&gt; results; int catMouseGame(vector&lt;vector&lt;int&gt;&gt;&amp; graph) { int n = graph.size(); this-&gt;graph = graph; this-&gt;degrees = vector&lt;vector&lt;vector&lt;int&gt;&gt;&gt;(n, vector&lt;vector&lt;int&gt;&gt;(n, vector&lt;int&gt;(2))); // 记录所有状态的度 this-&gt;results = vector&lt;vector&lt;vector&lt;int&gt;&gt;&gt;(n, vector&lt;vector&lt;int&gt;&gt;(n, vector&lt;int&gt;(2))); // 记录所有状态所能到达的结果 queue&lt;tuple&lt;int, int, int&gt;&gt; qu; // 拓扑排序队列 for (int i = 0; i &lt; n; i&#43;&#43;) { for (int j = 1; j &lt; n; j&#43;&#43;) { degrees[i][j][MOUSE_TURN] = graph[i].size(); degrees[i][j][CAT_TURN] = graph[j].size(); } } for (int node : graph[0]) { for (int i = 0; i &lt; n; i&#43;&#43;) { // 猫不能到达0，减掉与0相关的度 degrees[i][node][CAT_TURN]--; } } for (int j = 1; j &lt; n; j&#43;&#43;) { // 老鼠到达0的边界条件放入拓扑排序队列中 results[0][j][MOUSE_TURN] = MOUSE_WIN; results[0][j][CAT_TURN] = MOUSE_WIN; qu.emplace(0, j, MOUSE_TURN); qu.emplace(0, j, CAT_TURN); } for (int i = 1; i &lt; n; i&#43;&#43;) { // 老鼠与猫相遇的边界条件放入拓扑排序队列中 results[i][i][MOUSE_TURN] = CAT_WIN; results[i][i][CAT_TURN] = CAT_WIN; qu.emplace(i, i, MOUSE_TURN); qu.emplace(i, i, CAT_TURN); } while (!qu.empty()) { auto [mouse, cat, turn] = qu.front(); qu.pop(); int result = results[mouse][cat][turn]; vector&lt;tuple&lt;int, int, int&gt;&gt; prevStates = GetPrevStates(mouse, cat, turn); for (auto &amp; [prevMouse, prevCat, prevTurn] : prevStates) { // 处理上一轮的所有可能状态 if (results[prevMouse][prevCat][prevTurn] == DRAW) { // 只处理平局的状态 bool canWin = (result == MOUSE_WIN &amp;&amp; prevTurn == MOUSE_TURN) || (result == CAT_WIN &amp;&amp; prevTurn == CAT_TURN); if (canWin) { results[prevMouse][prevCat][prevTurn] = result; qu.emplace(prevMouse, prevCat, prevTurn); } else if (--degrees[prevMouse][prevCat][prevTurn] == 0) { int loseResult = prevTurn == MOUSE_TURN ? CAT_WIN : MOUSE_WIN; results[prevMouse][prevCat][prevTurn] = loseResult; qu.emplace(prevMouse, prevCat, prevTurn); } } } } return results[1][2][MOUSE_TURN]; } vector&lt;tuple&lt;int, int, int&gt;&gt; GetPrevStates(int mouse, int cat, int turn) // 返回上一轮的所有可能状态 { vector&lt;tuple&lt;int, int, int&gt;&gt; prevStates; int prevTurn = turn == MOUSE_TURN ? CAT_TURN : MOUSE_TURN; if (prevTurn == MOUSE_TURN) { for (int &amp; prev : graph[mouse]) { prevStates.emplace_back(prev, cat, prevTurn); } } else { for (int &amp; prev : graph[cat]) { if (prev != 0) { prevStates.emplace_back(mouse, prev, prevTurn); } } } return prevStates; } }; 提交结果 通过 分析 表示：老鼠的位置&#43;猫的位置&#43;当前移动方，除边界条件为都初始化为平局 从边界条件(确定的必胜状态和)出发，遍历其他情况 从当前一轮出发，遍历上一轮的所有可能位置 如果该位置不是平局，不需要重复计算 如果该位置是平局，需要计算该状态的结果 如果上一轮移动方和当前状态获胜方相同，则上一轮为必胜状态 如果上一轮移动方和当前获胜方不同 上一轮可能获胜的路径-1，即该状态的度减1 如果某状态的度减为0，则说明该状态为必败状态 参考资料 leetcode官方题解
+" />
+<meta name="keywords"
+  content='blog, google analytics' />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://y-m-m.github.io/post/leetcode913%E7%8C%AB%E5%92%8C%E8%80%81%E9%BC%A0/" />
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="leetcode 913 猫和老鼠 - 陈皮的博客" />
+<meta name="twitter:description"
+  content="leetcode 913 猫和老鼠
+题目 两位玩家分别扮演猫和老鼠，在一张 无向 图上进行游戏，两人轮流行动。 图的形式是：graph[a] 是一个列表，由满足 ab 是图中的一条边的所有节点 b 组成。 老鼠从节点 1 开始，第一个出发；猫从节点 2 开始，第二个出发。在节点 0 处有一个洞。 在每个玩家的行动中，他们 必须 沿着图中与所在当前位置连通的一条边移动。例如，如果老鼠在节点 1 ，那么它必须移动到 graph[1] 中的任一节点。 此外，猫无法移动到洞中（节点 0）。 然后，游戏在出现以下三种情形之一时结束： 如果猫和老鼠出现在同一个节点，猫获胜。 如果老鼠到达洞中，老鼠获胜。 如果某一位置重复出现（即，玩家的位置和移动顺序都与上一次行动相同），游戏平局。 给你一张图 graph ，并假设两位玩家都都以最佳状态参与游戏： 如果老鼠获胜，则返回 1； 如果猫获胜，则返回 2； 如果平局，则返回 0 。
+示例 示例一 输入：graph = [[2,5],[3],[0,4,5],[1,4,5],[2,3],[0,2,3]] 输出：0
+示例二 输入：graph = [[1,3],[0],[3],[0,2]] 输出：1
+提示 3 &lt;= graph.length &lt;= 50 1 &lt;= graph[i].length &lt; graph.length 0 &lt;= graph[i][j] &lt; graph.length graph[i][j] != i graph[i] 互不相同 猫和老鼠在游戏中总是可以移动 题解 动态规划解法(本题不适用) const int MOUSE_WIN = 1; const int CAT_WIN = 2; const int DRAW = 0; const int MAXN = 51; class Solution { public: int n; // 位置的个数 int dp[MAXN][MAXN][MAXN*(MAXN-1)*2]; // dp数组，老鼠的位置&#43;猫的位置&#43;轮次 vector&lt;vector&lt;int&gt;&gt; graph; // 存储路径 int catMouseGame(vector&lt;vector&lt;int&gt;&gt;&amp; graph) { this-&gt;n = graph.size(); this-&gt;graph = graph; memset(dp, -1, sizeof(dp)); // 初始化dp数组为-1 return getResult(1, 2, 0); // 老鼠的位置在1，猫的位置在2，初始为0次 } int getResult(int mouse, int cat, int turns) { if (turns == 2 * n * (n - 1)) { // 平局 return DRAW; } if (dp[mouse][cat][turns] &lt; 0) { if (mouse == 0) { // 老鼠进洞 dp[mouse][cat][turns] = MOUSE_WIN; // 老鼠获胜 } else if (cat == mouse) { // 老鼠和猫相遇 dp[mouse][cat][turns] = CAT_WIN; // 猫获胜 } else { getNextResult(mouse, cat, turns); // 以下一个状态的结果作为本状态的结果 } } return dp[mouse][cat][turns]; // 返回本状态的结果 } void getNextResult(int mouse, int cat, int turns) { int curMove = turns % 2 == 0 ? mouse : cat; // 判断本次是老鼠移动还是猫移动 int defaultResult = curMove == mouse ? CAT_WIN : MOUSE_WIN; // 如果当前是老鼠移动的话，默认猫赢，否则默认老鼠赢 int result = defaultResult; for (int next : graph[curMove]) { // 遍历当前能移动到的位置 if (curMove == cat &amp;&amp; next == 0) { // 猫不能往0位置移动 continue; } int nextMouse = curMove == mouse ? next : mouse; int nextCat = curMove == cat ? next : cat; int nextResult = getResult(nextMouse, nextCat, turns &#43; 1); // 向一个方向移动 if (nextResult != defaultResult) { // 找到能让自己赢的一次移动 result = nextResult; if (result != DRAW) { break; } } } dp[mouse][cat][turns] = result; } }; 分析 用一个函数实现移动策略，根据游戏已经进行的轮数的奇偶性决定当前轮到的玩家。对于特定玩家的移动，实现方法如下： 如果当前玩家存在一种移动方法到达非必败状态，则用该状态更新游戏结果。 如果该移动方法到达必胜状态，则将当前状态（移动前的状态）设为必胜状态，结束遍历其他可能的移动。 如果该移动方法到达必和状态，则将当前状态（移动前的状态）设为必和状态，继续遍历其他可能的移动，因为可能存在到达必胜状态的移动方法。 如果当前玩家的任何移动方法都到达必败状态，则将当前状态（移动前的状态）设为必败状态。 由于老鼠可能的位置有 n 个，猫可能的位置有 n−1 个，游戏轮数最大为 2n(n−1)，因此动态规划的状态数是 O(n4)，对于每个状态需要 O(n) 的时间计算状态值，因此总时间复杂度是 O(n5)，该时间复杂度会超出时间限制，因此自顶向下的动态规划不适用于这道题。 拓扑排序 class Solution { public: const int MOUSE_TURN = 0, CAT_TURN = 1; const int DRAW = 0, MOUSE_WIN = 1, CAT_WIN = 2; vector&lt;vector&lt;int&gt;&gt; graph; vector&lt;vector&lt;vector&lt;int&gt;&gt;&gt; degrees; vector&lt;vector&lt;vector&lt;int&gt;&gt;&gt; results; int catMouseGame(vector&lt;vector&lt;int&gt;&gt;&amp; graph) { int n = graph.size(); this-&gt;graph = graph; this-&gt;degrees = vector&lt;vector&lt;vector&lt;int&gt;&gt;&gt;(n, vector&lt;vector&lt;int&gt;&gt;(n, vector&lt;int&gt;(2))); // 记录所有状态的度 this-&gt;results = vector&lt;vector&lt;vector&lt;int&gt;&gt;&gt;(n, vector&lt;vector&lt;int&gt;&gt;(n, vector&lt;int&gt;(2))); // 记录所有状态所能到达的结果 queue&lt;tuple&lt;int, int, int&gt;&gt; qu; // 拓扑排序队列 for (int i = 0; i &lt; n; i&#43;&#43;) { for (int j = 1; j &lt; n; j&#43;&#43;) { degrees[i][j][MOUSE_TURN] = graph[i].size(); degrees[i][j][CAT_TURN] = graph[j].size(); } } for (int node : graph[0]) { for (int i = 0; i &lt; n; i&#43;&#43;) { // 猫不能到达0，减掉与0相关的度 degrees[i][node][CAT_TURN]--; } } for (int j = 1; j &lt; n; j&#43;&#43;) { // 老鼠到达0的边界条件放入拓扑排序队列中 results[0][j][MOUSE_TURN] = MOUSE_WIN; results[0][j][CAT_TURN] = MOUSE_WIN; qu.emplace(0, j, MOUSE_TURN); qu.emplace(0, j, CAT_TURN); } for (int i = 1; i &lt; n; i&#43;&#43;) { // 老鼠与猫相遇的边界条件放入拓扑排序队列中 results[i][i][MOUSE_TURN] = CAT_WIN; results[i][i][CAT_TURN] = CAT_WIN; qu.emplace(i, i, MOUSE_TURN); qu.emplace(i, i, CAT_TURN); } while (!qu.empty()) { auto [mouse, cat, turn] = qu.front(); qu.pop(); int result = results[mouse][cat][turn]; vector&lt;tuple&lt;int, int, int&gt;&gt; prevStates = GetPrevStates(mouse, cat, turn); for (auto &amp; [prevMouse, prevCat, prevTurn] : prevStates) { // 处理上一轮的所有可能状态 if (results[prevMouse][prevCat][prevTurn] == DRAW) { // 只处理平局的状态 bool canWin = (result == MOUSE_WIN &amp;&amp; prevTurn == MOUSE_TURN) || (result == CAT_WIN &amp;&amp; prevTurn == CAT_TURN); if (canWin) { results[prevMouse][prevCat][prevTurn] = result; qu.emplace(prevMouse, prevCat, prevTurn); } else if (--degrees[prevMouse][prevCat][prevTurn] == 0) { int loseResult = prevTurn == MOUSE_TURN ? CAT_WIN : MOUSE_WIN; results[prevMouse][prevCat][prevTurn] = loseResult; qu.emplace(prevMouse, prevCat, prevTurn); } } } } return results[1][2][MOUSE_TURN]; } vector&lt;tuple&lt;int, int, int&gt;&gt; GetPrevStates(int mouse, int cat, int turn) // 返回上一轮的所有可能状态 { vector&lt;tuple&lt;int, int, int&gt;&gt; prevStates; int prevTurn = turn == MOUSE_TURN ? CAT_TURN : MOUSE_TURN; if (prevTurn == MOUSE_TURN) { for (int &amp; prev : graph[mouse]) { prevStates.emplace_back(prev, cat, prevTurn); } } else { for (int &amp; prev : graph[cat]) { if (prev != 0) { prevStates.emplace_back(mouse, prev, prevTurn); } } } return prevStates; } }; 提交结果 通过 分析 表示：老鼠的位置&#43;猫的位置&#43;当前移动方，除边界条件为都初始化为平局 从边界条件(确定的必胜状态和)出发，遍历其他情况 从当前一轮出发，遍历上一轮的所有可能位置 如果该位置不是平局，不需要重复计算 如果该位置是平局，需要计算该状态的结果 如果上一轮移动方和当前状态获胜方相同，则上一轮为必胜状态 如果上一轮移动方和当前获胜方不同 上一轮可能获胜的路径-1，即该状态的度减1 如果某状态的度减为0，则说明该状态为必败状态 参考资料 leetcode官方题解
+" />
+<meta name="twitter:site" content="https://y-m-m.github.io/" />
+<meta name="twitter:creator" content="陈皮" />
+<meta name="twitter:image"
+  content="https://y-m-m.github.io/">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="leetcode 913 猫和老鼠 - 陈皮的博客">
+<meta property="og:description"
+  content="leetcode 913 猫和老鼠
+题目 两位玩家分别扮演猫和老鼠，在一张 无向 图上进行游戏，两人轮流行动。 图的形式是：graph[a] 是一个列表，由满足 ab 是图中的一条边的所有节点 b 组成。 老鼠从节点 1 开始，第一个出发；猫从节点 2 开始，第二个出发。在节点 0 处有一个洞。 在每个玩家的行动中，他们 必须 沿着图中与所在当前位置连通的一条边移动。例如，如果老鼠在节点 1 ，那么它必须移动到 graph[1] 中的任一节点。 此外，猫无法移动到洞中（节点 0）。 然后，游戏在出现以下三种情形之一时结束： 如果猫和老鼠出现在同一个节点，猫获胜。 如果老鼠到达洞中，老鼠获胜。 如果某一位置重复出现（即，玩家的位置和移动顺序都与上一次行动相同），游戏平局。 给你一张图 graph ，并假设两位玩家都都以最佳状态参与游戏： 如果老鼠获胜，则返回 1； 如果猫获胜，则返回 2； 如果平局，则返回 0 。
+示例 示例一 输入：graph = [[2,5],[3],[0,4,5],[1,4,5],[2,3],[0,2,3]] 输出：0
+示例二 输入：graph = [[1,3],[0],[3],[0,2]] 输出：1
+提示 3 &lt;= graph.length &lt;= 50 1 &lt;= graph[i].length &lt; graph.length 0 &lt;= graph[i][j] &lt; graph.length graph[i][j] != i graph[i] 互不相同 猫和老鼠在游戏中总是可以移动 题解 动态规划解法(本题不适用) const int MOUSE_WIN = 1; const int CAT_WIN = 2; const int DRAW = 0; const int MAXN = 51; class Solution { public: int n; // 位置的个数 int dp[MAXN][MAXN][MAXN*(MAXN-1)*2]; // dp数组，老鼠的位置&#43;猫的位置&#43;轮次 vector&lt;vector&lt;int&gt;&gt; graph; // 存储路径 int catMouseGame(vector&lt;vector&lt;int&gt;&gt;&amp; graph) { this-&gt;n = graph.size(); this-&gt;graph = graph; memset(dp, -1, sizeof(dp)); // 初始化dp数组为-1 return getResult(1, 2, 0); // 老鼠的位置在1，猫的位置在2，初始为0次 } int getResult(int mouse, int cat, int turns) { if (turns == 2 * n * (n - 1)) { // 平局 return DRAW; } if (dp[mouse][cat][turns] &lt; 0) { if (mouse == 0) { // 老鼠进洞 dp[mouse][cat][turns] = MOUSE_WIN; // 老鼠获胜 } else if (cat == mouse) { // 老鼠和猫相遇 dp[mouse][cat][turns] = CAT_WIN; // 猫获胜 } else { getNextResult(mouse, cat, turns); // 以下一个状态的结果作为本状态的结果 } } return dp[mouse][cat][turns]; // 返回本状态的结果 } void getNextResult(int mouse, int cat, int turns) { int curMove = turns % 2 == 0 ? mouse : cat; // 判断本次是老鼠移动还是猫移动 int defaultResult = curMove == mouse ? CAT_WIN : MOUSE_WIN; // 如果当前是老鼠移动的话，默认猫赢，否则默认老鼠赢 int result = defaultResult; for (int next : graph[curMove]) { // 遍历当前能移动到的位置 if (curMove == cat &amp;&amp; next == 0) { // 猫不能往0位置移动 continue; } int nextMouse = curMove == mouse ? next : mouse; int nextCat = curMove == cat ? next : cat; int nextResult = getResult(nextMouse, nextCat, turns &#43; 1); // 向一个方向移动 if (nextResult != defaultResult) { // 找到能让自己赢的一次移动 result = nextResult; if (result != DRAW) { break; } } } dp[mouse][cat][turns] = result; } }; 分析 用一个函数实现移动策略，根据游戏已经进行的轮数的奇偶性决定当前轮到的玩家。对于特定玩家的移动，实现方法如下： 如果当前玩家存在一种移动方法到达非必败状态，则用该状态更新游戏结果。 如果该移动方法到达必胜状态，则将当前状态（移动前的状态）设为必胜状态，结束遍历其他可能的移动。 如果该移动方法到达必和状态，则将当前状态（移动前的状态）设为必和状态，继续遍历其他可能的移动，因为可能存在到达必胜状态的移动方法。 如果当前玩家的任何移动方法都到达必败状态，则将当前状态（移动前的状态）设为必败状态。 由于老鼠可能的位置有 n 个，猫可能的位置有 n−1 个，游戏轮数最大为 2n(n−1)，因此动态规划的状态数是 O(n4)，对于每个状态需要 O(n) 的时间计算状态值，因此总时间复杂度是 O(n5)，该时间复杂度会超出时间限制，因此自顶向下的动态规划不适用于这道题。 拓扑排序 class Solution { public: const int MOUSE_TURN = 0, CAT_TURN = 1; const int DRAW = 0, MOUSE_WIN = 1, CAT_WIN = 2; vector&lt;vector&lt;int&gt;&gt; graph; vector&lt;vector&lt;vector&lt;int&gt;&gt;&gt; degrees; vector&lt;vector&lt;vector&lt;int&gt;&gt;&gt; results; int catMouseGame(vector&lt;vector&lt;int&gt;&gt;&amp; graph) { int n = graph.size(); this-&gt;graph = graph; this-&gt;degrees = vector&lt;vector&lt;vector&lt;int&gt;&gt;&gt;(n, vector&lt;vector&lt;int&gt;&gt;(n, vector&lt;int&gt;(2))); // 记录所有状态的度 this-&gt;results = vector&lt;vector&lt;vector&lt;int&gt;&gt;&gt;(n, vector&lt;vector&lt;int&gt;&gt;(n, vector&lt;int&gt;(2))); // 记录所有状态所能到达的结果 queue&lt;tuple&lt;int, int, int&gt;&gt; qu; // 拓扑排序队列 for (int i = 0; i &lt; n; i&#43;&#43;) { for (int j = 1; j &lt; n; j&#43;&#43;) { degrees[i][j][MOUSE_TURN] = graph[i].size(); degrees[i][j][CAT_TURN] = graph[j].size(); } } for (int node : graph[0]) { for (int i = 0; i &lt; n; i&#43;&#43;) { // 猫不能到达0，减掉与0相关的度 degrees[i][node][CAT_TURN]--; } } for (int j = 1; j &lt; n; j&#43;&#43;) { // 老鼠到达0的边界条件放入拓扑排序队列中 results[0][j][MOUSE_TURN] = MOUSE_WIN; results[0][j][CAT_TURN] = MOUSE_WIN; qu.emplace(0, j, MOUSE_TURN); qu.emplace(0, j, CAT_TURN); } for (int i = 1; i &lt; n; i&#43;&#43;) { // 老鼠与猫相遇的边界条件放入拓扑排序队列中 results[i][i][MOUSE_TURN] = CAT_WIN; results[i][i][CAT_TURN] = CAT_WIN; qu.emplace(i, i, MOUSE_TURN); qu.emplace(i, i, CAT_TURN); } while (!qu.empty()) { auto [mouse, cat, turn] = qu.front(); qu.pop(); int result = results[mouse][cat][turn]; vector&lt;tuple&lt;int, int, int&gt;&gt; prevStates = GetPrevStates(mouse, cat, turn); for (auto &amp; [prevMouse, prevCat, prevTurn] : prevStates) { // 处理上一轮的所有可能状态 if (results[prevMouse][prevCat][prevTurn] == DRAW) { // 只处理平局的状态 bool canWin = (result == MOUSE_WIN &amp;&amp; prevTurn == MOUSE_TURN) || (result == CAT_WIN &amp;&amp; prevTurn == CAT_TURN); if (canWin) { results[prevMouse][prevCat][prevTurn] = result; qu.emplace(prevMouse, prevCat, prevTurn); } else if (--degrees[prevMouse][prevCat][prevTurn] == 0) { int loseResult = prevTurn == MOUSE_TURN ? CAT_WIN : MOUSE_WIN; results[prevMouse][prevCat][prevTurn] = loseResult; qu.emplace(prevMouse, prevCat, prevTurn); } } } } return results[1][2][MOUSE_TURN]; } vector&lt;tuple&lt;int, int, int&gt;&gt; GetPrevStates(int mouse, int cat, int turn) // 返回上一轮的所有可能状态 { vector&lt;tuple&lt;int, int, int&gt;&gt; prevStates; int prevTurn = turn == MOUSE_TURN ? CAT_TURN : MOUSE_TURN; if (prevTurn == MOUSE_TURN) { for (int &amp; prev : graph[mouse]) { prevStates.emplace_back(prev, cat, prevTurn); } } else { for (int &amp; prev : graph[cat]) { if (prev != 0) { prevStates.emplace_back(mouse, prev, prevTurn); } } } return prevStates; } }; 提交结果 通过 分析 表示：老鼠的位置&#43;猫的位置&#43;当前移动方，除边界条件为都初始化为平局 从边界条件(确定的必胜状态和)出发，遍历其他情况 从当前一轮出发，遍历上一轮的所有可能位置 如果该位置不是平局，不需要重复计算 如果该位置是平局，需要计算该状态的结果 如果上一轮移动方和当前状态获胜方相同，则上一轮为必胜状态 如果上一轮移动方和当前获胜方不同 上一轮可能获胜的路径-1，即该状态的度减1 如果某状态的度减为0，则说明该状态为必败状态 参考资料 leetcode官方题解
+" />
+<meta property="og:url" content="https://y-m-m.github.io/post/leetcode913%E7%8C%AB%E5%92%8C%E8%80%81%E9%BC%A0/" />
+<meta property="og:site_name" content="leetcode 913 猫和老鼠" />
+<meta property="og:image"
+  content="https://y-m-m.github.io/">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+<meta property="article:published_time" content="2024-10-07 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+  <div style="position: relative">
+  <header class="Header js-details-container Details px-3 px-md-4 px-lg-5 flex-wrap flex-md-nowrap open Details--on">
+    <div class="Header-item mobile-none" style="margin-top: -4px; margin-bottom: -4px;">
+      <a class="Header-link" href="https://y-m-m.github.io/">
+        <img class="octicon" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item d-md-none">
+      <button class="Header-link btn-link js-details-target" type="button"
+        onclick="document.querySelector('#header-search').style.display = document.querySelector('#header-search').style.display == 'none'? 'block': 'none'">
+        <svg height="24" class="octicon octicon-three-bars" viewBox="0 0 16 16" version="1.1" width="24">
+          <path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 2.75zm0 5A.75.75 0 011.75 7h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 7.75zM1.75 12a.75.75 0 100 1.5h12.5a.75.75 0 100-1.5H1.75z">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <div style="display: none;" id="header-search"
+      class="Header-item Header-item--full flex-column flex-md-row width-full flex-order-2 flex-md-order-none mr-0 mr-md-3 mt-3 mt-md-0 Details-content--hidden-not-important d-md-flex">
+      <div
+        class="Header-search header-search flex-auto js-site-search position-relative flex-self-stretch flex-md-self-auto mb-3 mb-md-0 mr-0 mr-md-3 scoped-search site-scoped-search js-jump-to">
+        <div class="position-relative">
+          
+          <form target="_blank" id="search-form" action="" accept-charset="UTF-8" method="get"
+            autocomplete="off">
+            <label
+              class="Header-search-label form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative d-flex flex-justify-between flex-items-center">
+              <input type="text"
+                class="Header-search-input form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable"
+                name="q" value="" placeholder="Search" autocomplete="off">
+            </label>
+          </form>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="Header-item Header-item--full flex-justify-center d-md-none position-relative">
+      <a class="Header-link " href="https://y-m-m.github.io/">
+        <img class="octicon octicon-mark-github v-align-middle" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item" style="margin-right: 0;">
+      <a href="javascript:void(0)" class="Header-link no-select" onclick="switchTheme()">
+        <svg style="fill: var(--color-profile-color-modes-toggle-moon);" class="no-select" viewBox="0 0 16 16"
+          version="1.1" width="16" height="16">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M4.52208 7.71754C7.5782 7.71754 10.0557 5.24006 10.0557 2.18394C10.0557 1.93498 10.0392 1.68986 10.0074 1.44961C9.95801 1.07727 10.3495 0.771159 10.6474 0.99992C12.1153 2.12716 13.0615 3.89999 13.0615 5.89383C13.0615 9.29958 10.3006 12.0605 6.89485 12.0605C3.95334 12.0605 1.49286 10.001 0.876728 7.24527C0.794841 6.87902 1.23668 6.65289 1.55321 6.85451C2.41106 7.40095 3.4296 7.71754 4.52208 7.71754Z">
+          </path>
+        </svg>
+      </a>
+    </div>
+  </header>
+</div>
+
+  <div id="search-result" class="container-lg px-3 new-discussion-timeline" style="display: none;">
+</div>
+
+  
+<div class="application-main">
+  <div>
+  <main>
+    <div class="gisthead pagehead bg-gray-light pb-0 pt-3 mb-4">
+      <div class="px-0">
+        <div class="mb-3 d-flex px-3 px-md-3 px-lg-5">
+          <div class="flex-auto min-width-0 width-fit mr-3">
+            <div class="d-flex">
+              <div class="d-none d-md-block">
+                <a class="avatar mr-2 flex-shrink-0" href="https://y-m-m.github.io/">
+                  <img class=" avatar-user"
+                    src="/images/me.png"
+                    width="32" height="32"></a>
+              </div>
+              <div class="d-flex flex-column">
+                <h1 class="break-word f3 text-normal mb-md-0 mb-1">
+                  <span class="author">
+                    <a href="https://y-m-m.github.io/">陈皮</a>
+                  </span>
+                  <span class="path-divider">/</span>
+                  <strong class="css-truncate css-truncate-target mr-1" style="max-width: 410px">
+                    <a href="https://y-m-m.github.io/post/leetcode913%E7%8C%AB%E5%92%8C%E8%80%81%E9%BC%A0/">leetcode 913 猫和老鼠</a>
+                  </strong>
+                </h1>
+                <div class="note m-0">
+                  Created <relative-time datetime="Mon, 07 Oct 2024 00:00:00 &#43;0000"
+                    class="no-wrap">
+                    Mon, 07 Oct 2024 00:00:00 &#43;0000</relative-time>
+
+                  
+                  <span class="file-info-divider"></span>
+                  Modified <relative-time datetime="Mon, 10 Feb 2025 16:30:19 &#43;0800"
+                    class="no-wrap">
+                    Mon, 10 Feb 2025 16:30:19 &#43;0800</relative-time>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-lg px-3 new-discussion-timeline">
+      <div class="repository-content gist-content">
+        <div>
+          <div class="js-gist-file-update-container js-task-list-container file-box">
+            <div id="file-pytest" class="file my-2">
+              <div id="post-header" class="file-header d-flex flex-md-items-center flex-items-start sticky-header" style="z-index: 2">
+                <div class="file-info d-flex flex-md-items-center flex-items-start flex-order-1 flex-auto">
+                  <div class="text-mono f6 flex-auto pr-3 flex-order-2 flex-md-order-1 mt-2 mt-md-0">
+                    
+                    <summary id="toc-toggle" onclick="clickToc()" class="btn btn-octicon m-0 mr-2 p-2">
+                      <svg aria-hidden="true" viewBox="0 0 16 16" height="16" width="16" class="octicon octicon-list-unordered">
+                        <path fill-rule="evenodd" d="M2 4a1 1 0 100-2 1 1 0 000 2zm3.75-1.5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zM3 8a1 1 0 11-2 0 1 1 0 012 0zm-1 6a1 1 0 100-2 1 1 0 000 2z"></path>
+                      </svg>
+                    </summary>
+                    <details-menu class="SelectMenu" id="toc-details" style="display: none;">
+                      <div class="SelectMenu-modal rounded-3 mt-1" style="max-height: 340px;">
+                        <div class="SelectMenu-list SelectMenu-list--borderless p-2" style="overscroll-behavior: contain;" id="toc-list">
+                        </div>
+                      </div>
+                    </details-menu>
+                      1862 Words
+                    
+
+                  </div>
+                  <div class="file-actions flex-order-2 pt-0">
+                    
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      计算机科学与技术
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      算法题
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/leetcode">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      leetcode
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%9B%BE">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      图
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      拓扑排序
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%B0%E5%BF%86%E7%94%BB%E6%90%9C%E7%B4%A2">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      记忆画搜索
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%95%B0%E5%AD%A6">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      数学
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      动态规划
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%8D%9A%E5%BC%88">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      博弈
+                    </a>
+                    
+                    
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="Box-body px-5 pb-5" style="z-index: 1">
+                <article class="markdown-body entry-content container-lg"><p><a href="https://leetcode.cn/problems/cat-and-mouse/description/">leetcode 913 猫和老鼠</a></p>
+<h1 id="题目">题目</h1>
+<blockquote>
+<p>两位玩家分别扮演猫和老鼠，在一张 无向 图上进行游戏，两人轮流行动。             <br>
+图的形式是：graph[a] 是一个列表，由满足 ab 是图中的一条边的所有节点 b 组成。           <br>
+老鼠从节点 1 开始，第一个出发；猫从节点 2 开始，第二个出发。在节点 0 处有一个洞。                   <br>
+在每个玩家的行动中，他们 必须 沿着图中与所在当前位置连通的一条边移动。例如，如果老鼠在节点 1 ，那么它必须移动到 graph[1] 中的任一节点。                       <br>
+此外，猫无法移动到洞中（节点 0）。              <br>
+然后，游戏在出现以下三种情形之一时结束：            <br>
+如果猫和老鼠出现在同一个节点，猫获胜。             <br>
+如果老鼠到达洞中，老鼠获胜。         <br>
+如果某一位置重复出现（即，玩家的位置和移动顺序都与上一次行动相同），游戏平局。                <br>
+给你一张图 graph ，并假设两位玩家都都以最佳状态参与游戏：              <br>
+如果老鼠获胜，则返回 1；               <br>
+如果猫获胜，则返回 2；                <br>
+如果平局，则返回 0 。</p>
+</blockquote>
+<h1 id="示例">示例</h1>
+<h2 id="示例一">示例一</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-02-10%2009.31.04.png" alt=""></p>
+<blockquote>
+<p>输入：graph = [[2,5],[3],[0,4,5],[1,4,5],[2,3],[0,2,3]]             <br>
+输出：0</p>
+</blockquote>
+<h2 id="示例二">示例二</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-02-10%2009.33.05.png" alt=""></p>
+<blockquote>
+<p>输入：graph = [[1,3],[0],[3],[0,2]]          <br>
+输出：1</p>
+</blockquote>
+<h1 id="提示">提示</h1>
+<ul>
+<li>3 &lt;= graph.length &lt;= 50</li>
+<li>1 &lt;= graph[i].length &lt; graph.length</li>
+<li>0 &lt;= graph[i][j] &lt; graph.length</li>
+<li>graph[i][j] != i</li>
+<li>graph[i] 互不相同</li>
+<li>猫和老鼠在游戏中总是可以移动</li>
+</ul>
+<h1 id="题解">题解</h1>
+<h2 id="动态规划解法本题不适用">动态规划解法(本题不适用)</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">const</span> <span class="kt">int</span> <span class="n">MOUSE_WIN</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="kt">int</span> <span class="n">CAT_WIN</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="kt">int</span> <span class="n">DRAW</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="kt">int</span> <span class="n">MAXN</span> <span class="o">=</span> <span class="mi">51</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">n</span><span class="p">;</span> <span class="c1">// 位置的个数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">dp</span><span class="p">[</span><span class="n">MAXN</span><span class="p">][</span><span class="n">MAXN</span><span class="p">][</span><span class="n">MAXN</span><span class="o">*</span><span class="p">(</span><span class="n">MAXN</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="p">];</span> <span class="c1">// dp数组，老鼠的位置+猫的位置+轮次
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">graph</span><span class="p">;</span> <span class="c1">// 存储路径
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="nf">catMouseGame</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">graph</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">this</span><span class="o">-&gt;</span><span class="n">n</span> <span class="o">=</span> <span class="n">graph</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">this</span><span class="o">-&gt;</span><span class="n">graph</span> <span class="o">=</span> <span class="n">graph</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">memset</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">dp</span><span class="p">));</span> <span class="c1">// 初始化dp数组为-1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">return</span> <span class="n">getResult</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// 老鼠的位置在1，猫的位置在2，初始为0次
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="nf">getResult</span><span class="p">(</span><span class="kt">int</span> <span class="n">mouse</span><span class="p">,</span> <span class="kt">int</span> <span class="n">cat</span><span class="p">,</span> <span class="kt">int</span> <span class="n">turns</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">turns</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="p">{</span> <span class="c1">// 平局
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">return</span> <span class="n">DRAW</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">mouse</span><span class="p">][</span><span class="n">cat</span><span class="p">][</span><span class="n">turns</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> 
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">mouse</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 老鼠进洞
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="n">dp</span><span class="p">[</span><span class="n">mouse</span><span class="p">][</span><span class="n">cat</span><span class="p">][</span><span class="n">turns</span><span class="p">]</span> <span class="o">=</span> <span class="n">MOUSE_WIN</span><span class="p">;</span> <span class="c1">// 老鼠获胜
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">cat</span> <span class="o">==</span> <span class="n">mouse</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 老鼠和猫相遇
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="n">dp</span><span class="p">[</span><span class="n">mouse</span><span class="p">][</span><span class="n">cat</span><span class="p">][</span><span class="n">turns</span><span class="p">]</span> <span class="o">=</span> <span class="n">CAT_WIN</span><span class="p">;</span> <span class="c1">// 猫获胜
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">getNextResult</span><span class="p">(</span><span class="n">mouse</span><span class="p">,</span> <span class="n">cat</span><span class="p">,</span> <span class="n">turns</span><span class="p">);</span> <span class="c1">// 以下一个状态的结果作为本状态的结果
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">mouse</span><span class="p">][</span><span class="n">cat</span><span class="p">][</span><span class="n">turns</span><span class="p">];</span> <span class="c1">// 返回本状态的结果
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">getNextResult</span><span class="p">(</span><span class="kt">int</span> <span class="n">mouse</span><span class="p">,</span> <span class="kt">int</span> <span class="n">cat</span><span class="p">,</span> <span class="kt">int</span> <span class="n">turns</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">curMove</span> <span class="o">=</span> <span class="n">turns</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">?</span> <span class="nl">mouse</span> <span class="p">:</span> <span class="n">cat</span><span class="p">;</span> <span class="c1">// 判断本次是老鼠移动还是猫移动
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">int</span> <span class="n">defaultResult</span> <span class="o">=</span> <span class="n">curMove</span> <span class="o">==</span> <span class="n">mouse</span> <span class="o">?</span> <span class="nl">CAT_WIN</span> <span class="p">:</span> <span class="n">MOUSE_WIN</span><span class="p">;</span> <span class="c1">// 如果当前是老鼠移动的话，默认猫赢，否则默认老鼠赢
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">defaultResult</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="nl">next</span> <span class="p">:</span> <span class="n">graph</span><span class="p">[</span><span class="n">curMove</span><span class="p">])</span> <span class="p">{</span> <span class="c1">// 遍历当前能移动到的位置
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">if</span> <span class="p">(</span><span class="n">curMove</span> <span class="o">==</span> <span class="n">cat</span> <span class="o">&amp;&amp;</span> <span class="n">next</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 猫不能往0位置移动
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">nextMouse</span> <span class="o">=</span> <span class="n">curMove</span> <span class="o">==</span> <span class="n">mouse</span> <span class="o">?</span> <span class="nl">next</span> <span class="p">:</span> <span class="n">mouse</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">nextCat</span> <span class="o">=</span> <span class="n">curMove</span> <span class="o">==</span> <span class="n">cat</span> <span class="o">?</span> <span class="nl">next</span> <span class="p">:</span> <span class="n">cat</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">nextResult</span> <span class="o">=</span> <span class="n">getResult</span><span class="p">(</span><span class="n">nextMouse</span><span class="p">,</span> <span class="n">nextCat</span><span class="p">,</span> <span class="n">turns</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// 向一个方向移动
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">if</span> <span class="p">(</span><span class="n">nextResult</span> <span class="o">!=</span> <span class="n">defaultResult</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 找到能让自己赢的一次移动
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="n">result</span> <span class="o">=</span> <span class="n">nextResult</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">DRAW</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">dp</span><span class="p">[</span><span class="n">mouse</span><span class="p">][</span><span class="n">cat</span><span class="p">][</span><span class="n">turns</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><ul>
+<li>分析
+<ul>
+<li>用一个函数实现移动策略，根据游戏已经进行的轮数的奇偶性决定当前轮到的玩家。对于特定玩家的移动，实现方法如下：
+<ul>
+<li>如果当前玩家存在一种移动方法到达非必败状态，则用该状态更新游戏结果。
+<ul>
+<li>如果该移动方法到达必胜状态，则将当前状态（移动前的状态）设为必胜状态，结束遍历其他可能的移动。</li>
+<li>如果该移动方法到达必和状态，则将当前状态（移动前的状态）设为必和状态，继续遍历其他可能的移动，因为可能存在到达必胜状态的移动方法。</li>
+</ul>
+</li>
+<li>如果当前玩家的任何移动方法都到达必败状态，则将当前状态（移动前的状态）设为必败状态。</li>
+</ul>
+</li>
+<li>由于老鼠可能的位置有 n 个，猫可能的位置有 n−1 个，游戏轮数最大为 2n(n−1)，因此动态规划的状态数是 O(n<!-- raw HTML omitted -->4<!-- raw HTML omitted -->)，对于每个状态需要 O(n) 的时间计算状态值，因此总时间复杂度是 O(n<!-- raw HTML omitted -->5<!-- raw HTML omitted -->)，该时间复杂度会超出时间限制，因此自顶向下的动态规划不适用于这道题。</li>
+</ul>
+</li>
+</ul>
+<h2 id="拓扑排序">拓扑排序</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="kt">int</span> <span class="n">MOUSE_TURN</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">CAT_TURN</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="kt">int</span> <span class="n">DRAW</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">MOUSE_WIN</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">CAT_WIN</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">graph</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&gt;</span> <span class="n">degrees</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&gt;</span> <span class="n">results</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="nf">catMouseGame</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">graph</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">graph</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">this</span><span class="o">-&gt;</span><span class="n">graph</span> <span class="o">=</span> <span class="n">graph</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">this</span><span class="o">-&gt;</span><span class="n">degrees</span> <span class="o">=</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&gt;</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">2</span><span class="p">)));</span> <span class="c1">// 记录所有状态的度
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">this</span><span class="o">-&gt;</span><span class="n">results</span> <span class="o">=</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&gt;</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">2</span><span class="p">)));</span> <span class="c1">// 记录所有状态所能到达的结果
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">queue</span><span class="o">&lt;</span><span class="n">tuple</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">qu</span><span class="p">;</span> <span class="c1">// 拓扑排序队列
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">degrees</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">MOUSE_TURN</span><span class="p">]</span> <span class="o">=</span> <span class="n">graph</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                <span class="n">degrees</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">CAT_TURN</span><span class="p">]</span> <span class="o">=</span> <span class="n">graph</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="nl">node</span> <span class="p">:</span> <span class="n">graph</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">{</span> 
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 猫不能到达0，减掉与0相关的度
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="n">degrees</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">node</span><span class="p">][</span><span class="n">CAT_TURN</span><span class="p">]</span><span class="o">--</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 老鼠到达0的边界条件放入拓扑排序队列中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">MOUSE_TURN</span><span class="p">]</span> <span class="o">=</span> <span class="n">MOUSE_WIN</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl">            <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">CAT_TURN</span><span class="p">]</span> <span class="o">=</span> <span class="n">MOUSE_WIN</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">qu</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">MOUSE_TURN</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">qu</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">CAT_TURN</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 老鼠与猫相遇的边界条件放入拓扑排序队列中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">results</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">MOUSE_TURN</span><span class="p">]</span> <span class="o">=</span> <span class="n">CAT_WIN</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">results</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">CAT_TURN</span><span class="p">]</span> <span class="o">=</span> <span class="n">CAT_WIN</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">qu</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">MOUSE_TURN</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">qu</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">CAT_TURN</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">qu</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span> 
+</span></span><span class="line"><span class="cl">            <span class="k">auto</span> <span class="p">[</span><span class="n">mouse</span><span class="p">,</span> <span class="n">cat</span><span class="p">,</span> <span class="n">turn</span><span class="p">]</span> <span class="o">=</span> <span class="n">qu</span><span class="p">.</span><span class="n">front</span><span class="p">();</span> 
+</span></span><span class="line"><span class="cl">            <span class="n">qu</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="n">mouse</span><span class="p">][</span><span class="n">cat</span><span class="p">][</span><span class="n">turn</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="n">vector</span><span class="o">&lt;</span><span class="n">tuple</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">prevStates</span> <span class="o">=</span> <span class="n">GetPrevStates</span><span class="p">(</span><span class="n">mouse</span><span class="p">,</span> <span class="n">cat</span><span class="p">,</span> <span class="n">turn</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span> <span class="p">[</span><span class="n">prevMouse</span><span class="p">,</span> <span class="n">prevCat</span><span class="p">,</span> <span class="n">prevTurn</span><span class="p">]</span> <span class="o">:</span> <span class="n">prevStates</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 处理上一轮的所有可能状态
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="k">if</span> <span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="n">prevMouse</span><span class="p">][</span><span class="n">prevCat</span><span class="p">][</span><span class="n">prevTurn</span><span class="p">]</span> <span class="o">==</span> <span class="n">DRAW</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 只处理平局的状态
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                    <span class="kt">bool</span> <span class="n">canWin</span> <span class="o">=</span> <span class="p">(</span><span class="n">result</span> <span class="o">==</span> <span class="n">MOUSE_WIN</span> <span class="o">&amp;&amp;</span> <span class="n">prevTurn</span> <span class="o">==</span> <span class="n">MOUSE_TURN</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">result</span> <span class="o">==</span> <span class="n">CAT_WIN</span> <span class="o">&amp;&amp;</span> <span class="n">prevTurn</span> <span class="o">==</span> <span class="n">CAT_TURN</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">if</span> <span class="p">(</span><span class="n">canWin</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">results</span><span class="p">[</span><span class="n">prevMouse</span><span class="p">][</span><span class="n">prevCat</span><span class="p">][</span><span class="n">prevTurn</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">qu</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">prevMouse</span><span class="p">,</span> <span class="n">prevCat</span><span class="p">,</span> <span class="n">prevTurn</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">--</span><span class="n">degrees</span><span class="p">[</span><span class="n">prevMouse</span><span class="p">][</span><span class="n">prevCat</span><span class="p">][</span><span class="n">prevTurn</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="kt">int</span> <span class="n">loseResult</span> <span class="o">=</span> <span class="n">prevTurn</span> <span class="o">==</span> <span class="n">MOUSE_TURN</span> <span class="o">?</span> <span class="nl">CAT_WIN</span> <span class="p">:</span> <span class="n">MOUSE_WIN</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">results</span><span class="p">[</span><span class="n">prevMouse</span><span class="p">][</span><span class="n">prevCat</span><span class="p">][</span><span class="n">prevTurn</span><span class="p">]</span> <span class="o">=</span> <span class="n">loseResult</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">qu</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">prevMouse</span><span class="p">,</span> <span class="n">prevCat</span><span class="p">,</span> <span class="n">prevTurn</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">results</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="n">MOUSE_TURN</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="n">tuple</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">GetPrevStates</span><span class="p">(</span><span class="kt">int</span> <span class="n">mouse</span><span class="p">,</span> <span class="kt">int</span> <span class="n">cat</span><span class="p">,</span> <span class="kt">int</span> <span class="n">turn</span><span class="p">)</span>  <span class="c1">// 返回上一轮的所有可能状态
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="n">tuple</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">prevStates</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">prevTurn</span> <span class="o">=</span> <span class="n">turn</span> <span class="o">==</span> <span class="n">MOUSE_TURN</span> <span class="o">?</span> <span class="nl">CAT_TURN</span> <span class="p">:</span> <span class="n">MOUSE_TURN</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">prevTurn</span> <span class="o">==</span> <span class="n">MOUSE_TURN</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="o">&amp;</span> <span class="nl">prev</span> <span class="p">:</span> <span class="n">graph</span><span class="p">[</span><span class="n">mouse</span><span class="p">])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">prevStates</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">prev</span><span class="p">,</span> <span class="n">cat</span><span class="p">,</span> <span class="n">prevTurn</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="o">&amp;</span> <span class="nl">prev</span> <span class="p">:</span> <span class="n">graph</span><span class="p">[</span><span class="n">cat</span><span class="p">])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">prev</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">prevStates</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">mouse</span><span class="p">,</span> <span class="n">prev</span><span class="p">,</span> <span class="n">prevTurn</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">prevStates</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><ul>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+<li>分析
+<ul>
+<li>表示：老鼠的位置+猫的位置+当前移动方，除边界条件为都初始化为平局</li>
+<li>从边界条件(确定的必胜状态和)出发，遍历其他情况</li>
+<li>从当前一轮出发，遍历上一轮的所有可能位置
+<ul>
+<li>如果该位置不是平局，不需要重复计算</li>
+<li>如果该位置是平局，需要计算该状态的结果
+<ul>
+<li>如果上一轮移动方和当前状态获胜方相同，则上一轮为必胜状态</li>
+<li>如果上一轮移动方和当前获胜方不同
+<ul>
+<li>上一轮可能获胜的路径-1，即该状态的度减1</li>
+<li>如果某状态的度减为0，则说明该状态为必败状态</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="参考资料">参考资料</h1>
+<p><a href="https://leetcode.cn/problems/cat-and-mouse/solutions/1190205/mao-he-lao-shu-by-leetcode-solution-444x/">leetcode官方题解</a></p>
+</article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="application/javascript" src='https://y-m-m.github.io/js/toc.js'></script>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/toc.css' />
+
+  
+<div id="gitalk-container" class="gitalk-container"></div>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/gitalk.css'>
+<script src='https://y-m-m.github.io/js/gitalk.min.js'></script>
+<script>
+  const gitalk = new Gitalk({
+    clientID: 'Ov23livxKNtTlPeMjV2H',
+    clientSecret: '6d3bc9f47a1296f29628a63701ea5624cd28a26b',
+    repo: 'y-m-m.github.io',
+    owner: 'Y-M-M',
+    admin: ['Y-M-M'],
+    id: eval("location.pathname"), 
+    distractionFreeMode: false 
+  });
+  (function() {
+    gitalk.render('gitalk-container');
+  })();
+</script>
+
+</div>
+
+  <div class="footer container-xl width-full p-responsive">
+  <div
+    class="position-relative d-flex flex-row-reverse flex-lg-row flex-wrap flex-lg-nowrap flex-justify-center flex-lg-justify-between flex-sm-items-center pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
+    <a aria-label="Homepage" title="GitHub" class="footer-octicon d-none d-lg-block mr-lg-4" href="https://y-m-m.github.io/">
+      <svg height="24" class="octicon octicon-mark-github" viewBox="0 0 16 16" version="1.1" width="24">
+        <path fill-rule="evenodd"
+          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+        </path>
+      </svg>
+    </a>
+    <ul class="list-style-none d-flex flex-wrap col-12 flex-justify-center flex-lg-justify-between mb-2 mb-lg-0">
+      
+      <li class="mr-3 mr-lg-0">Theme by <a href='https://github.com/MeiK2333/github-style'>github-style</a></li>
+      
+    </ul>
+  </div>
+  <div class="d-flex flex-justify-center pb-6">
+    <span class="f6 text-gray-light"></span>
+  </div>
+
+
+</div>
+</body>
+
+<script type="application/javascript" src="https://y-m-m.github.io/js/github-style.js"></script>
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+<script type="application/javascript" src='https://y-m-m.github.io/js/search.js'></script>
+
+
+
+</html>

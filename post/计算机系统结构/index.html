@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script type="application/javascript" src='https://y-m-m.github.io/js/theme-mode.js'></script>
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/frameworks.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github-style.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/light.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/dark.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/syntax.css' />
+    <title>计算机系统结构 - 陈皮的博客</title>
+    
+    <link rel="icon" type="image/x-icon" href='/images/github-mark.png'>
+    
+    <meta name="theme-color" content="#1e2327">
+
+    
+    <meta name="description"
+  content="第1章 计算机系统结构的基础知识 1.1 计算机系统结构的基本概念 第一台通用电子计算机诞生于1946年 计算机技术的飞速发展受益于两个方面 计算机制造技术的发展 计算机系统结构的创新 经历了四个发展过程 2002年以来发展缓慢的原因 大功耗问题 可以进一步有效地开发的指令级并行性已经很少 存储器访问速度的提高缓慢 系统结构的重大转折 从单纯依靠指令级并行转向开发线程并行和数据级并行 1.1.1 计算机系统结构的层次结构 计算机系统 = 硬件/固件 &#43; 软件 计算机语言从低级到高级发展 高一级语言的语句相对于低一级语言来说功能更强，更便于应用，但又都以低级语言为基础。 从计算机语言的角度，把计算机系统按功能划分成多级层次结构 每一层以一种语言为特征 物理机：用硬件/固件实现的机器 最下面的两级机器 虚拟机：由软件实现的机器 虚拟机中有些操作可以由硬件或固件实现 固件：具有软件功能的硬件 各机器级的实现主要靠翻译或解释，或两者的结合 翻译：先用转换程序把高一级机器上的程序转换为低一级机器上等效的程序，然后再在这低一级机器上运行，实现程序的功能。 解释：对于高一级机器上的程序中的每一条语句或指令，都是转去执行低一级机器上的一段等效程序。执行完后，再去高一级机器取下一条语句或指令，再进行解释执行，如此反复，直到解释执行完整个程序。 解释执行比编译后再执行所花的时间多，但占用的存储空间较少。 1.1.2 计算机系统结构的定义 计算机系统结构的经典定义 传统机器程序员所看到的计算机属性，即概念性结构与功能特性。 按照计算机系统的多级层次结构，不同级程序员所看到的计算机具有不同的属性。 透明性 在计算机技术中，把这种本来存在的事物或属性，但从某种角度看又好像不存在的概念称为透明性。 广义的系统结构定义：指令系统结构、组成、硬件 计算机系统结构的实质 确定计算机系统中软硬件的界面，界面之上是软件实现的功能，界面之下是硬件和固件实现的功能。 1.1.3 计算机组成和计算机实现 计算机系统结构：计算机系统的软、硬件的界面 即机器语言程序员所看到的传统机器级所具有的属性。 计算机组成：计算机系统结构的逻辑实现 包含物理机器级中的数据流和控制流的组成以及逻辑设计等 着眼于：物理机器级内各事件的排序方式与控制方式、各部件的功能以及各部件之间的联系。 计算机实现：计算机组成的物理实现 包括处理机、主存等部件的物理结构，器件的集成度和速度，模块、插件、底板的划分与连接，信号传输，电源、冷却及整机装配技术等。 着眼于：器件技术（起主导作用）、微组装技术。 具有相同系统结构的计算机可以采用不同的计算机组成。同一种计算机组成又可以采用多种不同的计算机实现。 举例：乘法指令 、主存容量与编址方式 系列机 由同一厂家生产的具有相同系统结构、但具有不同组成和实现的一系列不同型号的机器。 例如 IBM公司的IBM370系列，Intel公司的x86系列等。 1.1.4 计算机系统结构的分类 Flynn分类法
+按照指令流和数据流的多倍性进行分类 指令流：计算机执行的指令序列 数据流：由指令流调用的数据序列 多倍性：在系统最受限的部件上，同时处于同一执行阶段的指令或数据的最大数目。 把计算机系统的结构分为4类 单指令流单数据流SISD 单指令流多数据流SIMD 多指令流单数据流MISD 多指令流多数据流MIMD 4类计算机的基本结构 IS：指令流 DS：数据流 CS：控制流 CU：控制部件 PU：处理部件 MM和SM：存储器 冯氏分类法
+" />
+<meta name="keywords"
+  content='blog, google analytics' />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://y-m-m.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84/" />
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="计算机系统结构 - 陈皮的博客" />
+<meta name="twitter:description"
+  content="第1章 计算机系统结构的基础知识 1.1 计算机系统结构的基本概念 第一台通用电子计算机诞生于1946年 计算机技术的飞速发展受益于两个方面 计算机制造技术的发展 计算机系统结构的创新 经历了四个发展过程 2002年以来发展缓慢的原因 大功耗问题 可以进一步有效地开发的指令级并行性已经很少 存储器访问速度的提高缓慢 系统结构的重大转折 从单纯依靠指令级并行转向开发线程并行和数据级并行 1.1.1 计算机系统结构的层次结构 计算机系统 = 硬件/固件 &#43; 软件 计算机语言从低级到高级发展 高一级语言的语句相对于低一级语言来说功能更强，更便于应用，但又都以低级语言为基础。 从计算机语言的角度，把计算机系统按功能划分成多级层次结构 每一层以一种语言为特征 物理机：用硬件/固件实现的机器 最下面的两级机器 虚拟机：由软件实现的机器 虚拟机中有些操作可以由硬件或固件实现 固件：具有软件功能的硬件 各机器级的实现主要靠翻译或解释，或两者的结合 翻译：先用转换程序把高一级机器上的程序转换为低一级机器上等效的程序，然后再在这低一级机器上运行，实现程序的功能。 解释：对于高一级机器上的程序中的每一条语句或指令，都是转去执行低一级机器上的一段等效程序。执行完后，再去高一级机器取下一条语句或指令，再进行解释执行，如此反复，直到解释执行完整个程序。 解释执行比编译后再执行所花的时间多，但占用的存储空间较少。 1.1.2 计算机系统结构的定义 计算机系统结构的经典定义 传统机器程序员所看到的计算机属性，即概念性结构与功能特性。 按照计算机系统的多级层次结构，不同级程序员所看到的计算机具有不同的属性。 透明性 在计算机技术中，把这种本来存在的事物或属性，但从某种角度看又好像不存在的概念称为透明性。 广义的系统结构定义：指令系统结构、组成、硬件 计算机系统结构的实质 确定计算机系统中软硬件的界面，界面之上是软件实现的功能，界面之下是硬件和固件实现的功能。 1.1.3 计算机组成和计算机实现 计算机系统结构：计算机系统的软、硬件的界面 即机器语言程序员所看到的传统机器级所具有的属性。 计算机组成：计算机系统结构的逻辑实现 包含物理机器级中的数据流和控制流的组成以及逻辑设计等 着眼于：物理机器级内各事件的排序方式与控制方式、各部件的功能以及各部件之间的联系。 计算机实现：计算机组成的物理实现 包括处理机、主存等部件的物理结构，器件的集成度和速度，模块、插件、底板的划分与连接，信号传输，电源、冷却及整机装配技术等。 着眼于：器件技术（起主导作用）、微组装技术。 具有相同系统结构的计算机可以采用不同的计算机组成。同一种计算机组成又可以采用多种不同的计算机实现。 举例：乘法指令 、主存容量与编址方式 系列机 由同一厂家生产的具有相同系统结构、但具有不同组成和实现的一系列不同型号的机器。 例如 IBM公司的IBM370系列，Intel公司的x86系列等。 1.1.4 计算机系统结构的分类 Flynn分类法
+按照指令流和数据流的多倍性进行分类 指令流：计算机执行的指令序列 数据流：由指令流调用的数据序列 多倍性：在系统最受限的部件上，同时处于同一执行阶段的指令或数据的最大数目。 把计算机系统的结构分为4类 单指令流单数据流SISD 单指令流多数据流SIMD 多指令流单数据流MISD 多指令流多数据流MIMD 4类计算机的基本结构 IS：指令流 DS：数据流 CS：控制流 CU：控制部件 PU：处理部件 MM和SM：存储器 冯氏分类法
+" />
+<meta name="twitter:site" content="https://y-m-m.github.io/" />
+<meta name="twitter:creator" content="陈皮" />
+<meta name="twitter:image"
+  content="https://y-m-m.github.io/">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="计算机系统结构 - 陈皮的博客">
+<meta property="og:description"
+  content="第1章 计算机系统结构的基础知识 1.1 计算机系统结构的基本概念 第一台通用电子计算机诞生于1946年 计算机技术的飞速发展受益于两个方面 计算机制造技术的发展 计算机系统结构的创新 经历了四个发展过程 2002年以来发展缓慢的原因 大功耗问题 可以进一步有效地开发的指令级并行性已经很少 存储器访问速度的提高缓慢 系统结构的重大转折 从单纯依靠指令级并行转向开发线程并行和数据级并行 1.1.1 计算机系统结构的层次结构 计算机系统 = 硬件/固件 &#43; 软件 计算机语言从低级到高级发展 高一级语言的语句相对于低一级语言来说功能更强，更便于应用，但又都以低级语言为基础。 从计算机语言的角度，把计算机系统按功能划分成多级层次结构 每一层以一种语言为特征 物理机：用硬件/固件实现的机器 最下面的两级机器 虚拟机：由软件实现的机器 虚拟机中有些操作可以由硬件或固件实现 固件：具有软件功能的硬件 各机器级的实现主要靠翻译或解释，或两者的结合 翻译：先用转换程序把高一级机器上的程序转换为低一级机器上等效的程序，然后再在这低一级机器上运行，实现程序的功能。 解释：对于高一级机器上的程序中的每一条语句或指令，都是转去执行低一级机器上的一段等效程序。执行完后，再去高一级机器取下一条语句或指令，再进行解释执行，如此反复，直到解释执行完整个程序。 解释执行比编译后再执行所花的时间多，但占用的存储空间较少。 1.1.2 计算机系统结构的定义 计算机系统结构的经典定义 传统机器程序员所看到的计算机属性，即概念性结构与功能特性。 按照计算机系统的多级层次结构，不同级程序员所看到的计算机具有不同的属性。 透明性 在计算机技术中，把这种本来存在的事物或属性，但从某种角度看又好像不存在的概念称为透明性。 广义的系统结构定义：指令系统结构、组成、硬件 计算机系统结构的实质 确定计算机系统中软硬件的界面，界面之上是软件实现的功能，界面之下是硬件和固件实现的功能。 1.1.3 计算机组成和计算机实现 计算机系统结构：计算机系统的软、硬件的界面 即机器语言程序员所看到的传统机器级所具有的属性。 计算机组成：计算机系统结构的逻辑实现 包含物理机器级中的数据流和控制流的组成以及逻辑设计等 着眼于：物理机器级内各事件的排序方式与控制方式、各部件的功能以及各部件之间的联系。 计算机实现：计算机组成的物理实现 包括处理机、主存等部件的物理结构，器件的集成度和速度，模块、插件、底板的划分与连接，信号传输，电源、冷却及整机装配技术等。 着眼于：器件技术（起主导作用）、微组装技术。 具有相同系统结构的计算机可以采用不同的计算机组成。同一种计算机组成又可以采用多种不同的计算机实现。 举例：乘法指令 、主存容量与编址方式 系列机 由同一厂家生产的具有相同系统结构、但具有不同组成和实现的一系列不同型号的机器。 例如 IBM公司的IBM370系列，Intel公司的x86系列等。 1.1.4 计算机系统结构的分类 Flynn分类法
+按照指令流和数据流的多倍性进行分类 指令流：计算机执行的指令序列 数据流：由指令流调用的数据序列 多倍性：在系统最受限的部件上，同时处于同一执行阶段的指令或数据的最大数目。 把计算机系统的结构分为4类 单指令流单数据流SISD 单指令流多数据流SIMD 多指令流单数据流MISD 多指令流多数据流MIMD 4类计算机的基本结构 IS：指令流 DS：数据流 CS：控制流 CU：控制部件 PU：处理部件 MM和SM：存储器 冯氏分类法
+" />
+<meta property="og:url" content="https://y-m-m.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84/" />
+<meta property="og:site_name" content="计算机系统结构" />
+<meta property="og:image"
+  content="https://y-m-m.github.io/">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+<meta property="article:published_time" content="2024-03-03 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+  <div style="position: relative">
+  <header class="Header js-details-container Details px-3 px-md-4 px-lg-5 flex-wrap flex-md-nowrap open Details--on">
+    <div class="Header-item mobile-none" style="margin-top: -4px; margin-bottom: -4px;">
+      <a class="Header-link" href="https://y-m-m.github.io/">
+        <img class="octicon" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item d-md-none">
+      <button class="Header-link btn-link js-details-target" type="button"
+        onclick="document.querySelector('#header-search').style.display = document.querySelector('#header-search').style.display == 'none'? 'block': 'none'">
+        <svg height="24" class="octicon octicon-three-bars" viewBox="0 0 16 16" version="1.1" width="24">
+          <path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 2.75zm0 5A.75.75 0 011.75 7h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 7.75zM1.75 12a.75.75 0 100 1.5h12.5a.75.75 0 100-1.5H1.75z">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <div style="display: none;" id="header-search"
+      class="Header-item Header-item--full flex-column flex-md-row width-full flex-order-2 flex-md-order-none mr-0 mr-md-3 mt-3 mt-md-0 Details-content--hidden-not-important d-md-flex">
+      <div
+        class="Header-search header-search flex-auto js-site-search position-relative flex-self-stretch flex-md-self-auto mb-3 mb-md-0 mr-0 mr-md-3 scoped-search site-scoped-search js-jump-to">
+        <div class="position-relative">
+          
+          <form target="_blank" id="search-form" action="" accept-charset="UTF-8" method="get"
+            autocomplete="off">
+            <label
+              class="Header-search-label form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative d-flex flex-justify-between flex-items-center">
+              <input type="text"
+                class="Header-search-input form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable"
+                name="q" value="" placeholder="Search" autocomplete="off">
+            </label>
+          </form>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="Header-item Header-item--full flex-justify-center d-md-none position-relative">
+      <a class="Header-link " href="https://y-m-m.github.io/">
+        <img class="octicon octicon-mark-github v-align-middle" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item" style="margin-right: 0;">
+      <a href="javascript:void(0)" class="Header-link no-select" onclick="switchTheme()">
+        <svg style="fill: var(--color-profile-color-modes-toggle-moon);" class="no-select" viewBox="0 0 16 16"
+          version="1.1" width="16" height="16">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M4.52208 7.71754C7.5782 7.71754 10.0557 5.24006 10.0557 2.18394C10.0557 1.93498 10.0392 1.68986 10.0074 1.44961C9.95801 1.07727 10.3495 0.771159 10.6474 0.99992C12.1153 2.12716 13.0615 3.89999 13.0615 5.89383C13.0615 9.29958 10.3006 12.0605 6.89485 12.0605C3.95334 12.0605 1.49286 10.001 0.876728 7.24527C0.794841 6.87902 1.23668 6.65289 1.55321 6.85451C2.41106 7.40095 3.4296 7.71754 4.52208 7.71754Z">
+          </path>
+        </svg>
+      </a>
+    </div>
+  </header>
+</div>
+
+  <div id="search-result" class="container-lg px-3 new-discussion-timeline" style="display: none;">
+</div>
+
+  
+<div class="application-main">
+  <div>
+  <main>
+    <div class="gisthead pagehead bg-gray-light pb-0 pt-3 mb-4">
+      <div class="px-0">
+        <div class="mb-3 d-flex px-3 px-md-3 px-lg-5">
+          <div class="flex-auto min-width-0 width-fit mr-3">
+            <div class="d-flex">
+              <div class="d-none d-md-block">
+                <a class="avatar mr-2 flex-shrink-0" href="https://y-m-m.github.io/">
+                  <img class=" avatar-user"
+                    src="/images/me.png"
+                    width="32" height="32"></a>
+              </div>
+              <div class="d-flex flex-column">
+                <h1 class="break-word f3 text-normal mb-md-0 mb-1">
+                  <span class="author">
+                    <a href="https://y-m-m.github.io/">陈皮</a>
+                  </span>
+                  <span class="path-divider">/</span>
+                  <strong class="css-truncate css-truncate-target mr-1" style="max-width: 410px">
+                    <a href="https://y-m-m.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84/">计算机系统结构</a>
+                  </strong>
+                </h1>
+                <div class="note m-0">
+                  Created <relative-time datetime="Sun, 03 Mar 2024 00:00:00 &#43;0000"
+                    class="no-wrap">
+                    Sun, 03 Mar 2024 00:00:00 &#43;0000</relative-time>
+
+                  
+                  <span class="file-info-divider"></span>
+                  Modified <relative-time datetime="Mon, 03 Mar 2025 20:19:18 &#43;0800"
+                    class="no-wrap">
+                    Mon, 03 Mar 2025 20:19:18 &#43;0800</relative-time>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-lg px-3 new-discussion-timeline">
+      <div class="repository-content gist-content">
+        <div>
+          <div class="js-gist-file-update-container js-task-list-container file-box">
+            <div id="file-pytest" class="file my-2">
+              <div id="post-header" class="file-header d-flex flex-md-items-center flex-items-start sticky-header" style="z-index: 2">
+                <div class="file-info d-flex flex-md-items-center flex-items-start flex-order-1 flex-auto">
+                  <div class="text-mono f6 flex-auto pr-3 flex-order-2 flex-md-order-1 mt-2 mt-md-0">
+                    
+                    <summary id="toc-toggle" onclick="clickToc()" class="btn btn-octicon m-0 mr-2 p-2">
+                      <svg aria-hidden="true" viewBox="0 0 16 16" height="16" width="16" class="octicon octicon-list-unordered">
+                        <path fill-rule="evenodd" d="M2 4a1 1 0 100-2 1 1 0 000 2zm3.75-1.5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zM3 8a1 1 0 11-2 0 1 1 0 012 0zm-1 6a1 1 0 100-2 1 1 0 000 2z"></path>
+                      </svg>
+                    </summary>
+                    <details-menu class="SelectMenu" id="toc-details" style="display: none;">
+                      <div class="SelectMenu-modal rounded-3 mt-1" style="max-height: 340px;">
+                        <div class="SelectMenu-list SelectMenu-list--borderless p-2" style="overscroll-behavior: contain;" id="toc-list">
+                        </div>
+                      </div>
+                    </details-menu>
+                      2637 Words
+                    
+
+                  </div>
+                  <div class="file-actions flex-order-2 pt-0">
+                    
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      计算机科学
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E6%8E%A5%E5%93%A6%E9%A1%BE">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      计算机系统接哦顾
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AC%94%E8%AE%B0">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      笔记
+                    </a>
+                    
+                    
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="Box-body px-5 pb-5" style="z-index: 1">
+                <article class="markdown-body entry-content container-lg"><h1 id="第1章-计算机系统结构的基础知识">第1章 计算机系统结构的基础知识</h1>
+<h2 id="11-计算机系统结构的基本概念">1.1 计算机系统结构的基本概念</h2>
+<ul>
+<li>第一台通用电子计算机诞生于1946年</li>
+<li>计算机技术的飞速发展受益于两个方面
+<ul>
+<li>计算机制造技术的发展</li>
+<li>计算机系统结构的创新</li>
+</ul>
+</li>
+<li>经历了四个发展过程
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-03%2014.55.27.png" alt=""></li>
+<li>2002年以来发展缓慢的原因
+<ul>
+<li>大功耗问题</li>
+<li>可以进一步有效地开发的指令级并行性已经很少</li>
+<li>存储器访问速度的提高缓慢</li>
+</ul>
+</li>
+<li>系统结构的重大转折
+<ul>
+<li>从单纯依靠指令级并行转向开发线程并行和数据级并行</li>
+</ul>
+</li>
+</ul>
+<h3 id="111-计算机系统结构的层次结构">1.1.1 计算机系统结构的层次结构</h3>
+<ol>
+<li>计算机系统 = 硬件/固件 + 软件</li>
+<li>计算机语言从低级到高级发展
+<ul>
+<li>高一级语言的语句相对于低一级语言来说功能更强，更便于应用，但又都以低级语言为基础。</li>
+</ul>
+</li>
+<li>从计算机语言的角度，把计算机系统按功能划分成多级层次结构
+<ul>
+<li>每一层以一种语言为特征
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-03%2015.01.37.png" alt=""></li>
+<li>物理机：用硬件/固件实现的机器
+<ul>
+<li>最下面的两级机器</li>
+</ul>
+</li>
+<li>虚拟机：由软件实现的机器
+<ul>
+<li>虚拟机中有些操作可以由硬件或固件实现</li>
+<li>固件：具有软件功能的硬件</li>
+</ul>
+</li>
+<li>各机器级的实现主要靠翻译或解释，或两者的结合
+<ul>
+<li>翻译：先用转换程序把高一级机器上的程序转换为低一级机器上等效的程序，然后再在这低一级机器上运行，实现程序的功能。</li>
+<li>解释：对于高一级机器上的程序中的每一条语句或指令，都是转去执行低一级机器上的一段等效程序。执行完后，再去高一级机器取下一条语句或指令，再进行解释执行，如此反复，直到解释执行完整个程序。</li>
+<li>解释执行比编译后再执行所花的时间多，但占用的存储空间较少。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="112-计算机系统结构的定义">1.1.2 计算机系统结构的定义</h3>
+<ol>
+<li>计算机系统结构的经典定义
+<ul>
+<li>传统机器程序员所看到的计算机属性，即概念性结构与功能特性。</li>
+</ul>
+</li>
+<li>按照计算机系统的多级层次结构，不同级程序员所看到的计算机具有不同的属性。</li>
+<li>透明性
+<ul>
+<li>在计算机技术中，把这种本来存在的事物或属性，但从某种角度看又好像不存在的概念称为透明性。</li>
+</ul>
+</li>
+<li>广义的系统结构定义：指令系统结构、组成、硬件</li>
+<li>计算机系统结构的实质
+<ul>
+<li>确定计算机系统中软硬件的界面，界面之上是软件实现的功能，界面之下是硬件和固件实现的功能。</li>
+</ul>
+</li>
+</ol>
+<h3 id="113-计算机组成和计算机实现">1.1.3 计算机组成和计算机实现</h3>
+<ol>
+<li>计算机系统结构：计算机系统的软、硬件的界面
+<ul>
+<li>即机器语言程序员所看到的传统机器级所具有的属性。</li>
+</ul>
+</li>
+<li>计算机组成：计算机系统结构的逻辑实现
+<ul>
+<li>包含物理机器级中的数据流和控制流的组成以及逻辑设计等</li>
+<li>着眼于：物理机器级内各事件的排序方式与控制方式、各部件的功能以及各部件之间的联系。</li>
+</ul>
+</li>
+<li>计算机实现：计算机组成的物理实现
+<ul>
+<li>包括处理机、主存等部件的物理结构，器件的集成度和速度，模块、插件、底板的划分与连接，信号传输，电源、冷却及整机装配技术等。</li>
+<li>着眼于：器件技术（起主导作用）、微组装技术。</li>
+<li>具有相同系统结构的计算机可以采用不同的计算机组成。同一种计算机组成又可以采用多种不同的计算机实现。</li>
+<li>举例：乘法指令 、主存容量与编址方式</li>
+</ul>
+</li>
+<li>系列机
+<ul>
+<li>由同一厂家生产的具有相同系统结构、但具有不同组成和实现的一系列不同型号的机器。</li>
+<li>例如 IBM公司的IBM370系列，Intel公司的x86系列等。</li>
+</ul>
+</li>
+</ol>
+<h3 id="114-计算机系统结构的分类">1.1.4 计算机系统结构的分类</h3>
+<ol>
+<li>
+<p>Flynn分类法</p>
+<ul>
+<li>按照指令流和数据流的多倍性进行分类
+<ul>
+<li>指令流：计算机执行的指令序列</li>
+<li>数据流：由指令流调用的数据序列</li>
+<li>多倍性：在系统最受限的部件上，同时处于同一执行阶段的指令或数据的最大数目。</li>
+</ul>
+</li>
+<li>把计算机系统的结构分为4类
+<ul>
+<li>单指令流单数据流SISD</li>
+<li>单指令流多数据流SIMD</li>
+<li>多指令流单数据流MISD</li>
+<li>多指令流多数据流MIMD</li>
+</ul>
+</li>
+<li>4类计算机的基本结构
+<ul>
+<li>IS：指令流</li>
+<li>DS：数据流</li>
+<li>CS：控制流</li>
+<li>CU：控制部件</li>
+<li>PU：处理部件</li>
+<li>MM和SM：存储器
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-03%2016.07.41.png" alt=""></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>冯氏分类法</p>
+<ul>
+<li>用系统的最大并行度对计算机进行分类</li>
+<li>最大并行度：计算机系统在单位时间内能够处理的最大的二进制位数</li>
+<li>用平面直角坐标系中的一个点代表一个计算机系统，其横坐标表示字宽（n位），纵坐标表示一次能同时处理的字数（m字）。m×n就表示了其最大并行度
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-03%2016.08.42.png" alt=""></li>
+<li>4类不同最大并行度的计算机系统结构
+<ul>
+<li>字串位串：n＝1，m＝1  第一代计算机发展初期的纯串行计算机</li>
+<li>字串位并：n＞1，m＝1。这是传统的单处理机，同时处理单个字的多个位，如16位、32位等。</li>
+<li>字并位串：n＝1，m＞1。同时处理多个字的同一位（位片）。</li>
+<li>字并位并：n＞1，m＞1。同时处理多个字的多个位。</li>
+</ul>
+</li>
+<li>平均并行度
+<ul>
+<li>与最大并行度密切相关的一个指标</li>
+<li>取决于系统的运用程度，与应用程序有关</li>
+</ul>
+</li>
+<li>假设每个时钟周期内能同时处理的二进制位数为P<!-- raw HTML omitted -->i<!-- raw HTML omitted -->，则T个时钟周期内的平均并行度为
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-03%2016.13.12.png" alt=""></li>
+<li>系统在T个时钟周期内的平均利用率定义为
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-03%2016.14.02.png" alt=""></li>
+</ul>
+</li>
+<li>
+<p>Handler分类法</p>
+<ul>
+<li>根据并行度和流水线对计算机进行分类</li>
+<li>把计算机的硬件结构分成3个层次
+<ul>
+<li>程序控制部件（PCU）的个数k</li>
+<li>算术逻辑部件（ALU）或处理部件（PE）的个数d</li>
+<li>每个算术逻辑部件包含基本逻辑线路(ELC)的套数w</li>
+</ul>
+</li>
+<li>用公式表示
+<ul>
+<li>t（系统型号）＝（k，d，w）</li>
+</ul>
+</li>
+<li>进一步改进
+<ul>
+<li>t（系统型号）＝（k×k’，d×d’，w×w’）
+<ul>
+<li>k’：宏流水线中程序控制部件的个数</li>
+<li>d’：指令流水线中算术逻辑部件的个数</li>
+<li>w’：操作流水线中基本逻辑线路的套数</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="12-计算机系统的设计">1.2 计算机系统的设计</h2>
+<h3 id="121-计算机系统设计的定量原理">1.2.1 计算机系统设计的定量原理</h3>
+<ol>
+<li>以经常性事件为重点
+<ul>
+<li>对经常发生的情况采用优化方法的原则进行选择，以得到更多的总体上的改进</li>
+<li>优化是指分配更多的资源、达到更高的性能或者分配更多的电能等</li>
+</ul>
+</li>
+<li>Amdahl定律
+<ul>
+<li>加快某部件执行速度所能获得的系统性能加速比，受限于该部件的执行时间占系统中总执行时间的百分比。</li>
+<li>系统性能加速比：
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-03%2020.00.39.png" alt=""></li>
+<li>加速比依赖于两个因素
+<ul>
+<li>可改进比例（Fe）：在改进前的系统中，可改进部分的执行时间在总的执行时间中所占的比例。它总是小于等于1。</li>
+<li>部件加速比（Se）：可改进部分改进以后性能提高的倍数。它是改进前所需的执行时间与改进后执行时间的比。一般情况下部件加速比是大于1的。
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-03%2020.07.50.png" alt=""></li>
+<li>系统加速比Sn为改进前与改进后总执行时间之比
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-03%2020.08.35.png" alt=""></li>
+</ul>
+</li>
+<li>改进后程序的总执行时间Tn</li>
+<li>Amdahl定律：一种性能改进的递减规则
+<ul>
+<li>如果仅仅对计算任务中的一部分做性能改进，则改进的越多，所得到的总体性能提升就越有限</li>
+<li>重要推论：如果只针对整个任务的一部分进行改进和优化，那么所获得的加速比不超过：1/（1－可改进比例）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>CPU性能公式
+<ul>
+<li>执行一个程序所需的CPU时间
+<ul>
+<li>CPU时间 = 执行程序所需的时钟周期数×时钟周期时间</li>
+<li>其中：时钟周期时间是系统时钟频率的倒数。</li>
+</ul>
+</li>
+<li>每条指令执行的平均时钟周期数CPI
+<ul>
+<li>CPI = 执行指令所需时钟周期数/IC</li>
+<li>IC：所执行指令条数</li>
+</ul>
+</li>
+<li>程序执行的CPU时间可以写成
+<ul>
+<li>CPU时间 = IC ×CPI ×时钟周期时间</li>
+</ul>
+</li>
+<li>CPU的性能取决于三个参数
+<ul>
+<li>时钟周期时间：取决于硬件实现技术和计算机组成；</li>
+<li>CPI：取决于计算机组成和指令系统的结构；</li>
+<li>IC：取决于指令系统的结构和编译技术。</li>
+</ul>
+</li>
+<li>对CPU性能公式进行进一步细化
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-03%2020.17.22.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-03%2020.18.57.png" alt=""></li>
+</ul>
+</li>
+</ol>
+<h2 id="13-计算机系统的性能测评">1.3 计算机系统的性能测评</h2>
+<h2 id="14-计算机系统结构的发展">1.4 计算机系统结构的发展</h2>
+<h2 id="15-计算机系统结构中并行性的发展">1.5 计算机系统结构中并行性的发展</h2>
+</article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="application/javascript" src='https://y-m-m.github.io/js/toc.js'></script>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/toc.css' />
+
+  
+<div id="gitalk-container" class="gitalk-container"></div>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/gitalk.css'>
+<script src='https://y-m-m.github.io/js/gitalk.min.js'></script>
+<script>
+  const gitalk = new Gitalk({
+    clientID: 'Ov23livxKNtTlPeMjV2H',
+    clientSecret: '6d3bc9f47a1296f29628a63701ea5624cd28a26b',
+    repo: 'y-m-m.github.io',
+    owner: 'Y-M-M',
+    admin: ['Y-M-M'],
+    id: eval("location.pathname"), 
+    distractionFreeMode: false 
+  });
+  (function() {
+    gitalk.render('gitalk-container');
+  })();
+</script>
+
+</div>
+
+  <div class="footer container-xl width-full p-responsive">
+  <div
+    class="position-relative d-flex flex-row-reverse flex-lg-row flex-wrap flex-lg-nowrap flex-justify-center flex-lg-justify-between flex-sm-items-center pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
+    <a aria-label="Homepage" title="GitHub" class="footer-octicon d-none d-lg-block mr-lg-4" href="https://y-m-m.github.io/">
+      <svg height="24" class="octicon octicon-mark-github" viewBox="0 0 16 16" version="1.1" width="24">
+        <path fill-rule="evenodd"
+          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+        </path>
+      </svg>
+    </a>
+    <ul class="list-style-none d-flex flex-wrap col-12 flex-justify-center flex-lg-justify-between mb-2 mb-lg-0">
+      
+      <li class="mr-3 mr-lg-0">Theme by <a href='https://github.com/MeiK2333/github-style'>github-style</a></li>
+      
+    </ul>
+  </div>
+  <div class="d-flex flex-justify-center pb-6">
+    <span class="f6 text-gray-light"></span>
+  </div>
+
+
+</div>
+</body>
+
+<script type="application/javascript" src="https://y-m-m.github.io/js/github-style.js"></script>
+
+
+
+<script type="text/javascript" async
+  src="https://cdn.bootcss.com/mathjax/2.7.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\[\[', '\]\]']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        TeX: {
+          equationNumbers: { autoNumber: "AMS" },
+          extensions: ["AMSmath.js", "AMSsymbols.js"]
+        }
+      }
+    });
+
+    MathJax.Hub.Queue(function () {
+      
+      
+      
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+
+<style>
+  code.has-jax {
+    font: inherit;
+    font-size: 100%;
+    background: inherit;
+    border: inherit;
+    color: #515151;
+  }
+</style>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+<script type="application/javascript" src='https://y-m-m.github.io/js/search.js'></script>
+
+
+
+</html>

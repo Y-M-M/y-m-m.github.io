@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script type="application/javascript" src='https://y-m-m.github.io/js/theme-mode.js'></script>
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/frameworks.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github-style.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/light.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/dark.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/syntax.css' />
+    <title>MME-Survey: A Comprehensive Survey on Evaluation of Multimodal LLMs - 陈皮的博客</title>
+    
+    <link rel="icon" type="image/x-icon" href='/images/github-mark.png'>
+    
+    <meta name="theme-color" content="#1e2327">
+
+    
+    <meta name="description"
+  content="Abstract 根据评估能力划分的汇总基准类型 基础能力 模型自分析 扩展应用 基准建设的典型流程 数据收集 数据标注 注意事项 由判断、度量和工具组成的系统评价方式 对下一个benchmark的展望 1 Introduction 对MLLM evaluation进行全面而系统的综述 评估了哪些能力？ 分层分类 在top level，benchmarks可以被分类为 evaluations of foundational capabilities Model behavior extended applications 如何构建benchmark? benchmark构建的方法 样本的收集 QA pairs的描述 评估模型时需要特别注意的问题 数据污染 基准多样性 样本量 如何衡量performance? 三种代表性的方法 基于人的评价 基于LLM/MLLM的评价 基于脚本的评价 两种主要评价指标以及四种评价工具包 New benchmark的方向在哪里？ 以能力为导向的评价 以任务为导向的评价 融入更多的模态 2 Background 简单的讨论了MLLMs的关键，包括architecture和训练 2.1 Architecture of MLLM 典型的MLLM包括三个模块，a modality encoder, a LLM and a connector between them MLLM的核心是统一的自回归建模 2.2 Training of MLLM " />
+<meta name="keywords"
+  content='blog, google analytics' />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://y-m-m.github.io/post/mllms%E7%BB%BC%E8%BF%B0evaluation/" />
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="MME-Survey: A Comprehensive Survey on Evaluation of Multimodal LLMs - 陈皮的博客" />
+<meta name="twitter:description"
+  content="Abstract 根据评估能力划分的汇总基准类型 基础能力 模型自分析 扩展应用 基准建设的典型流程 数据收集 数据标注 注意事项 由判断、度量和工具组成的系统评价方式 对下一个benchmark的展望 1 Introduction 对MLLM evaluation进行全面而系统的综述 评估了哪些能力？ 分层分类 在top level，benchmarks可以被分类为 evaluations of foundational capabilities Model behavior extended applications 如何构建benchmark? benchmark构建的方法 样本的收集 QA pairs的描述 评估模型时需要特别注意的问题 数据污染 基准多样性 样本量 如何衡量performance? 三种代表性的方法 基于人的评价 基于LLM/MLLM的评价 基于脚本的评价 两种主要评价指标以及四种评价工具包 New benchmark的方向在哪里？ 以能力为导向的评价 以任务为导向的评价 融入更多的模态 2 Background 简单的讨论了MLLMs的关键，包括architecture和训练 2.1 Architecture of MLLM 典型的MLLM包括三个模块，a modality encoder, a LLM and a connector between them MLLM的核心是统一的自回归建模 2.2 Training of MLLM " />
+<meta name="twitter:site" content="https://y-m-m.github.io/" />
+<meta name="twitter:creator" content="陈皮" />
+<meta name="twitter:image"
+  content="https://y-m-m.github.io/">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="MME-Survey: A Comprehensive Survey on Evaluation of Multimodal LLMs - 陈皮的博客">
+<meta property="og:description"
+  content="Abstract 根据评估能力划分的汇总基准类型 基础能力 模型自分析 扩展应用 基准建设的典型流程 数据收集 数据标注 注意事项 由判断、度量和工具组成的系统评价方式 对下一个benchmark的展望 1 Introduction 对MLLM evaluation进行全面而系统的综述 评估了哪些能力？ 分层分类 在top level，benchmarks可以被分类为 evaluations of foundational capabilities Model behavior extended applications 如何构建benchmark? benchmark构建的方法 样本的收集 QA pairs的描述 评估模型时需要特别注意的问题 数据污染 基准多样性 样本量 如何衡量performance? 三种代表性的方法 基于人的评价 基于LLM/MLLM的评价 基于脚本的评价 两种主要评价指标以及四种评价工具包 New benchmark的方向在哪里？ 以能力为导向的评价 以任务为导向的评价 融入更多的模态 2 Background 简单的讨论了MLLMs的关键，包括architecture和训练 2.1 Architecture of MLLM 典型的MLLM包括三个模块，a modality encoder, a LLM and a connector between them MLLM的核心是统一的自回归建模 2.2 Training of MLLM " />
+<meta property="og:url" content="https://y-m-m.github.io/post/mllms%E7%BB%BC%E8%BF%B0evaluation/" />
+<meta property="og:site_name" content="MME-Survey: A Comprehensive Survey on Evaluation of Multimodal LLMs" />
+<meta property="og:image"
+  content="https://y-m-m.github.io/">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+<meta property="article:published_time" content="2025-03-05 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+  <div style="position: relative">
+  <header class="Header js-details-container Details px-3 px-md-4 px-lg-5 flex-wrap flex-md-nowrap open Details--on">
+    <div class="Header-item mobile-none" style="margin-top: -4px; margin-bottom: -4px;">
+      <a class="Header-link" href="https://y-m-m.github.io/">
+        <img class="octicon" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item d-md-none">
+      <button class="Header-link btn-link js-details-target" type="button"
+        onclick="document.querySelector('#header-search').style.display = document.querySelector('#header-search').style.display == 'none'? 'block': 'none'">
+        <svg height="24" class="octicon octicon-three-bars" viewBox="0 0 16 16" version="1.1" width="24">
+          <path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 2.75zm0 5A.75.75 0 011.75 7h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 7.75zM1.75 12a.75.75 0 100 1.5h12.5a.75.75 0 100-1.5H1.75z">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <div style="display: none;" id="header-search"
+      class="Header-item Header-item--full flex-column flex-md-row width-full flex-order-2 flex-md-order-none mr-0 mr-md-3 mt-3 mt-md-0 Details-content--hidden-not-important d-md-flex">
+      <div
+        class="Header-search header-search flex-auto js-site-search position-relative flex-self-stretch flex-md-self-auto mb-3 mb-md-0 mr-0 mr-md-3 scoped-search site-scoped-search js-jump-to">
+        <div class="position-relative">
+          
+          <form target="_blank" id="search-form" action="" accept-charset="UTF-8" method="get"
+            autocomplete="off">
+            <label
+              class="Header-search-label form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative d-flex flex-justify-between flex-items-center">
+              <input type="text"
+                class="Header-search-input form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable"
+                name="q" value="" placeholder="Search" autocomplete="off">
+            </label>
+          </form>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="Header-item Header-item--full flex-justify-center d-md-none position-relative">
+      <a class="Header-link " href="https://y-m-m.github.io/">
+        <img class="octicon octicon-mark-github v-align-middle" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item" style="margin-right: 0;">
+      <a href="javascript:void(0)" class="Header-link no-select" onclick="switchTheme()">
+        <svg style="fill: var(--color-profile-color-modes-toggle-moon);" class="no-select" viewBox="0 0 16 16"
+          version="1.1" width="16" height="16">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M4.52208 7.71754C7.5782 7.71754 10.0557 5.24006 10.0557 2.18394C10.0557 1.93498 10.0392 1.68986 10.0074 1.44961C9.95801 1.07727 10.3495 0.771159 10.6474 0.99992C12.1153 2.12716 13.0615 3.89999 13.0615 5.89383C13.0615 9.29958 10.3006 12.0605 6.89485 12.0605C3.95334 12.0605 1.49286 10.001 0.876728 7.24527C0.794841 6.87902 1.23668 6.65289 1.55321 6.85451C2.41106 7.40095 3.4296 7.71754 4.52208 7.71754Z">
+          </path>
+        </svg>
+      </a>
+    </div>
+  </header>
+</div>
+
+  <div id="search-result" class="container-lg px-3 new-discussion-timeline" style="display: none;">
+</div>
+
+  
+<div class="application-main">
+  <div>
+  <main>
+    <div class="gisthead pagehead bg-gray-light pb-0 pt-3 mb-4">
+      <div class="px-0">
+        <div class="mb-3 d-flex px-3 px-md-3 px-lg-5">
+          <div class="flex-auto min-width-0 width-fit mr-3">
+            <div class="d-flex">
+              <div class="d-none d-md-block">
+                <a class="avatar mr-2 flex-shrink-0" href="https://y-m-m.github.io/">
+                  <img class=" avatar-user"
+                    src="/images/me.png"
+                    width="32" height="32"></a>
+              </div>
+              <div class="d-flex flex-column">
+                <h1 class="break-word f3 text-normal mb-md-0 mb-1">
+                  <span class="author">
+                    <a href="https://y-m-m.github.io/">陈皮</a>
+                  </span>
+                  <span class="path-divider">/</span>
+                  <strong class="css-truncate css-truncate-target mr-1" style="max-width: 410px">
+                    <a href="https://y-m-m.github.io/post/mllms%E7%BB%BC%E8%BF%B0evaluation/">MME-Survey: A Comprehensive Survey on Evaluation of Multimodal LLMs</a>
+                  </strong>
+                </h1>
+                <div class="note m-0">
+                  Created <relative-time datetime="Wed, 05 Mar 2025 00:00:00 &#43;0000"
+                    class="no-wrap">
+                    Wed, 05 Mar 2025 00:00:00 &#43;0000</relative-time>
+
+                  
+                  <span class="file-info-divider"></span>
+                  Modified <relative-time datetime="Wed, 05 Mar 2025 14:41:32 &#43;0800"
+                    class="no-wrap">
+                    Wed, 05 Mar 2025 14:41:32 &#43;0800</relative-time>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-lg px-3 new-discussion-timeline">
+      <div class="repository-content gist-content">
+        <div>
+          <div class="js-gist-file-update-container js-task-list-container file-box">
+            <div id="file-pytest" class="file my-2">
+              <div id="post-header" class="file-header d-flex flex-md-items-center flex-items-start sticky-header" style="z-index: 2">
+                <div class="file-info d-flex flex-md-items-center flex-items-start flex-order-1 flex-auto">
+                  <div class="text-mono f6 flex-auto pr-3 flex-order-2 flex-md-order-1 mt-2 mt-md-0">
+                    
+                    <summary id="toc-toggle" onclick="clickToc()" class="btn btn-octicon m-0 mr-2 p-2">
+                      <svg aria-hidden="true" viewBox="0 0 16 16" height="16" width="16" class="octicon octicon-list-unordered">
+                        <path fill-rule="evenodd" d="M2 4a1 1 0 100-2 1 1 0 000 2zm3.75-1.5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zM3 8a1 1 0 11-2 0 1 1 0 012 0zm-1 6a1 1 0 100-2 1 1 0 000 2z"></path>
+                      </svg>
+                    </summary>
+                    <details-menu class="SelectMenu" id="toc-details" style="display: none;">
+                      <div class="SelectMenu-modal rounded-3 mt-1" style="max-height: 340px;">
+                        <div class="SelectMenu-list SelectMenu-list--borderless p-2" style="overscroll-behavior: contain;" id="toc-list">
+                        </div>
+                      </div>
+                    </details-menu>
+                      5617 Words
+                    
+
+                  </div>
+                  <div class="file-actions flex-order-2 pt-0">
+                    
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      计算机科学
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      论文阅读
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AC%94%E8%AE%B0">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      笔记
+                    </a>
+                    
+                    
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="Box-body px-5 pb-5" style="z-index: 1">
+                <article class="markdown-body entry-content container-lg"><h1 id="abstract">Abstract</h1>
+<ol>
+<li>根据评估能力划分的汇总基准类型</li>
+<li>基础能力</li>
+<li>模型自分析</li>
+<li>扩展应用</li>
+<li>基准建设的典型流程</li>
+<li>数据收集</li>
+<li>数据标注</li>
+<li>注意事项</li>
+<li>由判断、度量和工具组成的系统评价方式</li>
+<li>对下一个benchmark的展望</li>
+</ol>
+<h1 id="1-introduction">1 Introduction</h1>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.27.43.png" alt=""></p>
+<ul>
+<li>对MLLM evaluation进行全面而系统的综述
+<ul>
+<li>评估了哪些能力？
+<ul>
+<li>分层分类</li>
+<li>在top level，benchmarks可以被分类为
+<ul>
+<li>evaluations of foundational capabilities</li>
+<li>Model behavior</li>
+<li>extended applications</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>如何构建benchmark?
+<ul>
+<li>benchmark构建的方法
+<ul>
+<li>样本的收集</li>
+<li>QA pairs的描述</li>
+</ul>
+</li>
+<li>评估模型时需要特别注意的问题
+<ul>
+<li>数据污染</li>
+<li>基准多样性</li>
+<li>样本量</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>如何衡量performance?
+<ul>
+<li>三种代表性的方法
+<ul>
+<li>基于人的评价</li>
+<li>基于LLM/MLLM的评价</li>
+<li>基于脚本的评价</li>
+</ul>
+</li>
+<li>两种主要评价指标以及四种评价工具包</li>
+</ul>
+</li>
+<li>New benchmark的方向在哪里？
+<ul>
+<li>以能力为导向的评价</li>
+<li>以任务为导向的评价</li>
+<li>融入更多的模态</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="2-background">2 Background</h1>
+<ul>
+<li>简单的讨论了MLLMs的关键，包括architecture和训练</li>
+</ul>
+<h2 id="21-architecture-of-mllm">2.1 Architecture of MLLM</h2>
+<ul>
+<li>典型的MLLM包括三个模块，a modality encoder, a LLM and a connector between them
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.28.41.png" alt=""></li>
+<li>MLLM的核心是统一的自回归建模
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.29.11.png" alt=""></li>
+</ul>
+<h2 id="22-training-of-mllm">2.2 Training of MLLM</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.29.46.png" alt=""></p>
+<h3 id="pre-training">pre-training</h3>
+<ul>
+<li>对齐不同的模态，将多模态世界知识注入到模型中</li>
+<li>涉及large-scale based paired data，如image caption data</li>
+</ul>
+<h3 id="instruction-tuning">Instruction tuning</h3>
+<ul>
+<li>目的是教导MLLMs用户的指令，完成所需的任务</li>
+<li>通过这种方式进行调优，MLLMs可以泛化到新指令定义的新任务中，提升零样本性能</li>
+<li>指令数据可以从the adaptation of existing multi-task datasets中获得，如QA，或self-instruction，数据由GPT-4o等先进的MLLMs合成</li>
+</ul>
+<h3 id="alignment-tuning">alignment tuning</h3>
+<ul>
+<li>帮助MLLMs与特定的人类偏好对齐，产生幻觉较少的响应</li>
+<li>用于本阶段的数据包含 说明哪种response更好的注释
+<ul>
+<li>这种反应偏好来自人类或人工智能</li>
+<li>学习目标鼓励与被偏爱者相似的反应，同时惩罚不利的反应</li>
+</ul>
+</li>
+</ul>
+<h1 id="3-benchmark--categories">3 Benchmark  categories</h1>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.38.44.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.39.08.png" alt=""></p>
+<h2 id="31-foundational-capability">3.1 Foundational Capability</h2>
+<h3 id="311-comprehensive-evaluation">3.1.1 Comprehensive Evaluation</h3>
+<ul>
+<li>传统基准
+<ul>
+<li>VQA v2是一个早期的benchmark，包括453K人工标注的QA用于模型评估</li>
+<li>VizWiz和VQA v2几乎同时出现，包含了来源于视障个体日常生活场景的8k个问答对，有效的捕获了残障用户的真实世界需求</li>
+</ul>
+</li>
+<li>将传统基准汇集起来进行综合评价
+<ul>
+<li>LVLM-eHub编制了广泛的公共数据集</li>
+<li>虽然MLLM在常识性任务上超越了SOTA，但在图像分类、OCR和VQA等任务上显著落后于领先的监督模型</li>
+<li>MLLMs在大规模计数问题上表现不佳，仅能进行粗略估计，且难以应对细粒度的属性区分</li>
+<li>尽管MLLMs具有物体定位能力，但准确预测边界框仍然具有挑战性，这可以通过进一步的微调来有效缓解</li>
+</ul>
+</li>
+<li>专门针对MLLMs的特点设计评估数据集
+<ul>
+<li>MME建立了一个包含14个感知和认知任务的综合基准，其中认知任务由常识推理、数值计算、文本翻译和代码推理组成</li>
+<li>MMBench提出了20个不同的能力维度，包括object reasoning和social reasoning</li>
+<li>Seed-Bench与MME和MMBench有相似之处，包含了大量的选择题</li>
+<li>Seed-Bench2将QA pairs从19K进一步扩展到24K，涵盖了27个评价维度</li>
+<li>MMT-Bench对数据集进行了进一步的扩展，纳入了31K来自不同场景的QA对</li>
+</ul>
+</li>
+<li>真实世界的使用场景
+<ul>
+<li>RealWordQA评估源于真实场景的基本空间理解能力</li>
+<li>BLINK识别了诸如相对深度估计，视觉对应，取证检测和多视觉推理等任务</li>
+<li>VV-Bench和VisIT-Bench强调了在实际应用中评估人类偏好和指令跟踪能力的重要性</li>
+<li>MME-RealWord比其前身更加强调质量和难度，包含了最大的人工标注的QA对和最大的图像分辨率</li>
+</ul>
+</li>
+<li>细粒度感知任务对于模型来说具有挑战性，相比之下，artistic style recogintion和relative epth perception方面模型表现较好</li>
+<li>为了便于结果的量化，许多研究将评估简化为二选一或多选一问题，但这忽略了关键的推理过程，这对理解模型的能力非常关键</li>
+<li>一些工作直接使用开放生成的结果，并使用基于LLM的评价者来评估性能，这也面临着LLM评分不准确的问题
+<ul>
+<li>MMVet引入了多样化的问题格式，要求模型集成各种核心视觉能力来提供解决方案</li>
+<li>TouchStone强调真实世界的对话能力，认为只评价多项选择题不足以反映多模态的对话能力</li>
+<li>InfiMM-Eval采用了一种综合的方法，在不同任务中对演绎推理、溯因推理和类比推理的模型进行评估；它评估了中间推理步骤，使评估与数学问题解决等实际场景相一致</li>
+<li>这些benchmarks揭示了MLLMs在处理复杂任务时的能力和挑战</li>
+<li>闭源模型在这些领域中表现优异，但通常难以理解复杂的局部化，结构关系，图标和可视化教学</li>
+<li>高分辨率数据特别有助于模型识别小物体、密集文本和细粒度细节</li>
+<li>虽然CoT(多模态思维链)显著提高了封闭源模型的开源能力，但对开源模型的影响仍然有限</li>
+</ul>
+</li>
+<li>MMStar指出，许多现有的benchmarks允许模型仅仅使用文本输入来解决问题，这可能会误导对真实多模态性能的评估
+<ul>
+<li>收集了1.5K 与可视化信息相关的QA pairs</li>
+<li>引入度量标准来评估数据泄露和真正的多模态能力</li>
+</ul>
+</li>
+<li>C-V bench认识到以视觉为中心的benchmarks的稀缺性
+<ul>
+<li>收集了2.6K样本来评估2D和3D视觉理解</li>
+</ul>
+</li>
+</ul>
+<h3 id="312-optical-character-recognition-ocr">3.1.2 Optical Character Recognition (OCR)</h3>
+<ul>
+<li>目前的多模态benchmarks越来越关注于OCR任务中的模型性能，benchmarks从单一场景进化到复杂的多场景
+<ul>
+<li>TextVQA和OCR-VQA专注于标准的文本识别任务</li>
+<li>InfoVQA和WebSRC引入更复杂的结构推理任务</li>
+<li>SEED-Bench-2-Plus和OCRBench进一步扩大了任务的范围，包括各种数据类型，证明了模型在识别regular text, irregular text, occluded text 和 artistic text方面可以与最先进的监督模型相匹配</li>
+</ul>
+</li>
+<li>VCR
+<ul>
+<li>VCR解决了OCR的变体</li>
+<li>文本嵌入在图像中并被部分遮挡，需要模型从图像中恢复文本的具体内容</li>
+</ul>
+</li>
+<li>许多MLLMs在细粒度OCR能力，手写体，非语义文本和多语言识别等方面仍然面临挑战
+<ul>
+<li>像GPT-4V这样的MLLMs在一些测评中表现出优异的性能，但仍然落后于专门在OCR任务上训练的模型</li>
+</ul>
+</li>
+<li>不同数据类型对模型性能的影响存在显著差异
+<ul>
+<li>与简单的图表相比，知识图谱和地图提出了更多的挑战</li>
+<li>针对特定的数据类型优化模型，引入专业的OCR组件可以带来实质性的提升</li>
+</ul>
+</li>
+</ul>
+<h3 id="313-chart-and-documentation">3.1.3 Chart and Documentation</h3>
+<ul>
+<li>ChartQA侧重于使用图表进行VQA，如条形图，线形图，饼图等
+<ul>
+<li>这些问题从需要简单数据检索的问题到需要数据推理和数学推理的更复杂的组合问题</li>
+</ul>
+</li>
+<li>DocVQA是针对从行业文档中抓取的文档图像进行VQA来构建的
+<ul>
+<li>问题一般集中在较为简单的信息提取任务上</li>
+</ul>
+</li>
+<li>InfoVQA的中心是理解信息表图像，这是一种旨在紧凑地传递信息的数据类型
+<ul>
+<li>信息图表的布局和结构比传统图表进行多样化</li>
+<li>问题一般需要基准的推理和判断能力</li>
+</ul>
+</li>
+<li>最近的基准转向对更复杂的图表和文档的理解
+<ul>
+<li>DocGenome 专注于科学论文的分析，信息提取-&gt;布局检测-&gt;矢量化分析-&gt;代码生成</li>
+<li>CharXiv以科学论文中的挑战性图表为中心</li>
+<li>MMLongBench-Doc专注于一般的长文本理解</li>
+</ul>
+</li>
+<li>在传统的benchmarks(如ChartQA, DocVQA, and InfoVQA等)上，开源模型与专有模型的差距正在减小，但在更具有挑战性的benchmarks上(如CharXiv and MMLongBench-Doc)差距仍然很大</li>
+<li>目前的MLLMs仍然struggle with推理问题和长上下文文档理解</li>
+</ul>
+<h3 id="314-mathematical-reasoning">3.1.4 Mathematical Reasoning</h3>
+<ul>
+<li>MathVista，早期尝试，整理了现有数据集以及新创建的数据集样本</li>
+<li>We-Math将问题分解为基于知识概念的子问题，在基本知识概念对MLLMs进行评价</li>
+<li>MathVerse 将每个问题转化为6个不同的版本，每个问题包含不同比例的视觉和文本内容</li>
+<li>一些关键的问题还未解决
+<ul>
+<li>目前，大多数MLLMs难以理解复杂的可视化图表，严重依赖于文本问题</li>
+<li>大多数MLLMs倾向于通过死记硬背来解决复合问题，而不具备正确回答子问题的能力</li>
+</ul>
+</li>
+</ul>
+<h3 id="315-multidisciplinary-多学科的">3.1.5 Multidisciplinary (多学科的)</h3>
+<ul>
+<li>ScienceQA是一个scientific questions的benchmark，提供了对lectures和explanations的注释，便于思维链的评估，这个benchmark涵盖了不同领域的不同级别的知识</li>
+<li>MMMU是一个更具有挑战性的benchmark，涵盖了广泛的学科和学院级别的问题，包括工程、艺术和设计、商业、科学、人文和社会科学以及医学
+<ul>
+<li>The format of questions由单一的图文发展为文字和图像交错</li>
+</ul>
+</li>
+<li>CMMU和CMMMU是中文环境下特定领域的benchmarks</li>
+<li>对这些工作的综合评估表明，即便是先进的模型也只能达到低于60%的准确率，这表明AGI还有很大的提升空间</li>
+</ul>
+<h3 id="316-multilingual多语种">3.1.6 Multilingual(多语种)</h3>
+<ul>
+<li>CMMMU, MMMU 中文</li>
+<li>ViOCRVQA, Urdu-VQA和Swahili-STR 其他语言的OCR和VQA能力</li>
+<li>Video-MME包含世界主要语言的多语言评价范畴</li>
+<li>MTVQA和M3Exam开发了跨9种不同语言的multilingual benchmarks</li>
+<li>专有模型和开源模型在使用拉丁字母的印欧语系语言中表现更好，如德语、法语、意大利语，这可能归因于它们与英语在视觉和语言上的相似性</li>
+</ul>
+<h3 id="317-instruction-following">3.1.7 Instruction Following</h3>
+<ul>
+<li>遵从用户指令并执行指定任务的能力</li>
+<li>MIA-Bench：MLLMs在跟随复杂指令上表现得有多好</li>
+</ul>
+<h3 id="318-multi-round-qa">3.1.8 Multi-Round QA</h3>
+<ul>
+<li>现在的MLLMs一般被开发为多轮聊天机器人，而大多数benchmarks仍然停留在单轮QA阶段</li>
+<li>ConvBench开发了一种渐进式的评估方案，每一轮都聚焦于特定的能力，即感知、推理和创造</li>
+<li>Evaluation
+<ul>
+<li>单轮水平</li>
+<li>整体会话水平</li>
+</ul>
+</li>
+<li>评估表明，MLLMs中的中的细粒度感知不足会导致推理和创建失败</li>
+<li>MMDU进行多轮和多图像对话，其中一个会话样本最多可以包含20张图像和27个轮次</li>
+<li>分析指出，开源模型与闭源模型之间的差距可能归因于有限的会话指令调优数据</li>
+</ul>
+<h3 id="319-multi-image-understanding">3.1.9 Multi-Image Understanding</h3>
+<ul>
+<li>NLVR2
+<ul>
+<li>每个样本包含一对相似的图像和一个自然语言描述</li>
+<li>任务：决定caption相对于图像对是否为真</li>
+</ul>
+</li>
+<li>SparklesEval
+<ul>
+<li>挑战了模型在多张图片和多个会话轮中的会话熟练度</li>
+<li>每一个实例共包含两轮对话和四张图片</li>
+</ul>
+</li>
+<li>MMDU
+<ul>
+<li>多图像和多轮benchmark</li>
+<li>一个样本中有最多20 images和27 turns</li>
+</ul>
+</li>
+<li>Mementos
+<ul>
+<li>用于评估被设计用于评估MLLMs理解序列图像的评估</li>
+</ul>
+</li>
+<li>MIRB
+<ul>
+<li>通过对来自多个图片的聚合和推理来获得回答能力</li>
+</ul>
+</li>
+<li>ReMI
+<ul>
+<li>13 具有多种输入形式和图像间的关系 tasks</li>
+</ul>
+</li>
+<li>MuirBench
+<ul>
+<li>设计12个多图像理解任务</li>
+</ul>
+</li>
+<li>尽管开源模型在单图像benchmarks上的表现接近于闭源的先进模型，如GPT-4V，在多图片推理上还有很大差距</li>
+</ul>
+<h3 id="3110-interleaved-images-and-text">3.1.10 Interleaved Images and Text</h3>
+<ul>
+<li>MMMU：问题的格式是文本和图像交织</li>
+<li>SparklesEval：采用类似的格式和两轮提示的方式</li>
+<li>VEGA：专门针对图文交错理解而设计的，要求模型能够从多余的图像和文本中辨别出有用的图像和文本，并得出正确的答案</li>
+<li>高级专有MLLMs，如GPT-4V和Gemini 1.5 pro ，仅能达到不太大的性能，这表明interleaved images and text处理有很大的改进空间</li>
+</ul>
+<h3 id="3111-high-resolution">3.1.11 High Resolution</h3>
+<ul>
+<li>V*Bench
+<ul>
+<li>旨在评估处理高分辨率的图像和关注正确视觉细节方面的性能</li>
+<li>包含191幅高分辨率的图像，平均分辨率为2246*1582</li>
+<li>两个子任务
+<ul>
+<li>属性识别任务旨在识别物体的颜色或材质等问题</li>
+<li>空间关系推理任务需要模型确定两个对象之间的空间关系</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>MME-RealWorld有13366张图像，平均分辨率为2000*1500，包括现实世界的视频监督、自动驾驶、遥感、图表和野外OCR等现实任务</li>
+<li>即使是最先进的MLLM也没有达到60%以上的准确率，这表明了这些场景的困难性</li>
+</ul>
+<h3 id="3112-visual-grounding">3.1.12 Visual Grounding</h3>
+<ul>
+<li>Visual grounding是一种经典的计算机视觉任务，旨在定位自然语言query所指定的最相关的对象/区域</li>
+<li>query通常是简短的表达(&ldquo;woman in red&rdquo;)</li>
+<li>Ref-L4 benchmark
+<ul>
+<li>与之前的benchmark相比，特点是覆盖面更广、注释更多，由大量词汇组成的referring expressions更长</li>
+</ul>
+</li>
+<li>SOTA开源模型的平均准确率约为66%，仍有很大提升空间</li>
+<li>目前的MLLMs对实例的规模很敏感，通常在小规模的目标上表现更差</li>
+</ul>
+<h3 id="3113-fine-grained-perception">3.1.13 Fine-Grained Perception</h3>
+<ul>
+<li>细粒度感知</li>
+<li>FOCI以ImageNet-21k的四个领域子集作为基准，再额外收集5个流行的分类数据集作为补充</li>
+<li>MMVP设计了9种不同的模式，基于CLIP-based的模型往往表现不佳</li>
+<li>开源模型和闭源模型都对视觉细节表现不佳，其中只有Gemini和GPT-4V取得了比随机猜测更好的性能</li>
+<li>LLVisionQA评估了感知和辨别低级属性的能力，例如模糊和亮度</li>
+<li>结果表明，在没有对低层视觉属性进行显式训练的情况下，大多数开源模型能够达到50%以上的准确率，显著优于随机猜测</li>
+<li>开源模型仍然落后于闭源的GPT-4V或人类，GPT-4V达到了与junior-level人类相当的性能</li>
+</ul>
+<h3 id="3114-video-understanding">3.1.14 Video Understanding</h3>
+<ul>
+<li>传统的video-QA benchmarks通常是特定领域和特定任务的
+<ul>
+<li>MSVD-QA主要涵盖了动作和物体的识别，答案非常简短</li>
+<li>ActivityNet-QA主要包括了一般的人类活动</li>
+</ul>
+</li>
+<li>Video-MME
+<ul>
+<li>具有多种多样的视频域(6个域，30个子域)和长度(11s至1h)</li>
+<li>使用的模态包括视频帧、字幕和音频；对视频进行人工采集</li>
+</ul>
+</li>
+<li>MVBench
+<ul>
+<li>定义了一个时态任务池</li>
+<li>利用ChatGPT自动重新标注现有的视频数据集(拥有原始标注)</li>
+</ul>
+</li>
+<li>MLVU, LVBench, Event-Bench, VNBench, 以及Video-MME主要关注于长视频的理解，这对模型理解长多模态语境的能力提出挑战
+<ul>
+<li>MLVU具有多样化的视频内容、视频时长和评估任务</li>
+<li>LVBench选取市场超过30min的视频，定义了长视频理解的6个核心能力</li>
+<li>Event-Bench关注事件理解能力，包括原子事件、复合事件和整体理解3个层次</li>
+<li>VN-Bench设计了一个video-needle-in-a-haystack framework，在视频中插入不相关的图像和文本，对检索、排序、计数等任务进行评估</li>
+</ul>
+</li>
+<li>EgoSchema
+<ul>
+<li>涵盖了自我中心视频的QA samples</li>
+</ul>
+</li>
+<li>TempCompass
+<ul>
+<li>包含了对细粒度时间感知能力的评估</li>
+<li>如视频的播放速度，相机或物体的方向以及物体属性的变化等</li>
+</ul>
+</li>
+<li>当前的MLLMs，在处理较长的视频的时候都会出现性能下降的问题，这表明上下文长度可能是一个需要考虑的关键因素</li>
+</ul>
+<h2 id="32-model-self-analysis">3.2 Model Self-Analysis</h2>
+<h3 id="321-hallucination">3.2.1 Hallucination</h3>
+<ul>
+<li>POPE设计简单的discriminative tasks，通过简单地提示物体是否在图像里来测量object hallucination</li>
+<li>M-HalDetect评估generative performace</li>
+<li>AMBER包括descrimative and generative tasks, 覆盖了existence, attribute 和 relation hallucinations</li>
+</ul>
+</article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="application/javascript" src='https://y-m-m.github.io/js/toc.js'></script>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/toc.css' />
+
+  
+<div id="gitalk-container" class="gitalk-container"></div>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/gitalk.css'>
+<script src='https://y-m-m.github.io/js/gitalk.min.js'></script>
+<script>
+  const gitalk = new Gitalk({
+    clientID: 'Ov23livxKNtTlPeMjV2H',
+    clientSecret: '6d3bc9f47a1296f29628a63701ea5624cd28a26b',
+    repo: 'y-m-m.github.io',
+    owner: 'Y-M-M',
+    admin: ['Y-M-M'],
+    id: eval("location.pathname"), 
+    distractionFreeMode: false 
+  });
+  (function() {
+    gitalk.render('gitalk-container');
+  })();
+</script>
+
+</div>
+
+  <div class="footer container-xl width-full p-responsive">
+  <div
+    class="position-relative d-flex flex-row-reverse flex-lg-row flex-wrap flex-lg-nowrap flex-justify-center flex-lg-justify-between flex-sm-items-center pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
+    <a aria-label="Homepage" title="GitHub" class="footer-octicon d-none d-lg-block mr-lg-4" href="https://y-m-m.github.io/">
+      <svg height="24" class="octicon octicon-mark-github" viewBox="0 0 16 16" version="1.1" width="24">
+        <path fill-rule="evenodd"
+          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+        </path>
+      </svg>
+    </a>
+    <ul class="list-style-none d-flex flex-wrap col-12 flex-justify-center flex-lg-justify-between mb-2 mb-lg-0">
+      
+      <li class="mr-3 mr-lg-0">Theme by <a href='https://github.com/MeiK2333/github-style'>github-style</a></li>
+      
+    </ul>
+  </div>
+  <div class="d-flex flex-justify-center pb-6">
+    <span class="f6 text-gray-light"></span>
+  </div>
+
+
+</div>
+</body>
+
+<script type="application/javascript" src="https://y-m-m.github.io/js/github-style.js"></script>
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+<script type="application/javascript" src='https://y-m-m.github.io/js/search.js'></script>
+
+
+
+</html>

@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script type="application/javascript" src='https://y-m-m.github.io/js/theme-mode.js'></script>
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/frameworks.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github-style.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/light.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/dark.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/syntax.css' />
+    <title>MIST : Multi-modal Iterative Spatial-Temporal Transformer(多模态迭代时空转换器) for Long-form Video Question Answering - 陈皮的博客</title>
+    
+    <link rel="icon" type="image/x-icon" href='/images/github-mark.png'>
+    
+    <meta name="theme-color" content="#1e2327">
+
+    
+    <meta name="description"
+  content=" 2022-12-19 arXiv
+Abstract 多模态VQA模型: 短视频片段/图片 -&gt; 长视频 使用密集视频采样策略计算太复杂 稀疏采样难以应对多粒度、多事件可视化推理 MIST的特点 dense spatialtemporal self-attention-&gt;级联的片段和区域选择模块，自适应地选择与问题本身密切相关的帧和图像区域 然后通过attention model对不同粒度的视觉概念进行高效处理 MIST在多个层次上迭代地进行选择和关注，以支持对多个事件的推理 使用数据集 AGQA, NExT-QA, STAR, Env-QA(平均时长从12s到44s不等) 1 Introduction Challenges 多事件推理(复杂的时序推理，如多事件推理，因果关系) 不同粒度的视觉概念之间的相互作用(可能涉及跨越不同事件的更复杂的物体、关系和事件的交互) 目前的多模态transformer依赖于密集的自注意力，随视频时间的延长，计算成本呈指数增长 -&gt; 只对每个视频采样3帧或4帧，不管其长度如何 新模型MIST 考虑所有事件的一般内容，关注与问题相关的少数事件的细节 MIST将稠密的联合时空自注意力机制分解为问题条件的级联片段和区域选择模块，以及多模态多粒度特征上的时空自注意力 级联选择通过关注与问题相关的片段和区域，降低了计算成本并提高了性能 通过对片段和图像块的自注意力，更好的捕获了不同粒度的视觉概念之间的相互作用 通过迭代的进行选择和自注意力，MIST可以在多个事件上进行推理，并更好的进行时间和因果推理 2 Related work Video question answering 长视频VQA任务主要关注于对情节和、社会交往的理解，和更复杂的时空推理能力；目前的工作在前两类基准上取得了可喜的成果，本文主要关注于最后一类问题 方法 早期提出了各种基于LSTM和图神经网络的模型 来捕获 跨模态的或动作与外观的交互 最近的一项工作将图建模集成到transformers中，以显式地捕获视频中的对象及其关系 许多工作直接在下游videoQA任务上对预训练模型进行微调 本文对自注意力机制进行了修正，以便更好的进行多时间、多粒度的视觉推理 将预训练的模型迁移到下游任务中 预训练的vision-language Transformers, 如CLIP -&gt; 下游任务，如目标检测，图像生成和视频文本检索 CLIP4Clip: 均值池化，Transformer等-&gt;更好的表示视频 CLIP2Video: 提出了时间差分块来更好的捕捉运动信息 我们保留了预训练模型的优点，并改进了它在下游任务上的弱点 Long-form video modeling 利用视频的自然特性，减少计算量 本文考虑了QA任务的特点，以问题为导向，减少计算量，提高性能 Iterative Attention MIST利用了VQA中的多模态对应关系来引导迭代注意 3 Method VQA任务目标 MIST回答问题的三步 利用预训练模型提取输入特征 迭代地在选定的特征集合上perform自注意力，以执行多事件推理 根据得到的video, question, answer features预测答案 3.1 Input Representation 视频部分 将视频分为K个长度均匀的片段，每个片段包含T帧，每帧被分为N个小块 -&gt; 图片块和帧的 [CLS] token 以N和T计数 vision-language Transformer，如CLIP，All-in-one with frozen parameters，提取所有帧的图像块级别的特征 由于分段特征是单独提取的，表示其在整个视频中的时间位置Pt ∈ {φt(i)|i ∈ [0, K · T ]}和帧索引 文本部分 将问题表征为单词序列 将它输入到vision-language Transformer来获取单词级别的特征 w1 corresponds to [CLS] and w2, &hellip;, wM are words in question 3.2 ISTA Iterative Spatial-Temporal Attention Layer 迭代时空注意力层 迭代的选择基于问题的长视频中的片段和区域，然后对选择的片段和区域进行多事件推理 步骤 Segment selection Region selection 时空自注意力 Segment Selection 给定一组image patch特征x，计算segments和问题的特征 -&gt; 选择Topk segments的patch features 执行temporal attention 对每一个第k segment第t frame做空间维度的特征池化 将frame features沿时间维度进行池化得到segment features Question feature通过对word features进行池化得到 池化函数可以根据使用的Transformer的具体类型，从mean pooling, first token pooling, simple MLP layer等中选择 Region Selection 对采样所得的帧，选择与问题最相关的patches Spatial-Temporal Self-Attention 给定选定的frames和选定的regions，使用一个self-attention layer推理出一个融合的特征向量来联合表示question和video 只保留选择出的patches 嵌入类型特征 -&gt; 多头注意力机制获得所有输入令牌的上下文特征 Iterative Execution of ISTA Answer prediction 将所有ISTA层的token特征池化 计算Xo和所有通过预训练模型获取的候选答案之间的相似度，选择相似度最大的答案作为最终预测答案 4 Experiments 4.1 Datasets AGQA 一个开放的，用于合成时空推理的VQA基准，使用v2版本(有更平衡的分布) 2.27M QA对，9.7K videos，平均长度30s NExT-QA 用于因果和时序推理的多选择视频问答基准 包括5440个视频，平均长度44s，约25K个问题 STAR 用于情景推理的多选择VQA基准 22个视频片段，平均长度12s，约60K个问题 Env-QA 开放的，用于动态环境理解的VQA基准 23K个自我中心视频，平均长度20s，85K问题，是在虚拟环境AI2THOR上收集的 4.2 Implementation Details 可以建立在大多数预训练的多模态Transformer上，在实验中尝试了针对图像语言预训练的模型CLIP(ViT-B/32)和针对视频语言预训练的模型All-in-One-Base Topk = 2, Topj = 12, the layer of ISTA L = 2, 每个视频采样32帧，并将其分割成K = 8个segments 4.3 Comparison with State-of-the-arts 与最先进的SOTA方法进行比较 我们提出的方法达到了最先进的性能，并且在所有数据集上都优于现有的方法 4.4 Comparison with Baselines 在基于CLIP的MIST框架中，我们通过在AGQA v2数据集上微调相同的预训练输入表示，将ISTA与其他解决方案进行比较 MeanPool: 简单的抽取帧特征的平均值作为整个视频的表示 Trans.-Frame: 遵循CLIP4Clip中的seqTransf类型，利用Transformer对帧特征进行自注意力来表示视频 Trans.-Patch: 类似Trans.-Frame, 但它在所有patch tokens上执行自注意力 Divided STA: 我们遵循视频分类模型中的Transformer对image patches执行uni-modal two-step SpaceTime Attention 如上结果表示，ISTA优于其他变体 原因 长格式视频的内容往往复杂多样，简单的聚合所有帧特征的方法，可能会造成信息丢失 长格式视频问答需要更强大的时空推理能力来关注视频的一些细节，而均值池化只在捕获整体内容上表现良好 长格式QA中考虑region information是有帮助的，但稠密的自注意力和divided STA都没有考虑多粒度之间的相互作用，性能提升有限 4.5 Ablation Study 提出MIST的几组变体，显示其关键组件的有效性 Effect of each component in ISTA 删除ISTA层中的关键模块，即Segment Selection(SS), Region Selection(RS), Self-attention layer(STA) 移除Segment Selection会引入大量的无关区域信息，hurt the performance Segment Selection对于多事件推理很重要，会损害需要时序推理的问题的表现 去除STA时，性能下降显著，原因与mean pooling类似，我们需要一个强大的模型来捕捉多粒度推理 去除RS无明显影响，原因是视频中的objects相对较少，经过temporal attention后，patch number大大减少；但使用spatial selection module可以显著降低计算成本 Effects of different ISTA configurations " />
+<meta name="keywords"
+  content='blog, google analytics' />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://y-m-m.github.io/post/mist/" />
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="MIST : Multi-modal Iterative Spatial-Temporal Transformer(多模态迭代时空转换器) for Long-form Video Question Answering - 陈皮的博客" />
+<meta name="twitter:description"
+  content=" 2022-12-19 arXiv
+Abstract 多模态VQA模型: 短视频片段/图片 -&gt; 长视频 使用密集视频采样策略计算太复杂 稀疏采样难以应对多粒度、多事件可视化推理 MIST的特点 dense spatialtemporal self-attention-&gt;级联的片段和区域选择模块，自适应地选择与问题本身密切相关的帧和图像区域 然后通过attention model对不同粒度的视觉概念进行高效处理 MIST在多个层次上迭代地进行选择和关注，以支持对多个事件的推理 使用数据集 AGQA, NExT-QA, STAR, Env-QA(平均时长从12s到44s不等) 1 Introduction Challenges 多事件推理(复杂的时序推理，如多事件推理，因果关系) 不同粒度的视觉概念之间的相互作用(可能涉及跨越不同事件的更复杂的物体、关系和事件的交互) 目前的多模态transformer依赖于密集的自注意力，随视频时间的延长，计算成本呈指数增长 -&gt; 只对每个视频采样3帧或4帧，不管其长度如何 新模型MIST 考虑所有事件的一般内容，关注与问题相关的少数事件的细节 MIST将稠密的联合时空自注意力机制分解为问题条件的级联片段和区域选择模块，以及多模态多粒度特征上的时空自注意力 级联选择通过关注与问题相关的片段和区域，降低了计算成本并提高了性能 通过对片段和图像块的自注意力，更好的捕获了不同粒度的视觉概念之间的相互作用 通过迭代的进行选择和自注意力，MIST可以在多个事件上进行推理，并更好的进行时间和因果推理 2 Related work Video question answering 长视频VQA任务主要关注于对情节和、社会交往的理解，和更复杂的时空推理能力；目前的工作在前两类基准上取得了可喜的成果，本文主要关注于最后一类问题 方法 早期提出了各种基于LSTM和图神经网络的模型 来捕获 跨模态的或动作与外观的交互 最近的一项工作将图建模集成到transformers中，以显式地捕获视频中的对象及其关系 许多工作直接在下游videoQA任务上对预训练模型进行微调 本文对自注意力机制进行了修正，以便更好的进行多时间、多粒度的视觉推理 将预训练的模型迁移到下游任务中 预训练的vision-language Transformers, 如CLIP -&gt; 下游任务，如目标检测，图像生成和视频文本检索 CLIP4Clip: 均值池化，Transformer等-&gt;更好的表示视频 CLIP2Video: 提出了时间差分块来更好的捕捉运动信息 我们保留了预训练模型的优点，并改进了它在下游任务上的弱点 Long-form video modeling 利用视频的自然特性，减少计算量 本文考虑了QA任务的特点，以问题为导向，减少计算量，提高性能 Iterative Attention MIST利用了VQA中的多模态对应关系来引导迭代注意 3 Method VQA任务目标 MIST回答问题的三步 利用预训练模型提取输入特征 迭代地在选定的特征集合上perform自注意力，以执行多事件推理 根据得到的video, question, answer features预测答案 3.1 Input Representation 视频部分 将视频分为K个长度均匀的片段，每个片段包含T帧，每帧被分为N个小块 -&gt; 图片块和帧的 [CLS] token 以N和T计数 vision-language Transformer，如CLIP，All-in-one with frozen parameters，提取所有帧的图像块级别的特征 由于分段特征是单独提取的，表示其在整个视频中的时间位置Pt ∈ {φt(i)|i ∈ [0, K · T ]}和帧索引 文本部分 将问题表征为单词序列 将它输入到vision-language Transformer来获取单词级别的特征 w1 corresponds to [CLS] and w2, &hellip;, wM are words in question 3.2 ISTA Iterative Spatial-Temporal Attention Layer 迭代时空注意力层 迭代的选择基于问题的长视频中的片段和区域，然后对选择的片段和区域进行多事件推理 步骤 Segment selection Region selection 时空自注意力 Segment Selection 给定一组image patch特征x，计算segments和问题的特征 -&gt; 选择Topk segments的patch features 执行temporal attention 对每一个第k segment第t frame做空间维度的特征池化 将frame features沿时间维度进行池化得到segment features Question feature通过对word features进行池化得到 池化函数可以根据使用的Transformer的具体类型，从mean pooling, first token pooling, simple MLP layer等中选择 Region Selection 对采样所得的帧，选择与问题最相关的patches Spatial-Temporal Self-Attention 给定选定的frames和选定的regions，使用一个self-attention layer推理出一个融合的特征向量来联合表示question和video 只保留选择出的patches 嵌入类型特征 -&gt; 多头注意力机制获得所有输入令牌的上下文特征 Iterative Execution of ISTA Answer prediction 将所有ISTA层的token特征池化 计算Xo和所有通过预训练模型获取的候选答案之间的相似度，选择相似度最大的答案作为最终预测答案 4 Experiments 4.1 Datasets AGQA 一个开放的，用于合成时空推理的VQA基准，使用v2版本(有更平衡的分布) 2.27M QA对，9.7K videos，平均长度30s NExT-QA 用于因果和时序推理的多选择视频问答基准 包括5440个视频，平均长度44s，约25K个问题 STAR 用于情景推理的多选择VQA基准 22个视频片段，平均长度12s，约60K个问题 Env-QA 开放的，用于动态环境理解的VQA基准 23K个自我中心视频，平均长度20s，85K问题，是在虚拟环境AI2THOR上收集的 4.2 Implementation Details 可以建立在大多数预训练的多模态Transformer上，在实验中尝试了针对图像语言预训练的模型CLIP(ViT-B/32)和针对视频语言预训练的模型All-in-One-Base Topk = 2, Topj = 12, the layer of ISTA L = 2, 每个视频采样32帧，并将其分割成K = 8个segments 4.3 Comparison with State-of-the-arts 与最先进的SOTA方法进行比较 我们提出的方法达到了最先进的性能，并且在所有数据集上都优于现有的方法 4.4 Comparison with Baselines 在基于CLIP的MIST框架中，我们通过在AGQA v2数据集上微调相同的预训练输入表示，将ISTA与其他解决方案进行比较 MeanPool: 简单的抽取帧特征的平均值作为整个视频的表示 Trans.-Frame: 遵循CLIP4Clip中的seqTransf类型，利用Transformer对帧特征进行自注意力来表示视频 Trans.-Patch: 类似Trans.-Frame, 但它在所有patch tokens上执行自注意力 Divided STA: 我们遵循视频分类模型中的Transformer对image patches执行uni-modal two-step SpaceTime Attention 如上结果表示，ISTA优于其他变体 原因 长格式视频的内容往往复杂多样，简单的聚合所有帧特征的方法，可能会造成信息丢失 长格式视频问答需要更强大的时空推理能力来关注视频的一些细节，而均值池化只在捕获整体内容上表现良好 长格式QA中考虑region information是有帮助的，但稠密的自注意力和divided STA都没有考虑多粒度之间的相互作用，性能提升有限 4.5 Ablation Study 提出MIST的几组变体，显示其关键组件的有效性 Effect of each component in ISTA 删除ISTA层中的关键模块，即Segment Selection(SS), Region Selection(RS), Self-attention layer(STA) 移除Segment Selection会引入大量的无关区域信息，hurt the performance Segment Selection对于多事件推理很重要，会损害需要时序推理的问题的表现 去除STA时，性能下降显著，原因与mean pooling类似，我们需要一个强大的模型来捕捉多粒度推理 去除RS无明显影响，原因是视频中的objects相对较少，经过temporal attention后，patch number大大减少；但使用spatial selection module可以显著降低计算成本 Effects of different ISTA configurations " />
+<meta name="twitter:site" content="https://y-m-m.github.io/" />
+<meta name="twitter:creator" content="陈皮" />
+<meta name="twitter:image"
+  content="https://y-m-m.github.io/">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="MIST : Multi-modal Iterative Spatial-Temporal Transformer(多模态迭代时空转换器) for Long-form Video Question Answering - 陈皮的博客">
+<meta property="og:description"
+  content=" 2022-12-19 arXiv
+Abstract 多模态VQA模型: 短视频片段/图片 -&gt; 长视频 使用密集视频采样策略计算太复杂 稀疏采样难以应对多粒度、多事件可视化推理 MIST的特点 dense spatialtemporal self-attention-&gt;级联的片段和区域选择模块，自适应地选择与问题本身密切相关的帧和图像区域 然后通过attention model对不同粒度的视觉概念进行高效处理 MIST在多个层次上迭代地进行选择和关注，以支持对多个事件的推理 使用数据集 AGQA, NExT-QA, STAR, Env-QA(平均时长从12s到44s不等) 1 Introduction Challenges 多事件推理(复杂的时序推理，如多事件推理，因果关系) 不同粒度的视觉概念之间的相互作用(可能涉及跨越不同事件的更复杂的物体、关系和事件的交互) 目前的多模态transformer依赖于密集的自注意力，随视频时间的延长，计算成本呈指数增长 -&gt; 只对每个视频采样3帧或4帧，不管其长度如何 新模型MIST 考虑所有事件的一般内容，关注与问题相关的少数事件的细节 MIST将稠密的联合时空自注意力机制分解为问题条件的级联片段和区域选择模块，以及多模态多粒度特征上的时空自注意力 级联选择通过关注与问题相关的片段和区域，降低了计算成本并提高了性能 通过对片段和图像块的自注意力，更好的捕获了不同粒度的视觉概念之间的相互作用 通过迭代的进行选择和自注意力，MIST可以在多个事件上进行推理，并更好的进行时间和因果推理 2 Related work Video question answering 长视频VQA任务主要关注于对情节和、社会交往的理解，和更复杂的时空推理能力；目前的工作在前两类基准上取得了可喜的成果，本文主要关注于最后一类问题 方法 早期提出了各种基于LSTM和图神经网络的模型 来捕获 跨模态的或动作与外观的交互 最近的一项工作将图建模集成到transformers中，以显式地捕获视频中的对象及其关系 许多工作直接在下游videoQA任务上对预训练模型进行微调 本文对自注意力机制进行了修正，以便更好的进行多时间、多粒度的视觉推理 将预训练的模型迁移到下游任务中 预训练的vision-language Transformers, 如CLIP -&gt; 下游任务，如目标检测，图像生成和视频文本检索 CLIP4Clip: 均值池化，Transformer等-&gt;更好的表示视频 CLIP2Video: 提出了时间差分块来更好的捕捉运动信息 我们保留了预训练模型的优点，并改进了它在下游任务上的弱点 Long-form video modeling 利用视频的自然特性，减少计算量 本文考虑了QA任务的特点，以问题为导向，减少计算量，提高性能 Iterative Attention MIST利用了VQA中的多模态对应关系来引导迭代注意 3 Method VQA任务目标 MIST回答问题的三步 利用预训练模型提取输入特征 迭代地在选定的特征集合上perform自注意力，以执行多事件推理 根据得到的video, question, answer features预测答案 3.1 Input Representation 视频部分 将视频分为K个长度均匀的片段，每个片段包含T帧，每帧被分为N个小块 -&gt; 图片块和帧的 [CLS] token 以N和T计数 vision-language Transformer，如CLIP，All-in-one with frozen parameters，提取所有帧的图像块级别的特征 由于分段特征是单独提取的，表示其在整个视频中的时间位置Pt ∈ {φt(i)|i ∈ [0, K · T ]}和帧索引 文本部分 将问题表征为单词序列 将它输入到vision-language Transformer来获取单词级别的特征 w1 corresponds to [CLS] and w2, &hellip;, wM are words in question 3.2 ISTA Iterative Spatial-Temporal Attention Layer 迭代时空注意力层 迭代的选择基于问题的长视频中的片段和区域，然后对选择的片段和区域进行多事件推理 步骤 Segment selection Region selection 时空自注意力 Segment Selection 给定一组image patch特征x，计算segments和问题的特征 -&gt; 选择Topk segments的patch features 执行temporal attention 对每一个第k segment第t frame做空间维度的特征池化 将frame features沿时间维度进行池化得到segment features Question feature通过对word features进行池化得到 池化函数可以根据使用的Transformer的具体类型，从mean pooling, first token pooling, simple MLP layer等中选择 Region Selection 对采样所得的帧，选择与问题最相关的patches Spatial-Temporal Self-Attention 给定选定的frames和选定的regions，使用一个self-attention layer推理出一个融合的特征向量来联合表示question和video 只保留选择出的patches 嵌入类型特征 -&gt; 多头注意力机制获得所有输入令牌的上下文特征 Iterative Execution of ISTA Answer prediction 将所有ISTA层的token特征池化 计算Xo和所有通过预训练模型获取的候选答案之间的相似度，选择相似度最大的答案作为最终预测答案 4 Experiments 4.1 Datasets AGQA 一个开放的，用于合成时空推理的VQA基准，使用v2版本(有更平衡的分布) 2.27M QA对，9.7K videos，平均长度30s NExT-QA 用于因果和时序推理的多选择视频问答基准 包括5440个视频，平均长度44s，约25K个问题 STAR 用于情景推理的多选择VQA基准 22个视频片段，平均长度12s，约60K个问题 Env-QA 开放的，用于动态环境理解的VQA基准 23K个自我中心视频，平均长度20s，85K问题，是在虚拟环境AI2THOR上收集的 4.2 Implementation Details 可以建立在大多数预训练的多模态Transformer上，在实验中尝试了针对图像语言预训练的模型CLIP(ViT-B/32)和针对视频语言预训练的模型All-in-One-Base Topk = 2, Topj = 12, the layer of ISTA L = 2, 每个视频采样32帧，并将其分割成K = 8个segments 4.3 Comparison with State-of-the-arts 与最先进的SOTA方法进行比较 我们提出的方法达到了最先进的性能，并且在所有数据集上都优于现有的方法 4.4 Comparison with Baselines 在基于CLIP的MIST框架中，我们通过在AGQA v2数据集上微调相同的预训练输入表示，将ISTA与其他解决方案进行比较 MeanPool: 简单的抽取帧特征的平均值作为整个视频的表示 Trans.-Frame: 遵循CLIP4Clip中的seqTransf类型，利用Transformer对帧特征进行自注意力来表示视频 Trans.-Patch: 类似Trans.-Frame, 但它在所有patch tokens上执行自注意力 Divided STA: 我们遵循视频分类模型中的Transformer对image patches执行uni-modal two-step SpaceTime Attention 如上结果表示，ISTA优于其他变体 原因 长格式视频的内容往往复杂多样，简单的聚合所有帧特征的方法，可能会造成信息丢失 长格式视频问答需要更强大的时空推理能力来关注视频的一些细节，而均值池化只在捕获整体内容上表现良好 长格式QA中考虑region information是有帮助的，但稠密的自注意力和divided STA都没有考虑多粒度之间的相互作用，性能提升有限 4.5 Ablation Study 提出MIST的几组变体，显示其关键组件的有效性 Effect of each component in ISTA 删除ISTA层中的关键模块，即Segment Selection(SS), Region Selection(RS), Self-attention layer(STA) 移除Segment Selection会引入大量的无关区域信息，hurt the performance Segment Selection对于多事件推理很重要，会损害需要时序推理的问题的表现 去除STA时，性能下降显著，原因与mean pooling类似，我们需要一个强大的模型来捕捉多粒度推理 去除RS无明显影响，原因是视频中的objects相对较少，经过temporal attention后，patch number大大减少；但使用spatial selection module可以显著降低计算成本 Effects of different ISTA configurations " />
+<meta property="og:url" content="https://y-m-m.github.io/post/mist/" />
+<meta property="og:site_name" content="MIST : Multi-modal Iterative Spatial-Temporal Transformer(多模态迭代时空转换器) for Long-form Video Question Answering" />
+<meta property="og:image"
+  content="https://y-m-m.github.io/">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+<meta property="article:published_time" content="2025-02-20 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+  <div style="position: relative">
+  <header class="Header js-details-container Details px-3 px-md-4 px-lg-5 flex-wrap flex-md-nowrap open Details--on">
+    <div class="Header-item mobile-none" style="margin-top: -4px; margin-bottom: -4px;">
+      <a class="Header-link" href="https://y-m-m.github.io/">
+        <img class="octicon" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item d-md-none">
+      <button class="Header-link btn-link js-details-target" type="button"
+        onclick="document.querySelector('#header-search').style.display = document.querySelector('#header-search').style.display == 'none'? 'block': 'none'">
+        <svg height="24" class="octicon octicon-three-bars" viewBox="0 0 16 16" version="1.1" width="24">
+          <path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 2.75zm0 5A.75.75 0 011.75 7h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 7.75zM1.75 12a.75.75 0 100 1.5h12.5a.75.75 0 100-1.5H1.75z">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <div style="display: none;" id="header-search"
+      class="Header-item Header-item--full flex-column flex-md-row width-full flex-order-2 flex-md-order-none mr-0 mr-md-3 mt-3 mt-md-0 Details-content--hidden-not-important d-md-flex">
+      <div
+        class="Header-search header-search flex-auto js-site-search position-relative flex-self-stretch flex-md-self-auto mb-3 mb-md-0 mr-0 mr-md-3 scoped-search site-scoped-search js-jump-to">
+        <div class="position-relative">
+          
+          <form target="_blank" id="search-form" action="" accept-charset="UTF-8" method="get"
+            autocomplete="off">
+            <label
+              class="Header-search-label form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative d-flex flex-justify-between flex-items-center">
+              <input type="text"
+                class="Header-search-input form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable"
+                name="q" value="" placeholder="Search" autocomplete="off">
+            </label>
+          </form>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="Header-item Header-item--full flex-justify-center d-md-none position-relative">
+      <a class="Header-link " href="https://y-m-m.github.io/">
+        <img class="octicon octicon-mark-github v-align-middle" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item" style="margin-right: 0;">
+      <a href="javascript:void(0)" class="Header-link no-select" onclick="switchTheme()">
+        <svg style="fill: var(--color-profile-color-modes-toggle-moon);" class="no-select" viewBox="0 0 16 16"
+          version="1.1" width="16" height="16">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M4.52208 7.71754C7.5782 7.71754 10.0557 5.24006 10.0557 2.18394C10.0557 1.93498 10.0392 1.68986 10.0074 1.44961C9.95801 1.07727 10.3495 0.771159 10.6474 0.99992C12.1153 2.12716 13.0615 3.89999 13.0615 5.89383C13.0615 9.29958 10.3006 12.0605 6.89485 12.0605C3.95334 12.0605 1.49286 10.001 0.876728 7.24527C0.794841 6.87902 1.23668 6.65289 1.55321 6.85451C2.41106 7.40095 3.4296 7.71754 4.52208 7.71754Z">
+          </path>
+        </svg>
+      </a>
+    </div>
+  </header>
+</div>
+
+  <div id="search-result" class="container-lg px-3 new-discussion-timeline" style="display: none;">
+</div>
+
+  
+<div class="application-main">
+  <div>
+  <main>
+    <div class="gisthead pagehead bg-gray-light pb-0 pt-3 mb-4">
+      <div class="px-0">
+        <div class="mb-3 d-flex px-3 px-md-3 px-lg-5">
+          <div class="flex-auto min-width-0 width-fit mr-3">
+            <div class="d-flex">
+              <div class="d-none d-md-block">
+                <a class="avatar mr-2 flex-shrink-0" href="https://y-m-m.github.io/">
+                  <img class=" avatar-user"
+                    src="/images/me.png"
+                    width="32" height="32"></a>
+              </div>
+              <div class="d-flex flex-column">
+                <h1 class="break-word f3 text-normal mb-md-0 mb-1">
+                  <span class="author">
+                    <a href="https://y-m-m.github.io/">陈皮</a>
+                  </span>
+                  <span class="path-divider">/</span>
+                  <strong class="css-truncate css-truncate-target mr-1" style="max-width: 410px">
+                    <a href="https://y-m-m.github.io/post/mist/">MIST : Multi-modal Iterative Spatial-Temporal Transformer(多模态迭代时空转换器) for Long-form Video Question Answering</a>
+                  </strong>
+                </h1>
+                <div class="note m-0">
+                  Created <relative-time datetime="Thu, 20 Feb 2025 00:00:00 &#43;0000"
+                    class="no-wrap">
+                    Thu, 20 Feb 2025 00:00:00 &#43;0000</relative-time>
+
+                  
+                  <span class="file-info-divider"></span>
+                  Modified <relative-time datetime="Wed, 05 Mar 2025 14:04:10 &#43;0800"
+                    class="no-wrap">
+                    Wed, 05 Mar 2025 14:04:10 &#43;0800</relative-time>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-lg px-3 new-discussion-timeline">
+      <div class="repository-content gist-content">
+        <div>
+          <div class="js-gist-file-update-container js-task-list-container file-box">
+            <div id="file-pytest" class="file my-2">
+              <div id="post-header" class="file-header d-flex flex-md-items-center flex-items-start sticky-header" style="z-index: 2">
+                <div class="file-info d-flex flex-md-items-center flex-items-start flex-order-1 flex-auto">
+                  <div class="text-mono f6 flex-auto pr-3 flex-order-2 flex-md-order-1 mt-2 mt-md-0">
+                    
+                    <summary id="toc-toggle" onclick="clickToc()" class="btn btn-octicon m-0 mr-2 p-2">
+                      <svg aria-hidden="true" viewBox="0 0 16 16" height="16" width="16" class="octicon octicon-list-unordered">
+                        <path fill-rule="evenodd" d="M2 4a1 1 0 100-2 1 1 0 000 2zm3.75-1.5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zM3 8a1 1 0 11-2 0 1 1 0 012 0zm-1 6a1 1 0 100-2 1 1 0 000 2z"></path>
+                      </svg>
+                    </summary>
+                    <details-menu class="SelectMenu" id="toc-details" style="display: none;">
+                      <div class="SelectMenu-modal rounded-3 mt-1" style="max-height: 340px;">
+                        <div class="SelectMenu-list SelectMenu-list--borderless p-2" style="overscroll-behavior: contain;" id="toc-list">
+                        </div>
+                      </div>
+                    </details-menu>
+                      3139 Words
+                    
+
+                  </div>
+                  <div class="file-actions flex-order-2 pt-0">
+                    
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      计算机科学
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      论文阅读
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AC%94%E8%AE%B0">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      笔记
+                    </a>
+                    
+                    
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="Box-body px-5 pb-5" style="z-index: 1">
+                <article class="markdown-body entry-content container-lg"><blockquote>
+<p>2022-12-19 arXiv</p>
+</blockquote>
+<h1 id="abstract">Abstract</h1>
+<ul>
+<li>多模态VQA模型: 短视频片段/图片 -&gt; 长视频
+<ul>
+<li>使用密集视频采样策略计算太复杂</li>
+<li>稀疏采样难以应对多粒度、多事件可视化推理</li>
+</ul>
+</li>
+<li>MIST的特点
+<ul>
+<li>dense spatialtemporal self-attention-&gt;级联的片段和区域选择模块，自适应地选择与问题本身密切相关的帧和图像区域</li>
+<li>然后通过attention model对不同粒度的视觉概念进行高效处理</li>
+<li>MIST在多个层次上迭代地进行选择和关注，以支持对多个事件的推理</li>
+<li>使用数据集
+<ul>
+<li>AGQA, NExT-QA, STAR, Env-QA(平均时长从12s到44s不等)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="1-introduction">1 Introduction</h1>
+<h2 id="challenges">Challenges</h2>
+<ul>
+<li>多事件推理(复杂的时序推理，如多事件推理，因果关系)</li>
+<li>不同粒度的视觉概念之间的相互作用(可能涉及跨越不同事件的更复杂的物体、关系和事件的交互)</li>
+<li>目前的多模态transformer依赖于密集的自注意力，随视频时间的延长，计算成本呈指数增长 -&gt; 只对每个视频采样3帧或4帧，不管其长度如何</li>
+</ul>
+<h2 id="新模型mist">新模型MIST</h2>
+<ul>
+<li>考虑所有事件的一般内容，关注与问题相关的少数事件的细节</li>
+<li>MIST将稠密的联合时空自注意力机制分解为问题条件的级联片段和区域选择模块，以及多模态多粒度特征上的时空自注意力
+<ul>
+<li>级联选择通过关注与问题相关的片段和区域，降低了计算成本并提高了性能</li>
+<li>通过对片段和图像块的自注意力，更好的捕获了不同粒度的视觉概念之间的相互作用</li>
+<li>通过迭代的进行选择和自注意力，MIST可以在多个事件上进行推理，并更好的进行时间和因果推理</li>
+</ul>
+</li>
+</ul>
+<h1 id="2-related-work">2 Related work</h1>
+<h2 id="video-question-answering">Video question answering</h2>
+<ul>
+<li>长视频VQA任务主要关注于对情节和、社会交往的理解，和更复杂的时空推理能力；目前的工作在前两类基准上取得了可喜的成果，本文主要关注于最后一类问题</li>
+<li>方法
+<ul>
+<li>早期提出了各种基于LSTM和图神经网络的模型 来捕获 跨模态的或动作与外观的交互</li>
+<li>最近的一项工作将图建模集成到transformers中，以显式地捕获视频中的对象及其关系</li>
+<li>许多工作直接在下游videoQA任务上对预训练模型进行微调</li>
+<li>本文对自注意力机制进行了修正，以便更好的进行多时间、多粒度的视觉推理</li>
+</ul>
+</li>
+</ul>
+<h2 id="将预训练的模型迁移到下游任务中">将预训练的模型迁移到下游任务中</h2>
+<ul>
+<li>预训练的vision-language Transformers, 如CLIP -&gt; 下游任务，如目标检测，图像生成和视频文本检索
+<ul>
+<li>CLIP4Clip: 均值池化，Transformer等-&gt;更好的表示视频</li>
+<li>CLIP2Video: 提出了时间差分块来更好的捕捉运动信息</li>
+<li>我们保留了预训练模型的优点，并改进了它在下游任务上的弱点</li>
+</ul>
+</li>
+</ul>
+<h2 id="long-form-video-modeling">Long-form video modeling</h2>
+<ul>
+<li>利用视频的自然特性，减少计算量</li>
+<li>本文考虑了QA任务的特点，以问题为导向，减少计算量，提高性能</li>
+</ul>
+<h2 id="iterative-attention">Iterative Attention</h2>
+<ul>
+<li>MIST利用了VQA中的多模态对应关系来引导迭代注意</li>
+</ul>
+<h1 id="3-method">3 Method</h1>
+<ul>
+<li>VQA任务目标
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2011.23.49.png" alt=""></li>
+<li>MIST回答问题的三步
+<ol>
+<li>利用预训练模型提取输入特征</li>
+<li>迭代地在选定的特征集合上perform自注意力，以执行多事件推理</li>
+<li>根据得到的video, question, answer features预测答案
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2011.24.30.png" alt=""></li>
+</ol>
+</li>
+</ul>
+<h2 id="31-input-representation">3.1 Input Representation</h2>
+<ul>
+<li>视频部分
+<ul>
+<li>将视频分为K个长度均匀的片段，每个片段包含T帧，每帧被分为N个小块 -&gt; 图片块和帧的 [CLS] token 以N和T计数</li>
+<li>vision-language Transformer，如CLIP，All-in-one with frozen parameters，提取所有帧的图像块级别的特征
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.54.55.png" alt="">
+<ul>
+<li>由于分段特征是单独提取的，表示其在整个视频中的时间位置Pt ∈ {φt(i)|i ∈ [0, K · T ]}和帧索引</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>文本部分
+<ul>
+<li>将问题表征为单词序列</li>
+<li>将它输入到vision-language Transformer来获取单词级别的特征
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.55.42.png" alt="">
+<ul>
+<li>w1 corresponds to [CLS] and w2, &hellip;, wM are words in question</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="32-ista">3.2 ISTA</h2>
+<ul>
+<li>Iterative Spatial-Temporal Attention Layer 迭代时空注意力层</li>
+<li>迭代的选择基于问题的长视频中的片段和区域，然后对选择的片段和区域进行多事件推理</li>
+<li>步骤
+<ul>
+<li>Segment selection</li>
+<li>Region selection</li>
+<li>时空自注意力
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.56.26.png" alt=""></li>
+</ul>
+</li>
+</ul>
+<h3 id="segment-selection">Segment Selection</h3>
+<ul>
+<li>给定一组image patch特征x，计算segments和问题的特征 -&gt; 选择Topk segments的patch features</li>
+<li>执行temporal attention
+<ul>
+<li>对每一个第k segment第t frame做空间维度的特征池化</li>
+<li>将frame features沿时间维度进行池化得到segment features</li>
+<li>Question feature通过对word features进行池化得到</li>
+<li>池化函数可以根据使用的Transformer的具体类型，从mean pooling, first token pooling, simple MLP layer等中选择</li>
+</ul>
+</li>
+</ul>
+<h3 id="region-selection">Region Selection</h3>
+<ul>
+<li>对采样所得的帧，选择与问题最相关的patches</li>
+</ul>
+<h3 id="spatial-temporal-self-attention">Spatial-Temporal Self-Attention</h3>
+<ul>
+<li>给定选定的frames和选定的regions，使用一个self-attention layer推理出一个融合的特征向量来联合表示question和video</li>
+<li>只保留选择出的patches</li>
+<li>嵌入类型特征 -&gt; 多头注意力机制获得所有输入令牌的上下文特征</li>
+</ul>
+<h3 id="iterative-execution-of-ista">Iterative Execution of ISTA</h3>
+<h2 id="answer-prediction">Answer prediction</h2>
+<ul>
+<li>将所有ISTA层的token特征池化
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.58.07.png" alt=""></li>
+<li>计算Xo和所有通过预训练模型获取的候选答案之间的相似度，选择相似度最大的答案作为最终预测答案</li>
+</ul>
+<h1 id="4-experiments">4 Experiments</h1>
+<h2 id="41-datasets">4.1 Datasets</h2>
+<h3 id="agqa">AGQA</h3>
+<ul>
+<li>一个开放的，用于合成时空推理的VQA基准，使用v2版本(有更平衡的分布)</li>
+<li>2.27M QA对，9.7K videos，平均长度30s</li>
+</ul>
+<h3 id="next-qa">NExT-QA</h3>
+<ul>
+<li>用于因果和时序推理的多选择视频问答基准</li>
+<li>包括5440个视频，平均长度44s，约25K个问题</li>
+</ul>
+<h3 id="star">STAR</h3>
+<ul>
+<li>用于情景推理的多选择VQA基准</li>
+<li>22个视频片段，平均长度12s，约60K个问题</li>
+</ul>
+<h3 id="env-qa">Env-QA</h3>
+<ul>
+<li>开放的，用于动态环境理解的VQA基准</li>
+<li>23K个自我中心视频，平均长度20s，85K问题，是在虚拟环境AI2THOR上收集的</li>
+</ul>
+<h2 id="42-implementation-details">4.2 Implementation Details</h2>
+<ul>
+<li>可以建立在大多数预训练的多模态Transformer上，在实验中尝试了针对图像语言预训练的模型CLIP(ViT-B/32)和针对视频语言预训练的模型All-in-One-Base</li>
+<li>Topk = 2, Topj = 12, the layer of ISTA L = 2, 每个视频采样32帧，并将其分割成K = 8个segments</li>
+</ul>
+<h2 id="43-comparison-with-state-of-the-arts">4.3 Comparison with State-of-the-arts</h2>
+<ul>
+<li>与最先进的SOTA方法进行比较
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.59.15.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.59.34.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.59.55.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.00.23.png" alt=""></li>
+<li>我们提出的方法达到了最先进的性能，并且在所有数据集上都优于现有的方法</li>
+</ul>
+<h2 id="44-comparison-with-baselines">4.4 Comparison with Baselines</h2>
+<ul>
+<li>在基于CLIP的MIST框架中，我们通过在AGQA v2数据集上微调相同的预训练输入表示，将ISTA与其他解决方案进行比较
+<ul>
+<li>MeanPool: 简单的抽取帧特征的平均值作为整个视频的表示</li>
+<li>Trans.-Frame: 遵循CLIP4Clip中的seqTransf类型，利用Transformer对帧特征进行自注意力来表示视频</li>
+<li>Trans.-Patch: 类似Trans.-Frame, 但它在所有patch tokens上执行自注意力</li>
+<li>Divided STA: 我们遵循视频分类模型中的Transformer对image patches执行uni-modal two-step SpaceTime Attention
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.00.59.png" alt=""></li>
+<li>如上结果表示，ISTA优于其他变体</li>
+</ul>
+</li>
+<li>原因</li>
+<li>长格式视频的内容往往复杂多样，简单的聚合所有帧特征的方法，可能会造成信息丢失</li>
+<li>长格式视频问答需要更强大的时空推理能力来关注视频的一些细节，而均值池化只在捕获整体内容上表现良好</li>
+<li>长格式QA中考虑region information是有帮助的，但稠密的自注意力和divided STA都没有考虑多粒度之间的相互作用，性能提升有限</li>
+</ul>
+<h2 id="45-ablation-study">4.5 Ablation Study</h2>
+<ul>
+<li>提出MIST的几组变体，显示其关键组件的有效性</li>
+</ul>
+<h3 id="effect-of-each-component-in-ista">Effect of each component in ISTA</h3>
+<ul>
+<li>删除ISTA层中的关键模块，即Segment Selection(SS), Region Selection(RS), Self-attention layer(STA)
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.01.50.png" alt="">
+<ul>
+<li>移除Segment Selection会引入大量的无关区域信息，hurt the performance</li>
+<li>Segment Selection对于多事件推理很重要，会损害需要时序推理的问题的表现</li>
+<li>去除STA时，性能下降显著，原因与mean pooling类似，我们需要一个强大的模型来捕捉多粒度推理</li>
+<li>去除RS无明显影响，原因是视频中的objects相对较少，经过temporal attention后，patch number大大减少；但使用spatial selection module可以显著降低计算成本</li>
+</ul>
+</li>
+</ul>
+<h3 id="effects-of-different-ista-configurations">Effects of different ISTA configurations</h3>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.02.53.png" alt=""></p>
+<ul>
+<li>MIST通过关注多个片段在多事件推理中是有用的</li>
+</ul>
+<h3 id="46-computation-efficiency">4.6 Computation Efficiency</h3>
+<ul>
+<li>采样更多frames的时候，效率显著提高</li>
+<li>patches上的标准Transformer在计算上是昂贵的</li>
+<li>Frame-based 方法计算量小，但性能有限</li>
+</ul>
+<h3 id="47-qualitative-results">4.7 Qualitative Results</h3>
+<ul>
+<li>mist可以显式选择与问题相关的video clip和image regions</li>
+<li>当问题涉及一些与社会情感相关的概念时，模型很难正确的选择segments和regions</li>
+<li>现存的模型可能不能很好的理解抽象概念和视频之间的对应关系</li>
+</ul>
+<h1 id="5-conclusion-and-future-work">5 Conclusion and Future Work</h1>
+<ul>
+<li>对高频率运动的捕捉能力有待提高</li>
+<li>Patches features在复杂的对象级推理上存在一定的局限性</li>
+</ul>
+</article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="application/javascript" src='https://y-m-m.github.io/js/toc.js'></script>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/toc.css' />
+
+  
+<div id="gitalk-container" class="gitalk-container"></div>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/gitalk.css'>
+<script src='https://y-m-m.github.io/js/gitalk.min.js'></script>
+<script>
+  const gitalk = new Gitalk({
+    clientID: 'Ov23livxKNtTlPeMjV2H',
+    clientSecret: '6d3bc9f47a1296f29628a63701ea5624cd28a26b',
+    repo: 'y-m-m.github.io',
+    owner: 'Y-M-M',
+    admin: ['Y-M-M'],
+    id: eval("location.pathname"), 
+    distractionFreeMode: false 
+  });
+  (function() {
+    gitalk.render('gitalk-container');
+  })();
+</script>
+
+</div>
+
+  <div class="footer container-xl width-full p-responsive">
+  <div
+    class="position-relative d-flex flex-row-reverse flex-lg-row flex-wrap flex-lg-nowrap flex-justify-center flex-lg-justify-between flex-sm-items-center pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
+    <a aria-label="Homepage" title="GitHub" class="footer-octicon d-none d-lg-block mr-lg-4" href="https://y-m-m.github.io/">
+      <svg height="24" class="octicon octicon-mark-github" viewBox="0 0 16 16" version="1.1" width="24">
+        <path fill-rule="evenodd"
+          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+        </path>
+      </svg>
+    </a>
+    <ul class="list-style-none d-flex flex-wrap col-12 flex-justify-center flex-lg-justify-between mb-2 mb-lg-0">
+      
+      <li class="mr-3 mr-lg-0">Theme by <a href='https://github.com/MeiK2333/github-style'>github-style</a></li>
+      
+    </ul>
+  </div>
+  <div class="d-flex flex-justify-center pb-6">
+    <span class="f6 text-gray-light"></span>
+  </div>
+
+
+</div>
+</body>
+
+<script type="application/javascript" src="https://y-m-m.github.io/js/github-style.js"></script>
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+<script type="application/javascript" src='https://y-m-m.github.io/js/search.js'></script>
+
+
+
+</html>

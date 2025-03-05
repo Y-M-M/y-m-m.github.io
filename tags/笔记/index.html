@@ -149,7 +149,7 @@
                 </path>
               </svg>
               Posts
-              <span class="Counter">96</span>
+              <span class="Counter">98</span>
             </a>
           </nav>
           <div class="profile-color-modes js-promo-color-modes-banner-profile isInitialToggle">
@@ -428,7 +428,7 @@
         </path>
       </svg>
       Posts
-      <span class="Counter ">96</span>
+      <span class="Counter ">98</span>
     </a>
   </nav>
 </div>
@@ -441,7 +441,7 @@
       
       <div class="TableObject border-bottom border-gray-light py-3">
         <div class="user-repo-search-results-summary TableObject-item TableObject-item--primary v-align-top">
-          <strong>16</strong>
+          <strong>18</strong>
           results
           for <strong>笔记</strong>
         </div>
@@ -464,16 +464,165 @@
           <div class="col-12 d-inline-block">
             <div class="d-inline-block mb-1">
               <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/linux%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E5%8F%8A%E5%BA%94%E7%94%A8/">Linux开发环境及应用</a>
+                <a href="https://y-m-m.github.io/post/vita-1.5/">VITA-1.5: Towards GPT-4o Level Real-Time Vision and Speech Interaction</a>
               </h3>
             </div>
 
             <div>
               <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <h1 id="unix常用命令">unix常用命令</h1>
-<h1 id="shell脚本程序设计">shell脚本程序设计</h1>
-<h1 id="系统调用">系统调用</h1>
-<h1 id="网络socket程序设计">网络socket程序设计</h1>
+                <h1 id="abstract">Abstract</h1>
+<ul>
+<li>在本文中，我们提出了一种精心设计的多阶段训练方法，通过逐步训练LLMs来理解视觉和语言信息，最终实现流利的视觉和语音交互；</li>
+<li>保留了强大的version-language能力，在没有单独的ASR和TTS模块的情况下实现了高效的语音对话能力，显著加快了多模态端到端的响应速度；
+<ul>
+<li>ASR 自动语音识别，将语音转换为文本</li>
+<li>TTS 文本到语音合成，将文本转换为语音</li>
+</ul>
+</li>
+</ul>
+<h1 id="1-introduction">1 Introduction</h1>
+<ul>
+<li>MLLMs中视觉和语音的整合并不简单，因为它们存在固有差异，常常导致训练过程的冲突
+<ul>
+<li>图像等视觉数据传递的是空间信息</li>
+<li>语音数据传递的是时间序列的动态变化</li>
+</ul>
+</li>
+<li>传统的语音到语音系统依赖于单独的模块ASR和TTS，这会增加延迟、降低一致性，限制了它们在实际应用中的一致性</li>
+<li>VITA-1.5
+<ul>
+<li>一个multimodal LLM</li>
+<li>通过精心设计的三阶段训练方法整合了视觉、语言和语音</li>
+<li>这种策略逐步整合视觉和语音数据，在缓解模态冲突的同时保持了较强的多模态性能</li>
+</ul>
+</li>
+<li>Stages
+<ul>
+<li>第一阶段，我们训练visual adapters，用描述性caption和视觉QA数据，关注version-language
+<ul>
+<li>这一步建立了模型的基本视觉能力，允许robust图像和视频理解</li>
+</ul>
+</li>
+<li>第二阶段，使用speech-transcription paired数据，训练一个audio encoder，再使用speech QA数据进行微调，引入audio input processing
+<ul>
+<li>这一步使模型具有有效的理解和响应音频输入的能力</li>
+</ul>
+</li>
+<li>第三阶段，训练一个audio decoder，使其能够实现端到端的语音输出，省去了外部的TTS模块
+<ul>
+<li>使VITA-1.5能够生成流畅的语音回复，促进了多模态对话系统的自然性和交互性</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>在与图像、视频和语音理解相关的各种基准进行了广泛的评估，将结果与open-source和proprietary模型进行比较
+<ul>
+<li>VITA-1.5显示出与基于图像/视频的MLLMs相当的感知和推理能力，并在语音能力方面取得显著进步</li>
+</ul>
+</li>
+</ul>
+<h1 id="2-related-work">2 Related work</h1>
+<ul>
+<li>近年来，得益于GPTs, LLaMA, Alpaca, Vicuna和Mistral等大语言模型的快速发展，研究者们通过多模态对齐和指令调优，成功的将文本理解扩展到多模态理解/推理</li>
+<li>例如
+<ul>
+<li>LLaVA, Qwen-VL, Cambrain-1, Mini-Gemini, MiniGPM-V 2.5, DeepSeek-VL和SLiME在图像预测和推理方面取得了重大进展</li>
+<li>LongVA, Video-LLaVA等模型展示出了视频理解的最新进展</li>
+</ul>
+</li>
+<li>很少有开源模型涉及多模态交互能力</li>
+<li>VITA-1.0对引入语音进行人机交互进行了初步尝试，但引入额外的语音数据对模型原有的多模态能力来说是个挑战
+<ul>
+<li>语音生成通常依赖于现有的TTS系统，导致高延迟</li>
+</ul>
+</li>
+<li>VITA-1.5
+<ul>
+<li>采用了精致的训练策略，在感知四个模态的数据(视频、图像、文本、音频)方面表现优异</li>
+<li>实现了接近实时的视觉和语音交互</li>
+</ul>
+</li>
+</ul>
+<h1 id="3-vita-15">3 VITA-1.5</h1>
+<h2 id="31-model-atchitecture">3.1 Model Atchitecture</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.06.41.png" alt=""></p>
+<ul>
+<li>输入
+<ul>
+<li>Multimodal Encoder-Adaptor-LLM的配置</li>
+<li>将视觉/听觉 transformer 和 多层connector 联合 大语言模型一起训练，旨在增强对视觉、音频和语言的统一认识</li>
+</ul>
+</li>
+<li>输出
+<ul>
+<li>VITA-1.5有自己的端到端语音模块，而不是像VITA-1.0那样使用外部模块</li>
+</ul>
+</li>
+</ul>
+<h3 id="311-visional-modality">3.1.1 Visional Modality</h3>
+<ul>
+<li>VIsional Encoder
+<ul>
+<li>Intern ViT-300M作为视觉编码器，输入图像大小为448*448个像素</li>
+<li>每个图像生成256个visual tokens</li>
+<li>对于高分辨率的图像，VITA-1.5采用动态补丁策略捕捉局部细节，提高图像理解的准确性
+<ul>
+<li>动态补丁策略是一种在图像处理或计算机视觉任务中用于捕捉局部细节的技术，通过动态调整patch的大小或位置，来更好的适应图像中的不同区域和细节</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Video Processing
+<ul>
+<li>视频被理解为一种特殊类型的多图像输入</li>
+<li>小于4s：均匀采样4帧</li>
+<li>4~16s：每秒采样1帧</li>
+<li>大于16s：均匀采样16帧</li>
+<li>不对视频帧运用动态补丁，以避免过多的视觉令牌阻碍处理效率</li>
+</ul>
+</li>
+<li>Vision Adapter
+<ul>
+<li>使用两层MLP(多层感知机)来将视觉特征映射到适合后续LLM理解的visual tokens</li>
+</ul>
+</li>
+</ul>
+<h3 id="312-audio-modality">3.1.2 Audio Modality</h3>
+<ul>
+<li>Speech Encoder
+<ul>
+<li>我们的audio encoder模块由多个下采样卷积层(4倍下采样)和24个Transformer块(隐藏尺寸为1024)组成
+<ul>
+<li>下采样层有助于降低音频特征的帧率，提高LLM的处理速度</li>
+<li>下采样是通过降低采样率来减少数据量的过程，下采样会减少信号的帧率，同时保留关键信息，从而提高后续处理的效率</li>
+</ul>
+</li>
+<li>参数为350M，输出帧率为12.5Hz</li>
+<li>Mel-filter bank features作为audio encoder的输入，窗口大小为25ms，步长 10ms</li>
+</ul>
+</li>
+<li>Speech Adapter
+<ul>
+<li>由多个具有两倍下采样的卷积层组成</li>
+</ul>
+</li>
+<li>Speech Decoder
+<ul>
+<li>TiCodec(编解码器)</li>
+<li>制定了一个大小为1024的单码本，简化了推理阶段的解码过程</li>
+<li>负责将连续的语音信号编码为40Hz的离散的speech tokens，同时能够将speech tokens解码为采样率24000Hz的语音信号</li>
+<li>两种解码器
+<ul>
+<li>Non-Autoregressive (NAR) Speech Decoder 对文本标记进行全局处理，并对语义特征进行建模，目的是生成speech tokens的初始分布</li>
+<li>Autoregressive (AR) Speech Decoder 基于NAR产生的语音信息，逐步产生更高质量的speech tokens，再使用codec model将最后的speech tokens解码为连续的语音信号流</li>
+<li>NAR和AR均采用4个LLaMA解码层，hidden size为896，参数大小为大约120M</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="32-training-data">3.2 Training Data</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.07.50.png" alt=""></p>
               </div>
             </div>
 
@@ -489,13 +638,13 @@
                 计算机科学
               </a>
               
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/linux%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E5%8F%8A%E5%BA%94%E7%94%A8">
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB">
                 <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
                   <path fill-rule="evenodd"
                     d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
                   </path>
                 </svg>
-                Linux开发环境及应用
+                论文阅读
               </a>
               
               <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AC%94%E8%AE%B0">
@@ -510,9 +659,9 @@
               
 
               Created
-              <relative-time datetime=" Wed, 26 Feb 2025 00:00:00 &#43;0000" class="no-wrap"
-                title=" Wed, 26 Feb 2025 00:00:00 &#43;0000">
-                Wed, 26 Feb 2025 00:00:00 &#43;0000
+              <relative-time datetime=" Fri, 28 Feb 2025 00:00:00 &#43;0000" class="no-wrap"
+                title=" Fri, 28 Feb 2025 00:00:00 &#43;0000">
+                Fri, 28 Feb 2025 00:00:00 &#43;0000
               </relative-time>
             </div>
           </div>
@@ -550,7 +699,7 @@
 </ul>
 <h2 id="internet的网络结构">Internet的网络结构</h2>
 <ul>
-<li>由路由器将各子王连接起来</li>
+<li>由路由器将各子网连接起来</li>
 <li>网络互联<strong>关键设备：路由器</strong>
 <ul>
 <li>功能
@@ -581,6 +730,75 @@
 </ul>
 </li>
 </ul>
+<h3 id="internet的核心部分">Internet的核心部分</h3>
+<ul>
+<li>网络核心部分起特殊作用的是路由器
+<ul>
+<li>路由器是实现<strong>分组交换</strong>的关键构件，其任务是转发收到的分组，这是网络核心部分最重要的功能</li>
+</ul>
+</li>
+</ul>
+<h3 id="体系结构">体系结构</h3>
+<ul>
+<li>Internet的体系结构
+<ul>
+<li>相互通信的两个计算机系统必须<strong>高度协调工作</strong>才行，而这种“协调”是相当复杂的</li>
+<li>“分层”可将庞大而复杂的问题，转化为若干较小的局部问题，而这些较小的局部问题就比较易于研究和处理</li>
+</ul>
+</li>
+<li>层次结构方法要达到的目标
+<ul>
+<li>结构清晰</li>
+<li>简化设计与实现</li>
+<li>便于更新与维护</li>
+</ul>
+</li>
+<li>具有五层的网络结构
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2010.19.01.png" alt=""></li>
+<li>发送数据
+<ul>
+<li>在应用层加上应用层首部 -&gt; PDU</li>
+<li>加上运输层首部 -&gt; 运输层报文</li>
+<li>加上网络层首部 -&gt; IP数据报(或分组)</li>
+<li>加上链路层首部和尾部，成为链路层帧</li>
+<li>物理层把比特流传输到物理媒体</li>
+</ul>
+</li>
+<li>接收数据
+<ul>
+<li>物理层接收比特流，上交给数据链路层</li>
+<li>链路层去掉首部和尾部，上交给网络层</li>
+<li>网络层剥去首部，取出数据部分，上交给运输层</li>
+<li>运输层剥去首部，取出数据部分，上交给应用层</li>
+<li>应用层剥去首部，取出应用数据，上交给应用进程</li>
+</ul>
+</li>
+</ul>
+<h3 id="internet的网络技术特性">Internet的网络技术特性</h3>
+<ul>
+<li>Internet是支持<strong>数据通信</strong>的网路</li>
+<li>Internet采用<strong>自适应路由</strong>算法</li>
+<li>Internet网络层采用<strong>无连接</strong>服务</li>
+<li>Internet是<strong>尽最大努力投递</strong>的网络</li>
+</ul>
+<h3 id="internet的接入方法">Internet的接入方法</h3>
+<ul>
+<li>介质类型分类
+<ul>
+<li>有线方式接入</li>
+<li>无线方式接入</li>
+</ul>
+</li>
+<li>接入技术分类
+<ul>
+<li>局域网接入</li>
+<li>拨号接入</li>
+<li>专线接入</li>
+</ul>
+</li>
+</ul>
+<h3 id="internet的标准化工作">Internet的标准化工作</h3>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2010.58.39.png" alt=""></p>
               </div>
             </div>
 
@@ -620,6 +838,415 @@
               <relative-time datetime=" Wed, 26 Feb 2025 00:00:00 &#43;0000" class="no-wrap"
                 title=" Wed, 26 Feb 2025 00:00:00 &#43;0000">
                 Wed, 26 Feb 2025 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/mist/">MIST : Multi-modal Iterative Spatial-Temporal Transformer(多模态迭代时空转换器) for Long-form Video Question Answering</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <blockquote>
+<p>2022-12-19 arXiv</p>
+</blockquote>
+<h1 id="abstract">Abstract</h1>
+<ul>
+<li>多模态VQA模型: 短视频片段/图片 -&gt; 长视频
+<ul>
+<li>使用密集视频采样策略计算太复杂</li>
+<li>稀疏采样难以应对多粒度、多事件可视化推理</li>
+</ul>
+</li>
+<li>MIST的特点
+<ul>
+<li>dense spatialtemporal self-attention-&gt;级联的片段和区域选择模块，自适应地选择与问题本身密切相关的帧和图像区域</li>
+<li>然后通过attention model对不同粒度的视觉概念进行高效处理</li>
+<li>MIST在多个层次上迭代地进行选择和关注，以支持对多个事件的推理</li>
+<li>使用数据集
+<ul>
+<li>AGQA, NExT-QA, STAR, Env-QA(平均时长从12s到44s不等)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="1-introduction">1 Introduction</h1>
+<h2 id="challenges">Challenges</h2>
+<ul>
+<li>多事件推理(复杂的时序推理，如多事件推理，因果关系)</li>
+<li>不同粒度的视觉概念之间的相互作用(可能涉及跨越不同事件的更复杂的物体、关系和事件的交互)</li>
+<li>目前的多模态transformer依赖于密集的自注意力，随视频时间的延长，计算成本呈指数增长 -&gt; 只对每个视频采样3帧或4帧，不管其长度如何</li>
+</ul>
+<h2 id="新模型mist">新模型MIST</h2>
+<ul>
+<li>考虑所有事件的一般内容，关注与问题相关的少数事件的细节</li>
+<li>MIST将稠密的联合时空自注意力机制分解为问题条件的级联片段和区域选择模块，以及多模态多粒度特征上的时空自注意力
+<ul>
+<li>级联选择通过关注与问题相关的片段和区域，降低了计算成本并提高了性能</li>
+<li>通过对片段和图像块的自注意力，更好的捕获了不同粒度的视觉概念之间的相互作用</li>
+<li>通过迭代的进行选择和自注意力，MIST可以在多个事件上进行推理，并更好的进行时间和因果推理</li>
+</ul>
+</li>
+</ul>
+<h1 id="2-related-work">2 Related work</h1>
+<h2 id="video-question-answering">Video question answering</h2>
+<ul>
+<li>长视频VQA任务主要关注于对情节和、社会交往的理解，和更复杂的时空推理能力；目前的工作在前两类基准上取得了可喜的成果，本文主要关注于最后一类问题</li>
+<li>方法
+<ul>
+<li>早期提出了各种基于LSTM和图神经网络的模型 来捕获 跨模态的或动作与外观的交互</li>
+<li>最近的一项工作将图建模集成到transformers中，以显式地捕获视频中的对象及其关系</li>
+<li>许多工作直接在下游videoQA任务上对预训练模型进行微调</li>
+<li>本文对自注意力机制进行了修正，以便更好的进行多时间、多粒度的视觉推理</li>
+</ul>
+</li>
+</ul>
+<h2 id="将预训练的模型迁移到下游任务中">将预训练的模型迁移到下游任务中</h2>
+<ul>
+<li>预训练的vision-language Transformers, 如CLIP -&gt; 下游任务，如目标检测，图像生成和视频文本检索
+<ul>
+<li>CLIP4Clip: 均值池化，Transformer等-&gt;更好的表示视频</li>
+<li>CLIP2Video: 提出了时间差分块来更好的捕捉运动信息</li>
+<li>我们保留了预训练模型的优点，并改进了它在下游任务上的弱点</li>
+</ul>
+</li>
+</ul>
+<h2 id="long-form-video-modeling">Long-form video modeling</h2>
+<ul>
+<li>利用视频的自然特性，减少计算量</li>
+<li>本文考虑了QA任务的特点，以问题为导向，减少计算量，提高性能</li>
+</ul>
+<h2 id="iterative-attention">Iterative Attention</h2>
+<ul>
+<li>MIST利用了VQA中的多模态对应关系来引导迭代注意</li>
+</ul>
+<h1 id="3-method">3 Method</h1>
+<ul>
+<li>VQA任务目标
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2011.23.49.png" alt=""></li>
+<li>MIST回答问题的三步
+<ol>
+<li>利用预训练模型提取输入特征</li>
+<li>迭代地在选定的特征集合上perform自注意力，以执行多事件推理</li>
+<li>根据得到的video, question, answer features预测答案
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2011.24.30.png" alt=""></li>
+</ol>
+</li>
+</ul>
+<h2 id="31-input-representation">3.1 Input Representation</h2>
+<ul>
+<li>视频部分
+<ul>
+<li>将视频分为K个长度均匀的片段，每个片段包含T帧，每帧被分为N个小块 -&gt; 图片块和帧的 [CLS] token 以N和T计数</li>
+<li>vision-language Transformer，如CLIP，All-in-one with frozen parameters，提取所有帧的图像块级别的特征
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.54.55.png" alt="">
+<ul>
+<li>由于分段特征是单独提取的，表示其在整个视频中的时间位置Pt ∈ {φt(i)|i ∈ [0, K · T ]}和帧索引</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>文本部分
+<ul>
+<li>将问题表征为单词序列</li>
+<li>将它输入到vision-language Transformer来获取单词级别的特征
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.55.42.png" alt="">
+<ul>
+<li>w1 corresponds to [CLS] and w2, &hellip;, wM are words in question</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="32-ista">3.2 ISTA</h2>
+<ul>
+<li>Iterative Spatial-Temporal Attention Layer 迭代时空注意力层</li>
+<li>迭代的选择基于问题的长视频中的片段和区域，然后对选择的片段和区域进行多事件推理</li>
+<li>步骤
+<ul>
+<li>Segment selection</li>
+<li>Region selection</li>
+<li>时空自注意力
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.56.26.png" alt=""></li>
+</ul>
+</li>
+</ul>
+<h3 id="segment-selection">Segment Selection</h3>
+<ul>
+<li>给定一组image patch特征x，计算segments和问题的特征 -&gt; 选择Topk segments的patch features</li>
+<li>执行temporal attention
+<ul>
+<li>对每一个第k segment第t frame做空间维度的特征池化</li>
+<li>将frame features沿时间维度进行池化得到segment features</li>
+<li>Question feature通过对word features进行池化得到</li>
+<li>池化函数可以根据使用的Transformer的具体类型，从mean pooling, first token pooling, simple MLP layer等中选择</li>
+</ul>
+</li>
+</ul>
+<h3 id="region-selection">Region Selection</h3>
+<ul>
+<li>对采样所得的帧，选择与问题最相关的patches</li>
+</ul>
+<h3 id="spatial-temporal-self-attention">Spatial-Temporal Self-Attention</h3>
+<ul>
+<li>给定选定的frames和选定的regions，使用一个self-attention layer推理出一个融合的特征向量来联合表示question和video</li>
+<li>只保留选择出的patches</li>
+<li>嵌入类型特征 -&gt; 多头注意力机制获得所有输入令牌的上下文特征</li>
+</ul>
+<h3 id="iterative-execution-of-ista">Iterative Execution of ISTA</h3>
+<h2 id="answer-prediction">Answer prediction</h2>
+<ul>
+<li>将所有ISTA层的token特征池化
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.58.07.png" alt=""></li>
+<li>计算Xo和所有通过预训练模型获取的候选答案之间的相似度，选择相似度最大的答案作为最终预测答案</li>
+</ul>
+<h1 id="4-experiments">4 Experiments</h1>
+<h2 id="41-datasets">4.1 Datasets</h2>
+<h3 id="agqa">AGQA</h3>
+<ul>
+<li>一个开放的，用于合成时空推理的VQA基准，使用v2版本(有更平衡的分布)</li>
+<li>2.27M QA对，9.7K videos，平均长度30s</li>
+</ul>
+<h3 id="next-qa">NExT-QA</h3>
+<ul>
+<li>用于因果和时序推理的多选择视频问答基准</li>
+<li>包括5440个视频，平均长度44s，约25K个问题</li>
+</ul>
+<h3 id="star">STAR</h3>
+<ul>
+<li>用于情景推理的多选择VQA基准</li>
+<li>22个视频片段，平均长度12s，约60K个问题</li>
+</ul>
+<h3 id="env-qa">Env-QA</h3>
+<ul>
+<li>开放的，用于动态环境理解的VQA基准</li>
+<li>23K个自我中心视频，平均长度20s，85K问题，是在虚拟环境AI2THOR上收集的</li>
+</ul>
+<h2 id="42-implementation-details">4.2 Implementation Details</h2>
+<ul>
+<li>可以建立在大多数预训练的多模态Transformer上，在实验中尝试了针对图像语言预训练的模型CLIP(ViT-B/32)和针对视频语言预训练的模型All-in-One-Base</li>
+<li>Topk = 2, Topj = 12, the layer of ISTA L = 2, 每个视频采样32帧，并将其分割成K = 8个segments</li>
+</ul>
+<h2 id="43-comparison-with-state-of-the-arts">4.3 Comparison with State-of-the-arts</h2>
+<ul>
+<li>与最先进的SOTA方法进行比较
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.59.15.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.59.34.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.59.55.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.00.23.png" alt=""></li>
+<li>我们提出的方法达到了最先进的性能，并且在所有数据集上都优于现有的方法</li>
+</ul>
+<h2 id="44-comparison-with-baselines">4.4 Comparison with Baselines</h2>
+<ul>
+<li>在基于CLIP的MIST框架中，我们通过在AGQA v2数据集上微调相同的预训练输入表示，将ISTA与其他解决方案进行比较
+<ul>
+<li>MeanPool: 简单的抽取帧特征的平均值作为整个视频的表示</li>
+<li>Trans.-Frame: 遵循CLIP4Clip中的seqTransf类型，利用Transformer对帧特征进行自注意力来表示视频</li>
+<li>Trans.-Patch: 类似Trans.-Frame, 但它在所有patch tokens上执行自注意力</li>
+<li>Divided STA: 我们遵循视频分类模型中的Transformer对image patches执行uni-modal two-step SpaceTime Attention
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.00.59.png" alt=""></li>
+<li>如上结果表示，ISTA优于其他变体</li>
+</ul>
+</li>
+<li>原因</li>
+<li>长格式视频的内容往往复杂多样，简单的聚合所有帧特征的方法，可能会造成信息丢失</li>
+<li>长格式视频问答需要更强大的时空推理能力来关注视频的一些细节，而均值池化只在捕获整体内容上表现良好</li>
+<li>长格式QA中考虑region information是有帮助的，但稠密的自注意力和divided STA都没有考虑多粒度之间的相互作用，性能提升有限</li>
+</ul>
+<h2 id="45-ablation-study">4.5 Ablation Study</h2>
+<ul>
+<li>提出MIST的几组变体，显示其关键组件的有效性</li>
+</ul>
+<h3 id="effect-of-each-component-in-ista">Effect of each component in ISTA</h3>
+<ul>
+<li>删除ISTA层中的关键模块，即Segment Selection(SS), Region Selection(RS), Self-attention layer(STA)
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.01.50.png" alt="">
+<ul>
+<li>移除Segment Selection会引入大量的无关区域信息，hurt the performance</li>
+<li>Segment Selection对于多事件推理很重要，会损害需要时序推理的问题的表现</li>
+<li>去除STA时，性能下降显著，原因与mean pooling类似，我们需要一个强大的模型来捕捉多粒度推理</li>
+<li>去除RS无明显影响，原因是视频中的objects相对较少，经过temporal attention后，patch number大大减少；但使用spatial selection module可以显著降低计算成本</li>
+</ul>
+</li>
+</ul>
+<h3 id="effects-of-different-ista-configurations">Effects of different ISTA configurations</h3>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.02.53.png" alt=""></p>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                论文阅读
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AC%94%E8%AE%B0">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                笔记
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Thu, 20 Feb 2025 00:00:00 &#43;0000" class="no-wrap"
+                title=" Thu, 20 Feb 2025 00:00:00 &#43;0000">
+                Thu, 20 Feb 2025 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/mllm%E7%BB%BC%E8%BF%B0/">A Survey on Multimodal Large Language Models</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <blockquote>
+<p>2024-11-14 IEEE</p>
+</blockquote>
+<h1 id="1-introduction">1 Introduction</h1>
+<h2 id="mllm的两个代表性特征">MLLM的两个代表性特征</h2>
+<ul>
+<li>基于Billion-scale parameters LLM</li>
+<li>使用新的训练范式，例如多模态教学调优</li>
+</ul>
+<h2 id="mllm的扩展">MLLM的扩展</h2>
+<ul>
+<li>更好的粒度支持，对用户提示进行更精细的控制；</li>
+<li>增强了对输入输出模态的支持，如图像、视频、音频和点云；NExT-GPT支持不同模态的输出；</li>
+<li>改进了语言支持</li>
+<li>扩展到更多领域和使用场景</li>
+</ul>
+<h2 id="mllm的时间线">MLLM的时间线</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2010.31.51.png" alt=""></p>
+<h2 id="surveys主要内容">surveys主要内容</h2>
+<h3 id="mllms重要方面的综述">MLLMs重要方面的综述</h3>
+<ol>
+<li>主流架构</li>
+<li>训练策略和训练数据</li>
+<li>效果评价</li>
+</ol>
+<h3 id="mllms的重要问题">MLLMs的重要问题</h3>
+<ol>
+<li>那些方面可以进一步完善和扩展</li>
+<li>如何缓解多模态幻觉问题</li>
+</ol>
+<h3 id="三种关键技术">三种关键技术</h3>
+<ol>
+<li>M-ICL(多模态上下文学习) 在推理阶段常用的提高小样本性能的有效技术</li>
+<li>M-CoT(多模态思维链) 用于复杂的推理任务</li>
+<li>开发基于LLM的系统来解决复合推理任务或解决普通用户查询的一般思路</li>
+</ol>
+<h1 id="2-architecture">2 Architecture</h1>
+<h2 id="mllm的模块构成">MLLM的模块构成</h2>
+<ol>
+<li>预训练的模态编码器</li>
+<li>预训练的LLM</li>
+<li>连接他们的接口</li>
+</ol>
+<h2 id="21-modality-encoder">2.1 Modality Encoder</h2>
+<h3 id="作用">作用</h3>
+<ul>
+<li>将原始信息压缩成更紧凑的表示；</li>
+</ul>
+<h3 id="常用modality-encoder">常用Modality Encoder</h3>
+<ul>
+<li>使用已经对齐到其他模态的预训练编码器，而无需从头开始训练；
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2010.33.28.png" alt=""></li>
+<li>MiniGPT-4 -&gt; EVA-CLIP encoder</li>
+<li>Osprey -&gt; ConvNext-L encoder</li>
+</ul>
+<h3 id="考虑的因素">考虑的因素</h3>
+<ul>
+<li>分辨率
+<ul>
+<li>提高分辨率可以获得显著的性能增益</li>
+<li>提高分辨率方法
+<ul>
+<li>直接缩放法 直接将高分辨率图像输入到编码器中 (CogAgent采用双编码机制，两个编码器分别处理高、低编码器图像)</li>
+<li>分片法 将一幅高分辨率图像切割成块，复用低分辨率编码器 (Monkey和SPHINX将一幅大图像分割成更小的图像块，并将子图像和降采样后的高分辨率图像一起发送给Encoder)</li>
+</ul>
+</li>
+<li>Pingi使用CLAP模型作为音频编码器</li>
+<li>ImageBind-LLM 使用ImageBind编码器，支持编码图像、文本、音频、深度、温度和惯性测量单元( Inertial Measurement Unit，IMU )数据</li>
+</ul>
+</li>
+<li>参数大小</li>
+<li>训练语境</li>
+</ul>
+<h2 id="22-pre-trained-llm">2.2 Pre-trained LLM</h2>
+<h3 id="常用pre-trained-llm">常用pre-trained LLM</h3>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2010.35.04.png" alt=""></p>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                论文阅读
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AC%94%E8%AE%B0">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                笔记
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Sat, 15 Feb 2025 00:00:00 &#43;0000" class="no-wrap"
+                title=" Sat, 15 Feb 2025 00:00:00 &#43;0000">
+                Sat, 15 Feb 2025 00:00:00 &#43;0000
               </relative-time>
             </div>
           </div>
@@ -1587,446 +2214,6 @@
               <relative-time datetime=" Fri, 01 Mar 2024 00:00:00 &#43;0000" class="no-wrap"
                 title=" Fri, 01 Mar 2024 00:00:00 &#43;0000">
                 Fri, 01 Mar 2024 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/%E6%AF%9B%E6%A6%82/">毛泽东思想和中国特色社会主义理论体系概论</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <h1 id="成绩">成绩</h1>
-<ul>
-<li>平时成绩 40% 考勤、课堂表现、讨论</li>
-<li>期中成绩 20% 视频 7-8分钟 主题“作为北邮学子，向新中国成立75周年献礼” 提交时附上视频拍摄大纲（主要内容、特色等简介），并标清各成员的具体分工内容，以MP4等能便捷打开的格式，4月8日前交给本班长</li>
-<li>期末成绩 40% 闭卷考试</li>
-<li>实践成绩 小组提交实验报告（期中之后）</li>
-<li>4.7 小班学委</li>
-</ul>
-<h1 id="导论-马克思主义中国化时代化的历史进程与理论成果">导论 马克思主义中国化时代化的历史进程与理论成果</h1>
-<h2 id="马克思主义中国化时代化的提出">马克思主义中国化时代化的提出</h2>
-<h3 id="马克思是什么时候进入中国的">马克思是什么时候进入中国的</h3>
-<ul>
-<li>1899年 清末 传入中国</li>
-<li>1917年 十月革命爆发</li>
-<li>1919年 五四运动</li>
-<li>1921年 中国共产党诞生，中国人民从精神上由被动转为主动，中国选择马克思主义，是历史的选择，是人民的选择</li>
-<li>1938年 提出马克思主义中国化，毛泽东在<strong>党的六届六中全会</strong>上作了《论新阶段》的报告，“没有抽象的马克思主义，只有具体的马克思主义。”，这标志着“马克思主义中国化”这一命题的正式提出</li>
-<li>1945年，在<strong>党的七大</strong>上，刘少奇代表党中央作了《关于修改党章的报告》，对马克思主义中国化从理论上作了进一步的阐述，并指出毛泽东思想是“中国化的马克思主义”。</li>
-<li>2021年，<strong>党的十九届六中全会</strong>通过的《中共中央关于党的百年奋斗重大成就和历史经验的决议》，总结了百年来中国共产党推进马克思主义中国化时代化的重大成就，阐释了马克思主义中国化时代化的重大历史意义</li>
-<li>2022年，<strong>党的二十大</strong>明确把“不断谱写马克思主义中国化时代化新篇章”作为当代中国共产党人的庄严历史责任，并提出了继续推进马克思主义中国化时代化的新要求</li>
-</ul>
-<h3 id="中国选择了马克思主义">中国选择了马克思主义</h3>
-<ul>
-<li>是众多先进分子的共同选择</li>
-<li>国内探索：毛泽东也是在不断学习和革命实践的过程中，认识到只有马克思主义、只有社会主义才能救中国的深刻道理，从而实现了向马克思主义者的转变</li>
-<li>日本：陈独秀、李大钊、胡汉民</li>
-<li>美国和苏联</li>
-</ul>
-<h3 id="中国共产党成立的意义">中国共产党成立的意义</h3>
-<ul>
-<li>改变了近代以后中华民族发展的方向和进程</li>
-<li>深刻改变了中国人民和中华民族的前途和命运</li>
-<li>深刻改变了世界发展的趋势和格局</li>
-</ul>
-<h3 id="马克思主义必须中国化时代化">马克思主义必须中国化时代化</h3>
-<ul>
-<li>马克思主义理论发展的内在要求（马克思主义）：解释世界、改造世界</li>
-<li>解决中国实际问题的客观需要（中国文化）：对美好社会的向往</li>
-<li>（中国共产党）</li>
-</ul>
-<h2 id="马克思主义中国化时代化的内涵">马克思主义中国化时代化的内涵</h2>
-<ul>
-<li>
-<p>立足中国国情和时代特点，坚持把马克思主义基本原理同中国具体实际相结合，同中国优秀传统文化相结合</p>
-</li>
-<li>
-<p>运用马克思主义解决中国问题</p>
-<ul>
-<li>运用马克思主义的立场、观点和方法，观察时代、把握时代、引领时代，解决中国革命、建设、改革中的实际问题</li>
-</ul>
-</li>
-<li>
-<p>总结中国经验，发展马克思主义</p>
-<ul>
-<li>总结和提炼中国革命、建设、改革的实际经验并将其上升为理论，不断丰富和发展马克思主义的理论宝库，赋予马克思主义新的时代内涵</li>
-</ul>
-</li>
-<li>
-<p>运用民族语言，阐述马克思主义</p>
-<ul>
-<li>运用中国人民喜闻乐见的民族语言来阐述马克思主义，使其根植于中华优秀传统文化的土壤之中，具有中国特色、中国风格、中国气派</li>
-</ul>
-</li>
-</ul>
-<h2 id="马克思主义中国化时代化的历史进程">马克思主义中国化时代化的历史进程</h2>
-<ul>
-<li>1921-1949年 新民主主义革命时期 创造了新民主主义革命的伟大成就，为实现中华民族伟大复兴创造根本社会条件</li>
-<li>1949-1978年 社会主义革命和建设时期 实现了中华民族有史以来最广泛而深刻的社会变革，实现了一穷二白、人口众多的东方大国迈进社会主义社会的伟大飞跃，为实现中华民族伟大复兴奠定了根本政治前提和制度基础</li>
-<li>1978-2012年 改革开放和社会主义现代化建设新时期 创造了改革开放和社会主义现代化建设的伟大成就，为实现中华民族伟大复兴提供充满新的活力的体制保证和快速发展的物质条件</li>
-<li>2012年至今，中国特色社会主义新时代 创造了新时代中国特色社会主义的伟大成就，为实现中华民族伟大复兴提供了更为完善的制度保证，更为坚实的物质基础，更为主动的精神力量</li>
-</ul>
-<h2 id="马克思主义中国化时代化理论成果及其关系">马克思主义中国化时代化理论成果及其关系</h2>
-<h3 id="毛泽东思想">毛泽东思想</h3>
-<ul>
-<li>在革命和建设的长期实践中</li>
-<li>是马克思列宁主义在中国的运用和发展，是被实践证明了的关于中国革命和建设的正确的理论原则和经验总结，是中国共产党集体智慧的结晶</li>
-</ul>
-<h3 id="邓小平理论">邓小平理论</h3>
-<ul>
-<li>1978党的十一届三中全会以后</li>
-<li>什么是社会主义，怎样建设社会主义</li>
-<li>中国特色社会主义理论体系的开篇之作</li>
-</ul>
-<h3 id="三个代表重要思想">“三个代表”重要思想</h3>
-<ul>
-<li>1989党的十三届四中全会以后</li>
-<li>建设什么样的党，怎样建设党</li>
-<li>推动了中国特色社会主义理论体系的跨世纪发展</li>
-</ul>
-<h3 id="科学发展观">科学发展观</h3>
-<ul>
-<li>2002党的十六大以后</li>
-<li>新形势下实现什么样的发展、怎样发展</li>
-<li>实现了中国特色社会主义理论体系在新世纪新阶段的新发展</li>
-</ul>
-<h3 id="中国特色社会主义理论体系的科学概念">中国特色社会主义理论体系的科学概念</h3>
-<ul>
-<li>2007党的十七大提出</li>
-</ul>
-<h3 id="习近平新时代中国特色社会主义思想">习近平新时代中国特色社会主义思想</h3>
-<ul>
-<li>2012党的十八大以来</li>
-<li>新时代坚持和发展什么样的中国特色社会主义、怎样坚持和发展中国特色社会主义这个重大时代课题</li>
-<li>谱写了新时代中国特色社会主义的新篇章</li>
-</ul>
-<h3 id="关系">关系</h3>
-<ul>
-<li>一脉相承又与时俱进</li>
-<li>一方面，毛泽东思想所蕴含的马克思主义的立场、观点和方法，为中国特色社会主义理论体系提供了基本遵循</li>
-<li>另一方面，中国特色社会主义理论体系在新的历史条件下进一步丰富和发展了毛泽东思想。</li>
-<li>毛泽东思想和中国特色社会主义理论体系，都是马克思列宁主义在中国的运用和发展，都以独创性的理论成果丰富和发展了马克思主义的理论宝库</li>
-</ul>
-<h2 id="学习本课程的要求和方法">学习本课程的要求和方法</h2>
-<ul>
-<li>掌握基本理论</li>
-<li>培养理论思维</li>
-<li>坚持理论联系实际</li>
-</ul>
-<h2 id="思考题">思考题</h2>
-<ul>
-<li>马克思主义中国化时代化的必要性是什么</li>
-<li>马克思主义中国化时代化的内涵是什么</li>
-<li>马克思主义中国化时代化有哪些理论成果</li>
-<li>马克思主义中国化时代化理论成果之间的相互关系</li>
-</ul>
-<h1 id="第一章-毛泽东思想及其历史地位">第一章 毛泽东思想及其历史地位</h1>
-<h2 id="毛泽东思想的形成和发展">毛泽东思想的形成和发展</h2>
-<h3 id="毛泽东思想形成发展的历史条件">毛泽东思想形成发展的历史条件</h3>
-<h4 id="青年毛泽东1893年时期的世界和中国">青年毛泽东（1893年）时期的世界和中国</h4>
-<ul>
-<li>
-<p>国内背景</p>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%94%BF%E6%B2%BB%E8%AF%BE">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                政治课
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%AF%9B%E6%B3%BD%E4%B8%9C%E6%80%9D%E6%83%B3%E5%92%8C%E4%B8%AD%E5%9B%BD%E7%89%B9%E8%89%B2%E7%A4%BE%E4%BC%9A%E4%B8%BB%E4%B9%89%E7%90%86%E8%AE%BA%E4%BD%93%E7%B3%BB%E6%A6%82%E8%AE%BA">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                毛泽东思想和中国特色社会主义理论体系概论
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AC%94%E8%AE%B0">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                笔记
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Tue, 27 Feb 2024 00:00:00 &#43;0000" class="no-wrap"
-                title=" Tue, 27 Feb 2024 00:00:00 &#43;0000">
-                Tue, 27 Feb 2024 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <p>bupt的计算机组成原理课的笔记</p>
-<h2 id="成绩构成">成绩构成</h2>
-<ul>
-<li>硬件实验20%</li>
-<li>期中考试10%</li>
-<li>平时作业10%</li>
-<li>期末考试60%</li>
-</ul>
-<h1 id="第一章-计算机概述">第一章 计算机概述</h1>
-<h2 id="计算机分类和应用">计算机分类和应用</h2>
-<h3 id="通用计算机分类">通用计算机分类</h3>
-<ul>
-<li>单片机</li>
-<li>微型机</li>
-<li>工作站</li>
-<li>服务器</li>
-<li>大型机</li>
-<li>超级计算机</li>
-</ul>
-<h3 id="面向应用的分类">面向应用的分类</h3>
-<ul>
-<li>通用计算机：具有计算机的标准形态，通过安装不同的应用软件，以相似的外观呈现并应用在各行各业</li>
-<li>专用计算机/嵌入式计算机：安装或嵌入到交通工具、仪器仪表、控制系统、通信设备和家电产品等中的模块化计算机</li>
-</ul>
-<h3 id="计算机的应用领域">计算机的应用领域</h3>
-<ul>
-<li>科学计算</li>
-<li>信息处理</li>
-<li>实时控制</li>
-<li>人工智能</li>
-<li>计算机辅助设计</li>
-<li>医疗保健、教育、工业制造、娱乐和游戏等</li>
-</ul>
-<h2 id="计算机发展简史">计算机发展简史</h2>
-<h3 id="计算机的演进">计算机的演进</h3>
-<ul>
-<li>第0代 机械时代(BC-1940)</li>
-<li>第1代 电子管时代(1946-1957) 数据处理机</li>
-<li>第2代 晶体管时代(1958-1964) 工业控制机</li>
-<li>第3代 集成电路时代(1965-1971) 小型计算机</li>
-<li>第4代 超大规模集成电路时代(1972-1990) 微型计算机</li>
-<li>第5代 巨大规模集成电路计算机(1991年开始) 单片计算机</li>
-<li>第6代 量子计算机、光计算机、生物计算机？</li>
-</ul>
-<h3 id="世界上第一台计算机eniac">世界上第一台计算机ENIAC</h3>
-<ul>
-<li>1946美国宾夕法尼亚大学</li>
-<li>Mauchly和Eckert设计</li>
-<li>十进制</li>
-</ul>
-<h3 id="ias计算机">IAS计算机</h3>
-<ul>
-<li>Von Neumann机，冯·诺伊曼结构计算机</li>
-<li>“存储程序”计算机</li>
-<li>1945年冯·诺伊曼/图灵同时提出“存储程序“思想</li>
-<li>采用二进制数据</li>
-<li>只实现整数运算</li>
-<li>五大功能部件，是后来通用计算机的原型</li>
-</ul>
-<h3 id="计算机技术飞速发展">计算机技术飞速发展</h3>
-<h3 id="硬件定律">硬件定律</h3>
-<ul>
-<li>信号传输速度赶不上光速</li>
-<li>内存赶不上CPU速度</li>
-<li>软件赶不上硬件</li>
-<li>Moore&rsquo;s Law：集成电路芯片中晶体管数量大体上每2年翻一番，或者价格下降一半</li>
-</ul>
-<h3 id="计算机的性能指标">计算机的性能指标</h3>
-<h4 id="容量">容量</h4>
-<ul>
-<li>地址寄存器位数N</li>
-<li>数据寄存器位数M</li>
-<li>总容量 = 存储单元个数 * 存储字长 bit = 2<!-- raw HTML omitted -->N<!-- raw HTML omitted --> * M bit</li>
-<li>K:2<!-- raw HTML omitted -->10<!-- raw HTML omitted -->, M:2<!-- raw HTML omitted -->20<!-- raw HTML omitted -->, G:2<!-- raw HTML omitted -->30<!-- raw HTML omitted -->, T:2<!-- raw HTML omitted -->40<!-- raw HTML omitted --></li>
-</ul>
-<h4 id="速度">速度</h4>
-<ul>
-<li>机器字长(处理机字长)：指处理机运算其中一次能够完成二进制数运算的位数。（一般等于内部寄存器的位数）</li>
-<li>CLK CPU的时钟周期，时钟周期越长，频率越慢 主频：主时钟的频率</li>
-<li>CPI：每条指令执行所需要的时钟周期数，或每条指令执行所需的平均时钟周期数 指令耗时=CPI*CPU时钟周期</li>
-<li>MIPS(Million Instructions Per Second)（每秒百万指令数 MIPS=(指令总数/程序执行时间)*10<!-- raw HTML omitted -->-6<!-- raw HTML omitted -->）</li>
-<li>FLOPS：每秒执行浮点操作的次数</li>
-<li>MFLOPS：每秒百万次浮点操作次数</li>
-<li>GFLOPS：每秒十亿次浮点操作次数</li>
-<li>TFLOPS：每秒万亿次浮点操作次数</li>
-<li>总线宽度：数据总线一次所能并行传送信息的位数</li>
-<li>存储器带宽：单位时间内从存储器读出的字节数，一般用字节数/秒表示</li>
-<li>吞吐量：表征一台计算机在某一时间间隔内能够处理的信息量，单位是字节/秒(B/S)</li>
-<li>响应时间：指从用户向计算机发送一个请求，到系统对该请求作出响应并获得它所需要的结果的等待时间</li>
-<li>利用率：在给定的时间间隔内系统被实际使用的时间所占的比率，用百分比表示</li>
-<li>存储器容量：存储器中所有存储单元的总数目，通常用KB、MB、GB、TB来表示</li>
-</ul>
-<h2 id="计算机的硬件">计算机的硬件</h2>
-<h3 id="计算机组成">计算机组成</h3>
-<ul>
-<li>计算机由运算器、控制器、存储器、输入设备和输出设备五大部件组成</li>
-<li>在机器内部，指令和数据均以二进制码表示</li>
-<li>机器以运算器为中心，数据传送都经过运算器</li>
-<li>存储程序式计算机</li>
-<li>基于总线的计算机</li>
-</ul>
-<h2 id="计算机的软件">计算机的软件</h2>
-<h3 id="计算机软件分类">计算机软件分类</h3>
-<h4 id="系统程序管理整个操作系统使系统资源得到合理调度">系统程序：管理整个操作系统，使系统资源得到合理调度</h4>
-<ul>
-<li>操作系统</li>
-<li>服务程序：调试程序、诊断程序、排错程序、联系程序等</li>
-<li>语言程序：汇编器、编译器、解释程序</li>
-<li>数据库管理系统</li>
-</ul>
-<h4 id="应用程序完成用户的特定任务使用系统软件提供的资源接口">应用程序：完成用户的特定任务，使用系统软件提供的资源接口</h4>
-<ul>
-<li>EDA设计软件</li>
-<li>数据处理软件</li>
-<li>社交娱乐</li>
-<li>办公软件</li>
-</ul>
-<h2 id="计算机系统的层次结构">计算机系统的层次结构</h2>
-<ul>
-<li>第一级为微程序设计级(逻辑电路级)，或硬布线级。是一个实际机器层，由硬件直接执行微指令。</li>
-<li>第二级为一般机器级，也称为机器语言级。由为程序解释机器指令系统。这一级也是硬件级</li>
-<li>第三级为操作系统级。用于对计算机系统的软硬件资源进行管理和调度，也称为混合级。</li>
-<li>第四级为汇编语言级。通过汇编器将汇编程序翻译成机器指令。</li>
-<li>第五级为高级语言级。用汇编程序翻译成第四级的汇编语言程序。</li>
-</ul>
-<h3 id="n层计算机系统层次结构">n层计算机系统层次结构</h3>
-<ul>
-<li>第一层，实际计算机M1，机器语言为L1，由L1编写的程序可以直接由电子电路执行。</li>
-<li>第二层，虚拟机M2，机器语言为L2，用L2编写的程序需经运行在M1上的解释器解释指行或翻译成L1语言后执行。</li>
-<li>第三层，虚拟机M3，机器语言为L3，用L3编写的程序需经运行在M2或M1上的解释器解释执行，或翻译成L2或L1语言后执行。</li>
-<li>第四层，虚拟机M4，机器语言为L4</li>
-<li>……</li>
-<li>第n层，虚拟机Mn，起机器语言为Ln，用Ln编写的程序需经运行在更低级别的机器上的解释器解释执行，或翻译成更低级别别机器上语言后执行</li>
-</ul>
-<h2 id="软件与硬件的逻辑等价性">软件与硬件的逻辑等价性</h2>
-<ul>
-<li>硬件：能实现高速的算术逻辑运算功能，但难以实现较复杂的功能或实现的代价太高</li>
-<li>软件：易于实现各种复杂的算术逻辑运算功能，但是频繁的访存操作制约了处理速度</li>
-<li>从理论上讲，任何软件算法可以用软件实现，也可以用硬件实现</li>
-<li>对于某一具体功能，才用硬件方案还是软件方案，取决于设计目标、技术水平、器件价格、速度、可靠性、易维护性和变更周期等因素</li>
-<li>固件：现在已经可以把许多复杂的、常用的程序制作成所谓的固件。就它的功能来说，是软件；但从形态上来说，又是固件。</li>
-</ul>
-<h1 id="第二章-运算方法和运算器">第二章 运算方法和运算器</h1>
-<h2 id="数据与文字的表示方法">数据与文字的表示方法</h2>
-<h3 id="数据编码与表示">数据编码与表示</h3>
-<ul>
-<li>计算机中的数据</li>
-<li>编码原则</li>
-<li>二进制码0、1</li>
-</ul>
-<h3 id="无符号数和有符号数">无符号数和有符号数</h3>
-<ul>
-<li>无符号数不带符号位</li>
-<li>有符号数带符号为，最左边的位用作符号位</li>
-</ul>
-<h3 id="计算机中常用的数据表示格式">计算机中常用的数据表示格式</h3>
-<ul>
-<li>定点格式：数值范围有限，处理简单（纯小数或纯整数） 小数点位置固定不限，不是用记号“.“来表示小数点，表示纯小数或纯整数 定点数有一位符号位</li>
-<li>浮点格式：数值范围很大，处理过程复杂</li>
-<li>十进制数格式</li>
-</ul>
-<h3 id="真值与机器数">真值与机器数</h3>
-<ul>
-<li>真值是机器数代表的实际的值</li>
-<li>机器数是真值在机器中的表示</li>
-</ul>
-<h3 id="数的机器码表示">数的机器码表示</h3>
-<ul>
-<li>将符号为和数值位一起编码</li>
-<li>小数点：隐含存储</li>
-<li>真值-机器码/机器数</li>
-<li>有符号数机器码：原码、补码、反码（方便过渡，通过原码计算补码）、移码（表示偏移值，符号位1表示正数，0表示负数）
-<img src="/images/%E6%88%AA%E5%B1%8F2024-03-05%2013.14.23.png" alt="8位无符号数和有符号数的表示"></li>
-<li>若X为整数，则所有码制表示方法相同</li>
-<li>原码、反码、补码用1表示-，用0表示+</li>
-<li>移码用1表示+，用0表示-</li>
-<li>移码与补码的尾码相同，符号相反
-<img src="/images/%E6%88%AA%E5%B1%8F2024-03-05%2013.26.23.png" alt="数据大小"></li>
-</ul>
-<h3 id="数据操作">数据操作</h3>
-<ul>
-<li>符号位扩展n-&gt;n+k 填充符号位</li>
-<li>移位操作
-<ul>
-<li>左移1位，绝对值扩大，*2</li>
-<li>右移1位，绝对值缩小，/2</li>
-<li>算术移位的法则（有符号数的移位法则）
-<ul>
-<li>符号位保持不动</li>
-<li>正数：原码、补码、反码均补0</li>
-<li><em>负数：原码补0，补码左移补0、右移补1，反码补1</em></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="浮点数的表示方法">浮点数的表示方法</h3>
-<ul>
-<li>
-<p>定点数可表示的数据范围有限，但我们不能无限制的增长数据的长度</p>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机科学
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机组成原理
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AC%94%E8%AE%B0">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                笔记
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Tue, 27 Feb 2024 00:00:00 &#43;0000" class="no-wrap"
-                title=" Tue, 27 Feb 2024 00:00:00 &#43;0000">
-                Tue, 27 Feb 2024 00:00:00 &#43;0000
               </relative-time>
             </div>
           </div>

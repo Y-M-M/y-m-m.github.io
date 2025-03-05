@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script type="application/javascript" src='https://y-m-m.github.io/js/theme-mode.js'></script>
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/frameworks.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github-style.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/light.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/dark.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/syntax.css' />
+    <title>VITA-1.5: Towards GPT-4o Level Real-Time Vision and Speech Interaction - 陈皮的博客</title>
+    
+    <link rel="icon" type="image/x-icon" href='/images/github-mark.png'>
+    
+    <meta name="theme-color" content="#1e2327">
+
+    
+    <meta name="description"
+  content="Abstract 在本文中，我们提出了一种精心设计的多阶段训练方法，通过逐步训练LLMs来理解视觉和语言信息，最终实现流利的视觉和语音交互； 保留了强大的version-language能力，在没有单独的ASR和TTS模块的情况下实现了高效的语音对话能力，显著加快了多模态端到端的响应速度； ASR 自动语音识别，将语音转换为文本 TTS 文本到语音合成，将文本转换为语音 1 Introduction MLLMs中视觉和语音的整合并不简单，因为它们存在固有差异，常常导致训练过程的冲突 图像等视觉数据传递的是空间信息 语音数据传递的是时间序列的动态变化 传统的语音到语音系统依赖于单独的模块ASR和TTS，这会增加延迟、降低一致性，限制了它们在实际应用中的一致性 VITA-1.5 一个multimodal LLM 通过精心设计的三阶段训练方法整合了视觉、语言和语音 这种策略逐步整合视觉和语音数据，在缓解模态冲突的同时保持了较强的多模态性能 Stages 第一阶段，我们训练visual adapters，用描述性caption和视觉QA数据，关注version-language 这一步建立了模型的基本视觉能力，允许robust图像和视频理解 第二阶段，使用speech-transcription paired数据，训练一个audio encoder，再使用speech QA数据进行微调，引入audio input processing 这一步使模型具有有效的理解和响应音频输入的能力 第三阶段，训练一个audio decoder，使其能够实现端到端的语音输出，省去了外部的TTS模块 使VITA-1.5能够生成流畅的语音回复，促进了多模态对话系统的自然性和交互性 在与图像、视频和语音理解相关的各种基准进行了广泛的评估，将结果与open-source和proprietary模型进行比较 VITA-1.5显示出与基于图像/视频的MLLMs相当的感知和推理能力，并在语音能力方面取得显著进步 2 Related work 近年来，得益于GPTs, LLaMA, Alpaca, Vicuna和Mistral等大语言模型的快速发展，研究者们通过多模态对齐和指令调优，成功的将文本理解扩展到多模态理解/推理 例如 LLaVA, Qwen-VL, Cambrain-1, Mini-Gemini, MiniGPM-V 2.5, DeepSeek-VL和SLiME在图像预测和推理方面取得了重大进展 LongVA, Video-LLaVA等模型展示出了视频理解的最新进展 很少有开源模型涉及多模态交互能力 VITA-1.0对引入语音进行人机交互进行了初步尝试，但引入额外的语音数据对模型原有的多模态能力来说是个挑战 语音生成通常依赖于现有的TTS系统，导致高延迟 VITA-1.5 采用了精致的训练策略，在感知四个模态的数据(视频、图像、文本、音频)方面表现优异 实现了接近实时的视觉和语音交互 3 VITA-1.5 3.1 Model Atchitecture 输入 Multimodal Encoder-Adaptor-LLM的配置 将视觉/听觉 transformer 和 多层connector 联合 大语言模型一起训练，旨在增强对视觉、音频和语言的统一认识 输出 VITA-1.5有自己的端到端语音模块，而不是像VITA-1.0那样使用外部模块 3.1.1 Visional Modality VIsional Encoder Intern ViT-300M作为视觉编码器，输入图像大小为448*448个像素 每个图像生成256个visual tokens 对于高分辨率的图像，VITA-1.5采用动态补丁策略捕捉局部细节，提高图像理解的准确性 动态补丁策略是一种在图像处理或计算机视觉任务中用于捕捉局部细节的技术，通过动态调整patch的大小或位置，来更好的适应图像中的不同区域和细节 Video Processing 视频被理解为一种特殊类型的多图像输入 小于4s：均匀采样4帧 4~16s：每秒采样1帧 大于16s：均匀采样16帧 不对视频帧运用动态补丁，以避免过多的视觉令牌阻碍处理效率 Vision Adapter 使用两层MLP(多层感知机)来将视觉特征映射到适合后续LLM理解的visual tokens 3.1.2 Audio Modality Speech Encoder 我们的audio encoder模块由多个下采样卷积层(4倍下采样)和24个Transformer块(隐藏尺寸为1024)组成 下采样层有助于降低音频特征的帧率，提高LLM的处理速度 下采样是通过降低采样率来减少数据量的过程，下采样会减少信号的帧率，同时保留关键信息，从而提高后续处理的效率 参数为350M，输出帧率为12.5Hz Mel-filter bank features作为audio encoder的输入，窗口大小为25ms，步长 10ms Speech Adapter 由多个具有两倍下采样的卷积层组成 Speech Decoder TiCodec(编解码器) 制定了一个大小为1024的单码本，简化了推理阶段的解码过程 负责将连续的语音信号编码为40Hz的离散的speech tokens，同时能够将speech tokens解码为采样率24000Hz的语音信号 两种解码器 Non-Autoregressive (NAR) Speech Decoder 对文本标记进行全局处理，并对语义特征进行建模，目的是生成speech tokens的初始分布 Autoregressive (AR) Speech Decoder 基于NAR产生的语音信息，逐步产生更高质量的speech tokens，再使用codec model将最后的speech tokens解码为连续的语音信号流 NAR和AR均采用4个LLaMA解码层，hidden size为896，参数大小为大约120M 3.2 Training Data " />
+<meta name="keywords"
+  content='blog, google analytics' />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://y-m-m.github.io/post/vita-1.5/" />
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="VITA-1.5: Towards GPT-4o Level Real-Time Vision and Speech Interaction - 陈皮的博客" />
+<meta name="twitter:description"
+  content="Abstract 在本文中，我们提出了一种精心设计的多阶段训练方法，通过逐步训练LLMs来理解视觉和语言信息，最终实现流利的视觉和语音交互； 保留了强大的version-language能力，在没有单独的ASR和TTS模块的情况下实现了高效的语音对话能力，显著加快了多模态端到端的响应速度； ASR 自动语音识别，将语音转换为文本 TTS 文本到语音合成，将文本转换为语音 1 Introduction MLLMs中视觉和语音的整合并不简单，因为它们存在固有差异，常常导致训练过程的冲突 图像等视觉数据传递的是空间信息 语音数据传递的是时间序列的动态变化 传统的语音到语音系统依赖于单独的模块ASR和TTS，这会增加延迟、降低一致性，限制了它们在实际应用中的一致性 VITA-1.5 一个multimodal LLM 通过精心设计的三阶段训练方法整合了视觉、语言和语音 这种策略逐步整合视觉和语音数据，在缓解模态冲突的同时保持了较强的多模态性能 Stages 第一阶段，我们训练visual adapters，用描述性caption和视觉QA数据，关注version-language 这一步建立了模型的基本视觉能力，允许robust图像和视频理解 第二阶段，使用speech-transcription paired数据，训练一个audio encoder，再使用speech QA数据进行微调，引入audio input processing 这一步使模型具有有效的理解和响应音频输入的能力 第三阶段，训练一个audio decoder，使其能够实现端到端的语音输出，省去了外部的TTS模块 使VITA-1.5能够生成流畅的语音回复，促进了多模态对话系统的自然性和交互性 在与图像、视频和语音理解相关的各种基准进行了广泛的评估，将结果与open-source和proprietary模型进行比较 VITA-1.5显示出与基于图像/视频的MLLMs相当的感知和推理能力，并在语音能力方面取得显著进步 2 Related work 近年来，得益于GPTs, LLaMA, Alpaca, Vicuna和Mistral等大语言模型的快速发展，研究者们通过多模态对齐和指令调优，成功的将文本理解扩展到多模态理解/推理 例如 LLaVA, Qwen-VL, Cambrain-1, Mini-Gemini, MiniGPM-V 2.5, DeepSeek-VL和SLiME在图像预测和推理方面取得了重大进展 LongVA, Video-LLaVA等模型展示出了视频理解的最新进展 很少有开源模型涉及多模态交互能力 VITA-1.0对引入语音进行人机交互进行了初步尝试，但引入额外的语音数据对模型原有的多模态能力来说是个挑战 语音生成通常依赖于现有的TTS系统，导致高延迟 VITA-1.5 采用了精致的训练策略，在感知四个模态的数据(视频、图像、文本、音频)方面表现优异 实现了接近实时的视觉和语音交互 3 VITA-1.5 3.1 Model Atchitecture 输入 Multimodal Encoder-Adaptor-LLM的配置 将视觉/听觉 transformer 和 多层connector 联合 大语言模型一起训练，旨在增强对视觉、音频和语言的统一认识 输出 VITA-1.5有自己的端到端语音模块，而不是像VITA-1.0那样使用外部模块 3.1.1 Visional Modality VIsional Encoder Intern ViT-300M作为视觉编码器，输入图像大小为448*448个像素 每个图像生成256个visual tokens 对于高分辨率的图像，VITA-1.5采用动态补丁策略捕捉局部细节，提高图像理解的准确性 动态补丁策略是一种在图像处理或计算机视觉任务中用于捕捉局部细节的技术，通过动态调整patch的大小或位置，来更好的适应图像中的不同区域和细节 Video Processing 视频被理解为一种特殊类型的多图像输入 小于4s：均匀采样4帧 4~16s：每秒采样1帧 大于16s：均匀采样16帧 不对视频帧运用动态补丁，以避免过多的视觉令牌阻碍处理效率 Vision Adapter 使用两层MLP(多层感知机)来将视觉特征映射到适合后续LLM理解的visual tokens 3.1.2 Audio Modality Speech Encoder 我们的audio encoder模块由多个下采样卷积层(4倍下采样)和24个Transformer块(隐藏尺寸为1024)组成 下采样层有助于降低音频特征的帧率，提高LLM的处理速度 下采样是通过降低采样率来减少数据量的过程，下采样会减少信号的帧率，同时保留关键信息，从而提高后续处理的效率 参数为350M，输出帧率为12.5Hz Mel-filter bank features作为audio encoder的输入，窗口大小为25ms，步长 10ms Speech Adapter 由多个具有两倍下采样的卷积层组成 Speech Decoder TiCodec(编解码器) 制定了一个大小为1024的单码本，简化了推理阶段的解码过程 负责将连续的语音信号编码为40Hz的离散的speech tokens，同时能够将speech tokens解码为采样率24000Hz的语音信号 两种解码器 Non-Autoregressive (NAR) Speech Decoder 对文本标记进行全局处理，并对语义特征进行建模，目的是生成speech tokens的初始分布 Autoregressive (AR) Speech Decoder 基于NAR产生的语音信息，逐步产生更高质量的speech tokens，再使用codec model将最后的speech tokens解码为连续的语音信号流 NAR和AR均采用4个LLaMA解码层，hidden size为896，参数大小为大约120M 3.2 Training Data " />
+<meta name="twitter:site" content="https://y-m-m.github.io/" />
+<meta name="twitter:creator" content="陈皮" />
+<meta name="twitter:image"
+  content="https://y-m-m.github.io/">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="VITA-1.5: Towards GPT-4o Level Real-Time Vision and Speech Interaction - 陈皮的博客">
+<meta property="og:description"
+  content="Abstract 在本文中，我们提出了一种精心设计的多阶段训练方法，通过逐步训练LLMs来理解视觉和语言信息，最终实现流利的视觉和语音交互； 保留了强大的version-language能力，在没有单独的ASR和TTS模块的情况下实现了高效的语音对话能力，显著加快了多模态端到端的响应速度； ASR 自动语音识别，将语音转换为文本 TTS 文本到语音合成，将文本转换为语音 1 Introduction MLLMs中视觉和语音的整合并不简单，因为它们存在固有差异，常常导致训练过程的冲突 图像等视觉数据传递的是空间信息 语音数据传递的是时间序列的动态变化 传统的语音到语音系统依赖于单独的模块ASR和TTS，这会增加延迟、降低一致性，限制了它们在实际应用中的一致性 VITA-1.5 一个multimodal LLM 通过精心设计的三阶段训练方法整合了视觉、语言和语音 这种策略逐步整合视觉和语音数据，在缓解模态冲突的同时保持了较强的多模态性能 Stages 第一阶段，我们训练visual adapters，用描述性caption和视觉QA数据，关注version-language 这一步建立了模型的基本视觉能力，允许robust图像和视频理解 第二阶段，使用speech-transcription paired数据，训练一个audio encoder，再使用speech QA数据进行微调，引入audio input processing 这一步使模型具有有效的理解和响应音频输入的能力 第三阶段，训练一个audio decoder，使其能够实现端到端的语音输出，省去了外部的TTS模块 使VITA-1.5能够生成流畅的语音回复，促进了多模态对话系统的自然性和交互性 在与图像、视频和语音理解相关的各种基准进行了广泛的评估，将结果与open-source和proprietary模型进行比较 VITA-1.5显示出与基于图像/视频的MLLMs相当的感知和推理能力，并在语音能力方面取得显著进步 2 Related work 近年来，得益于GPTs, LLaMA, Alpaca, Vicuna和Mistral等大语言模型的快速发展，研究者们通过多模态对齐和指令调优，成功的将文本理解扩展到多模态理解/推理 例如 LLaVA, Qwen-VL, Cambrain-1, Mini-Gemini, MiniGPM-V 2.5, DeepSeek-VL和SLiME在图像预测和推理方面取得了重大进展 LongVA, Video-LLaVA等模型展示出了视频理解的最新进展 很少有开源模型涉及多模态交互能力 VITA-1.0对引入语音进行人机交互进行了初步尝试，但引入额外的语音数据对模型原有的多模态能力来说是个挑战 语音生成通常依赖于现有的TTS系统，导致高延迟 VITA-1.5 采用了精致的训练策略，在感知四个模态的数据(视频、图像、文本、音频)方面表现优异 实现了接近实时的视觉和语音交互 3 VITA-1.5 3.1 Model Atchitecture 输入 Multimodal Encoder-Adaptor-LLM的配置 将视觉/听觉 transformer 和 多层connector 联合 大语言模型一起训练，旨在增强对视觉、音频和语言的统一认识 输出 VITA-1.5有自己的端到端语音模块，而不是像VITA-1.0那样使用外部模块 3.1.1 Visional Modality VIsional Encoder Intern ViT-300M作为视觉编码器，输入图像大小为448*448个像素 每个图像生成256个visual tokens 对于高分辨率的图像，VITA-1.5采用动态补丁策略捕捉局部细节，提高图像理解的准确性 动态补丁策略是一种在图像处理或计算机视觉任务中用于捕捉局部细节的技术，通过动态调整patch的大小或位置，来更好的适应图像中的不同区域和细节 Video Processing 视频被理解为一种特殊类型的多图像输入 小于4s：均匀采样4帧 4~16s：每秒采样1帧 大于16s：均匀采样16帧 不对视频帧运用动态补丁，以避免过多的视觉令牌阻碍处理效率 Vision Adapter 使用两层MLP(多层感知机)来将视觉特征映射到适合后续LLM理解的visual tokens 3.1.2 Audio Modality Speech Encoder 我们的audio encoder模块由多个下采样卷积层(4倍下采样)和24个Transformer块(隐藏尺寸为1024)组成 下采样层有助于降低音频特征的帧率，提高LLM的处理速度 下采样是通过降低采样率来减少数据量的过程，下采样会减少信号的帧率，同时保留关键信息，从而提高后续处理的效率 参数为350M，输出帧率为12.5Hz Mel-filter bank features作为audio encoder的输入，窗口大小为25ms，步长 10ms Speech Adapter 由多个具有两倍下采样的卷积层组成 Speech Decoder TiCodec(编解码器) 制定了一个大小为1024的单码本，简化了推理阶段的解码过程 负责将连续的语音信号编码为40Hz的离散的speech tokens，同时能够将speech tokens解码为采样率24000Hz的语音信号 两种解码器 Non-Autoregressive (NAR) Speech Decoder 对文本标记进行全局处理，并对语义特征进行建模，目的是生成speech tokens的初始分布 Autoregressive (AR) Speech Decoder 基于NAR产生的语音信息，逐步产生更高质量的speech tokens，再使用codec model将最后的speech tokens解码为连续的语音信号流 NAR和AR均采用4个LLaMA解码层，hidden size为896，参数大小为大约120M 3.2 Training Data " />
+<meta property="og:url" content="https://y-m-m.github.io/post/vita-1.5/" />
+<meta property="og:site_name" content="VITA-1.5: Towards GPT-4o Level Real-Time Vision and Speech Interaction" />
+<meta property="og:image"
+  content="https://y-m-m.github.io/">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+<meta property="article:published_time" content="2025-02-28 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+  <div style="position: relative">
+  <header class="Header js-details-container Details px-3 px-md-4 px-lg-5 flex-wrap flex-md-nowrap open Details--on">
+    <div class="Header-item mobile-none" style="margin-top: -4px; margin-bottom: -4px;">
+      <a class="Header-link" href="https://y-m-m.github.io/">
+        <img class="octicon" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item d-md-none">
+      <button class="Header-link btn-link js-details-target" type="button"
+        onclick="document.querySelector('#header-search').style.display = document.querySelector('#header-search').style.display == 'none'? 'block': 'none'">
+        <svg height="24" class="octicon octicon-three-bars" viewBox="0 0 16 16" version="1.1" width="24">
+          <path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 2.75zm0 5A.75.75 0 011.75 7h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 7.75zM1.75 12a.75.75 0 100 1.5h12.5a.75.75 0 100-1.5H1.75z">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <div style="display: none;" id="header-search"
+      class="Header-item Header-item--full flex-column flex-md-row width-full flex-order-2 flex-md-order-none mr-0 mr-md-3 mt-3 mt-md-0 Details-content--hidden-not-important d-md-flex">
+      <div
+        class="Header-search header-search flex-auto js-site-search position-relative flex-self-stretch flex-md-self-auto mb-3 mb-md-0 mr-0 mr-md-3 scoped-search site-scoped-search js-jump-to">
+        <div class="position-relative">
+          
+          <form target="_blank" id="search-form" action="" accept-charset="UTF-8" method="get"
+            autocomplete="off">
+            <label
+              class="Header-search-label form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative d-flex flex-justify-between flex-items-center">
+              <input type="text"
+                class="Header-search-input form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable"
+                name="q" value="" placeholder="Search" autocomplete="off">
+            </label>
+          </form>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="Header-item Header-item--full flex-justify-center d-md-none position-relative">
+      <a class="Header-link " href="https://y-m-m.github.io/">
+        <img class="octicon octicon-mark-github v-align-middle" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item" style="margin-right: 0;">
+      <a href="javascript:void(0)" class="Header-link no-select" onclick="switchTheme()">
+        <svg style="fill: var(--color-profile-color-modes-toggle-moon);" class="no-select" viewBox="0 0 16 16"
+          version="1.1" width="16" height="16">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M4.52208 7.71754C7.5782 7.71754 10.0557 5.24006 10.0557 2.18394C10.0557 1.93498 10.0392 1.68986 10.0074 1.44961C9.95801 1.07727 10.3495 0.771159 10.6474 0.99992C12.1153 2.12716 13.0615 3.89999 13.0615 5.89383C13.0615 9.29958 10.3006 12.0605 6.89485 12.0605C3.95334 12.0605 1.49286 10.001 0.876728 7.24527C0.794841 6.87902 1.23668 6.65289 1.55321 6.85451C2.41106 7.40095 3.4296 7.71754 4.52208 7.71754Z">
+          </path>
+        </svg>
+      </a>
+    </div>
+  </header>
+</div>
+
+  <div id="search-result" class="container-lg px-3 new-discussion-timeline" style="display: none;">
+</div>
+
+  
+<div class="application-main">
+  <div>
+  <main>
+    <div class="gisthead pagehead bg-gray-light pb-0 pt-3 mb-4">
+      <div class="px-0">
+        <div class="mb-3 d-flex px-3 px-md-3 px-lg-5">
+          <div class="flex-auto min-width-0 width-fit mr-3">
+            <div class="d-flex">
+              <div class="d-none d-md-block">
+                <a class="avatar mr-2 flex-shrink-0" href="https://y-m-m.github.io/">
+                  <img class=" avatar-user"
+                    src="/images/me.png"
+                    width="32" height="32"></a>
+              </div>
+              <div class="d-flex flex-column">
+                <h1 class="break-word f3 text-normal mb-md-0 mb-1">
+                  <span class="author">
+                    <a href="https://y-m-m.github.io/">陈皮</a>
+                  </span>
+                  <span class="path-divider">/</span>
+                  <strong class="css-truncate css-truncate-target mr-1" style="max-width: 410px">
+                    <a href="https://y-m-m.github.io/post/vita-1.5/">VITA-1.5: Towards GPT-4o Level Real-Time Vision and Speech Interaction</a>
+                  </strong>
+                </h1>
+                <div class="note m-0">
+                  Created <relative-time datetime="Fri, 28 Feb 2025 00:00:00 &#43;0000"
+                    class="no-wrap">
+                    Fri, 28 Feb 2025 00:00:00 &#43;0000</relative-time>
+
+                  
+                  <span class="file-info-divider"></span>
+                  Modified <relative-time datetime="Wed, 05 Mar 2025 14:14:11 &#43;0800"
+                    class="no-wrap">
+                    Wed, 05 Mar 2025 14:14:11 &#43;0800</relative-time>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-lg px-3 new-discussion-timeline">
+      <div class="repository-content gist-content">
+        <div>
+          <div class="js-gist-file-update-container js-task-list-container file-box">
+            <div id="file-pytest" class="file my-2">
+              <div id="post-header" class="file-header d-flex flex-md-items-center flex-items-start sticky-header" style="z-index: 2">
+                <div class="file-info d-flex flex-md-items-center flex-items-start flex-order-1 flex-auto">
+                  <div class="text-mono f6 flex-auto pr-3 flex-order-2 flex-md-order-1 mt-2 mt-md-0">
+                    
+                    <summary id="toc-toggle" onclick="clickToc()" class="btn btn-octicon m-0 mr-2 p-2">
+                      <svg aria-hidden="true" viewBox="0 0 16 16" height="16" width="16" class="octicon octicon-list-unordered">
+                        <path fill-rule="evenodd" d="M2 4a1 1 0 100-2 1 1 0 000 2zm3.75-1.5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zM3 8a1 1 0 11-2 0 1 1 0 012 0zm-1 6a1 1 0 100-2 1 1 0 000 2z"></path>
+                      </svg>
+                    </summary>
+                    <details-menu class="SelectMenu" id="toc-details" style="display: none;">
+                      <div class="SelectMenu-modal rounded-3 mt-1" style="max-height: 340px;">
+                        <div class="SelectMenu-list SelectMenu-list--borderless p-2" style="overscroll-behavior: contain;" id="toc-list">
+                        </div>
+                      </div>
+                    </details-menu>
+                      4166 Words
+                    
+
+                  </div>
+                  <div class="file-actions flex-order-2 pt-0">
+                    
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      计算机科学
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      论文阅读
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AC%94%E8%AE%B0">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      笔记
+                    </a>
+                    
+                    
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="Box-body px-5 pb-5" style="z-index: 1">
+                <article class="markdown-body entry-content container-lg"><h1 id="abstract">Abstract</h1>
+<ul>
+<li>在本文中，我们提出了一种精心设计的多阶段训练方法，通过逐步训练LLMs来理解视觉和语言信息，最终实现流利的视觉和语音交互；</li>
+<li>保留了强大的version-language能力，在没有单独的ASR和TTS模块的情况下实现了高效的语音对话能力，显著加快了多模态端到端的响应速度；
+<ul>
+<li>ASR 自动语音识别，将语音转换为文本</li>
+<li>TTS 文本到语音合成，将文本转换为语音</li>
+</ul>
+</li>
+</ul>
+<h1 id="1-introduction">1 Introduction</h1>
+<ul>
+<li>MLLMs中视觉和语音的整合并不简单，因为它们存在固有差异，常常导致训练过程的冲突
+<ul>
+<li>图像等视觉数据传递的是空间信息</li>
+<li>语音数据传递的是时间序列的动态变化</li>
+</ul>
+</li>
+<li>传统的语音到语音系统依赖于单独的模块ASR和TTS，这会增加延迟、降低一致性，限制了它们在实际应用中的一致性</li>
+<li>VITA-1.5
+<ul>
+<li>一个multimodal LLM</li>
+<li>通过精心设计的三阶段训练方法整合了视觉、语言和语音</li>
+<li>这种策略逐步整合视觉和语音数据，在缓解模态冲突的同时保持了较强的多模态性能</li>
+</ul>
+</li>
+<li>Stages
+<ul>
+<li>第一阶段，我们训练visual adapters，用描述性caption和视觉QA数据，关注version-language
+<ul>
+<li>这一步建立了模型的基本视觉能力，允许robust图像和视频理解</li>
+</ul>
+</li>
+<li>第二阶段，使用speech-transcription paired数据，训练一个audio encoder，再使用speech QA数据进行微调，引入audio input processing
+<ul>
+<li>这一步使模型具有有效的理解和响应音频输入的能力</li>
+</ul>
+</li>
+<li>第三阶段，训练一个audio decoder，使其能够实现端到端的语音输出，省去了外部的TTS模块
+<ul>
+<li>使VITA-1.5能够生成流畅的语音回复，促进了多模态对话系统的自然性和交互性</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>在与图像、视频和语音理解相关的各种基准进行了广泛的评估，将结果与open-source和proprietary模型进行比较
+<ul>
+<li>VITA-1.5显示出与基于图像/视频的MLLMs相当的感知和推理能力，并在语音能力方面取得显著进步</li>
+</ul>
+</li>
+</ul>
+<h1 id="2-related-work">2 Related work</h1>
+<ul>
+<li>近年来，得益于GPTs, LLaMA, Alpaca, Vicuna和Mistral等大语言模型的快速发展，研究者们通过多模态对齐和指令调优，成功的将文本理解扩展到多模态理解/推理</li>
+<li>例如
+<ul>
+<li>LLaVA, Qwen-VL, Cambrain-1, Mini-Gemini, MiniGPM-V 2.5, DeepSeek-VL和SLiME在图像预测和推理方面取得了重大进展</li>
+<li>LongVA, Video-LLaVA等模型展示出了视频理解的最新进展</li>
+</ul>
+</li>
+<li>很少有开源模型涉及多模态交互能力</li>
+<li>VITA-1.0对引入语音进行人机交互进行了初步尝试，但引入额外的语音数据对模型原有的多模态能力来说是个挑战
+<ul>
+<li>语音生成通常依赖于现有的TTS系统，导致高延迟</li>
+</ul>
+</li>
+<li>VITA-1.5
+<ul>
+<li>采用了精致的训练策略，在感知四个模态的数据(视频、图像、文本、音频)方面表现优异</li>
+<li>实现了接近实时的视觉和语音交互</li>
+</ul>
+</li>
+</ul>
+<h1 id="3-vita-15">3 VITA-1.5</h1>
+<h2 id="31-model-atchitecture">3.1 Model Atchitecture</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.06.41.png" alt=""></p>
+<ul>
+<li>输入
+<ul>
+<li>Multimodal Encoder-Adaptor-LLM的配置</li>
+<li>将视觉/听觉 transformer 和 多层connector 联合 大语言模型一起训练，旨在增强对视觉、音频和语言的统一认识</li>
+</ul>
+</li>
+<li>输出
+<ul>
+<li>VITA-1.5有自己的端到端语音模块，而不是像VITA-1.0那样使用外部模块</li>
+</ul>
+</li>
+</ul>
+<h3 id="311-visional-modality">3.1.1 Visional Modality</h3>
+<ul>
+<li>VIsional Encoder
+<ul>
+<li>Intern ViT-300M作为视觉编码器，输入图像大小为448*448个像素</li>
+<li>每个图像生成256个visual tokens</li>
+<li>对于高分辨率的图像，VITA-1.5采用动态补丁策略捕捉局部细节，提高图像理解的准确性
+<ul>
+<li>动态补丁策略是一种在图像处理或计算机视觉任务中用于捕捉局部细节的技术，通过动态调整patch的大小或位置，来更好的适应图像中的不同区域和细节</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Video Processing
+<ul>
+<li>视频被理解为一种特殊类型的多图像输入</li>
+<li>小于4s：均匀采样4帧</li>
+<li>4~16s：每秒采样1帧</li>
+<li>大于16s：均匀采样16帧</li>
+<li>不对视频帧运用动态补丁，以避免过多的视觉令牌阻碍处理效率</li>
+</ul>
+</li>
+<li>Vision Adapter
+<ul>
+<li>使用两层MLP(多层感知机)来将视觉特征映射到适合后续LLM理解的visual tokens</li>
+</ul>
+</li>
+</ul>
+<h3 id="312-audio-modality">3.1.2 Audio Modality</h3>
+<ul>
+<li>Speech Encoder
+<ul>
+<li>我们的audio encoder模块由多个下采样卷积层(4倍下采样)和24个Transformer块(隐藏尺寸为1024)组成
+<ul>
+<li>下采样层有助于降低音频特征的帧率，提高LLM的处理速度</li>
+<li>下采样是通过降低采样率来减少数据量的过程，下采样会减少信号的帧率，同时保留关键信息，从而提高后续处理的效率</li>
+</ul>
+</li>
+<li>参数为350M，输出帧率为12.5Hz</li>
+<li>Mel-filter bank features作为audio encoder的输入，窗口大小为25ms，步长 10ms</li>
+</ul>
+</li>
+<li>Speech Adapter
+<ul>
+<li>由多个具有两倍下采样的卷积层组成</li>
+</ul>
+</li>
+<li>Speech Decoder
+<ul>
+<li>TiCodec(编解码器)</li>
+<li>制定了一个大小为1024的单码本，简化了推理阶段的解码过程</li>
+<li>负责将连续的语音信号编码为40Hz的离散的speech tokens，同时能够将speech tokens解码为采样率24000Hz的语音信号</li>
+<li>两种解码器
+<ul>
+<li>Non-Autoregressive (NAR) Speech Decoder 对文本标记进行全局处理，并对语义特征进行建模，目的是生成speech tokens的初始分布</li>
+<li>Autoregressive (AR) Speech Decoder 基于NAR产生的语音信息，逐步产生更高质量的speech tokens，再使用codec model将最后的speech tokens解码为连续的语音信号流</li>
+<li>NAR和AR均采用4个LLaMA解码层，hidden size为896，参数大小为大约120M</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="32-training-data">3.2 Training Data</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.07.50.png" alt=""></p>
+<ul>
+<li>Image Captioning Data
+<ul>
+<li>训练模型生成图像的描述语言</li>
+</ul>
+</li>
+<li>Image QA Data
+<ul>
+<li>训练模型回答基于图像的问题和执行视觉推理任务</li>
+</ul>
+</li>
+<li>OCR &amp; Diagram Data
+<ul>
+<li>支持模型对OCR和图表技术的理解</li>
+<li>OCR (Optical Character Recognition 光学字符识别) 将图像中的文字转变为可识别的文本</li>
+</ul>
+</li>
+<li>Video Data
+<ul>
+<li>训练模型来处理视频输入，执行captioning和video-based QA等任务</li>
+</ul>
+</li>
+<li>Pure Text Data
+<ul>
+<li>增强了模型理解和生成语言的能力，促进了基于文本的问答任务</li>
+</ul>
+</li>
+<li>11万小时的内部speech-transcription paired ASR数据(中文/英文)被用于训练音频编码器，并将音频编码器与LLM对齐</li>
+<li>使用TTS系统生成的3000小时的text-speech pairs数据被用于训练语音解码器</li>
+</ul>
+<h2 id="33-three-stage-training-strategies">3.3 Three Stage Training Strategies</h2>
+<ul>
+<li>关键挑战：不同模态之间的训练冲突
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.08.36.png" alt=""></li>
+</ul>
+<h3 id="331-stage-1-vision-language-training">3.3.1 Stage 1: Vision-Language Training</h3>
+<h4 id="stage-11-vision-alignment">Stage 1.1 Vision Alignment</h4>
+<ul>
+<li>Bridge the gap between vision and language
+<ul>
+<li>Vision从预训练的视觉编码器InternViT-300M中提取</li>
+<li>language从LLM中获取</li>
+</ul>
+</li>
+<li>我们使用table 1中20%的descriptive caption data来训练，其中只有visual adapter是可训练的，其他模块是冻结的</li>
+<li>这种方法允许LLM对视觉模态进行初步对齐</li>
+</ul>
+<h4 id="stage-12-vision-understanding">Stage 1.2 Vision Understanding</h4>
+<ul>
+<li>教LLM转写图像内容</li>
+<li>使用table 1中所有descriptive caption data</li>
+<li>Visual module中的encoder和adapter可训练
+<ul>
+<li>建立图像和描述性文本之间的强连接，使其能够通过生成自然语言描述来理解图像内容</li>
+</ul>
+</li>
+</ul>
+<h4 id="stage-13-vision-sft">Stage 1.3 Vision SFT</h4>
+<ul>
+<li>使用表1中所有的QA数据，同时保留了20%的描述性caption数据，以增强数据集的多样性和任务的复杂性</li>
+<li>视觉模块的encoder和adapter以及LLM都是可训练的</li>
+<li>使模型能够根据指令回答问题</li>
+</ul>
+<h3 id="332-stage-2-audio-input-tuning">3.3.2 Stage 2: Audio Input Tuning</h3>
+<h4 id="stage-21-audio-alignment">Stage 2.1 Audio Alignment</h4>
+<ul>
+<li>在阶段1的基础上减少音频和语言之间的差异，使LLM能够理解音频输入</li>
+<li>训练数据由11000小时的speech-transcription pairs组成</li>
+<li>两步方法
+<ul>
+<li>step 1 Speech Encoder Training
+<ul>
+<li>采用在常见的speech recognition systems中使用的训练框架</li>
+<li>使用CTC(Connectionist Temporal Classification)损失函数来训练speech encoder</li>
+<li>目的是使encoder能从speech input预测训练文本</li>
+<li>这一步保证了audio encoder可以提取speech features并把它映射到文本描述空间</li>
+</ul>
+</li>
+<li>Step 2 Speech Adapter Training
+<ul>
+<li>训练speech encoder之后，我们把它和LLM融合，使用一个audio adapter把音频信息交给LLM的输入层</li>
+<li>这一阶段的训练目标是允许LLM输出speech data的翻译文本</li>
+<li>使用特别的可训练的input tokens来引导speech understanding过程，这些tokens提供了额外的上下文信息来引导用于QA的LLM承担ASR任务</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="stage-22-audio-sft">Stage 2.2 Audio SFT</h4>
+<ul>
+<li>引入speech questions和text answers之间的QA功能</li>
+<li>采样了table 1中的4%的caption data和20%的QA data
+<ul>
+<li>接近一半的text-based问题被他们的相关的speech versions</li>
+</ul>
+</li>
+<li>在这一阶段，visual encoder, adapter, audio encoder, adapter 和 LLM 都是可训练的，目的是提高模型的多模态输入的适应性</li>
+<li>给LLM的输出添加一个分类头，用于区分输入来自于speech还是text</li>
+<li>结果，模型可以更精确的翻译speech inputs并且有效且灵活的处理不同的模态</li>
+</ul>
+<h3 id="333-stage-3-audio-output-tuning">3.3.3 Stage 3: Audio Output Tuning</h3>
+<ul>
+<li>在前两个阶段，VITA-1.5模型有效的培养了它的多模态理解能力</li>
+<li>为了引入speech output能力并且不损害模型的基本能力，我们凭借strategy，使用3000小时的text-speech数据并且应用一个两步的训练方法</li>
+</ul>
+<h4 id="stage-31-codec-training">Stage 3.1 Codec Training</h4>
+<ul>
+<li>这一步的目的是训练一个有single codebook的，使用speech data的codec</li>
+<li>编码器：speech -&gt; discrete tokens； 解码器：discrete tokens -&gt; speech stream</li>
+<li>在VITA的推断阶段，只用到了解码器</li>
+</ul>
+<h4 id="stage-32-nar--ar-decoder-training">Stage 3.2 NAR + AR Decoder Training</h4>
+<ul>
+<li>使用text-speech paired数据，text-&gt;tokenizer-&gt;嵌入LLM-&gt;嵌入向量，speech-&gt;encoder-&gt;获取speech tokens；</li>
+<li>Text embedding vectors被送往NAR speech decoder来获取全局的语义特征</li>
+<li>然后语义特征被送往AR speech decoder，预测相关的speech tokens</li>
+<li>在这个过程中LLM被冻结，因此多模态的表现不会受到影响</li>
+</ul>
+<h1 id="4-evaluation">4 Evaluation</h1>
+<h2 id="41-vision-language-evaluation">4.1 Vision-Language Evaluation</h2>
+<h3 id="baselines">Baselines</h3>
+<ul>
+<li>比较了一系列开源MLLMs和五个闭源MLLMs</li>
+</ul>
+<h3 id="evaluation-benchmarks">Evaluation Benchmarks</h3>
+<ul>
+<li>General 多模态能力：MME, MMBench, MMMU</li>
+<li>数学推理：Math Vista</li>
+<li>幻觉检测：HallusionBench</li>
+<li>Char: AI2D</li>
+<li>OCR: OCRBench</li>
+<li>Video understanding: representative evaluation benchmarks, 如Video-MME, MVBench 和 TempCompass</li>
+</ul>
+<h3 id="vision-language-capabilities">Vision-Language Capabilities</h3>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.12.12.png" alt=""></p>
+<ul>
+<li>VITA-1.5的图像理解的表现，展现出robust
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.12.38.png" alt=""></li>
+<li>VITA-1.5的video understanding的表现可以与最好的开源模型相比</li>
+<li>与专有模型相比的巨大鸿沟表现出VITA-1.5在video understanding上仍然具有很大的进步空间</li>
+<li>在经过第二阶段和第三阶段后，VITA-1.5保留了几乎所有的阶段一中的visual-language capabilities</li>
+</ul>
+<h2 id="42-speech-evaluation">4.2 Speech Evaluation</h2>
+<h3 id="baselines-1">Baselines</h3>
+<ul>
+<li>用于对比：Wav2vec2-base, Mini-Omini2, Freeze-Omimni, and VITA-1.0</li>
+</ul>
+<h3 id="evaluation-benchmarks-1">Evaluation Benchmarks</h3>
+<ul>
+<li>Mandarin Evaluation sets
+<ul>
+<li>Aishell-l</li>
+<li>Test net</li>
+<li>Test meeting</li>
+<li>用于评估模型在Mandarin speech上的表现</li>
+<li>Evaluation metric: CER(Character error rate)</li>
+</ul>
+</li>
+<li>英语的evaluation sets
+<ul>
+<li>dev-clean</li>
+<li>dev-other</li>
+<li>Test-clean</li>
+<li>test-other</li>
+<li>用于评估模型的English speech的表现</li>
+<li>Evaluation metric: WER(Word Error Rate)</li>
+</ul>
+</li>
+</ul>
+<h3 id="asr-performance">ASR Performance</h3>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.13.44.png" alt=""></p>
+<ul>
+<li>ViTA-1.5在汉语和英语ASR任务中都取得了领先的准确性</li>
+<li>这表明了VITA-1.5已经成功地集成了先进的语音能力来支持多模态交互</li>
+</ul>
+<h1 id="5-conclusion">5 Conclusion</h1>
+</article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="application/javascript" src='https://y-m-m.github.io/js/toc.js'></script>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/toc.css' />
+
+  
+<div id="gitalk-container" class="gitalk-container"></div>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/gitalk.css'>
+<script src='https://y-m-m.github.io/js/gitalk.min.js'></script>
+<script>
+  const gitalk = new Gitalk({
+    clientID: 'Ov23livxKNtTlPeMjV2H',
+    clientSecret: '6d3bc9f47a1296f29628a63701ea5624cd28a26b',
+    repo: 'y-m-m.github.io',
+    owner: 'Y-M-M',
+    admin: ['Y-M-M'],
+    id: eval("location.pathname"), 
+    distractionFreeMode: false 
+  });
+  (function() {
+    gitalk.render('gitalk-container');
+  })();
+</script>
+
+</div>
+
+  <div class="footer container-xl width-full p-responsive">
+  <div
+    class="position-relative d-flex flex-row-reverse flex-lg-row flex-wrap flex-lg-nowrap flex-justify-center flex-lg-justify-between flex-sm-items-center pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
+    <a aria-label="Homepage" title="GitHub" class="footer-octicon d-none d-lg-block mr-lg-4" href="https://y-m-m.github.io/">
+      <svg height="24" class="octicon octicon-mark-github" viewBox="0 0 16 16" version="1.1" width="24">
+        <path fill-rule="evenodd"
+          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+        </path>
+      </svg>
+    </a>
+    <ul class="list-style-none d-flex flex-wrap col-12 flex-justify-center flex-lg-justify-between mb-2 mb-lg-0">
+      
+      <li class="mr-3 mr-lg-0">Theme by <a href='https://github.com/MeiK2333/github-style'>github-style</a></li>
+      
+    </ul>
+  </div>
+  <div class="d-flex flex-justify-center pb-6">
+    <span class="f6 text-gray-light"></span>
+  </div>
+
+
+</div>
+</body>
+
+<script type="application/javascript" src="https://y-m-m.github.io/js/github-style.js"></script>
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+<script type="application/javascript" src='https://y-m-m.github.io/js/search.js'></script>
+
+
+
+</html>

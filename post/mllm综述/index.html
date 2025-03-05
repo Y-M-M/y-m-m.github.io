@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script type="application/javascript" src='https://y-m-m.github.io/js/theme-mode.js'></script>
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/frameworks.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github-style.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/light.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/dark.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/syntax.css' />
+    <title>A Survey on Multimodal Large Language Models - 陈皮的博客</title>
+    
+    <link rel="icon" type="image/x-icon" href='/images/github-mark.png'>
+    
+    <meta name="theme-color" content="#1e2327">
+
+    
+    <meta name="description"
+  content=" 2024-11-14 IEEE
+1 Introduction MLLM的两个代表性特征 基于Billion-scale parameters LLM 使用新的训练范式，例如多模态教学调优 MLLM的扩展 更好的粒度支持，对用户提示进行更精细的控制； 增强了对输入输出模态的支持，如图像、视频、音频和点云；NExT-GPT支持不同模态的输出； 改进了语言支持 扩展到更多领域和使用场景 MLLM的时间线 surveys主要内容 MLLMs重要方面的综述 主流架构 训练策略和训练数据 效果评价 MLLMs的重要问题 那些方面可以进一步完善和扩展 如何缓解多模态幻觉问题 三种关键技术 M-ICL(多模态上下文学习) 在推理阶段常用的提高小样本性能的有效技术 M-CoT(多模态思维链) 用于复杂的推理任务 开发基于LLM的系统来解决复合推理任务或解决普通用户查询的一般思路 2 Architecture MLLM的模块构成 预训练的模态编码器 预训练的LLM 连接他们的接口 2.1 Modality Encoder 作用 将原始信息压缩成更紧凑的表示； 常用Modality Encoder 使用已经对齐到其他模态的预训练编码器，而无需从头开始训练； MiniGPT-4 -&gt; EVA-CLIP encoder Osprey -&gt; ConvNext-L encoder 考虑的因素 分辨率 提高分辨率可以获得显著的性能增益 提高分辨率方法 直接缩放法 直接将高分辨率图像输入到编码器中 (CogAgent采用双编码机制，两个编码器分别处理高、低编码器图像) 分片法 将一幅高分辨率图像切割成块，复用低分辨率编码器 (Monkey和SPHINX将一幅大图像分割成更小的图像块，并将子图像和降采样后的高分辨率图像一起发送给Encoder) Pingi使用CLAP模型作为音频编码器 ImageBind-LLM 使用ImageBind编码器，支持编码图像、文本、音频、深度、温度和惯性测量单元( Inertial Measurement Unit，IMU )数据 参数大小 训练语境 2.2 Pre-trained LLM 常用pre-trained LLM " />
+<meta name="keywords"
+  content='blog, google analytics' />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://y-m-m.github.io/post/mllm%E7%BB%BC%E8%BF%B0/" />
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="A Survey on Multimodal Large Language Models - 陈皮的博客" />
+<meta name="twitter:description"
+  content=" 2024-11-14 IEEE
+1 Introduction MLLM的两个代表性特征 基于Billion-scale parameters LLM 使用新的训练范式，例如多模态教学调优 MLLM的扩展 更好的粒度支持，对用户提示进行更精细的控制； 增强了对输入输出模态的支持，如图像、视频、音频和点云；NExT-GPT支持不同模态的输出； 改进了语言支持 扩展到更多领域和使用场景 MLLM的时间线 surveys主要内容 MLLMs重要方面的综述 主流架构 训练策略和训练数据 效果评价 MLLMs的重要问题 那些方面可以进一步完善和扩展 如何缓解多模态幻觉问题 三种关键技术 M-ICL(多模态上下文学习) 在推理阶段常用的提高小样本性能的有效技术 M-CoT(多模态思维链) 用于复杂的推理任务 开发基于LLM的系统来解决复合推理任务或解决普通用户查询的一般思路 2 Architecture MLLM的模块构成 预训练的模态编码器 预训练的LLM 连接他们的接口 2.1 Modality Encoder 作用 将原始信息压缩成更紧凑的表示； 常用Modality Encoder 使用已经对齐到其他模态的预训练编码器，而无需从头开始训练； MiniGPT-4 -&gt; EVA-CLIP encoder Osprey -&gt; ConvNext-L encoder 考虑的因素 分辨率 提高分辨率可以获得显著的性能增益 提高分辨率方法 直接缩放法 直接将高分辨率图像输入到编码器中 (CogAgent采用双编码机制，两个编码器分别处理高、低编码器图像) 分片法 将一幅高分辨率图像切割成块，复用低分辨率编码器 (Monkey和SPHINX将一幅大图像分割成更小的图像块，并将子图像和降采样后的高分辨率图像一起发送给Encoder) Pingi使用CLAP模型作为音频编码器 ImageBind-LLM 使用ImageBind编码器，支持编码图像、文本、音频、深度、温度和惯性测量单元( Inertial Measurement Unit，IMU )数据 参数大小 训练语境 2.2 Pre-trained LLM 常用pre-trained LLM " />
+<meta name="twitter:site" content="https://y-m-m.github.io/" />
+<meta name="twitter:creator" content="陈皮" />
+<meta name="twitter:image"
+  content="https://y-m-m.github.io/">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="A Survey on Multimodal Large Language Models - 陈皮的博客">
+<meta property="og:description"
+  content=" 2024-11-14 IEEE
+1 Introduction MLLM的两个代表性特征 基于Billion-scale parameters LLM 使用新的训练范式，例如多模态教学调优 MLLM的扩展 更好的粒度支持，对用户提示进行更精细的控制； 增强了对输入输出模态的支持，如图像、视频、音频和点云；NExT-GPT支持不同模态的输出； 改进了语言支持 扩展到更多领域和使用场景 MLLM的时间线 surveys主要内容 MLLMs重要方面的综述 主流架构 训练策略和训练数据 效果评价 MLLMs的重要问题 那些方面可以进一步完善和扩展 如何缓解多模态幻觉问题 三种关键技术 M-ICL(多模态上下文学习) 在推理阶段常用的提高小样本性能的有效技术 M-CoT(多模态思维链) 用于复杂的推理任务 开发基于LLM的系统来解决复合推理任务或解决普通用户查询的一般思路 2 Architecture MLLM的模块构成 预训练的模态编码器 预训练的LLM 连接他们的接口 2.1 Modality Encoder 作用 将原始信息压缩成更紧凑的表示； 常用Modality Encoder 使用已经对齐到其他模态的预训练编码器，而无需从头开始训练； MiniGPT-4 -&gt; EVA-CLIP encoder Osprey -&gt; ConvNext-L encoder 考虑的因素 分辨率 提高分辨率可以获得显著的性能增益 提高分辨率方法 直接缩放法 直接将高分辨率图像输入到编码器中 (CogAgent采用双编码机制，两个编码器分别处理高、低编码器图像) 分片法 将一幅高分辨率图像切割成块，复用低分辨率编码器 (Monkey和SPHINX将一幅大图像分割成更小的图像块，并将子图像和降采样后的高分辨率图像一起发送给Encoder) Pingi使用CLAP模型作为音频编码器 ImageBind-LLM 使用ImageBind编码器，支持编码图像、文本、音频、深度、温度和惯性测量单元( Inertial Measurement Unit，IMU )数据 参数大小 训练语境 2.2 Pre-trained LLM 常用pre-trained LLM " />
+<meta property="og:url" content="https://y-m-m.github.io/post/mllm%E7%BB%BC%E8%BF%B0/" />
+<meta property="og:site_name" content="A Survey on Multimodal Large Language Models" />
+<meta property="og:image"
+  content="https://y-m-m.github.io/">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+<meta property="article:published_time" content="2025-02-15 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+  <div style="position: relative">
+  <header class="Header js-details-container Details px-3 px-md-4 px-lg-5 flex-wrap flex-md-nowrap open Details--on">
+    <div class="Header-item mobile-none" style="margin-top: -4px; margin-bottom: -4px;">
+      <a class="Header-link" href="https://y-m-m.github.io/">
+        <img class="octicon" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item d-md-none">
+      <button class="Header-link btn-link js-details-target" type="button"
+        onclick="document.querySelector('#header-search').style.display = document.querySelector('#header-search').style.display == 'none'? 'block': 'none'">
+        <svg height="24" class="octicon octicon-three-bars" viewBox="0 0 16 16" version="1.1" width="24">
+          <path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 2.75zm0 5A.75.75 0 011.75 7h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 7.75zM1.75 12a.75.75 0 100 1.5h12.5a.75.75 0 100-1.5H1.75z">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <div style="display: none;" id="header-search"
+      class="Header-item Header-item--full flex-column flex-md-row width-full flex-order-2 flex-md-order-none mr-0 mr-md-3 mt-3 mt-md-0 Details-content--hidden-not-important d-md-flex">
+      <div
+        class="Header-search header-search flex-auto js-site-search position-relative flex-self-stretch flex-md-self-auto mb-3 mb-md-0 mr-0 mr-md-3 scoped-search site-scoped-search js-jump-to">
+        <div class="position-relative">
+          
+          <form target="_blank" id="search-form" action="" accept-charset="UTF-8" method="get"
+            autocomplete="off">
+            <label
+              class="Header-search-label form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative d-flex flex-justify-between flex-items-center">
+              <input type="text"
+                class="Header-search-input form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable"
+                name="q" value="" placeholder="Search" autocomplete="off">
+            </label>
+          </form>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="Header-item Header-item--full flex-justify-center d-md-none position-relative">
+      <a class="Header-link " href="https://y-m-m.github.io/">
+        <img class="octicon octicon-mark-github v-align-middle" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item" style="margin-right: 0;">
+      <a href="javascript:void(0)" class="Header-link no-select" onclick="switchTheme()">
+        <svg style="fill: var(--color-profile-color-modes-toggle-moon);" class="no-select" viewBox="0 0 16 16"
+          version="1.1" width="16" height="16">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M4.52208 7.71754C7.5782 7.71754 10.0557 5.24006 10.0557 2.18394C10.0557 1.93498 10.0392 1.68986 10.0074 1.44961C9.95801 1.07727 10.3495 0.771159 10.6474 0.99992C12.1153 2.12716 13.0615 3.89999 13.0615 5.89383C13.0615 9.29958 10.3006 12.0605 6.89485 12.0605C3.95334 12.0605 1.49286 10.001 0.876728 7.24527C0.794841 6.87902 1.23668 6.65289 1.55321 6.85451C2.41106 7.40095 3.4296 7.71754 4.52208 7.71754Z">
+          </path>
+        </svg>
+      </a>
+    </div>
+  </header>
+</div>
+
+  <div id="search-result" class="container-lg px-3 new-discussion-timeline" style="display: none;">
+</div>
+
+  
+<div class="application-main">
+  <div>
+  <main>
+    <div class="gisthead pagehead bg-gray-light pb-0 pt-3 mb-4">
+      <div class="px-0">
+        <div class="mb-3 d-flex px-3 px-md-3 px-lg-5">
+          <div class="flex-auto min-width-0 width-fit mr-3">
+            <div class="d-flex">
+              <div class="d-none d-md-block">
+                <a class="avatar mr-2 flex-shrink-0" href="https://y-m-m.github.io/">
+                  <img class=" avatar-user"
+                    src="/images/me.png"
+                    width="32" height="32"></a>
+              </div>
+              <div class="d-flex flex-column">
+                <h1 class="break-word f3 text-normal mb-md-0 mb-1">
+                  <span class="author">
+                    <a href="https://y-m-m.github.io/">陈皮</a>
+                  </span>
+                  <span class="path-divider">/</span>
+                  <strong class="css-truncate css-truncate-target mr-1" style="max-width: 410px">
+                    <a href="https://y-m-m.github.io/post/mllm%E7%BB%BC%E8%BF%B0/">A Survey on Multimodal Large Language Models</a>
+                  </strong>
+                </h1>
+                <div class="note m-0">
+                  Created <relative-time datetime="Sat, 15 Feb 2025 00:00:00 &#43;0000"
+                    class="no-wrap">
+                    Sat, 15 Feb 2025 00:00:00 &#43;0000</relative-time>
+
+                  
+                  <span class="file-info-divider"></span>
+                  Modified <relative-time datetime="Wed, 05 Mar 2025 11:16:23 &#43;0800"
+                    class="no-wrap">
+                    Wed, 05 Mar 2025 11:16:23 &#43;0800</relative-time>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-lg px-3 new-discussion-timeline">
+      <div class="repository-content gist-content">
+        <div>
+          <div class="js-gist-file-update-container js-task-list-container file-box">
+            <div id="file-pytest" class="file my-2">
+              <div id="post-header" class="file-header d-flex flex-md-items-center flex-items-start sticky-header" style="z-index: 2">
+                <div class="file-info d-flex flex-md-items-center flex-items-start flex-order-1 flex-auto">
+                  <div class="text-mono f6 flex-auto pr-3 flex-order-2 flex-md-order-1 mt-2 mt-md-0">
+                    
+                    <summary id="toc-toggle" onclick="clickToc()" class="btn btn-octicon m-0 mr-2 p-2">
+                      <svg aria-hidden="true" viewBox="0 0 16 16" height="16" width="16" class="octicon octicon-list-unordered">
+                        <path fill-rule="evenodd" d="M2 4a1 1 0 100-2 1 1 0 000 2zm3.75-1.5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zM3 8a1 1 0 11-2 0 1 1 0 012 0zm-1 6a1 1 0 100-2 1 1 0 000 2z"></path>
+                      </svg>
+                    </summary>
+                    <details-menu class="SelectMenu" id="toc-details" style="display: none;">
+                      <div class="SelectMenu-modal rounded-3 mt-1" style="max-height: 340px;">
+                        <div class="SelectMenu-list SelectMenu-list--borderless p-2" style="overscroll-behavior: contain;" id="toc-list">
+                        </div>
+                      </div>
+                    </details-menu>
+                      7070 Words
+                    
+
+                  </div>
+                  <div class="file-actions flex-order-2 pt-0">
+                    
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      计算机科学
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      论文阅读
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AC%94%E8%AE%B0">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      笔记
+                    </a>
+                    
+                    
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="Box-body px-5 pb-5" style="z-index: 1">
+                <article class="markdown-body entry-content container-lg"><blockquote>
+<p>2024-11-14 IEEE</p>
+</blockquote>
+<h1 id="1-introduction">1 Introduction</h1>
+<h2 id="mllm的两个代表性特征">MLLM的两个代表性特征</h2>
+<ul>
+<li>基于Billion-scale parameters LLM</li>
+<li>使用新的训练范式，例如多模态教学调优</li>
+</ul>
+<h2 id="mllm的扩展">MLLM的扩展</h2>
+<ul>
+<li>更好的粒度支持，对用户提示进行更精细的控制；</li>
+<li>增强了对输入输出模态的支持，如图像、视频、音频和点云；NExT-GPT支持不同模态的输出；</li>
+<li>改进了语言支持</li>
+<li>扩展到更多领域和使用场景</li>
+</ul>
+<h2 id="mllm的时间线">MLLM的时间线</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2010.31.51.png" alt=""></p>
+<h2 id="surveys主要内容">surveys主要内容</h2>
+<h3 id="mllms重要方面的综述">MLLMs重要方面的综述</h3>
+<ol>
+<li>主流架构</li>
+<li>训练策略和训练数据</li>
+<li>效果评价</li>
+</ol>
+<h3 id="mllms的重要问题">MLLMs的重要问题</h3>
+<ol>
+<li>那些方面可以进一步完善和扩展</li>
+<li>如何缓解多模态幻觉问题</li>
+</ol>
+<h3 id="三种关键技术">三种关键技术</h3>
+<ol>
+<li>M-ICL(多模态上下文学习) 在推理阶段常用的提高小样本性能的有效技术</li>
+<li>M-CoT(多模态思维链) 用于复杂的推理任务</li>
+<li>开发基于LLM的系统来解决复合推理任务或解决普通用户查询的一般思路</li>
+</ol>
+<h1 id="2-architecture">2 Architecture</h1>
+<h2 id="mllm的模块构成">MLLM的模块构成</h2>
+<ol>
+<li>预训练的模态编码器</li>
+<li>预训练的LLM</li>
+<li>连接他们的接口</li>
+</ol>
+<h2 id="21-modality-encoder">2.1 Modality Encoder</h2>
+<h3 id="作用">作用</h3>
+<ul>
+<li>将原始信息压缩成更紧凑的表示；</li>
+</ul>
+<h3 id="常用modality-encoder">常用Modality Encoder</h3>
+<ul>
+<li>使用已经对齐到其他模态的预训练编码器，而无需从头开始训练；
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2010.33.28.png" alt=""></li>
+<li>MiniGPT-4 -&gt; EVA-CLIP encoder</li>
+<li>Osprey -&gt; ConvNext-L encoder</li>
+</ul>
+<h3 id="考虑的因素">考虑的因素</h3>
+<ul>
+<li>分辨率
+<ul>
+<li>提高分辨率可以获得显著的性能增益</li>
+<li>提高分辨率方法
+<ul>
+<li>直接缩放法 直接将高分辨率图像输入到编码器中 (CogAgent采用双编码机制，两个编码器分别处理高、低编码器图像)</li>
+<li>分片法 将一幅高分辨率图像切割成块，复用低分辨率编码器 (Monkey和SPHINX将一幅大图像分割成更小的图像块，并将子图像和降采样后的高分辨率图像一起发送给Encoder)</li>
+</ul>
+</li>
+<li>Pingi使用CLAP模型作为音频编码器</li>
+<li>ImageBind-LLM 使用ImageBind编码器，支持编码图像、文本、音频、深度、温度和惯性测量单元( Inertial Measurement Unit，IMU )数据</li>
+</ul>
+</li>
+<li>参数大小</li>
+<li>训练语境</li>
+</ul>
+<h2 id="22-pre-trained-llm">2.2 Pre-trained LLM</h2>
+<h3 id="常用pre-trained-llm">常用pre-trained LLM</h3>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2010.35.04.png" alt=""></p>
+<ul>
+<li>大多数LLM属于因果解码器范畴，仅次于GPT-3</li>
+<li>Flan-T5 系列是BLIP - 2 、Instruct BLIP等工作中使用较早的LLM</li>
+<li>LLa MA系列和Vicuna系列是具有代表性的开源LLMs，主要在英语语料上进行预训练</li>
+<li>Qwen是一个很好的支持中文和英文双语的LLM</li>
+</ul>
+<h3 id="scale-up-the-parameter-size">Scale up the parameter size</h3>
+<ul>
+<li>scaling up the parameter size brings additional gains</li>
+<li>MoE(Mixture of Experts) 稀疏结构，可以通过选择性激活参数，在不增大计算成本的情况下扩大总的参数规模，具有更好的性能</li>
+</ul>
+<h2 id="23-modality-interface">2.3 Modality interface</h2>
+<h3 id="bridge-the-gap">Bridge the gap</h3>
+<ul>
+<li>在与训练的视觉编码器和LLM之间引入一个Learnable Connector</li>
+<li>借助expert models把图像翻译成语言，然后把语言发送给LLM</li>
+</ul>
+<h3 id="learnable-connector">Learnable Connector</h3>
+<ul>
+<li>token-level
+<ul>
+<li>Q-Former-style approaches
+<ul>
+<li>encoder输出的特征被转换成token，并与文本token串接后送入LLMs</li>
+<li>利用一组可学习的查询令牌以基于查询的方式提取信息(首先在BLIP-2中实现)</li>
+</ul>
+</li>
+<li>MLP-based接口
+<ul>
+<li>LLaVA系列采用1/2线性MLP进行视觉标记投影，将特征维度与词嵌入对齐</li>
+</ul>
+</li>
+<li>MM1发现对于令牌级别的融合，模态适配器的类型远不如视觉令牌的数量和输入分辨率重要</li>
+<li>token-level fusion variant在VQA上表现的更好</li>
+<li>交叉注意力模型可能需要更复杂的超参数搜索过程才能达到相当的性能</li>
+</ul>
+</li>
+<li>feature-level
+<ul>
+<li>插入额外的模块，可以实现文本特征和视觉特征之间的深度交互和融合
+<ul>
+<li>Flagmingo在LLMs的冻结Transformer层之间插入额外的交叉注意力层，从而利用外部视觉线索增强语言特征</li>
+<li>CogVLM在每个Transformer层之间插入visual expert module，实现视觉和语言特征的双重交互和融合</li>
+<li>LLaMA-Adapter在Transformer层中引入了learnable prompts，首先嵌入视觉知识，然后与文本特征串接作为前缀</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>所占比例很小</li>
+</ul>
+<h3 id="expert-model">Expert Model</h3>
+<ul>
+<li>基本思想：将多模态输入转换为无需训练的语言</li>
+<li>For example
+<ul>
+<li>VideoChat-Text使用预训练的视觉模型来提取动作等视觉信息，并使用语音识别模型来丰富描述</li>
+<li>foreign modalities-&gt;text 会造成信息损失；(例如，将视频转化为文本描述会扭曲时空关系)</li>
+</ul>
+</li>
+</ul>
+<h1 id="3-training-strategy-and-data">3 Training Strategy and Data</h1>
+<h2 id="31-pre-training">3.1 Pre-training</h2>
+<h3 id="311-training-detail">3.1.1 Training detail</h3>
+<ul>
+<li>主要目的：使不同模态对齐，学习多模态世界知识</li>
+<li>需要大规模的text-paired data，例如caption data</li>
+<li>a common approach
+<ul>
+<li>keep pre-trained modules (visual encoders ans LLMs)</li>
+<li>train a learnable interface</li>
+<li>在不损失预训练知识的情况下对齐不同的modalities</li>
+</ul>
+</li>
+<li>其他方法
+<ul>
+<li>将更多的modules解冻，以启用更多可训练的参数用于对齐</li>
+</ul>
+</li>
+<li>训练模式与数据质量密切相关
+<ul>
+<li>较短且有噪声的caption数据，采用较低分辨率</li>
+<li>较长且较干净的数据，使用较高分辨率来减轻幻觉</li>
+<li>ShareGPT4V发现在预训练阶段使用高质量的字幕数据，解锁视觉编码可以促进更好的对齐</li>
+</ul>
+</li>
+</ul>
+<h3 id="312-data">3.1.2 Data</h3>
+<ul>
+<li>数据的主要服务对象
+<ul>
+<li>对齐不同的模态</li>
+<li>提供世界知识</li>
+</ul>
+</li>
+<li>分类
+<ul>
+<li>粗粒度数据
+<ul>
+<li>数据量大，样本一般来源于互联网</li>
+<li>由于网络爬虫的特性，字幕通常是短而嘈杂的</li>
+<li>可以通过自动工具进行清洗和过滤，例如CLIP</li>
+</ul>
+</li>
+<li>细粒度数据</li>
+</ul>
+</li>
+<li>常用预训练数据集
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2010.59.47.png" alt="">
+<ul>
+<li>粗粒度数据集
+<ul>
+<li>CC-3M: 3.3M image-caption pairs；原始描述来自图像相关的alt-text；complicated pipeline用于清理数据，对于图像，过滤掉内容或横总比不合适的图像，对于文本，使用NLP工具获取文本标注，根据designed heuristics对样本进行过滤，对于image-text对，通过classifiers为图像分配标签；</li>
+<li>CC-12M: 12.4M image-caption对，在CC-3M的基础上，放松和简化了数据收集管道，从而收集了更多数据；</li>
+<li>SBU Captions: 1M image-caption pairs，来自于Flicker( caption 为附在图片上的文字 )</li>
+<li>LAION: 大型的网络数据集，网络上爬取图片，相关的alt-text作为caption；删除长度过短的文本和尺寸过小或过大的图像，基于URL的图像去重，提取图像和文本的CLIP embeddings，使用embeddings去掉非法内容和embeddings相似度过低的image-text对；LAION-5B: 5.85 B图像-文本对的研究数据集，多语种，英语子集为2B；LAION-COCO，包含了从LAION-5B英文子集提取的600M图像，使用BLIP生成各种image caption，使用CLIP选择最合适的图像。</li>
+<li>COYO-700M：747M image-text pairs(从Common Crawl中提取)</li>
+</ul>
+</li>
+<li>细粒度数据集
+<ul>
+<li>目前，更多的工作探索了通过强MLLMs(GPT-4v)来生成高质量的细粒度数据，成本较高，数据量相对较小；</li>
+<li>ShareGPT4V 通过GPT-4V产生的100K数据训练captioner，然后使用预训练的captioner将数据量扩大到1.2M</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="32-instruction-tuning">3.2 Instruction-tuning</h2>
+<h3 id="321-introdution">3.2.1 Introdution</h3>
+<ul>
+<li>目的：教导模型更好地理解用户的指令并完成所需的任务</li>
+<li>通过指令调优，LLMs可以通过跟随新的指令泛化到不可见的任务中，从而提升零样本性能；这种简单而有效的思想引发了后续NLP工作的成功，如ChatGPT, InstructGPT, FLAN和OPT-IML
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2011.02.48.png" alt=""></li>
+</ul>
+<h3 id="322-training-detail">3.2.2 Training detail</h3>
+<ul>
+<li>Multimodal instruction sample 构成
+<ul>
+<li>可选指令(描述指令的自然语言句子)</li>
+<li>输入-输出对
+<ul>
+<li>输入：图像-文本对/图像</li>
+<li>输出：answer</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Multimodal instruction sample 描述
+<ul>
+<li>(I, M, R)</li>
+<li>I指令，M多模态输入，R真实反应</li>
+</ul>
+</li>
+<li>MLLM
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2011.05.33.png" alt="">
+<ul>
+<li>A denotes the predicted answer, and θ are the parameters of the model.</li>
+<li>objective
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2011.06.02.png" alt=""></li>
+</ul>
+</li>
+</ul>
+<h3 id="323-data-collection三种典型方法">3.2.3 Data collection(三种典型方法)</h3>
+<ul>
+<li>Data Apation
+<ul>
+<li>existing high quality datasets -&gt; construct instruction-formatted datasets</li>
+<li>例如，VQA datasets中
+<ul>
+<li>the input-output pairs -&gt; multimodal input and response</li>
+<li>手工设计/GPT辅助的半自动生成-&gt;instructions and descriptions</li>
+</ul>
+</li>
+<li>例子
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2011.06.50.png" alt=""></li>
+<li>注意
+<ul>
+<li>现有的VQA and caption datasets很简洁，直接使用这些数据集进行指令调优可能会限制MLLM的输出长度；</li>
+<li>解决方法
+<ul>
+<li>在指令中明确规定</li>
+<li>扩展现有答案的长度</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Self-Instruction
+<ul>
+<li>使用LLMs生成textual instruction-following(少量手写样本指导)</li>
+<li>例子
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2011.07.50.png" alt="">
+[图片]</li>
+</ul>
+</li>
+<li>Data Mixture
+<ul>
+<li>纯语言的user-assistant对话数据也可以用于提高conversational proficiencies和instruction-following abilities</li>
+<li>LaVIN通过对纯语言数据和多模态数据进行随机抽样，直接构建了小批量数据</li>
+</ul>
+</li>
+</ul>
+<h3 id="324-data-quality">3.2.4 Data Quality</h3>
+<ul>
+<li>Prompt Diversity 指令的多样性对模型性能至关重要</li>
+<li>Task Coverage 视觉推理任务在提升模型性能方面优于字幕和问答任务；增强指令复杂性可能比增加任务多样性和纳入细粒度的空间注释更有益处</li>
+</ul>
+<h2 id="33-alignment-tuning">3.3 Alignment tuning</h2>
+<h3 id="331-introduction">3.3.1 Introduction</h3>
+<ul>
+<li>常用于模型需要与特定的人类偏好对齐的场景中</li>
+<li>RLHF(Reinforcement Learning with Human Feedback，基于人类反馈的强化学习)和DPO(Direct Preference Optimization，直接偏好优化)是两种主要的对齐调优技术
+<ul>
+<li>Supervised fine-tuning 微调一个预训练的模型(policy model)，以呈现初步的期望输出行为；这一步可以被跳过，因为supervised policy model可以从指令调整的模型中被初始化；</li>
+<li>Reward modeling 使用 preference pairs 训练一个奖励模型
+<ul>
+<li>multimodal prompt(image and text): x</li>
+<li>a response pair: yw和yl</li>
+<li>Reward model 学习对偏好反应给予较高的奖励</li>
+<li>D = {(x, yw, yl)}是人工标注的比较数据集
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2011.09.14.png" alt=""></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Reinforcement learning
+<ul>
+<li>PPO(Proximal Policy Optimization近端策略优化算法)对RL polocy 进行优化；</li>
+</ul>
+</li>
+</ul>
+<h3 id="332-training-detail">3.3.2 Training Detail</h3>
+<h4 id="rlhf">RLHF</h4>
+<ul>
+<li>利用强化学习算法将LLM与人类偏好对齐，在训练循环中使用人类注释作为监督</li>
+<li>Step
+<ul>
+<li>Supervised fine-tuning 微调一个预训练的模型(policy model)，以呈现初步的期望输出行为</li>
+<li>Reward modeling 使用preference pairs训练一个reward model</li>
+<li>Reinforcement learning 使用PPO(Proximal Policy Optimization)算法对RL policy model进行优化，加入per-token KL惩罚</li>
+</ul>
+</li>
+</ul>
+<h4 id="dpo">DPO</h4>
+<ul>
+<li>使用简单的二分类损失从人类偏好标签中学习，免于学习一个显式的奖励模型</li>
+<li>Step
+<ul>
+<li>人类偏好数据收集</li>
+<li>偏好学习</li>
+</ul>
+</li>
+</ul>
+<h3 id="333-data">3.3.3 Data</h3>
+<ul>
+<li>校准数据收集依据：收集对模型响应的反馈，来决定哪个响应更好</li>
+<li>收集这样的数据通常比较昂贵，并且本阶段使用的数据比前面的阶段更少
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2011.10.26.png" alt=""></li>
+</ul>
+<ol>
+<li>LLaVA-RLHF 从人类反馈中收集的，基于诚实和乐于助人的preference pairs，用于减少模型响应中的幻觉</li>
+<li>RLHF-V 通过segment-level hallucination corrections获取的人类反馈数据</li>
+<li>VLFeedback 利用GPT-4V，基于乐于助人，诚实守信和伦理的comparison pairs</li>
+</ol>
+<h1 id="4-evaluation">4 Evaluation</h1>
+<ul>
+<li>为模型优化提供反馈，并有助于比较不同模型的性能</li>
+<li>MLLMs的评价的新特点
+<ul>
+<li>MLLMs具有多功能性-&gt;全面评估非常重要</li>
+<li>MLLMs表现出许多emergent capabilities需要特别关注和新的评估方案</li>
+</ul>
+</li>
+</ul>
+<h2 id="41-closed-set">4.1 Closed-set</h2>
+<ul>
+<li>Closed-set: 将可能的答案选项预先定义并限定在有限集合中</li>
+<li>评估在task-specific datasets上进行，settings通常是零样本或微调
+<ul>
+<li>Zero-shot 选择覆盖不同通用任务的大规模数据集，分为held-in和held-out数据集，调优后使用未见过的数据集甚至未见过的任务来评估零样本性能</li>
+<li>finetuning 常用于领域特定任务的评估</li>
+</ul>
+</li>
+<li>局限于小范围的选定任务或数据集，缺乏全面的量化比较</li>
+<li>为MLLMs设计的新基准
+<ul>
+<li>MME</li>
+<li>MMbeach</li>
+<li>Video-ChatGPT</li>
+<li>Video-Bench</li>
+<li>POPE 评估模型的特定方面，专注于hallucination degree的评估</li>
+</ul>
+</li>
+</ul>
+<h2 id="42-open-set">4.2 Open-set</h2>
+<ul>
+<li>对open-set questions的回答可以更灵活，因为聊天的内容可以是任意的，所以要比闭合式输出更难judge，人工评分/GPT评分/case study</li>
+<li>人工评分
+<ul>
+<li>需要人类去评估生成的回应</li>
+<li>手工设计问题，用来评估特定的维度</li>
+</ul>
+</li>
+<li>GPT评分
+<ul>
+<li>通常用于评估多模态对话的性能</li>
+<li>问题
+<ul>
+<li>判断只基于与图像相关的文本内容，如字幕和边界框坐标，而不访问图像</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="5-extensions">5 Extensions</h1>
+<h2 id="granularity-support">Granularity Support</h2>
+<ul>
+<li>Input
+<ul>
+<li>支持用户提供更精细控制的模型正在逐步发展，image-&gt;region-&gt;pixels</li>
+</ul>
+</li>
+<li>output</li>
+</ul>
+<h2 id="modality-support">Modality Support</h2>
+<h2 id="language-support">Language Support</h2>
+<ul>
+<li>目前的模型主要是单语的，这可能是由于高质量的非英语训练语料短缺
+Scenario/Task Extension</li>
+<li>一些研究专注于需要考虑实际情况的更具体的场景，另一些研究将MLLMs扩展到具有特定专业知识的下游任务</li>
+<li>典型倾向：使MLLMs适应更具体的实际生活场景，如文档理解和医学领域</li>
+</ul>
+<h1 id="6-multimodal-hallucination">6 Multimodal hallucination</h1>
+<ul>
+<li>MLLMs产生的反应与图像内容不一致的现象</li>
+</ul>
+<h2 id="61-preliminaries">6.1 Preliminaries</h2>
+<ul>
+<li>Existence Hallucination是最基本的形式，模型错误的宣布图像中某些物体的存在</li>
+<li>Attribute Hallucination 以错误的方式描述某些对象的属性，它通常与Existence Hallucination联系在一起，因为对属性的描述应该基于图像中存在的对象</li>
+<li>Relationship Hallucination是一种较为复杂的类型，也基于物体的存在，它指的是对对象之间关系的错误描述，如相对位置和相互作用</li>
+</ul>
+<h2 id="62-evaluation-methods">6.2 Evaluation Methods</h2>
+<ul>
+<li>CHAIR是早期评估开放式字幕中幻觉水平的指标
+<ul>
+<li>衡量了所有含有幻觉对象的句子的比例 或 幻觉对象在所有被提到的对象中所占的比例</li>
+</ul>
+</li>
+<li>POPE是一种评估closed-set choices的方法</li>
+<li>MME提供了更全面的评估，涵盖了存在、计数、位置和颜色等方面</li>
+<li>HaELM提出使用仅有文本的LLMs作为判断，自动判断MLLMs的字幕与参考字幕是否正确</li>
+<li>Woodpecker使用GPT-4V直接评估基于图像的模型响应</li>
+<li>Faith score是一个更细粒度的度量，将descriptive sub-sentences分解，分别评估每个子句</li>
+<li>AMBER是一个LLM-free基准，包含判别性任务和生成性任务，包含这三种可能的幻觉</li>
+</ul>
+<h2 id="63-mitigation-methods">6.3 Mitigation Methods</h2>
+<h3 id="pre-correction">Pre-correction</h3>
+<ul>
+<li>收集专门的数据，使用这些数据进行微调，从而产生幻觉响应较少的模型</li>
+<li>LRV-Instruction引入一个可视化的指令调优数据集；除了积极指示外，该数据集还包含了精心设计的不同语义层级的消极提示，以鼓励忠实于图像的反应</li>
+<li>LLaVA-RLHF 使用强化学习技术收集人类偏好对并微调模型，从而使模型产生更少的幻觉答案</li>
+</ul>
+<h3 id="in-process-correction">In-process-correction</h3>
+<ul>
+<li>在建筑设计或特征表达上做出改进；探究产生幻觉的原因，在产生过程中设计补救措施来缓解幻觉</li>
+<li>HallE-Switch
+<ul>
+<li>假设existance hallucinations不是基于visual encoders，而是从嵌入在LLM的知识推出来的</li>
+<li>引入一个连续的控制因子和相关的训练方案来控制推理过程中模型输出的想象程度</li>
+</ul>
+</li>
+<li>VCD
+<ul>
+<li>训练语料库中的统计偏差和嵌入在LLMs中的强语言先验</li>
+<li>当向图像中注入噪声时，MLLMs倾向于偏向语言先验而不是图像内容来生成响应，从而造成幻觉</li>
+<li>设计了一种先放大后对比的解码方案来抵消虚假偏差</li>
+</ul>
+</li>
+<li>HACL
+<ul>
+<li>研究了视觉和语言的嵌入空间</li>
+<li>设计一种对比学习方案，在拉近成对的跨模态表征的同时，推开非清晰化和幻觉化的文本表征</li>
+</ul>
+</li>
+</ul>
+<h3 id="post-correction">Post-correction</h3>
+<ul>
+<li>事后矫正，在输出产生后对幻觉进行矫正</li>
+<li>Wood-pocker
+<ul>
+<li>免训练的用于幻觉矫正的通用框架</li>
+<li>结合expert models来补充图像的上下文信息，设计一个管道来逐步纠正幻觉</li>
+<li>该方法具有可解释性，可以检查每个步骤的中间结果</li>
+</ul>
+</li>
+<li>LURE
+<ul>
+<li>训练一个专门的revisor来mask描述中具有高度不确定性的对象，并重新生成响应</li>
+</ul>
+</li>
+</ul>
+<h1 id="7-extended-techniques">7 Extended techniques</h1>
+<h2 id="71-multimodal-in-context-learning">7.1 Multimodal In-Context Learning</h2>
+<ul>
+<li>ICL的两个好的traits
+<ul>
+<li>不同于传统的有监督学习(从大量数据中学习隐含模式)，ICL的关键是从类比中学习</li>
+<li>ICL通常以免训练的方式实现，在推理阶段可以灵活的插入到不同的框架中；与ICL密切相关的一项技术是instruction-tuning，它被证明可以提高ICL的能力</li>
+</ul>
+</li>
+<li>M-ICL
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2011.13.59.png" alt=""></li>
+</ul>
+<h3 id="711-improvement-on-icl-capabilities">7.1.1 Improvement on ICL capabilities</h3>
+<ul>
+<li>MIMIC-IT
+<ul>
+<li>通过建立用multimodal context格式化的指令数据集，将语境学习与指令调优相结合</li>
+<li>在引入的数据集上调优的模型指令在字幕任务中显示出改进的小样本性能</li>
+</ul>
+</li>
+<li>Emu
+<ul>
+<li>通过在模型生成和相关的训练语料中引入额外的模态，扩展了Flamingo思想</li>
+</ul>
+</li>
+<li>Stable Diffusion
+<ul>
+<li>在引入的vision decoder的帮助下，模型借鉴了额外的视觉监督，支持更灵活的输出格式和语境推理</li>
+<li>除了在纯文本中回答之外，模型还可以以图像的形式给出回答</li>
+</ul>
+</li>
+<li>Sheng
+<ul>
+<li>尝试将输出模态扩展到文本和图像中</li>
+<li>没有采用专门的针对图像的编码器，而是采用了具有共享嵌入层的统一量化方案</li>
+</ul>
+</li>
+<li>Link-context learning
+<ul>
+<li>加强image-label pairs之间的因果联系</li>
+<li>制定正负imgae-description pairs来投射对比训练模式</li>
+</ul>
+</li>
+<li>MMICL
+<ul>
+<li>增加利用多个图像进行推理的能力</li>
+<li>将交错的image-text数据转换为统一的格式</li>
+</ul>
+</li>
+<li>Jeong
+<ul>
+<li>发现：当插入一小部分不相干的图像/文本作为噪声时，MLLMs会被误导，给出与上下文不一致的响应</li>
+<li>提出一种预过滤的方法，去除不相关的上下文，并促进更coherent的反应</li>
+</ul>
+</li>
+</ul>
+<h3 id="712-applications">7.1.2 Applications</h3>
+<ul>
+<li>解决各种视觉推理任务
+<ul>
+<li>涉及从少数几个task-specific例子中学习，并推广到新的类似的问题</li>
+</ul>
+</li>
+<li>教LLMs使用外部工具
+<ul>
+<li>更加细粒度</li>
+<li>通常由一系列可以依次执行的步骤组成，可以依次完成任务</li>
+<li>与CoT密切相关(思维链)</li>
+</ul>
+</li>
+</ul>
+<h2 id="72-multimodal-chain-of-thought">7.2 Multimodal Chain of Thought</h2>
+<ul>
+<li>CoT 一系列中间推理步骤，在复杂推理任务中有效</li>
+<li>主要思想：促使LLMs不仅输出最终答案，而且输出导致答案的推理过程，类似于人类的认知过程</li>
+</ul>
+<h3 id="721-learning-paradigms">7.2.1 Learning Paradigms</h3>
+<ul>
+<li>获取M-CoT能力的方法
+<ul>
+<li>微调</li>
+<li>Training-free few learning
+<ul>
+<li>涉及到对特定数据集进行M-CoT学习</li>
+</ul>
+</li>
+<li>Training-free zero-shot learning</li>
+</ul>
+</li>
+</ul>
+<h3 id="722-chain-configuration">7.2.2 Chain Configuration</h3>
+<ul>
+<li>结构和长度是推理链的两个重要方面</li>
+<li>根据结构分类
+<ul>
+<li>单链方法
+<ul>
+<li>一种被广泛应用于各种方法的范式</li>
+<li>分步推理过程：question-rationable-answer链</li>
+</ul>
+</li>
+<li>树形方法</li>
+</ul>
+</li>
+<li>根据链长分类
+<ul>
+<li>自适应</li>
+<li>预定义</li>
+</ul>
+</li>
+</ul>
+<h3 id="723-generation-patterns">7.2.3 Generation Patterns</h3>
+<ul>
+<li>基于填充的模式
+<ul>
+<li>需要在上下文之间的推导步骤来填补逻辑空缺</li>
+</ul>
+</li>
+<li>基于预测的模式
+<ul>
+<li>需要扩展推理链，例如指令和先前的推理历史</li>
+</ul>
+</li>
+<li>共同要求：生成的步骤应该是一致和正确的</li>
+</ul>
+<h2 id="73-llm-aided-visual-reasoning">7.3 LLM-Aided Visual Reasoning</h2>
+<h3 id="731-introduction">7.3.1 Introduction</h3>
+<ul>
+<li>使用LLMs作为
+<ul>
+<li>Task-specific</li>
+<li>general-purpose</li>
+</ul>
+</li>
+<li>Good traits
+<ul>
+<li>较强的泛化能力：具有从大规模的预训练中学到的丰富的开放世界知识，可以很容易的泛化到未见过的对象或概念，具有显著的零样本/小样本性能</li>
+<li>Emergent abilities: 在LLMs的强大的推理能力的帮助下，这些模型可以执行复杂的任务</li>
+</ul>
+</li>
+<li>更好的交互性和控制性
+<ul>
+<li>LLM-based system具有在用户友好界面进行精细控制的能力</li>
+</ul>
+</li>
+</ul>
+<h3 id="732-training-paradigms">7.3.2 Training Paradigms</h3>
+<ul>
+<li>Training-free
+<ul>
+<li>Few-shot models</li>
+<li>Zero-shot models</li>
+</ul>
+</li>
+<li>Finetuning</li>
+</ul>
+<h3 id="733-functions">7.3.3 Functions</h3>
+<ul>
+<li>LLM as a Controller
+<ul>
+<li>将复杂的任务分解成更简单的子任务/步骤
+<ul>
+<li>利用LLMs的CoT能力</li>
+</ul>
+</li>
+<li>将这些任务分解成合适的工具/模块</li>
+</ul>
+</li>
+<li>LLM as a Decision Maker
+<ul>
+<li>复杂任务以多轮方式进行求解，通常采用迭代的方法</li>
+<li>step1 总结当前上下文和历史信息，并决定当前步骤可获得的信息是否足以回答问题或完成任务</li>
+<li>step2 对答案进行整理和总结，以方便用户使用的方式呈现答案</li>
+</ul>
+</li>
+<li>LLM as a Semantics Refiner
+<ul>
+<li>研究者利用其丰富的语言学和语义学知识</li>
+<li>LLMs通常被指导将信息整合到一致流畅的自然语句中，或根据特定需求生成文本</li>
+</ul>
+</li>
+</ul>
+<h1 id="8-challenges-and-future-decisions">8 Challenges and future decisions</h1>
+<ul>
+<li>目前的多层次线性模型在处理长语境的多模态信息时存在局限性</li>
+<li>MLLMs需要升级以适应更复杂的指令</li>
+<li>M-ICL和M-CoT等技术仍有较大进步空间
+<ul>
+<li>目前针对这两种技术的研究尚处于起步阶段，MLLMs的相关能力较弱</li>
+<li>对潜在技术的探索和潜在的改进是很有研究的</li>
+</ul>
+</li>
+<li>开发基于MLLMs的具身代理是一个热门话题
+<ul>
+<li>需要具有关键能力的模型，包括感知、推理、规划和执行</li>
+</ul>
+</li>
+<li>安全问题
+<ul>
+<li>MLLMs可能被误导产出biased或undesirable的反应</li>
+</ul>
+</li>
+</ul>
+<h1 id="9-conclusion">9 Conclusion</h1>
+</article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="application/javascript" src='https://y-m-m.github.io/js/toc.js'></script>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/toc.css' />
+
+  
+<div id="gitalk-container" class="gitalk-container"></div>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/gitalk.css'>
+<script src='https://y-m-m.github.io/js/gitalk.min.js'></script>
+<script>
+  const gitalk = new Gitalk({
+    clientID: 'Ov23livxKNtTlPeMjV2H',
+    clientSecret: '6d3bc9f47a1296f29628a63701ea5624cd28a26b',
+    repo: 'y-m-m.github.io',
+    owner: 'Y-M-M',
+    admin: ['Y-M-M'],
+    id: eval("location.pathname"), 
+    distractionFreeMode: false 
+  });
+  (function() {
+    gitalk.render('gitalk-container');
+  })();
+</script>
+
+</div>
+
+  <div class="footer container-xl width-full p-responsive">
+  <div
+    class="position-relative d-flex flex-row-reverse flex-lg-row flex-wrap flex-lg-nowrap flex-justify-center flex-lg-justify-between flex-sm-items-center pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
+    <a aria-label="Homepage" title="GitHub" class="footer-octicon d-none d-lg-block mr-lg-4" href="https://y-m-m.github.io/">
+      <svg height="24" class="octicon octicon-mark-github" viewBox="0 0 16 16" version="1.1" width="24">
+        <path fill-rule="evenodd"
+          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+        </path>
+      </svg>
+    </a>
+    <ul class="list-style-none d-flex flex-wrap col-12 flex-justify-center flex-lg-justify-between mb-2 mb-lg-0">
+      
+      <li class="mr-3 mr-lg-0">Theme by <a href='https://github.com/MeiK2333/github-style'>github-style</a></li>
+      
+    </ul>
+  </div>
+  <div class="d-flex flex-justify-center pb-6">
+    <span class="f6 text-gray-light"></span>
+  </div>
+
+
+</div>
+</body>
+
+<script type="application/javascript" src="https://y-m-m.github.io/js/github-style.js"></script>
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+<script type="application/javascript" src='https://y-m-m.github.io/js/search.js'></script>
+
+
+
+</html>

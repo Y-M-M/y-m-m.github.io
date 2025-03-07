@@ -150,9 +150,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Wed, 05 Mar 2025 14:41:32 &#43;0800"
+                  Modified <relative-time datetime="Fri, 07 Mar 2025 09:13:05 &#43;0800"
                     class="no-wrap">
-                    Wed, 05 Mar 2025 14:41:32 &#43;0800</relative-time>
+                    Fri, 07 Mar 2025 09:13:05 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -182,7 +182,7 @@
                         </div>
                       </div>
                     </details-menu>
-                      5617 Words
+                      7321 Words
                     
 
                   </div>
@@ -628,6 +628,124 @@
 <li>POPE设计简单的discriminative tasks，通过简单地提示物体是否在图像里来测量object hallucination</li>
 <li>M-HalDetect评估generative performace</li>
 <li>AMBER包括descrimative and generative tasks, 覆盖了existence, attribute 和 relation hallucinations</li>
+<li>VideoHallucer提出了对视频理解中的幻觉进行综合评估，涵盖了对象关系，时间和语义细节幻觉等子类</li>
+<li>合成图像-&gt;自动高效的构建评价样本
+<ul>
+<li>PhD, MHaluBench, VHTest, and OpenCHAIR采用了文本到图像的生成式模型，例如Dall-E 3，合成所需图像</li>
+</ul>
+</li>
+<li>更有针对性的benchmarks
+<ul>
+<li>GAVIE观察到了对正样本的偏见，为各种任务同时引入正负样本</li>
+<li>HallusionBench 为了便于分析模型的反应倾向和失效模式，纳入了视觉问题的控制组</li>
+<li>Bingo 确定了两种幻觉原因，即偏见和干扰，并设计了相关的视觉问题进行研究</li>
+<li>VLind-Bench的目的是评估MLLMs语言先验的程度，并导致幻觉</li>
+</ul>
+</li>
+<li>根据评估结果，导致幻觉的因素主要有两个
+<ul>
+<li>目前的MLLMs存在视觉能力不足的问题
+<ul>
+<li>MLLMs容易被简单的图像处理或引导性问题所误导</li>
+<li>面对多幅图像时，难以分辨细微的差异或推理时序关系</li>
+</ul>
+</li>
+<li>模型中的偏差
+<ul>
+<li>MLLMs对不同的问题表现出不同的性能，通常与地区、文化和语言有关</li>
+<li>这可能是由于模型中记忆的训练数据不平衡导致的</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="322-bias">3.2.2 Bias</h3>
+<ul>
+<li>VLBiasBench涵盖了9类社会偏见，如年龄、性别、外貌等
+<ul>
+<li>评估表明，LLaVA和Shikra等开源模型普遍表现出不同程度的偏差，Gemini等先进的闭源模型则表现出较弱的偏差</li>
+</ul>
+</li>
+<li>Bingo认识到MLLMs的模型性能存在区域偏向性，当出现不同的区域/文化情境的视觉问题的时候，模型表现出高度不同的性能
+<ul>
+<li>包括了三类偏差：区域偏差、OCR偏差和事实偏差</li>
+</ul>
+</li>
+<li>MM-SpuBench研究了一种虚假偏差，一种利用虚假相关性进行预测的倾向；
+<ul>
+<li>模型的学习过程，其中视觉tokens和文本描述之间的粗粒度对齐会导致错误的相关性</li>
+<li>这些嵌入在参数记忆中的错误先验会干扰反直觉场景下的预测</li>
+</ul>
+</li>
+<li>闭源模型往往比开源模型表现更好</li>
+<li>模态对齐在抑制虚假偏差方面起着非常重要的作用</li>
+</ul>
+<h3 id="323-safety">3.2.3 Safety</h3>
+<h4 id="oodout-of-distribution-robustness">OOD(Out of distribution) Robustness</h4>
+<ul>
+<li>考虑MLLMs对没有见过的领域的泛化能力，例如在训练语料中没有遇到的不同风格的图像</li>
+<li>OODCV-VQA和Sketchy-VQA分别包含了现实场景中很少见的图像和简单的粗略图像，还包括根据original questions改编的OOD文本指令</li>
+<li>MultiTrust进一步考虑了来自其他领域的图像，例如MRI和红外图像
+<ul>
+<li>评估表明，MLLMs更善于理解OOD视觉内容，而不是遵循OOD文本指令</li>
+<li>这可能预示着向新指令推广的能力不足</li>
+</ul>
+</li>
+</ul>
+<h4 id="adversarial-robustness">Adversarial Robustness</h4>
+<ul>
+<li>针对MLLMs的对抗攻击旨在诱骗模型做出错误的反应，对抗鲁棒性衡量了模型对恶意攻击的robustness</li>
+<li>AttackVLM提出了一个框架来合成对抗样本并评估开源MLLM的对抗鲁棒性
+<ul>
+<li>评估结果解释了开源模型如LLaVA和MiniGPT-4等开源模型的对抗脆弱性</li>
+</ul>
+</li>
+<li>AdvDiffVLM旨在提高生成对抗样本的效率和可移植性</li>
+<li>与开源模型相比，闭源模型具有更好的对抗鲁棒性</li>
+</ul>
+<h4 id="jailbreaks">Jailbreaks</h4>
+<ul>
+<li>模型拒绝引起非法反应的尝试的能力</li>
+<li>VLLM-safety-benchmark
+<ul>
+<li>分别针对LLM和ViT设计了两种越狱策略</li>
+<li>以评估模型的弹性</li>
+</ul>
+</li>
+<li>MultiTrust结合了三个任务来测试模型对jailbreaks的鲁棒性
+<ul>
+<li>在图像中插入详细的越狱提示</li>
+<li>将正常的文本提示与插入图像中的越狱提示相结合</li>
+<li>越狱提示与正相关或负相关的图像配对</li>
+</ul>
+</li>
+<li>结果表明
+<ul>
+<li>与LLMs相比，MLLMs在图像中嵌入简单单有害的指令的时候更容易受到攻击</li>
+<li>目前对MLLM的调优损害了嵌入在MLLMs中的安全协议</li>
+</ul>
+</li>
+<li>MOSSBench评估了MLLMs对某些视觉刺激的过度敏感性，拒绝无害的查询，而不考虑良性的上下文；包括三种类型的刺激：
+<ul>
+<li>夸大风险</li>
+<li>否定伤害</li>
+<li>反直觉解释</li>
+</ul>
+</li>
+<li>评估表明，过度敏感性在MLLMs中普遍存在，特别是对于那更安全的模型，这可能意味着模型相应的安全性和保守性之间的权衡</li>
+</ul>
+<h3 id="324-causation">3.2.4 Causation</h3>
+<ul>
+<li>因果关系：一个变量的变化导致另一个变量的变化</li>
+<li>理解这种关系的能力，即因果推理能力，是理解和分析我们这个世界的重要能力</li>
+<li>CELLO提出了涉及人或物关系的统一定义，并构建了有12个因果任务的benchmarks</li>
+<li>结果表明，目前的MLLMs，如BLIP-2和Claude3 Sonnet，表现出一些较弱的因果推理能力，并且存在一些性能较差的随机猜测</li>
+</ul>
+<h2 id="33-extended-applications">3.3 Extended Applications</h2>
+<h3 id="331-医学影像">3.3.1 医学影像</h3>
+<ul>
+<li>直接反映人体的状态，是临床决策的重要组成部分</li>
+<li>VQA-RAD是针对放射学图像的VQA任务设计的早期benchmark，包含平面、模态、器官系统等11种问题</li>
 </ul>
 </article>
               </div>

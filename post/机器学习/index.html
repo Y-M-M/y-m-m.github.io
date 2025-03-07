@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script type="application/javascript" src='https://y-m-m.github.io/js/theme-mode.js'></script>
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/frameworks.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github-style.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/light.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/dark.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/syntax.css' />
+    <title>机器学习 - 陈皮的博客</title>
+    
+    <link rel="icon" type="image/x-icon" href='/images/github-mark.png'>
+    
+    <meta name="theme-color" content="#1e2327">
+
+    
+    <meta name="description"
+  content="1. 分类与决策模型 学习任务分类
+监督学习(supervised learning) 无监督学习(unsupervised learning) 半监督学习(semi-supervised learning) 一半的数据有标签 强化学习(reinforcement learning) 弱监督学习(weak supervised learning) 数据有标签，但标签和任务不相关 分类
+分类是什么 对于给定一个对象，从一个事先定好的分类体系中挑出一个(或者多个)最适合该对象的类别 对象：可以是任何东西 事先定好的分类体系：可能有结构 最适合：判断标准 便于今后查找其最直接的映射 分类系统可以是层次结构 分类模式 2类问题，属于或不属于 多类问题，多个类别，可拆分成2类问题 一个对象可以属于多类(multi-label) 分类的基本步骤 定义分类体系 将预先分类过的数据作为训练集 从训练集中的处分类模型 用分类模型对物体进行分类 分类问题的评价方式 准确率 (P, precision) 判断异常的正确率 召回率 (R, recall) 从所有异常中找出异常的概率 准确率与召回率很难兼得-&gt;F-measure F = 1 / (α * (1 / P) &#43; (1 - α) * (1 / R) ) (α = 0.5时) F1 = 2PR / P &#43; R 1.1 决策树基本算法 二分类学习任务 属性 属性值 决策树学习的目的 为了产生一颗泛化能力强的决策树，即处理未见示例能力强 基本算法 决定分类属性 对目前的数据表，建立一个节点N 如果数据库中的数据都属于同一个类，N就是叶节点，在叶节点上标出所属的类 如果数据表中没有其他属性可考虑，则N也是叶节点，按照少数服从多数的原则在叶节点上标出所属类别 否则，根据属性信息增益值选出一个最佳属性作为节点N的测试属性 节点属性选定后，对于该属性中的每个值再生成一个分支 -&gt;递归 关键：选择最优划分属性 希望决策树的分支节点所包含的样本尽可能属于同一类别，即节点的“纯度”越来越高 衡量“纯度”的指标 信息增益 信息熵(香农用“信息熵”的概念来描述信源的不确定性) 信息增益 Gain(D, a) (D是信息熵，a是属性) 问题：信息增益准则对可取值数目较多的属性有所偏好 增益率 Gain_ratio(D, a) = Gain(D, a) / IV(a) IV(a)属性a的“固有值“，属性a的可能的取值数目越多，IV(a)的值通常会越大 增益率准则对可取值数目较少的属性有所偏好 著名的C4.5决策树算法综合了信息增益准则和信息率准则的特点，先从候选划分属性中找出信息增益高于平均水平的属性，再从中选择增益最高的 基尼指数 著名的CART决策树算法 Gini(D)越小，纯度越高 特征选择 目标：寻找最优特征子集；剔除不相关或冗余的特征，从而达到减少特征额书，提高模型精确度，减少运行时间的目的 常见方法 Pearson相关系数 卡方验证 互信息和最大信息系数 距离相关系数 方差选择法 1.2 决策树的剪枝 过拟合 学习器能力过于强大，把训练样本自身的一些特点当做了所有潜在样本都会具有的一般性质，导致泛化性能下降 无法彻底避免，只能做到“缓解” 欠拟合 学习器能力低下，对训练样本的一般性质尚未学好 剪枝的目的：通过主动去掉一些分支来降低过拟合的风险 策略 预剪枝 后剪枝 " />
+<meta name="keywords"
+  content='blog, google analytics' />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://y-m-m.github.io/post/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" />
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="机器学习 - 陈皮的博客" />
+<meta name="twitter:description"
+  content="1. 分类与决策模型 学习任务分类
+监督学习(supervised learning) 无监督学习(unsupervised learning) 半监督学习(semi-supervised learning) 一半的数据有标签 强化学习(reinforcement learning) 弱监督学习(weak supervised learning) 数据有标签，但标签和任务不相关 分类
+分类是什么 对于给定一个对象，从一个事先定好的分类体系中挑出一个(或者多个)最适合该对象的类别 对象：可以是任何东西 事先定好的分类体系：可能有结构 最适合：判断标准 便于今后查找其最直接的映射 分类系统可以是层次结构 分类模式 2类问题，属于或不属于 多类问题，多个类别，可拆分成2类问题 一个对象可以属于多类(multi-label) 分类的基本步骤 定义分类体系 将预先分类过的数据作为训练集 从训练集中的处分类模型 用分类模型对物体进行分类 分类问题的评价方式 准确率 (P, precision) 判断异常的正确率 召回率 (R, recall) 从所有异常中找出异常的概率 准确率与召回率很难兼得-&gt;F-measure F = 1 / (α * (1 / P) &#43; (1 - α) * (1 / R) ) (α = 0.5时) F1 = 2PR / P &#43; R 1.1 决策树基本算法 二分类学习任务 属性 属性值 决策树学习的目的 为了产生一颗泛化能力强的决策树，即处理未见示例能力强 基本算法 决定分类属性 对目前的数据表，建立一个节点N 如果数据库中的数据都属于同一个类，N就是叶节点，在叶节点上标出所属的类 如果数据表中没有其他属性可考虑，则N也是叶节点，按照少数服从多数的原则在叶节点上标出所属类别 否则，根据属性信息增益值选出一个最佳属性作为节点N的测试属性 节点属性选定后，对于该属性中的每个值再生成一个分支 -&gt;递归 关键：选择最优划分属性 希望决策树的分支节点所包含的样本尽可能属于同一类别，即节点的“纯度”越来越高 衡量“纯度”的指标 信息增益 信息熵(香农用“信息熵”的概念来描述信源的不确定性) 信息增益 Gain(D, a) (D是信息熵，a是属性) 问题：信息增益准则对可取值数目较多的属性有所偏好 增益率 Gain_ratio(D, a) = Gain(D, a) / IV(a) IV(a)属性a的“固有值“，属性a的可能的取值数目越多，IV(a)的值通常会越大 增益率准则对可取值数目较少的属性有所偏好 著名的C4.5决策树算法综合了信息增益准则和信息率准则的特点，先从候选划分属性中找出信息增益高于平均水平的属性，再从中选择增益最高的 基尼指数 著名的CART决策树算法 Gini(D)越小，纯度越高 特征选择 目标：寻找最优特征子集；剔除不相关或冗余的特征，从而达到减少特征额书，提高模型精确度，减少运行时间的目的 常见方法 Pearson相关系数 卡方验证 互信息和最大信息系数 距离相关系数 方差选择法 1.2 决策树的剪枝 过拟合 学习器能力过于强大，把训练样本自身的一些特点当做了所有潜在样本都会具有的一般性质，导致泛化性能下降 无法彻底避免，只能做到“缓解” 欠拟合 学习器能力低下，对训练样本的一般性质尚未学好 剪枝的目的：通过主动去掉一些分支来降低过拟合的风险 策略 预剪枝 后剪枝 " />
+<meta name="twitter:site" content="https://y-m-m.github.io/" />
+<meta name="twitter:creator" content="陈皮" />
+<meta name="twitter:image"
+  content="https://y-m-m.github.io/">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="机器学习 - 陈皮的博客">
+<meta property="og:description"
+  content="1. 分类与决策模型 学习任务分类
+监督学习(supervised learning) 无监督学习(unsupervised learning) 半监督学习(semi-supervised learning) 一半的数据有标签 强化学习(reinforcement learning) 弱监督学习(weak supervised learning) 数据有标签，但标签和任务不相关 分类
+分类是什么 对于给定一个对象，从一个事先定好的分类体系中挑出一个(或者多个)最适合该对象的类别 对象：可以是任何东西 事先定好的分类体系：可能有结构 最适合：判断标准 便于今后查找其最直接的映射 分类系统可以是层次结构 分类模式 2类问题，属于或不属于 多类问题，多个类别，可拆分成2类问题 一个对象可以属于多类(multi-label) 分类的基本步骤 定义分类体系 将预先分类过的数据作为训练集 从训练集中的处分类模型 用分类模型对物体进行分类 分类问题的评价方式 准确率 (P, precision) 判断异常的正确率 召回率 (R, recall) 从所有异常中找出异常的概率 准确率与召回率很难兼得-&gt;F-measure F = 1 / (α * (1 / P) &#43; (1 - α) * (1 / R) ) (α = 0.5时) F1 = 2PR / P &#43; R 1.1 决策树基本算法 二分类学习任务 属性 属性值 决策树学习的目的 为了产生一颗泛化能力强的决策树，即处理未见示例能力强 基本算法 决定分类属性 对目前的数据表，建立一个节点N 如果数据库中的数据都属于同一个类，N就是叶节点，在叶节点上标出所属的类 如果数据表中没有其他属性可考虑，则N也是叶节点，按照少数服从多数的原则在叶节点上标出所属类别 否则，根据属性信息增益值选出一个最佳属性作为节点N的测试属性 节点属性选定后，对于该属性中的每个值再生成一个分支 -&gt;递归 关键：选择最优划分属性 希望决策树的分支节点所包含的样本尽可能属于同一类别，即节点的“纯度”越来越高 衡量“纯度”的指标 信息增益 信息熵(香农用“信息熵”的概念来描述信源的不确定性) 信息增益 Gain(D, a) (D是信息熵，a是属性) 问题：信息增益准则对可取值数目较多的属性有所偏好 增益率 Gain_ratio(D, a) = Gain(D, a) / IV(a) IV(a)属性a的“固有值“，属性a的可能的取值数目越多，IV(a)的值通常会越大 增益率准则对可取值数目较少的属性有所偏好 著名的C4.5决策树算法综合了信息增益准则和信息率准则的特点，先从候选划分属性中找出信息增益高于平均水平的属性，再从中选择增益最高的 基尼指数 著名的CART决策树算法 Gini(D)越小，纯度越高 特征选择 目标：寻找最优特征子集；剔除不相关或冗余的特征，从而达到减少特征额书，提高模型精确度，减少运行时间的目的 常见方法 Pearson相关系数 卡方验证 互信息和最大信息系数 距离相关系数 方差选择法 1.2 决策树的剪枝 过拟合 学习器能力过于强大，把训练样本自身的一些特点当做了所有潜在样本都会具有的一般性质，导致泛化性能下降 无法彻底避免，只能做到“缓解” 欠拟合 学习器能力低下，对训练样本的一般性质尚未学好 剪枝的目的：通过主动去掉一些分支来降低过拟合的风险 策略 预剪枝 后剪枝 " />
+<meta property="og:url" content="https://y-m-m.github.io/post/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" />
+<meta property="og:site_name" content="机器学习" />
+<meta property="og:image"
+  content="https://y-m-m.github.io/">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+<meta property="article:published_time" content="2025-03-07 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+  <div style="position: relative">
+  <header class="Header js-details-container Details px-3 px-md-4 px-lg-5 flex-wrap flex-md-nowrap open Details--on">
+    <div class="Header-item mobile-none" style="margin-top: -4px; margin-bottom: -4px;">
+      <a class="Header-link" href="https://y-m-m.github.io/">
+        <img class="octicon" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item d-md-none">
+      <button class="Header-link btn-link js-details-target" type="button"
+        onclick="document.querySelector('#header-search').style.display = document.querySelector('#header-search').style.display == 'none'? 'block': 'none'">
+        <svg height="24" class="octicon octicon-three-bars" viewBox="0 0 16 16" version="1.1" width="24">
+          <path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 2.75zm0 5A.75.75 0 011.75 7h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 7.75zM1.75 12a.75.75 0 100 1.5h12.5a.75.75 0 100-1.5H1.75z">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <div style="display: none;" id="header-search"
+      class="Header-item Header-item--full flex-column flex-md-row width-full flex-order-2 flex-md-order-none mr-0 mr-md-3 mt-3 mt-md-0 Details-content--hidden-not-important d-md-flex">
+      <div
+        class="Header-search header-search flex-auto js-site-search position-relative flex-self-stretch flex-md-self-auto mb-3 mb-md-0 mr-0 mr-md-3 scoped-search site-scoped-search js-jump-to">
+        <div class="position-relative">
+          
+          <form target="_blank" id="search-form" action="" accept-charset="UTF-8" method="get"
+            autocomplete="off">
+            <label
+              class="Header-search-label form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative d-flex flex-justify-between flex-items-center">
+              <input type="text"
+                class="Header-search-input form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable"
+                name="q" value="" placeholder="Search" autocomplete="off">
+            </label>
+          </form>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="Header-item Header-item--full flex-justify-center d-md-none position-relative">
+      <a class="Header-link " href="https://y-m-m.github.io/">
+        <img class="octicon octicon-mark-github v-align-middle" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item" style="margin-right: 0;">
+      <a href="javascript:void(0)" class="Header-link no-select" onclick="switchTheme()">
+        <svg style="fill: var(--color-profile-color-modes-toggle-moon);" class="no-select" viewBox="0 0 16 16"
+          version="1.1" width="16" height="16">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M4.52208 7.71754C7.5782 7.71754 10.0557 5.24006 10.0557 2.18394C10.0557 1.93498 10.0392 1.68986 10.0074 1.44961C9.95801 1.07727 10.3495 0.771159 10.6474 0.99992C12.1153 2.12716 13.0615 3.89999 13.0615 5.89383C13.0615 9.29958 10.3006 12.0605 6.89485 12.0605C3.95334 12.0605 1.49286 10.001 0.876728 7.24527C0.794841 6.87902 1.23668 6.65289 1.55321 6.85451C2.41106 7.40095 3.4296 7.71754 4.52208 7.71754Z">
+          </path>
+        </svg>
+      </a>
+    </div>
+  </header>
+</div>
+
+  <div id="search-result" class="container-lg px-3 new-discussion-timeline" style="display: none;">
+</div>
+
+  
+<div class="application-main">
+  <div>
+  <main>
+    <div class="gisthead pagehead bg-gray-light pb-0 pt-3 mb-4">
+      <div class="px-0">
+        <div class="mb-3 d-flex px-3 px-md-3 px-lg-5">
+          <div class="flex-auto min-width-0 width-fit mr-3">
+            <div class="d-flex">
+              <div class="d-none d-md-block">
+                <a class="avatar mr-2 flex-shrink-0" href="https://y-m-m.github.io/">
+                  <img class=" avatar-user"
+                    src="/images/me.png"
+                    width="32" height="32"></a>
+              </div>
+              <div class="d-flex flex-column">
+                <h1 class="break-word f3 text-normal mb-md-0 mb-1">
+                  <span class="author">
+                    <a href="https://y-m-m.github.io/">陈皮</a>
+                  </span>
+                  <span class="path-divider">/</span>
+                  <strong class="css-truncate css-truncate-target mr-1" style="max-width: 410px">
+                    <a href="https://y-m-m.github.io/post/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+                  </strong>
+                </h1>
+                <div class="note m-0">
+                  Created <relative-time datetime="Fri, 07 Mar 2025 00:00:00 &#43;0000"
+                    class="no-wrap">
+                    Fri, 07 Mar 2025 00:00:00 &#43;0000</relative-time>
+
+                  
+                  <span class="file-info-divider"></span>
+                  Modified <relative-time datetime="Fri, 07 Mar 2025 09:35:44 &#43;0800"
+                    class="no-wrap">
+                    Fri, 07 Mar 2025 09:35:44 &#43;0800</relative-time>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-lg px-3 new-discussion-timeline">
+      <div class="repository-content gist-content">
+        <div>
+          <div class="js-gist-file-update-container js-task-list-container file-box">
+            <div id="file-pytest" class="file my-2">
+              <div id="post-header" class="file-header d-flex flex-md-items-center flex-items-start sticky-header" style="z-index: 2">
+                <div class="file-info d-flex flex-md-items-center flex-items-start flex-order-1 flex-auto">
+                  <div class="text-mono f6 flex-auto pr-3 flex-order-2 flex-md-order-1 mt-2 mt-md-0">
+                    
+                    <summary id="toc-toggle" onclick="clickToc()" class="btn btn-octicon m-0 mr-2 p-2">
+                      <svg aria-hidden="true" viewBox="0 0 16 16" height="16" width="16" class="octicon octicon-list-unordered">
+                        <path fill-rule="evenodd" d="M2 4a1 1 0 100-2 1 1 0 000 2zm3.75-1.5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zM3 8a1 1 0 11-2 0 1 1 0 012 0zm-1 6a1 1 0 100-2 1 1 0 000 2z"></path>
+                      </svg>
+                    </summary>
+                    <details-menu class="SelectMenu" id="toc-details" style="display: none;">
+                      <div class="SelectMenu-modal rounded-3 mt-1" style="max-height: 340px;">
+                        <div class="SelectMenu-list SelectMenu-list--borderless p-2" style="overscroll-behavior: contain;" id="toc-list">
+                        </div>
+                      </div>
+                    </details-menu>
+                      1183 Words
+                    
+
+                  </div>
+                  <div class="file-actions flex-order-2 pt-0">
+                    
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      计算机科学
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      机器学习
+                    </a>
+                    
+                    
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="Box-body px-5 pb-5" style="z-index: 1">
+                <article class="markdown-body entry-content container-lg"><h1 id="1-分类与决策模型">1. 分类与决策模型</h1>
+<ul>
+<li>
+<p>学习任务分类</p>
+<ul>
+<li>监督学习(supervised learning)</li>
+<li>无监督学习(unsupervised learning)</li>
+<li>半监督学习(semi-supervised learning)
+<ul>
+<li>一半的数据有标签</li>
+</ul>
+</li>
+<li>强化学习(reinforcement learning)</li>
+<li>弱监督学习(weak supervised learning)
+<ul>
+<li>数据有标签，但标签和任务不相关</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>分类</p>
+<ul>
+<li>分类是什么
+<ul>
+<li>对于给定一个对象，从一个事先定好的分类体系中挑出一个(或者多个)最适合该对象的类别
+<ul>
+<li>对象：可以是任何东西</li>
+<li>事先定好的分类体系：可能有结构</li>
+<li>最适合：判断标准</li>
+</ul>
+</li>
+<li>便于今后查找其最直接的映射</li>
+</ul>
+</li>
+<li>分类系统可以是层次结构</li>
+<li>分类模式
+<ul>
+<li>2类问题，属于或不属于</li>
+<li>多类问题，多个类别，可拆分成2类问题</li>
+<li>一个对象可以属于多类(multi-label)</li>
+</ul>
+</li>
+<li>分类的基本步骤
+<ul>
+<li>定义分类体系</li>
+<li>将预先分类过的数据作为训练集</li>
+<li>从训练集中的处分类模型</li>
+<li>用分类模型对物体进行分类</li>
+</ul>
+</li>
+<li>分类问题的评价方式
+<ul>
+<li>准确率 (P, precision)  判断异常的正确率</li>
+<li>召回率 (R, recall)  从所有异常中找出异常的概率</li>
+<li>准确率与召回率很难兼得-&gt;F-measure
+<ul>
+<li>F = 1 / (α * (1 / P) + (1 - α) * (1 / R) )</li>
+<li>(α = 0.5时) F<!-- raw HTML omitted -->1<!-- raw HTML omitted --> = 2PR / P + R</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="11-决策树基本算法">1.1 决策树基本算法</h2>
+<ul>
+<li>二分类学习任务
+<ul>
+<li>属性</li>
+<li>属性值</li>
+</ul>
+</li>
+<li>决策树学习的目的
+<ul>
+<li>为了产生一颗泛化能力强的决策树，即处理未见示例能力强</li>
+</ul>
+</li>
+<li>基本算法
+<ul>
+<li><strong>决定分类属性</strong></li>
+<li>对目前的数据表，建立一个节点N</li>
+<li>如果数据库中的数据都属于同一个类，N就是叶节点，在叶节点上标出所属的类</li>
+<li>如果数据表中没有其他属性可考虑，则N也是叶节点，按照少数服从多数的原则在叶节点上标出所属类别</li>
+<li>否则，根据属性信息增益值选出一个最佳属性作为节点N的测试属性</li>
+<li>节点属性选定后，对于该属性中的每个值再生成一个分支</li>
+<li>-&gt;递归</li>
+</ul>
+</li>
+<li>关键：选择最优划分属性
+<ul>
+<li>希望决策树的分支节点所包含的样本尽可能属于同一类别，即节点的“纯度”越来越高</li>
+<li>衡量“纯度”的指标
+<ul>
+<li>信息增益
+<ul>
+<li>信息熵(香农用“信息熵”的概念来描述信源的不确定性)</li>
+<li>信息增益 Gain(D, a) (D是信息熵，a是属性)</li>
+<li>问题：信息增益准则对可取值数目较多的属性有所偏好</li>
+</ul>
+</li>
+<li>增益率
+<ul>
+<li>Gain_ratio(D, a) = Gain(D, a) / IV(a)</li>
+<li>IV(a)属性a的“固有值“，属性a的可能的取值数目越多，IV(a)的值通常会越大</li>
+<li>增益率准则对可取值数目较少的属性有所偏好</li>
+<li>著名的C4.5决策树算法综合了信息增益准则和信息率准则的特点，先从候选划分属性中找出信息增益高于平均水平的属性，再从中选择增益最高的</li>
+</ul>
+</li>
+<li>基尼指数
+<ul>
+<li>著名的CART决策树算法</li>
+<li>Gini(D)越小，纯度越高</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>特征选择
+<ul>
+<li>目标：寻找最优特征子集；剔除不相关或冗余的特征，从而达到减少特征额书，提高模型精确度，减少运行时间的目的</li>
+<li>常见方法
+<ul>
+<li>Pearson相关系数</li>
+<li>卡方验证</li>
+<li>互信息和最大信息系数</li>
+<li>距离相关系数</li>
+<li>方差选择法</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="12-决策树的剪枝">1.2 决策树的剪枝</h2>
+<ul>
+<li>过拟合
+<ul>
+<li>学习器能力过于强大，把训练样本自身的一些特点当做了所有潜在样本都会具有的一般性质，导致泛化性能下降</li>
+<li>无法彻底避免，只能做到“缓解”</li>
+</ul>
+</li>
+<li>欠拟合
+<ul>
+<li>学习器能力低下，对训练样本的一般性质尚未学好</li>
+</ul>
+</li>
+<li>剪枝的目的：通过主动去掉一些分支来降低过拟合的风险</li>
+<li>策略
+<ul>
+<li>预剪枝</li>
+<li>后剪枝</li>
+</ul>
+</li>
+</ul>
+</article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="application/javascript" src='https://y-m-m.github.io/js/toc.js'></script>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/toc.css' />
+
+  
+<div id="gitalk-container" class="gitalk-container"></div>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/gitalk.css'>
+<script src='https://y-m-m.github.io/js/gitalk.min.js'></script>
+<script>
+  const gitalk = new Gitalk({
+    clientID: 'Ov23livxKNtTlPeMjV2H',
+    clientSecret: '6d3bc9f47a1296f29628a63701ea5624cd28a26b',
+    repo: 'y-m-m.github.io',
+    owner: 'Y-M-M',
+    admin: ['Y-M-M'],
+    id: eval("location.pathname"), 
+    distractionFreeMode: false 
+  });
+  (function() {
+    gitalk.render('gitalk-container');
+  })();
+</script>
+
+</div>
+
+  <div class="footer container-xl width-full p-responsive">
+  <div
+    class="position-relative d-flex flex-row-reverse flex-lg-row flex-wrap flex-lg-nowrap flex-justify-center flex-lg-justify-between flex-sm-items-center pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
+    <a aria-label="Homepage" title="GitHub" class="footer-octicon d-none d-lg-block mr-lg-4" href="https://y-m-m.github.io/">
+      <svg height="24" class="octicon octicon-mark-github" viewBox="0 0 16 16" version="1.1" width="24">
+        <path fill-rule="evenodd"
+          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+        </path>
+      </svg>
+    </a>
+    <ul class="list-style-none d-flex flex-wrap col-12 flex-justify-center flex-lg-justify-between mb-2 mb-lg-0">
+      
+      <li class="mr-3 mr-lg-0">Theme by <a href='https://github.com/MeiK2333/github-style'>github-style</a></li>
+      
+    </ul>
+  </div>
+  <div class="d-flex flex-justify-center pb-6">
+    <span class="f6 text-gray-light"></span>
+  </div>
+
+
+</div>
+</body>
+
+<script type="application/javascript" src="https://y-m-m.github.io/js/github-style.js"></script>
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+<script type="application/javascript" src='https://y-m-m.github.io/js/search.js'></script>
+
+
+
+</html>

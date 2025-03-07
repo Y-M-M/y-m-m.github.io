@@ -149,7 +149,7 @@
                 </path>
               </svg>
               Posts
-              <span class="Counter">97</span>
+              <span class="Counter">98</span>
             </a>
           </nav>
           <div class="profile-color-modes js-promo-color-modes-banner-profile isInitialToggle">
@@ -428,7 +428,7 @@
         </path>
       </svg>
       Posts
-      <span class="Counter ">97</span>
+      <span class="Counter ">98</span>
     </a>
   </nav>
 </div>
@@ -441,7 +441,7 @@
       
       <div class="TableObject border-bottom border-gray-light py-3">
         <div class="user-repo-search-results-summary TableObject-item TableObject-item--primary v-align-top">
-          <strong>18</strong>
+          <strong>19</strong>
           results
           for <strong>计算机科学</strong>
         </div>
@@ -459,6 +459,207 @@
       </div>
       
       <ul>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <h1 id="1-分类与决策模型">1. 分类与决策模型</h1>
+<ul>
+<li>
+<p>学习任务分类</p>
+<ul>
+<li>监督学习(supervised learning)</li>
+<li>无监督学习(unsupervised learning)</li>
+<li>半监督学习(semi-supervised learning)
+<ul>
+<li>一半的数据有标签</li>
+</ul>
+</li>
+<li>强化学习(reinforcement learning)</li>
+<li>弱监督学习(weak supervised learning)
+<ul>
+<li>数据有标签，但标签和任务不相关</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>分类</p>
+<ul>
+<li>分类是什么
+<ul>
+<li>对于给定一个对象，从一个事先定好的分类体系中挑出一个(或者多个)最适合该对象的类别
+<ul>
+<li>对象：可以是任何东西</li>
+<li>事先定好的分类体系：可能有结构</li>
+<li>最适合：判断标准</li>
+</ul>
+</li>
+<li>便于今后查找其最直接的映射</li>
+</ul>
+</li>
+<li>分类系统可以是层次结构</li>
+<li>分类模式
+<ul>
+<li>2类问题，属于或不属于</li>
+<li>多类问题，多个类别，可拆分成2类问题</li>
+<li>一个对象可以属于多类(multi-label)</li>
+</ul>
+</li>
+<li>分类的基本步骤
+<ul>
+<li>定义分类体系</li>
+<li>将预先分类过的数据作为训练集</li>
+<li>从训练集中的处分类模型</li>
+<li>用分类模型对物体进行分类</li>
+</ul>
+</li>
+<li>分类问题的评价方式
+<ul>
+<li>准确率 (P, precision)  判断异常的正确率</li>
+<li>召回率 (R, recall)  从所有异常中找出异常的概率</li>
+<li>准确率与召回率很难兼得-&gt;F-measure
+<ul>
+<li>F = 1 / (α * (1 / P) + (1 - α) * (1 / R) )</li>
+<li>(α = 0.5时) F<!-- raw HTML omitted -->1<!-- raw HTML omitted --> = 2PR / P + R</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="11-决策树基本算法">1.1 决策树基本算法</h2>
+<ul>
+<li>二分类学习任务
+<ul>
+<li>属性</li>
+<li>属性值</li>
+</ul>
+</li>
+<li>决策树学习的目的
+<ul>
+<li>为了产生一颗泛化能力强的决策树，即处理未见示例能力强</li>
+</ul>
+</li>
+<li>基本算法
+<ul>
+<li><strong>决定分类属性</strong></li>
+<li>对目前的数据表，建立一个节点N</li>
+<li>如果数据库中的数据都属于同一个类，N就是叶节点，在叶节点上标出所属的类</li>
+<li>如果数据表中没有其他属性可考虑，则N也是叶节点，按照少数服从多数的原则在叶节点上标出所属类别</li>
+<li>否则，根据属性信息增益值选出一个最佳属性作为节点N的测试属性</li>
+<li>节点属性选定后，对于该属性中的每个值再生成一个分支</li>
+<li>-&gt;递归</li>
+</ul>
+</li>
+<li>关键：选择最优划分属性
+<ul>
+<li>希望决策树的分支节点所包含的样本尽可能属于同一类别，即节点的“纯度”越来越高</li>
+<li>衡量“纯度”的指标
+<ul>
+<li>信息增益
+<ul>
+<li>信息熵(香农用“信息熵”的概念来描述信源的不确定性)</li>
+<li>信息增益 Gain(D, a) (D是信息熵，a是属性)</li>
+<li>问题：信息增益准则对可取值数目较多的属性有所偏好</li>
+</ul>
+</li>
+<li>增益率
+<ul>
+<li>Gain_ratio(D, a) = Gain(D, a) / IV(a)</li>
+<li>IV(a)属性a的“固有值“，属性a的可能的取值数目越多，IV(a)的值通常会越大</li>
+<li>增益率准则对可取值数目较少的属性有所偏好</li>
+<li>著名的C4.5决策树算法综合了信息增益准则和信息率准则的特点，先从候选划分属性中找出信息增益高于平均水平的属性，再从中选择增益最高的</li>
+</ul>
+</li>
+<li>基尼指数
+<ul>
+<li>著名的CART决策树算法</li>
+<li>Gini(D)越小，纯度越高</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>特征选择
+<ul>
+<li>目标：寻找最优特征子集；剔除不相关或冗余的特征，从而达到减少特征额书，提高模型精确度，减少运行时间的目的</li>
+<li>常见方法
+<ul>
+<li>Pearson相关系数</li>
+<li>卡方验证</li>
+<li>互信息和最大信息系数</li>
+<li>距离相关系数</li>
+<li>方差选择法</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="12-决策树的剪枝">1.2 决策树的剪枝</h2>
+<ul>
+<li>过拟合
+<ul>
+<li>学习器能力过于强大，把训练样本自身的一些特点当做了所有潜在样本都会具有的一般性质，导致泛化性能下降</li>
+<li>无法彻底避免，只能做到“缓解”</li>
+</ul>
+</li>
+<li>欠拟合
+<ul>
+<li>学习器能力低下，对训练样本的一般性质尚未学好</li>
+</ul>
+</li>
+<li>剪枝的目的：通过主动去掉一些分支来降低过拟合的风险</li>
+<li>策略
+<ul>
+<li>预剪枝</li>
+<li>后剪枝</li>
+</ul>
+</li>
+</ul>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                机器学习
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Fri, 07 Mar 2025 00:00:00 &#43;0000" class="no-wrap"
+                title=" Fri, 07 Mar 2025 00:00:00 &#43;0000">
+                Fri, 07 Mar 2025 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
         
         <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
           <div class="col-12 d-inline-block">
@@ -2053,165 +2254,6 @@
               <relative-time datetime=" Thu, 22 Aug 2024 00:00:00 &#43;0000" class="no-wrap"
                 title=" Thu, 22 Aug 2024 00:00:00 &#43;0000">
                 Thu, 22 Aug 2024 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/%E8%AE%A1%E7%BD%91%E8%AF%BE%E8%AE%BE/">计算机网络课程设计</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <h1 id="题目-dns中继服务器的实现">题目 DNS中继服务器的实现</h1>
-<ul>
-<li>设计一个DNS服务器程序，读入“域名-IP地址”对照表（一个文件），当客户端查询域名对应的IP地址时，用域名检索该对照表，得到三种检索结果：
-<ul>
-<li>检索结果为IP地址0.0.0.0，则向客户端返回“域名不存在”的报错信息（不良网站拦截功能）</li>
-<li>检索结果为普通IP地址，则向客户返回这个地址（服务器功能）</li>
-<li>表中未检测到该域名，则向因特网DNS服务器发出查询，并将结果返回给客户端（中继功能）
-<ul>
-<li>考虑多个计算机上的客户端会同时查询，需要进行消息ID的转换</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h1 id="dns介绍">DNS介绍</h1>
-<h2 id="dns查询过程迭代查询">DNS查询过程(迭代查询)</h2>
-<ul>
-<li>客户端向DNS服务器发起查询请求</li>
-<li>DNS搜索本地解析库没有结果。向根域发起查询请求，根域告诉DNS服务器，.com服务器上有它需要的资源</li>
-<li>DNS服务器又向.com服务器发起请求，.com服务器告诉DNS服务器，.google.com上有它需要的资源</li>
-<li>DNS服务器又向.google.com服务器发起请求，得到解析记录，并返回给了客户端。用户提供一种名称，查询以得到另一种名称：域名-&gt;IP或IP-&gt;域名</li>
-</ul>
-<h2 id="dns报文">DNS报文</h2>
-<ul>
-<li>
-<p>构成
-<img src="/images/%E6%88%AA%E5%B1%8F2024-06-24%2021.06.06.png" alt=""></p>
-</li>
-<li>
-<p>格式</p>
-<ul>
-<li>除Header外其余四部分为可变长度(12字节长)</li>
-<li>Question: the question for the name server</li>
-<li>Answer: RRs answering the question</li>
-<li>Authority: RRs pointing toward an authority</li>
-<li>Additional: RRs holding additional information</li>
-<li>后三段格式相同，每段都是由0~n个资源记录(Resource Record)构成</li>
-</ul>
-</li>
-<li>
-<p>报头字段 12字节
-<img src="/images/%E6%88%AA%E5%B1%8F2024-06-24%2021.10.12.png" alt="Header Section Format"></p>
-<ul>
-<li>ID
-<ul>
-<li>由客户程序设置并由服务器返回结果。客户程序通过它来确定响应与查询是否匹配</li>
-</ul>
-</li>
-<li>QR：0表示查询报，1表示响应报</li>
-<li>OPCODE
-<ul>
-<li>通常值为0(标准查询)，其他值为1(反向查询)和2(服务器状态请求)</li>
-</ul>
-</li>
-<li>AA：权威答案</li>
-<li>TC：截断的
-<ul>
-<li>应答的总长度超过512字节时，只返回前512个字节</li>
-</ul>
-</li>
-<li>RD：期望递归
-<ul>
-<li>查询报中设置，响应报中返回</li>
-<li>告诉名字服务器处理递归查询</li>
-<li>如果该位为1，则递归查询</li>
-<li>如果该位为0，且被请求的名字服务器没有一个权威回答，就返回一个能解答该查询的其他名字服务器列表，这称为迭代查询</li>
-</ul>
-</li>
-<li>RA：递归可用
-<ul>
-<li>如果名字服务器支持递归查询，则在响应中该比特设置为1</li>
-</ul>
-</li>
-<li>Z：必须为0，保留字段</li>
-<li>RCODE：响应码，仅用于响应报
-<ul>
-<li>值为0(没有差错)</li>
-<li>值为3表示名字差错。从权威名字服务器返回，表示在查询中指定域名不存在</li>
-</ul>
-</li>
-<li>QDCOUNT
-<ul>
-<li>Number of entries in the question section</li>
-</ul>
-</li>
-<li>ANCOUNT
-<ul>
-<li>Number of RRs in the answer section</li>
-</ul>
-</li>
-<li>NSCOUNT
-<ul>
-<li>Number of name server RRs in authority records section</li>
-</ul>
-</li>
-<li>ARCOUNT
-<ul>
-<li>Number of RRs in additional records section</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p>Question Section Format
-<img src="/images/%E6%88%AA%E5%B1%8F2024-06-24%2021.25.28.png" alt=""></p>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机科学
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机网络
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%AE%9E%E8%B7%B5%E8%BF%87%E7%A8%8B">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                实践过程
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Tue, 25 Jun 2024 00:00:00 &#43;0000" class="no-wrap"
-                title=" Tue, 25 Jun 2024 00:00:00 &#43;0000">
-                Tue, 25 Jun 2024 00:00:00 &#43;0000
               </relative-time>
             </div>
           </div>

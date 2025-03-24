@@ -22,7 +22,7 @@
 示例 示例 1: 输入: strs = [&ldquo;eat&rdquo;, &ldquo;tea&rdquo;, &ldquo;tan&rdquo;, &ldquo;ate&rdquo;, &ldquo;nat&rdquo;, &ldquo;bat&rdquo;] 输出: [[&ldquo;bat&rdquo;],[&ldquo;nat&rdquo;,&ldquo;tan&rdquo;],[&ldquo;ate&rdquo;,&ldquo;eat&rdquo;,&ldquo;tea&rdquo;]]
 示例 2: 输入: strs = [&quot;&quot;] 输出: [[&quot;&quot;]]
 示例 3: 输入: strs = [&ldquo;a&rdquo;] 输出: [[&ldquo;a&rdquo;]]
-提示 1 &lt;= strs.length &lt;= 104 0 &lt;= strs[i].length &lt;= 100 strs[i] 仅包含小写字母 题解 方法一 分析 用一个int记录一个字符串中所有出现的字母 将int映射到这一类字符串在ans中的位置 问题 使用的字母相同不能保证两个字符串相同 提交结果 106/126个通过的测试样例 解答错误 class Solution { public: vector&lt;vector&lt;string&gt;&gt; groupAnagrams(vector&lt;string&gt;&amp; strs) { vector&lt;vector&lt;string&gt;&gt; ans; unordered_map&lt;int, int&gt; pos; // 从字符串的值映射到在ans中的位置 for (string str: strs) { int nowbits = 0; for (char c: str) // 计算值 { nowbits = nowbits | (1 &lt;&lt; (c - &#39;a&#39;)); } if (pos.find(nowbits) != pos.end()) { ans[pos[nowbits]].push_back(str); // 将字符串插入已经有的数组中 } else { ans.push_back({str}); pos[nowbits] = ans.size() - 1; } } return ans; } }; " />
+提示 1 &lt;= strs.length &lt;= 104 0 &lt;= strs[i].length &lt;= 100 strs[i] 仅包含小写字母 题解 方法一 分析 用一个int记录一个字符串中所有出现的字母 将int映射到这一类字符串在ans中的位置 问题 使用的字母相同不能保证两个字符串相同 提交结果 106/126个通过的测试样例 解答错误 class Solution { public: vector&lt;vector&lt;string&gt;&gt; groupAnagrams(vector&lt;string&gt;&amp; strs) { vector&lt;vector&lt;string&gt;&gt; ans; unordered_map&lt;int, int&gt; pos; // 从字符串的值映射到在ans中的位置 for (string str: strs) { int nowbits = 0; for (char c: str) // 计算值 { nowbits = nowbits | (1 &lt;&lt; (c - &#39;a&#39;)); } if (pos.find(nowbits) != pos.end()) { ans[pos[nowbits]].push_back(str); // 将字符串插入已经有的数组中 } else { ans.push_back({str}); pos[nowbits] = ans.size() - 1; } } return ans; } }; 方法二 分析 将所有字符串转换为统一格式，映射到其在ans数组中的位置 提交结果 通过 class Solution { public: vector&lt;vector&lt;string&gt;&gt; groupAnagrams(vector&lt;string&gt;&amp; strs) { vector&lt;vector&lt;string&gt;&gt; ans; unordered_map&lt;string, int&gt; pos; // 从字符串的值映射到在ans中的位置 for (string str: strs) { string newstr = str; sort(newstr.begin(), newstr.end()); if (pos.find(newstr) != pos.end()) { ans[pos[newstr]].push_back(str); // 将字符串插入已经有的数组中 } else { ans.push_back({str}); pos[newstr] = ans.size() - 1; } } return ans; } }; " />
 <meta name="keywords"
   content='blog, google analytics' />
 <meta name="robots" content="noodp" />
@@ -36,7 +36,7 @@
 示例 示例 1: 输入: strs = [&ldquo;eat&rdquo;, &ldquo;tea&rdquo;, &ldquo;tan&rdquo;, &ldquo;ate&rdquo;, &ldquo;nat&rdquo;, &ldquo;bat&rdquo;] 输出: [[&ldquo;bat&rdquo;],[&ldquo;nat&rdquo;,&ldquo;tan&rdquo;],[&ldquo;ate&rdquo;,&ldquo;eat&rdquo;,&ldquo;tea&rdquo;]]
 示例 2: 输入: strs = [&quot;&quot;] 输出: [[&quot;&quot;]]
 示例 3: 输入: strs = [&ldquo;a&rdquo;] 输出: [[&ldquo;a&rdquo;]]
-提示 1 &lt;= strs.length &lt;= 104 0 &lt;= strs[i].length &lt;= 100 strs[i] 仅包含小写字母 题解 方法一 分析 用一个int记录一个字符串中所有出现的字母 将int映射到这一类字符串在ans中的位置 问题 使用的字母相同不能保证两个字符串相同 提交结果 106/126个通过的测试样例 解答错误 class Solution { public: vector&lt;vector&lt;string&gt;&gt; groupAnagrams(vector&lt;string&gt;&amp; strs) { vector&lt;vector&lt;string&gt;&gt; ans; unordered_map&lt;int, int&gt; pos; // 从字符串的值映射到在ans中的位置 for (string str: strs) { int nowbits = 0; for (char c: str) // 计算值 { nowbits = nowbits | (1 &lt;&lt; (c - &#39;a&#39;)); } if (pos.find(nowbits) != pos.end()) { ans[pos[nowbits]].push_back(str); // 将字符串插入已经有的数组中 } else { ans.push_back({str}); pos[nowbits] = ans.size() - 1; } } return ans; } }; " />
+提示 1 &lt;= strs.length &lt;= 104 0 &lt;= strs[i].length &lt;= 100 strs[i] 仅包含小写字母 题解 方法一 分析 用一个int记录一个字符串中所有出现的字母 将int映射到这一类字符串在ans中的位置 问题 使用的字母相同不能保证两个字符串相同 提交结果 106/126个通过的测试样例 解答错误 class Solution { public: vector&lt;vector&lt;string&gt;&gt; groupAnagrams(vector&lt;string&gt;&amp; strs) { vector&lt;vector&lt;string&gt;&gt; ans; unordered_map&lt;int, int&gt; pos; // 从字符串的值映射到在ans中的位置 for (string str: strs) { int nowbits = 0; for (char c: str) // 计算值 { nowbits = nowbits | (1 &lt;&lt; (c - &#39;a&#39;)); } if (pos.find(nowbits) != pos.end()) { ans[pos[nowbits]].push_back(str); // 将字符串插入已经有的数组中 } else { ans.push_back({str}); pos[nowbits] = ans.size() - 1; } } return ans; } }; 方法二 分析 将所有字符串转换为统一格式，映射到其在ans数组中的位置 提交结果 通过 class Solution { public: vector&lt;vector&lt;string&gt;&gt; groupAnagrams(vector&lt;string&gt;&amp; strs) { vector&lt;vector&lt;string&gt;&gt; ans; unordered_map&lt;string, int&gt; pos; // 从字符串的值映射到在ans中的位置 for (string str: strs) { string newstr = str; sort(newstr.begin(), newstr.end()); if (pos.find(newstr) != pos.end()) { ans[pos[newstr]].push_back(str); // 将字符串插入已经有的数组中 } else { ans.push_back({str}); pos[newstr] = ans.size() - 1; } } return ans; } }; " />
 <meta name="twitter:site" content="https://y-m-m.github.io/" />
 <meta name="twitter:creator" content="陈皮" />
 <meta name="twitter:image"
@@ -50,7 +50,7 @@
 示例 示例 1: 输入: strs = [&ldquo;eat&rdquo;, &ldquo;tea&rdquo;, &ldquo;tan&rdquo;, &ldquo;ate&rdquo;, &ldquo;nat&rdquo;, &ldquo;bat&rdquo;] 输出: [[&ldquo;bat&rdquo;],[&ldquo;nat&rdquo;,&ldquo;tan&rdquo;],[&ldquo;ate&rdquo;,&ldquo;eat&rdquo;,&ldquo;tea&rdquo;]]
 示例 2: 输入: strs = [&quot;&quot;] 输出: [[&quot;&quot;]]
 示例 3: 输入: strs = [&ldquo;a&rdquo;] 输出: [[&ldquo;a&rdquo;]]
-提示 1 &lt;= strs.length &lt;= 104 0 &lt;= strs[i].length &lt;= 100 strs[i] 仅包含小写字母 题解 方法一 分析 用一个int记录一个字符串中所有出现的字母 将int映射到这一类字符串在ans中的位置 问题 使用的字母相同不能保证两个字符串相同 提交结果 106/126个通过的测试样例 解答错误 class Solution { public: vector&lt;vector&lt;string&gt;&gt; groupAnagrams(vector&lt;string&gt;&amp; strs) { vector&lt;vector&lt;string&gt;&gt; ans; unordered_map&lt;int, int&gt; pos; // 从字符串的值映射到在ans中的位置 for (string str: strs) { int nowbits = 0; for (char c: str) // 计算值 { nowbits = nowbits | (1 &lt;&lt; (c - &#39;a&#39;)); } if (pos.find(nowbits) != pos.end()) { ans[pos[nowbits]].push_back(str); // 将字符串插入已经有的数组中 } else { ans.push_back({str}); pos[nowbits] = ans.size() - 1; } } return ans; } }; " />
+提示 1 &lt;= strs.length &lt;= 104 0 &lt;= strs[i].length &lt;= 100 strs[i] 仅包含小写字母 题解 方法一 分析 用一个int记录一个字符串中所有出现的字母 将int映射到这一类字符串在ans中的位置 问题 使用的字母相同不能保证两个字符串相同 提交结果 106/126个通过的测试样例 解答错误 class Solution { public: vector&lt;vector&lt;string&gt;&gt; groupAnagrams(vector&lt;string&gt;&amp; strs) { vector&lt;vector&lt;string&gt;&gt; ans; unordered_map&lt;int, int&gt; pos; // 从字符串的值映射到在ans中的位置 for (string str: strs) { int nowbits = 0; for (char c: str) // 计算值 { nowbits = nowbits | (1 &lt;&lt; (c - &#39;a&#39;)); } if (pos.find(nowbits) != pos.end()) { ans[pos[nowbits]].push_back(str); // 将字符串插入已经有的数组中 } else { ans.push_back({str}); pos[nowbits] = ans.size() - 1; } } return ans; } }; 方法二 分析 将所有字符串转换为统一格式，映射到其在ans数组中的位置 提交结果 通过 class Solution { public: vector&lt;vector&lt;string&gt;&gt; groupAnagrams(vector&lt;string&gt;&amp; strs) { vector&lt;vector&lt;string&gt;&gt; ans; unordered_map&lt;string, int&gt; pos; // 从字符串的值映射到在ans中的位置 for (string str: strs) { string newstr = str; sort(newstr.begin(), newstr.end()); if (pos.find(newstr) != pos.end()) { ans[pos[newstr]].push_back(str); // 将字符串插入已经有的数组中 } else { ans.push_back({str}); pos[newstr] = ans.size() - 1; } } return ans; } }; " />
 <meta property="og:url" content="https://y-m-m.github.io/post/leetcodehot49%E5%AD%97%E6%AF%8D%E5%BC%82%E4%BD%8D%E8%AF%8D%E5%88%86%E7%BB%84/" />
 <meta property="og:site_name" content="leetcode hot100 49 字母异位词分组" />
 <meta property="og:image"
@@ -162,9 +162,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Mon, 24 Mar 2025 13:20:24 &#43;0800"
+                  Modified <relative-time datetime="Mon, 24 Mar 2025 13:26:13 &#43;0800"
                     class="no-wrap">
-                    Mon, 24 Mar 2025 13:20:24 &#43;0800</relative-time>
+                    Mon, 24 Mar 2025 13:26:13 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -194,7 +194,7 @@
                         </div>
                       </div>
                     </details-menu>
-                      320 Words
+                      436 Words
                     
 
                   </div>
@@ -339,6 +339,42 @@
 </span></span><span class="line"><span class="cl">            <span class="p">{</span>
 </span></span><span class="line"><span class="cl">                <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">({</span><span class="n">str</span><span class="p">});</span>
 </span></span><span class="line"><span class="cl">                <span class="n">pos</span><span class="p">[</span><span class="n">nowbits</span><span class="p">]</span> <span class="o">=</span> <span class="n">ans</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h2 id="方法二">方法二</h2>
+<ul>
+<li>分析
+<ul>
+<li>将所有字符串转换为统一格式，映射到其在ans数组中的位置</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;</span> <span class="n">groupAnagrams</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">strs</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">pos</span><span class="p">;</span> <span class="c1">// 从字符串的值映射到在ans中的位置
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="n">string</span> <span class="nl">str</span><span class="p">:</span> <span class="n">strs</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">string</span> <span class="n">newstr</span> <span class="o">=</span> <span class="n">str</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">sort</span><span class="p">(</span><span class="n">newstr</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">newstr</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">            
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">newstr</span><span class="p">)</span> <span class="o">!=</span> <span class="n">pos</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ans</span><span class="p">[</span><span class="n">pos</span><span class="p">[</span><span class="n">newstr</span><span class="p">]].</span><span class="n">push_back</span><span class="p">(</span><span class="n">str</span><span class="p">);</span> <span class="c1">// 将字符串插入已经有的数组中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">({</span><span class="n">str</span><span class="p">});</span>
+</span></span><span class="line"><span class="cl">                <span class="n">pos</span><span class="p">[</span><span class="n">newstr</span><span class="p">]</span> <span class="o">=</span> <span class="n">ans</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">            <span class="p">}</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>

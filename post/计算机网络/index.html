@@ -1384,11 +1384,11 @@ output stream</li>
 <li>n: codedword length(n=m+r)</li>
 </ul>
 </li>
-<li>2<!-- raw HTML omitted -->m<!-- raw HTML omitted --> legal messages</li>
-<li>Each legal message has n illegal codewords at a distance 1 from it. Altogether there are (n+1)2<!-- raw HTML omitted -->m<!-- raw HTML omitted --> codewords
+<li>2<sup>m</sup> legal messages</li>
+<li>Each legal message has n illegal codewords at a distance 1 from it. Altogether there are (n+1)2<sup>m</sup> codewords
 <ul>
-<li>(n+1)2<!-- raw HTML omitted -->m<!-- raw HTML omitted --> ≤ 2<!-- raw HTML omitted -->n<!-- raw HTML omitted --></li>
-<li>m+r+1 ≤ 2<!-- raw HTML omitted -->r<!-- raw HTML omitted --></li>
+<li>(n+1)2<sup>m</sup> ≤ 2<sup>n</sup></li>
+<li>m+r+1 ≤ 2<sup>r</sup></li>
 <li>example: m = 7, r ≥ 4</li>
 </ul>
 </li>
@@ -1422,7 +1422,7 @@ output stream</li>
 <li>On channels such as wireless links that make many errors, it is better to add enough redundancy to each block for the receiver to be able to figure out what the original block was, i.e. using error correcting code但成本很高-&gt;应用时一般都是混用</li>
 <li>example:
 <ul>
-<li>Bit Error Rate(BER)=10<!-- raw HTML omitted -->-6<!-- raw HTML omitted -->, 1 block=1000bits, Data=1Mbits(有线电话线)</li>
+<li>Bit Error Rate(BER)=10<sup>-6</sup>, 1 block=1000bits, Data=1Mbits(有线电话线)</li>
 <li>The overhead for 1000 blocks
 <ul>
 <li>Error detection(parity check) + retransmission: 2001 bits</li>
@@ -1455,7 +1455,7 @@ output stream</li>
 <ul>
 <li>Can detect a single burst of length n</li>
 <li>A burst of length n+1 will pass undetected if the first bit is inverted, the last bit is inverted, and all the other bits are correct</li>
-<li>If block is garbled by a long burst，the probability of being accepted is 2<!-- raw HTML omitted -->-n<!-- raw HTML omitted --></li>
+<li>If block is garbled by a long burst，the probability of being accepted is 2<sup>-n</sup></li>
 </ul>
 </li>
 </ul>
@@ -1478,16 +1478,16 @@ output stream</li>
 </li>
 <li>The power of CRC
 <ul>
-<li>Single bit error: E(x) = x<!-- raw HTML omitted -->i<!-- raw HTML omitted -->(保证单比特错误一定能检验出来，每个G(x)中一定包含+1)</li>
+<li>Single bit error: E(x) = x<sup>i</sup>(保证单比特错误一定能检验出来，每个G(x)中一定包含+1)</li>
 <li>r check bits will detect all burst errors of length ≤ r
 <ul>
-<li>E(x) = x<!-- raw HTML omitted -->i<!-- raw HTML omitted -->(x<!-- raw HTML omitted -->k-1<!-- raw HTML omitted -->+x<!-- raw HTML omitted -->k-2<!-- raw HTML omitted -->+&hellip;+1), k-1&lt;r &ndash;&gt; E(x)/G(x) 余数≠0</li>
+<li>E(x) = x<sup>i</sup>(x<sup>k-1</sup>+x<sup>k-2</sup>+&hellip;+1), k-1&lt;r &ndash;&gt; E(x)/G(x) 余数≠0</li>
 </ul>
 </li>
 <li>Two isolated single-bit errors are detected
 <ul>
-<li>E(x) = x<!-- raw HTML omitted -->i<!-- raw HTML omitted --> + x<!-- raw HTML omitted -->j<!-- raw HTML omitted --> = x<!-- raw HTML omitted -->j<!-- raw HTML omitted -->(x<!-- raw HTML omitted -->i-j<!-- raw HTML omitted --> + 1). where i &gt; j</li>
-<li>Choose G(x): G(x) does not divide x<!-- raw HTML omitted -->k<!-- raw HTML omitted --> + 1 for any value of k below 32,768 (4096 bytes)</li>
+<li>E(x) = x<sup>i</sup> + x<sup>j</sup> = x<sup>j</sup>(x<sup>i-j</sup> + 1). where i &gt; j</li>
+<li>Choose G(x): G(x) does not divide x<sup>k</sup> + 1 for any value of k below 32,768 (4096 bytes)</li>
 </ul>
 </li>
 <li>Catch all errors consisting of an odd number of inverted bits: by making x+1 a factor of G(x)
@@ -1497,7 +1497,7 @@ output stream</li>
 </li>
 <li>Other burst errors (length &gt; r)
 <ul>
-<li>The probability of a bad frame been accepted is 2<!-- raw HTML omitted -->-r<!-- raw HTML omitted --></li>
+<li>The probability of a bad frame been accepted is 2<sup>-r</sup></li>
 </ul>
 </li>
 </ul>
@@ -1692,8 +1692,8 @@ output stream</li>
 <ul>
 <li>Full-duplex(全双工) data transmission: Piggybacking</li>
 <li>sequence number: n = 1, [0, 1]</li>
-<li>sending window W<!-- raw HTML omitted -->T<!-- raw HTML omitted --> = 1</li>
-<li>receiving window W<!-- raw HTML omitted -->R<!-- raw HTML omitted --> = 1
+<li>sending window W<sub>T</sub> = 1</li>
+<li>receiving window W<sub>R</sub> = 1
 <img src="/images/%E6%88%AA%E5%B1%8F2024-03-25%2017.30.30.png" alt="单比特滑动窗口">
 <img src="/images/%E6%88%AA%E5%B1%8F2024-03-25%2017.32.44.png" alt="单比特滑动窗口">
 <img src="/images/%E6%88%AA%E5%B1%8F2024-03-25%2017.34.21.png" alt="单比特滑动窗口"></li>
@@ -1727,15 +1727,15 @@ output stream</li>
 <li>Allow multiple frames to be in transit at a time</li>
 <li>frame sequence number bounder by size of field(n)
 <ul>
-<li>Frames are numbered modulo 2<!-- raw HTML omitted -->n<!-- raw HTML omitted --> (0&hellip;2<!-- raw HTML omitted -->n<!-- raw HTML omitted -->-1)</li>
-<li>Window size does not have to be max allowed(1 ≤ W ≤ 2<!-- raw HTML omitted -->n<!-- raw HTML omitted -->)</li>
+<li>Frames are numbered modulo 2<sup>n</sup> (0&hellip;2<sub>n</sub>-1)</li>
+<li>Window size does not have to be max allowed(1 ≤ W ≤ 2<sub>n</sub>)</li>
 </ul>
 </li>
 </ul>
 </li>
 <li>Sending window and Receiving window
 <ul>
-<li>Sender can send up to W<!-- raw HTML omitted -->T<!-- raw HTML omitted --> frames without ACK
+<li>Sender can send up to W<sub>T</sub> frames without ACK
 <ul>
 <li>W is the sending window size</li>
 </ul>
@@ -1746,7 +1746,7 @@ output stream</li>
 <li>These frames are said to fall within the sending window.</li>
 </ul>
 </li>
-<li>Receiver may be able to buffer multiple(W<!-- raw HTML omitted -->R<!-- raw HTML omitted -->) frames</li>
+<li>Receiver may be able to buffer multiple(W<sub>R</sub>) frames</li>
 <li>Receiving window
 <ul>
 <li>Receiver also maintains a receiving window corresponding to the set of frames it is permitted to accept
@@ -1772,8 +1772,8 @@ output stream</li>
 <li>
 <p>Use window to control number of outstanding frames</p>
 <ul>
-<li>Sender is allowed to send multiple frames before receiving ACK: pipelining(流水线), (W<!-- raw HTML omitted -->T<!-- raw HTML omitted --> &gt; 1)</li>
-<li>Receiving window size is 1 (W<!-- raw HTML omitted -->R<!-- raw HTML omitted -->=1)
+<li>Sender is allowed to send multiple frames before receiving ACK: pipelining(流水线), (W<sub>T</sub> &gt; 1)</li>
+<li>Receiving window size is 1 (W<sub>R</sbu>=1)
 <img src="/images/%E6%88%AA%E5%B1%8F2024-03-25%2017.59.35.png" alt="Sending window">
 <img src="/images/%E6%88%AA%E5%B1%8F2024-03-25%2018.00.14.png" alt="Receiving window"></li>
 </ul>
@@ -1824,15 +1824,15 @@ output stream</li>
 <li>
 <p>传送效率</p>
 <ul>
-<li>W<!-- raw HTML omitted -->T<!-- raw HTML omitted --> * T<!-- raw HTML omitted -->trans<!-- raw HTML omitted --> / (T<!-- raw HTML omitted -->trans<!-- raw HTML omitted --> + 2T<!-- raw HTML omitted -->prop<!-- raw HTML omitted -->)</li>
+<li>W<sub>T</sub> * T<sub>trans</sub> / (T<sub>trans</sub> + 2T<sub>prop</sub>)</li>
 </ul>
 </li>
 <li>
 <p>Maximum of Sending Window Size
 <img src="/images/%E6%88%AA%E5%B1%8F2024-03-27%2010.11.52.png" alt="Maximum of Sending Window Size"></p>
 <ul>
-<li>发送窗口数目W<!-- raw HTML omitted -->T<!-- raw HTML omitted -->+接受窗口数目W<!-- raw HTML omitted -->R<!-- raw HTML omitted --> ≤ 2<!-- raw HTML omitted -->n<!-- raw HTML omitted --></li>
-<li>在Go Back N中，W<!-- raw HTML omitted -->T<!-- raw HTML omitted --> ≤ 2<!-- raw HTML omitted -->n<!-- raw HTML omitted --> - 1
+<li>发送窗口数目W<sub>T</sub>+接受窗口数目W<sub>R</sub> ≤ 2<sup>n</sup></li>
+<li>在Go Back N中，W<sub>T</sub> ≤ 2<sup>n</sup> - 1
 <img src="/images/%E6%88%AA%E5%B1%8F2024-03-27%2010.19.50.png" alt="example"></li>
 </ul>
 </li>
@@ -1854,9 +1854,9 @@ output stream</li>
 <li>Selective Repeat&ndash; Maximum Window Size
 <ul>
 <li>The maximum window size should be at most half the range of the sequence numbers</li>
-<li>W<!-- raw HTML omitted -->T<!-- raw HTML omitted -->+W<!-- raw HTML omitted -->R<!-- raw HTML omitted --> ≤ 2<!-- raw HTML omitted -->n<!-- raw HTML omitted --></li>
-<li>W<!-- raw HTML omitted -->T<!-- raw HTML omitted -->≥W<!-- raw HTML omitted -->R<!-- raw HTML omitted --></li>
-<li>In practice, usually W<!-- raw HTML omitted -->T<!-- raw HTML omitted --> = W<!-- raw HTML omitted -->R<!-- raw HTML omitted --> = 2<!-- raw HTML omitted -->n-1<!-- raw HTML omitted --></li>
+<li>W<sub>T</sub>+W<sub>R</sub> ≤ 2<sup>n</sup></li>
+<li>W<sub>T</sub>≥W<sub>R</sub></li>
+<li>In practice, usually W<sub>T</sub> = W<sub>R</sub> = 2<sup>n-1</sup></li>
 </ul>
 </li>
 <li>Selective Repeat&ndash;Buffers
@@ -1912,10 +1912,10 @@ output stream</li>
 <img src="/images/%E6%88%AA%E5%B1%8F2024-03-27%2011.06.28.png" alt="Model"></li>
 <li>Transfer Time &amp; Round Trip Time
 <ul>
-<li>Frame transfer time (t<!-- raw HTML omitted -->xfr<!-- raw HTML omitted -->)
+<li>Frame transfer time (t<sub>xfr</sub>)
 <ul>
 <li>Time for receiver to receive the entire frame</li>
-<li>t<!-- raw HTML omitted -->xfr<!-- raw HTML omitted --> = t<!-- raw HTML omitted -->tran<!-- raw HTML omitted --> + t<!-- raw HTML omitted -->prop<!-- raw HTML omitted --> + t<!-- raw HTML omitted -->quene/switching<!-- raw HTML omitted --></li>
+<li>t<sub>xfr</sub> = t<sub>tran</sub> + t<sub>prop</sub> + t<sub>quene/switching</sub></li>
 </ul>
 </li>
 <li>Round Trip Time(RTT)
@@ -1929,7 +1929,7 @@ output stream</li>
 <ul>
 <li>Error-free Stop and Wait
 <ul>
-<li>The total time to send the data T can be expressed as T = n*T<!-- raw HTML omitted -->F<!-- raw HTML omitted -->
+<li>The total time to send the data T can be expressed as T = n*T<sub>F</sub>
 <img src="/images/%E6%88%AA%E5%B1%8F2024-03-27%2019.02.15.png" alt="Error-free Stop and Wait">
 <img src="/images/%E6%88%AA%E5%B1%8F2024-03-27%2019.03.35.png" alt=""></li>
 <li>More: Stop-and-Wait with error
@@ -2114,7 +2114,7 @@ output stream</li>
 <li>FDM</li>
 <li>Telephone networks: user number is small and costant, with heavy load of traffic of each user(simple and efficient)
 <ul>
-<li>T<!-- raw HTML omitted -->FDM<!-- raw HTML omitted --> = NT</li>
+<li>T<sub>FDM</sub> = NT</li>
 <li>why? use M/M/1 model</li>
 </ul>
 </li>
@@ -2187,7 +2187,7 @@ output stream</li>
 </ul>
 <h4 id="slotted-aloha时隙分槽aloha">Slotted ALOHA(时隙/分槽ALOHA)</h4>
 <ul>
-<li>Time is uniform slots equal T<!-- raw HTML omitted -->0<!-- raw HTML omitted --></li>
+<li>Time is uniform slots equal T<sub>0</sub></li>
 <li>Need central clock(or other sync mechanism)</li>
 <li>Transmission begins at slot boundary
 <img src="/images/%E6%88%AA%E5%B1%8F2024-04-01%2017.48.12.png" alt="">
@@ -2314,7 +2314,7 @@ output stream</li>
 <ul>
 <li>Binary Exponential Backoff Algorithm
 <ul>
-<li>Random pick a number r from{0, 1, 2, &hellip;, 2<!-- raw HTML omitted -->k<!-- raw HTML omitted -->-1}</li>
+<li>Random pick a number r from{0, 1, 2, &hellip;, 2<sup>k</sup>-1}</li>
 <li>Backoff time r * basic backoff_time</li>
 <li>With k = min[number of atempt, 10]
 <ul>
@@ -3133,8 +3133,8 @@ output stream</li>
 <ul>
 <li><strong>DIFs</strong>: The interval between regular <strong>data frames</strong></li>
 <li><strong>SIFS</strong>: The <strong>shortest</strong> interval. It is used to allow the parties in a singledialog the chance to go first(eg. letting the receiver send <strong>ACK</strong>, or theSender transmit a burst of fragments )</li>
-<li>AIFS<!-- raw HTML omitted -->1<!-- raw HTML omitted -->, (Arbitration InterFrame Space): The short interval, can beused by the AP to move high-priority traffic</li>
-<li>AIFS<!-- raw HTML omitted -->4<!-- raw HTML omitted -->: The long interval, can be used for low-priority traffic</li>
+<li>AIFS<sub>1</sub>, (Arbitration InterFrame Space): The short interval, can beused by the AP to move high-priority traffic</li>
+<li>AIFS<sub>4</sub>: The long interval, can be used for low-priority traffic</li>
 <li>EIFs: is used only by a station that just received a bad or unknownframe, to report the problem
 <img src="/images/%E6%88%AA%E5%B1%8F2024-04-15%2016.52.12.png" alt=""></li>
 </ul>
@@ -4301,7 +4301,7 @@ output stream</li>
 <li>Bit error rate(BER)</li>
 </ul>
 </li>
-<li>Delay: the time period fro 1<!-- raw HTML omitted -->st<!-- raw HTML omitted --> bit of packet sent to last bit received</li>
+<li>Delay: the time period fro 1<sup>st</sup> bit of packet sent to last bit received</li>
 <li>Jitter(抖动): the variation in delay of packets belonging to the same flow</li>
 <li>Bandwidth: maximum data rate
 <img src="/images/%E6%88%AA%E5%B1%8F2024-05-08%2010.44.02.png" alt=""></li>
@@ -4670,7 +4670,7 @@ output stream</li>
 <li>Tell where in the current datagram this fragment belongs, in 8bytes (0~8191)</li>
 <li>82 fc 40 00</li>
 <li>找到最后一片就知道IP包有多长</li>
-<li>IP包长度最长为2<!-- raw HTML omitted -->16<!-- raw HTML omitted -->-1</li>
+<li>IP包长度最长为2<sup>16</sup>-1</li>
 <li>偏移量是8字节的整数倍-&gt;/8成为offset 8字节的整数倍
 <img src="/images/%E6%88%AA%E5%B1%8F2024-05-13%2019.07.26.png" alt=""></li>
 <li>Fragmentation Example
@@ -4714,7 +4714,7 @@ output stream</li>
 <li>Some of the IP options
 <ul>
 <li>Security option 没有意义</li>
-<li>Strict source routing option 严格源选路(A-&gt;C-&gt;D-&gt;E-&gt;H<!-- raw HTML omitted -->2<!-- raw HTML omitted -->)
+<li>Strict source routing option 严格源选路(A-&gt;C-&gt;D-&gt;E-&gt;H<sub>2</sub>)
 <ul>
 <li>Gives the complete path from source to destination as a sequence of IP addresses</li>
 </ul>
@@ -4820,9 +4820,9 @@ output stream</li>
 <ul>
 <li>网络地址: x.x.x.x/m</li>
 <li>网络号m位，主机号=32-m=n位</li>
-<li>该网络内共有2<!-- raw HTML omitted -->n<!-- raw HTML omitted -->个地址</li>
+<li>该网络内共有2<sup>n</sup>个地址</li>
 <li>其中第一个地址(主机号全0)为网路地址，最后一个地址(主机号为全1)为广播地址</li>
-<li>可分配(可用)地址数: 2<!-- raw HTML omitted -->n<!-- raw HTML omitted -->-2</li>
+<li>可分配(可用)地址数: 2<sup>n</sup>-2</li>
 </ul>
 </li>
 <li>
@@ -5631,7 +5631,7 @@ output stream</li>
 <li>flow control
 <ul>
 <li>
-<p>Sending window W<!-- raw HTML omitted -->T<!-- raw HTML omitted --> is related to BD
+<p>Sending window W<sub>T</sub> is related to BD
 <img src="/images/%E6%88%AA%E5%B1%8F2024-05-29%2010.19.54.png" alt=""></p>
 </li>
 <li>
@@ -5956,8 +5956,8 @@ output stream</li>
 <li>Window scale
 <ul>
 <li>Allows the sender and receiver to negotiate a window scale factor at the start of a connection</li>
-<li>2<!-- raw HTML omitted -->16<!-- raw HTML omitted -->=64KB</li>
-<li>Shift the window size field up to 14 bits to the left, allowing the window size up to 2<!-- raw HTML omitted -->30<!-- raw HTML omitted --> bytes</li>
+<li>2<sup>16</sup>=64KB</li>
+<li>Shift the window size field up to 14 bits to the left, allowing the window size up to 2<sup>30</sup> bytes</li>
 </ul>
 </li>
 <li>Timestamp

@@ -496,11 +496,72 @@
 </blockquote>
 <h1 id="提示">提示</h1>
 <ul>
-<li>2 &lt;= nums.length &lt;= 10<!-- raw HTML omitted -->4<!-- raw HTML omitted --></li>
-<li>-10<!-- raw HTML omitted -->9<!-- raw HTML omitted --> &lt;= nums[i] &lt;= 10<!-- raw HTML omitted -->9<!-- raw HTML omitted --></li>
-<li>-10<!-- raw HTML omitted -->9<!-- raw HTML omitted --> &lt;= target &lt;= 10<!-- raw HTML omitted -->9<!-- raw HTML omitted --></li>
+<li>2 &lt;= nums.length &lt;= 10<sup>4</sup></li>
+<li>-10<sup>9</sup> &lt;= nums[i] &lt;= 10<sup>9</sup></li>
+<li>-10<sup>9</sup> &lt;= target &lt;= 10<sup>9</sup></li>
 <li>只会存在一个有效答案</li>
 </ul>
+<h1 id="题解">题解</h1>
+<h2 id="解法一">解法一</h2>
+<ul>
+<li>分析
+<ul>
+<li>遍历nums, unordered_set needs存储target-nums[i]</li>
+<li>直到找到已经存在于needs中的数字为止</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">twoSum</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">unordered_set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">neednums</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">num</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">neednums</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">!=</span> <span class="n">neednums</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">num</span> <span class="o">==</span> <span class="n">target</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">j</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                        <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">neednums</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">target</span> <span class="o">-</span> <span class="n">num</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h2 id="解法二">解法二</h2>
+<ul>
+<li>unordered_map将数字映射到它在数组中的位置</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">twoSum</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">pos</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">target</span> <span class="o">-</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">!=</span> <span class="n">pos</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="p">{</span><span class="n">pos</span><span class="p">[</span><span class="n">target</span> <span class="o">-</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="n">i</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">pos</span><span class="p">[</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="p">{};</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div>
               </div>
             </div>
 
@@ -692,9 +753,9 @@ rangeFreqQuery.query(0, 11, 33); // 返回 2 。33 在整个子数组中出现 2
 </blockquote>
 <h1 id="提示">提示</h1>
 <ul>
-<li>1 &lt;= arr.length &lt;= 10<!-- raw HTML omitted -->5<!-- raw HTML omitted --></li>
+<li>1 &lt;= arr.length &lt;= 10<sup>5</sup></li>
 <li>arr.length 为偶数</li>
-<li>1 &lt;= arr[i] &lt;= 10<!-- raw HTML omitted -->5<!-- raw HTML omitted --></li>
+<li>1 &lt;= arr[i] &lt;= 10<sup>5</sup></li>
 </ul>
 <h1 id="题解">题解</h1>
 <h2 id="方法一">方法一</h2>
@@ -1146,9 +1207,34 @@ int diagonalSum(int value) 返回在 grid 中与 value 对角线相邻的元素�
               <div class="col-12 d-inline-block text-gray mb-2 pr-4">
                 <h1 id="题目">题目</h1>
 <blockquote>
-<p>给你两个正整数 xCorner 和 yCorner 和一个二维整数数组 circles ，其中 circles[i] = [x<!-- raw HTML omitted -->i<!-- raw HTML omitted -->, y<!-- raw HTML omitted -->i<!-- raw HTML omitted -->, r<!-- raw HTML omitted -->i<!-- raw HTML omitted -->] 表示一个圆心在 (x<!-- raw HTML omitted -->i<!-- raw HTML omitted -->, y<!-- raw HTML omitted -->i<!-- raw HTML omitted -->) 半径为 r<!-- raw HTML omitted -->i<!-- raw HTML omitted --> 的圆。
+<p>给你两个正整数 xCorner 和 yCorner 和一个二维整数数组 circles ，其中 circles[i] = [x<sub>i</sub>, y<sub>i</sub>, r<sub>i</sub>] 表示一个圆心在 (x<sub>i</sub>, y<sub>i</sub>) 半径为 r<sub>i</sub> 的圆。
 坐标平面内有一个左下角在原点，右上角在 (xCorner, yCorner) 的矩形。你需要判断是否存在一条从左下角到右上角的路径满足：路径 完全 在矩形内部，不会 触碰或者经过 任何 圆的内部和边界，同时 只 在起点和终点接触到矩形。
 如果存在这样的路径，请你返回 true ，否则返回 false 。</p>
+</blockquote>
+<h1 id="示例">示例</h1>
+<h2 id="示例一">示例一</h2>
+<blockquote>
+<p>输入：X = 3, Y = 4, circles = [[2,1,1]]
+输出：true
+<img src="/images/%E6%88%AA%E5%B1%8F2024-11-08%2016.13.44.png" alt=""></p>
+</blockquote>
+<h2 id="示例二">示例二</h2>
+<blockquote>
+<p>输入：X = 3, Y = 3, circles = [[1,1,2]]
+输出：false
+<img src="/images/%E6%88%AA%E5%B1%8F2024-11-08%2016.14.50.png" alt=""></p>
+</blockquote>
+<h2 id="示例三">示例三</h2>
+<blockquote>
+<p>输入：X = 3, Y = 3, circles = [[2,1,1],[1,2,1]]
+输出：false
+<img src="/images/%E6%88%AA%E5%B1%8F2024-11-08%2016.15.33.png" alt=""></p>
+</blockquote>
+<h2 id="示例四">示例四</h2>
+<blockquote>
+<p>输入：X = 4, Y = 4, circles = [[5,5,1]]
+输出：true
+<img src="/images/%E6%88%AA%E5%B1%8F2024-11-08%2016.16.19.png" alt=""></p>
               </div>
             </div>
 
@@ -1420,8 +1506,8 @@ int diagonalSum(int value) 返回在 grid 中与 value 对角线相邻的元素�
 </blockquote>
 <h2 id="提示">提示</h2>
 <blockquote>
-<p>1 &lt;= hours.length &lt;= 5 * 10<!-- raw HTML omitted -->5<!-- raw HTML omitted -->
-1 &lt;= hours[i] &lt;= 10<!-- raw HTML omitted -->9<!-- raw HTML omitted --></p>
+<p>1 &lt;= hours.length &lt;= 5 * 10<sup>5</sup>
+1 &lt;= hours[i] &lt;= 10<sup>9</sup></p>
               </div>
             </div>
 

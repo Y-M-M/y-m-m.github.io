@@ -24,6 +24,8 @@
 示例二 输入：c = 3 输出：false
 提示 0 &lt;= c &lt;= 231 - 1
 题解 方法一 class Solution { public: bool judgeSquareSum(int c) { unordered_set&lt;int&gt; little_squares; long long base = 0; long long square = base * base; while (square &lt;= c / 2) { little_squares.insert(square); if (square &#43; square == c) return true; base&#43;&#43;; square = base * base; } while (square &lt;= c) { if (little_squares.count(c - square)) return true; base&#43;&#43;; square = base * base; } return false; } }; 提交结果
+通过 分析
+思路 计算不超过c/2的所有平方数，存入unordered_set中，便于查找 计算超过c/2且不超过c的所有平方数x，在unordered_set中查找是否有c - x，如果有，返回true 单独处理c/2刚好是平方数的情况 时间复杂度 O(sqrt(n)) unordered_map()节省了查找的时间 空间复杂度 O(sqrt(n)) 方法二 class Solution { public: bool judgeSquareSum(int c) { for (long a = 0; a * a &lt;= c; a&#43;&#43;) { double b = sqrt(c - a * a); if (b == (int)b) { return true; } } return false; } }; 提交结果 通过 分析 使用sqrt函数，查看是否有整数的平方根 时间复杂度 O(sqrt(n)) 空间复杂度O(1) 方法三 class Solution { public: bool judgeSquareSum(int c) { long left = 0; long right = (int)sqrt(c); while (left &lt;= right) { long sum = left * left &#43; right * right; if (sum == c) return true; else if (sum &gt; c) right--; else left&#43;&#43;; } return false; } }; 提交结果 通过 分析 双指针 时间复杂度O(sqrt(n)) 空间复杂度O(1) 方法四 class Solution { public: bool judgeSquareSum(int c) { for (int base = 2; base * base &lt;= c; base&#43;&#43;) { if (c % base != 0) continue; int exp = 0; while (c % base == 0) // 计算base的幂 { c /= base; exp&#43;&#43;; } if (base % 4 == 3 &amp;&amp; exp % 2 != 0) { return false; } } return c % 4 != 3; } }; 提交结果 通过 分析 数学 费马平方和定理 一个非负整数 c 如果能够表示为两个整数的平方和，当且仅当 c 的所有形如 4k&#43;3 的质因子的幂均为偶数。 依次遍历所有质因子 每次都让c /= base，则遍历到的因子一定是质因子(如果因子除了1和它本身之外还有其他因子，则一定会在前面被除掉) 对每个质因子计算幂，判读它是否符合条件 时间复杂度 O(sqrt(n)) 空间复杂度 O(1) 参考资料 leetcode 官方题解
 " />
 <meta name="keywords"
   content='blog, google analytics' />
@@ -40,6 +42,8 @@
 示例二 输入：c = 3 输出：false
 提示 0 &lt;= c &lt;= 231 - 1
 题解 方法一 class Solution { public: bool judgeSquareSum(int c) { unordered_set&lt;int&gt; little_squares; long long base = 0; long long square = base * base; while (square &lt;= c / 2) { little_squares.insert(square); if (square &#43; square == c) return true; base&#43;&#43;; square = base * base; } while (square &lt;= c) { if (little_squares.count(c - square)) return true; base&#43;&#43;; square = base * base; } return false; } }; 提交结果
+通过 分析
+思路 计算不超过c/2的所有平方数，存入unordered_set中，便于查找 计算超过c/2且不超过c的所有平方数x，在unordered_set中查找是否有c - x，如果有，返回true 单独处理c/2刚好是平方数的情况 时间复杂度 O(sqrt(n)) unordered_map()节省了查找的时间 空间复杂度 O(sqrt(n)) 方法二 class Solution { public: bool judgeSquareSum(int c) { for (long a = 0; a * a &lt;= c; a&#43;&#43;) { double b = sqrt(c - a * a); if (b == (int)b) { return true; } } return false; } }; 提交结果 通过 分析 使用sqrt函数，查看是否有整数的平方根 时间复杂度 O(sqrt(n)) 空间复杂度O(1) 方法三 class Solution { public: bool judgeSquareSum(int c) { long left = 0; long right = (int)sqrt(c); while (left &lt;= right) { long sum = left * left &#43; right * right; if (sum == c) return true; else if (sum &gt; c) right--; else left&#43;&#43;; } return false; } }; 提交结果 通过 分析 双指针 时间复杂度O(sqrt(n)) 空间复杂度O(1) 方法四 class Solution { public: bool judgeSquareSum(int c) { for (int base = 2; base * base &lt;= c; base&#43;&#43;) { if (c % base != 0) continue; int exp = 0; while (c % base == 0) // 计算base的幂 { c /= base; exp&#43;&#43;; } if (base % 4 == 3 &amp;&amp; exp % 2 != 0) { return false; } } return c % 4 != 3; } }; 提交结果 通过 分析 数学 费马平方和定理 一个非负整数 c 如果能够表示为两个整数的平方和，当且仅当 c 的所有形如 4k&#43;3 的质因子的幂均为偶数。 依次遍历所有质因子 每次都让c /= base，则遍历到的因子一定是质因子(如果因子除了1和它本身之外还有其他因子，则一定会在前面被除掉) 对每个质因子计算幂，判读它是否符合条件 时间复杂度 O(sqrt(n)) 空间复杂度 O(1) 参考资料 leetcode 官方题解
 " />
 <meta name="twitter:site" content="https://y-m-m.github.io/" />
 <meta name="twitter:creator" content="陈皮" />
@@ -56,6 +60,8 @@
 示例二 输入：c = 3 输出：false
 提示 0 &lt;= c &lt;= 231 - 1
 题解 方法一 class Solution { public: bool judgeSquareSum(int c) { unordered_set&lt;int&gt; little_squares; long long base = 0; long long square = base * base; while (square &lt;= c / 2) { little_squares.insert(square); if (square &#43; square == c) return true; base&#43;&#43;; square = base * base; } while (square &lt;= c) { if (little_squares.count(c - square)) return true; base&#43;&#43;; square = base * base; } return false; } }; 提交结果
+通过 分析
+思路 计算不超过c/2的所有平方数，存入unordered_set中，便于查找 计算超过c/2且不超过c的所有平方数x，在unordered_set中查找是否有c - x，如果有，返回true 单独处理c/2刚好是平方数的情况 时间复杂度 O(sqrt(n)) unordered_map()节省了查找的时间 空间复杂度 O(sqrt(n)) 方法二 class Solution { public: bool judgeSquareSum(int c) { for (long a = 0; a * a &lt;= c; a&#43;&#43;) { double b = sqrt(c - a * a); if (b == (int)b) { return true; } } return false; } }; 提交结果 通过 分析 使用sqrt函数，查看是否有整数的平方根 时间复杂度 O(sqrt(n)) 空间复杂度O(1) 方法三 class Solution { public: bool judgeSquareSum(int c) { long left = 0; long right = (int)sqrt(c); while (left &lt;= right) { long sum = left * left &#43; right * right; if (sum == c) return true; else if (sum &gt; c) right--; else left&#43;&#43;; } return false; } }; 提交结果 通过 分析 双指针 时间复杂度O(sqrt(n)) 空间复杂度O(1) 方法四 class Solution { public: bool judgeSquareSum(int c) { for (int base = 2; base * base &lt;= c; base&#43;&#43;) { if (c % base != 0) continue; int exp = 0; while (c % base == 0) // 计算base的幂 { c /= base; exp&#43;&#43;; } if (base % 4 == 3 &amp;&amp; exp % 2 != 0) { return false; } } return c % 4 != 3; } }; 提交结果 通过 分析 数学 费马平方和定理 一个非负整数 c 如果能够表示为两个整数的平方和，当且仅当 c 的所有形如 4k&#43;3 的质因子的幂均为偶数。 依次遍历所有质因子 每次都让c /= base，则遍历到的因子一定是质因子(如果因子除了1和它本身之外还有其他因子，则一定会在前面被除掉) 对每个质因子计算幂，判读它是否符合条件 时间复杂度 O(sqrt(n)) 空间复杂度 O(1) 参考资料 leetcode 官方题解
 " />
 <meta property="og:url" content="https://y-m-m.github.io/post/leetcode683%E5%B9%B3%E6%96%B9%E6%95%B0%E4%B9%8B%E5%92%8C/" />
 <meta property="og:site_name" content="leetcode 683 平方数之和" />
@@ -271,7 +277,7 @@
                 <article class="markdown-body entry-content container-lg"><p><a href="https://leetcode.cn/problems/sum-of-square-numbers/description/">leetcode 683 平方数之和</a></p>
 <h1 id="题目">题目</h1>
 <blockquote>
-<p>给定一个非负整数 c ，你要判断是否存在两个整数 a 和 b，使得 a<!-- raw HTML omitted -->2<!-- raw HTML omitted --> + b<!-- raw HTML omitted -->2<!-- raw HTML omitted --> = c 。</p>
+<p>给定一个非负整数 c ，你要判断是否存在两个整数 a 和 b，使得 a<sup>2</sup> + b<sup>2</sup> = c 。</p>
 </blockquote>
 <h1 id="示例">示例</h1>
 <h2 id="示例一">示例一</h2>
@@ -287,7 +293,7 @@
 </blockquote>
 <h1 id="提示">提示</h1>
 <blockquote>
-<p>0 &lt;= c &lt;= 2<!-- raw HTML omitted -->31<!-- raw HTML omitted --> - 1</p>
+<p>0 &lt;= c &lt;= 2<sup>31</sup> - 1</p>
 </blockquote>
 <h1 id="题解">题解</h1>
 <h2 id="方法一">方法一</h2>

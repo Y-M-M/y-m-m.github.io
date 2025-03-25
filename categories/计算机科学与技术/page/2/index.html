@@ -149,7 +149,7 @@
                 </path>
               </svg>
               Posts
-              <span class="Counter">104</span>
+              <span class="Counter">105</span>
             </a>
           </nav>
           <div class="profile-color-modes js-promo-color-modes-banner-profile isInitialToggle">
@@ -428,7 +428,7 @@
         </path>
       </svg>
       Posts
-      <span class="Counter ">104</span>
+      <span class="Counter ">105</span>
     </a>
   </nav>
 </div>
@@ -1368,6 +1368,213 @@
         
       
       <ul>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/vita-1.5/">VITA-1.5: Towards GPT-4o Level Real-Time Vision and Speech Interaction</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <h1 id="abstract">Abstract</h1>
+<ul>
+<li>在本文中，我们提出了一种精心设计的多阶段训练方法，通过逐步训练LLMs来理解视觉和语言信息，最终实现流利的视觉和语音交互；</li>
+<li>保留了强大的version-language能力，在没有单独的ASR和TTS模块的情况下实现了高效的语音对话能力，显著加快了多模态端到端的响应速度；
+<ul>
+<li>ASR 自动语音识别，将语音转换为文本</li>
+<li>TTS 文本到语音合成，将文本转换为语音</li>
+</ul>
+</li>
+</ul>
+<h1 id="1-introduction">1 Introduction</h1>
+<ul>
+<li>MLLMs中视觉和语音的整合并不简单，因为它们存在固有差异，常常导致训练过程的冲突
+<ul>
+<li>图像等视觉数据传递的是空间信息</li>
+<li>语音数据传递的是时间序列的动态变化</li>
+</ul>
+</li>
+<li>传统的语音到语音系统依赖于单独的模块ASR和TTS，这会增加延迟、降低一致性，限制了它们在实际应用中的一致性</li>
+<li>VITA-1.5
+<ul>
+<li>一个multimodal LLM</li>
+<li>通过精心设计的三阶段训练方法整合了视觉、语言和语音</li>
+<li>这种策略逐步整合视觉和语音数据，在缓解模态冲突的同时保持了较强的多模态性能</li>
+</ul>
+</li>
+<li>Stages
+<ul>
+<li>第一阶段，我们训练visual adapters，用描述性caption和视觉QA数据，关注version-language
+<ul>
+<li>这一步建立了模型的基本视觉能力，允许robust图像和视频理解</li>
+</ul>
+</li>
+<li>第二阶段，使用speech-transcription paired数据，训练一个audio encoder，再使用speech QA数据进行微调，引入audio input processing
+<ul>
+<li>这一步使模型具有有效的理解和响应音频输入的能力</li>
+</ul>
+</li>
+<li>第三阶段，训练一个audio decoder，使其能够实现端到端的语音输出，省去了外部的TTS模块
+<ul>
+<li>使VITA-1.5能够生成流畅的语音回复，促进了多模态对话系统的自然性和交互性</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>在与图像、视频和语音理解相关的各种基准进行了广泛的评估，将结果与open-source和proprietary模型进行比较
+<ul>
+<li>VITA-1.5显示出与基于图像/视频的MLLMs相当的感知和推理能力，并在语音能力方面取得显著进步</li>
+</ul>
+</li>
+</ul>
+<h1 id="2-related-work">2 Related work</h1>
+<ul>
+<li>近年来，得益于GPTs, LLaMA, Alpaca, Vicuna和Mistral等大语言模型的快速发展，研究者们通过多模态对齐和指令调优，成功的将文本理解扩展到多模态理解/推理</li>
+<li>例如
+<ul>
+<li>LLaVA, Qwen-VL, Cambrain-1, Mini-Gemini, MiniGPM-V 2.5, DeepSeek-VL和SLiME在图像预测和推理方面取得了重大进展</li>
+<li>LongVA, Video-LLaVA等模型展示出了视频理解的最新进展</li>
+</ul>
+</li>
+<li>很少有开源模型涉及多模态交互能力</li>
+<li>VITA-1.0对引入语音进行人机交互进行了初步尝试，但引入额外的语音数据对模型原有的多模态能力来说是个挑战
+<ul>
+<li>语音生成通常依赖于现有的TTS系统，导致高延迟</li>
+</ul>
+</li>
+<li>VITA-1.5
+<ul>
+<li>采用了精致的训练策略，在感知四个模态的数据(视频、图像、文本、音频)方面表现优异</li>
+<li>实现了接近实时的视觉和语音交互</li>
+</ul>
+</li>
+</ul>
+<h1 id="3-vita-15">3 VITA-1.5</h1>
+<h2 id="31-model-atchitecture">3.1 Model Atchitecture</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.06.41.png" alt=""></p>
+<ul>
+<li>输入
+<ul>
+<li>Multimodal Encoder-Adaptor-LLM的配置</li>
+<li>将视觉/听觉 transformer 和 多层connector 联合 大语言模型一起训练，旨在增强对视觉、音频和语言的统一认识</li>
+</ul>
+</li>
+<li>输出
+<ul>
+<li>VITA-1.5有自己的端到端语音模块，而不是像VITA-1.0那样使用外部模块</li>
+</ul>
+</li>
+</ul>
+<h3 id="311-visional-modality">3.1.1 Visional Modality</h3>
+<ul>
+<li>VIsional Encoder
+<ul>
+<li>Intern ViT-300M作为视觉编码器，输入图像大小为448*448个像素</li>
+<li>每个图像生成256个visual tokens</li>
+<li>对于高分辨率的图像，VITA-1.5采用动态补丁策略捕捉局部细节，提高图像理解的准确性
+<ul>
+<li>动态补丁策略是一种在图像处理或计算机视觉任务中用于捕捉局部细节的技术，通过动态调整patch的大小或位置，来更好的适应图像中的不同区域和细节</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Video Processing
+<ul>
+<li>视频被理解为一种特殊类型的多图像输入</li>
+<li>小于4s：均匀采样4帧</li>
+<li>4~16s：每秒采样1帧</li>
+<li>大于16s：均匀采样16帧</li>
+<li>不对视频帧运用动态补丁，以避免过多的视觉令牌阻碍处理效率</li>
+</ul>
+</li>
+<li>Vision Adapter
+<ul>
+<li>使用两层MLP(多层感知机)来将视觉特征映射到适合后续LLM理解的visual tokens</li>
+</ul>
+</li>
+</ul>
+<h3 id="312-audio-modality">3.1.2 Audio Modality</h3>
+<ul>
+<li>Speech Encoder
+<ul>
+<li>我们的audio encoder模块由多个下采样卷积层(4倍下采样)和24个Transformer块(隐藏尺寸为1024)组成
+<ul>
+<li>下采样层有助于降低音频特征的帧率，提高LLM的处理速度</li>
+<li>下采样是通过降低采样率来减少数据量的过程，下采样会减少信号的帧率，同时保留关键信息，从而提高后续处理的效率</li>
+</ul>
+</li>
+<li>参数为350M，输出帧率为12.5Hz</li>
+<li>Mel-filter bank features作为audio encoder的输入，窗口大小为25ms，步长 10ms</li>
+</ul>
+</li>
+<li>Speech Adapter
+<ul>
+<li>由多个具有两倍下采样的卷积层组成</li>
+</ul>
+</li>
+<li>Speech Decoder
+<ul>
+<li>TiCodec(编解码器)</li>
+<li>制定了一个大小为1024的单码本，简化了推理阶段的解码过程</li>
+<li>负责将连续的语音信号编码为40Hz的离散的speech tokens，同时能够将speech tokens解码为采样率24000Hz的语音信号</li>
+<li>两种解码器
+<ul>
+<li>Non-Autoregressive (NAR) Speech Decoder 对文本标记进行全局处理，并对语义特征进行建模，目的是生成speech tokens的初始分布</li>
+<li>Autoregressive (AR) Speech Decoder 基于NAR产生的语音信息，逐步产生更高质量的speech tokens，再使用codec model将最后的speech tokens解码为连续的语音信号流</li>
+<li>NAR和AR均采用4个LLaMA解码层，hidden size为896，参数大小为大约120M</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="32-training-data">3.2 Training Data</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.07.50.png" alt=""></p>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                论文阅读
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AC%94%E8%AE%B0">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                笔记
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Fri, 28 Feb 2025 00:00:00 &#43;0000" class="no-wrap"
+                title=" Fri, 28 Feb 2025 00:00:00 &#43;0000">
+                Fri, 28 Feb 2025 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
         
         <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
           <div class="col-12 d-inline-block">
@@ -3094,143 +3301,6 @@ rangeFreqQuery.query(0, 11, 33); // 返回 2 。33 在整个子数组中出现 2
               <relative-time datetime=" Sat, 08 Feb 2025 00:00:00 &#43;0000" class="no-wrap"
                 title=" Sat, 08 Feb 2025 00:00:00 &#43;0000">
                 Sat, 08 Feb 2025 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/leetcode59%E8%9E%BA%E6%97%8B%E7%9F%A9%E9%98%B5/">leetcode 59 螺旋矩阵二</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <p><a href="https://leetcode.cn/problems/spiral-matrix-ii/description/">leetcode 59 螺旋矩阵二</a></p>
-<h1 id="题目">题目</h1>
-<blockquote>
-<p>给你一个正整数 n ，生成一个包含 1 到 n<sup>2</sup> 所有元素，且元素按顺时针顺序螺旋排列的 n x n 正方形矩阵 matrix 。</p>
-</blockquote>
-<h1 id="示例">示例</h1>
-<h2 id="示例一">示例一</h2>
-<p><img src="/images/%E6%88%AA%E5%B1%8F2025-02-07%2008.57.26.png" alt=""></p>
-<blockquote>
-<p>输入：n = 3           <br>
-输出：[[1,2,3],[8,9,4],[7,6,5]]</p>
-</blockquote>
-<h2 id="示例二">示例二</h2>
-<blockquote>
-<p>输入：n = 1         <br>
-输出：[[1]]</p>
-</blockquote>
-<h1 id="提示">提示</h1>
-<ul>
-<li>1 &lt;= n &lt;= 20</li>
-</ul>
-<h1 id="题解">题解</h1>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">generateMatrix</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">ans</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">while</span><span class="p">(</span><span class="n">len</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">ans</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="o">++</span><span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="o">++</span><span class="n">cnt</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="n">len</span><span class="o">--</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">ans</span><span class="p">[</span><span class="o">++</span><span class="n">l</span><span class="p">][</span><span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="o">++</span><span class="n">cnt</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">ans</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="o">--</span><span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="o">++</span><span class="n">cnt</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="n">len</span><span class="o">--</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">ans</span><span class="p">[</span><span class="o">--</span><span class="n">l</span><span class="p">][</span><span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="o">++</span><span class="n">cnt</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div><ul>
-<li>提交结果
-<ul>
-<li>通过</li>
-</ul>
-</li>
-<li>分析
-<ul>
-<li>在绕一圈的过程中，len会减小两次</li>
-</ul>
-</li>
-</ul>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机科学与技术
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                算法题
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/leetcode">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                leetcode
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%95%B0%E7%BB%84">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                数组
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%9F%A9%E9%98%B5">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                矩阵
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Fri, 07 Feb 2025 00:00:00 &#43;0000" class="no-wrap"
-                title=" Fri, 07 Feb 2025 00:00:00 &#43;0000">
-                Fri, 07 Feb 2025 00:00:00 &#43;0000
               </relative-time>
             </div>
           </div>

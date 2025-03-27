@@ -18,10 +18,12 @@
 
     
     <meta name="description"
-  content="题目 给你一个整数数组 nums 和一个整数 k ，请你统计并返回 该数组中和为 k 的子数组的个数 。 子数组是数组中元素的连续非空序列。
+  content="leetcode 560 和为k的字数组
+题目 给你一个整数数组 nums 和一个整数 k ，请你统计并返回 该数组中和为 k 的子数组的个数 。 子数组是数组中元素的连续非空序列。
 示例 示例 1： 输入：nums = [1,1,1], k = 2 输出：2
 示例 2： 输入：nums = [1,2,3], k = 3 输出：2
-示例 1 &lt;= nums.length &lt;= 2 * 104 -1000 &lt;= nums[i] &lt;= 1000 -107 &lt;= k &lt;= 107 " />
+提示 1 &lt;= nums.length &lt;= 2 * 104 -1000 &lt;= nums[i] &lt;= 1000 -107 &lt;= k &lt;= 107 题解 方法一 分析 用vector presum记录前缀和 用unordered_map&lt;int, vector&gt; pos 记录不同前缀和所在的所有位置 遍历所有前缀和nowsum, pos[nowsum &#43; k].size()与pos[nowsum - k]即为和为k的子数组的个数 问题 如果nowsum &#43; k 的位置在nowsum前，则中间一段的和为-k 提交结果 62/93个通过的测试样例 结果错误 class Solution { public: int subarraySum(vector&lt;int&gt;&amp; nums, int k) { unordered_map&lt;int, vector&lt;int&gt;&gt; pos; vector&lt;int&gt; presum(nums.size(), 0); pos[0].push_back(-1); presum[0] = nums[0]; for (int i = 0; i &lt; nums.size(); i&#43;&#43;) { if (i) { presum[i] = presum[i - 1] &#43; nums[i]; } pos[presum[i]].push_back(i); } int ans = 0; for (int i = 0; i &lt; presum.size(); i&#43;&#43;) { // cout &lt;&lt; &#34;ans = &#34; &lt;&lt; ans &lt;&lt; endl; // cout &lt;&lt; &#34;i = &#34; &lt;&lt; i &lt;&lt; &#34;, i &#43; k = &#34; &lt;&lt; i &#43; k &lt;&lt; &#34;, i - k = &#34; &lt;&lt; i - k &lt;&lt; endl; int nowsum = presum[i]; cout &lt;&lt; &#34;nowsum = &#34; &lt;&lt; nowsum &lt;&lt; endl; if (!i &amp;&amp; !(nowsum &#43; k)) { ans--; } if (!i &amp;&amp; !(nowsum - k)) { ans--; } // cout &lt;&lt; &#34;ans = &#34; &lt;&lt; ans &lt;&lt; endl; if (!k) { ans &#43;= pos[nowsum].size() - 1; } else { if (pos.find(nowsum &#43; k) != pos.end()) { // cout &lt;&lt; &#34;pos[&#34; &lt;&lt; nowsum &#43; k &lt;&lt; &#34;].siz() = &#34; &lt;&lt; pos[nowsum &#43; k].size() &lt;&lt; endl; ans &#43;= pos[nowsum &#43; k].size(); } if (pos.find(nowsum - k) != pos.end()) { // cout &lt;&lt; &#34;pos[&#34; &lt;&lt; nowsum - k &lt;&lt; &#34;].size() = &#34; &lt;&lt; pos[nowsum - k].size() &lt;&lt; endl; ans &#43;= pos[nowsum - k].size(); } } // cout &lt;&lt; ans &lt;&lt; endl; pos[nowsum].pop_back(); } return ans; } }; 方法二 分析 在方法一的基础上，每次对取到的nowsum，在pos[nowsum]数组中，通过二分查找确定比nowsum的pos更小的nowsum - k的sum的数目 累加 提交结果 通过 class Solution { public: int binary_find(vector&lt;int&gt; &amp;position, int target) // 找到mid以左的所有pos的数量 { // cout &lt;&lt; &#34;target = &#34; &lt;&lt; target &lt;&lt; endl; // for (int i = 0; i &lt; position.size(); i&#43;&#43;) // { // cout &lt;&lt; position[i] &lt;&lt; &#39; &#39;; // } // cout &lt;&lt; endl; int l = 0, r = position.size() - 1; while (l &lt;= r) { int mid = (l &#43; r) / 2; if (position[mid] &lt; target) { l = mid &#43; 1; } else { r = mid - 1; } } if (l == 0 &amp;&amp; position[l] &gt;= target) { // cout &lt;&lt; &#34;add = &#34; &lt;&lt; 0 &lt;&lt; endl; return 0; } // cout &lt;&lt; &#34;add = &#34; &lt;&lt; l &#43; 1 &lt;&lt; endl; return l; } int subarraySum(vector&lt;int&gt;&amp; nums, int k) { vector&lt;int&gt; presum(nums.size() &#43; 1, 0); presum[0] = 0; unordered_map&lt;int, vector&lt;int&gt;&gt; pos; pos[0].push_back(0); for (int i = 0; i &lt; nums.size(); i&#43;&#43;) { presum[i &#43; 1] = presum[i] &#43; nums[i]; pos[presum[i &#43; 1]].push_back(i &#43; 1); } int ans = 0; for (int i = 1; i &lt; presum.size(); i&#43;&#43;) { // cout &lt;&lt; presum[i] - k &lt;&lt; endl; if (pos.find(presum[i] - k) != pos.end()) { ans &#43;= binary_find(pos[presum[i] - k], i); } // cout &lt;&lt; &#34;ans = &#34; &lt;&lt; ans &lt;&lt; endl; } return ans; } }; 方法三 分析 直接遍历，求以i结尾的子数组的和 提交结果 92/93个通过的测试样例 超出时间限制 class Solution { public: int subarraySum(vector&lt;int&gt;&amp; nums, int k) { int nowsum; int ans = 0; for (int i = 0; i &lt; nums.size(); i&#43;&#43;) { nowsum = 0; for (int j = i; j &gt;= 0; j--) { nowsum &#43;= nums[j]; if (nowsum == k) { ans&#43;&#43;; } } } return ans; } }; 方法四 分析 在方法二的基础上改进，一边遍历求前缀和一边累加符合条件的子数组的数量 可省去二分查找消耗的时间 无需使用数组记录所有前缀和，只需要一个数字记录当前前缀和即可 提交结果 通过 class Solution { public: int subarraySum(vector&lt;int&gt;&amp; nums, int k) { unordered_map&lt;int, int&gt; cnt; int presum = 0; int ans = 0; cnt[0]&#43;&#43;; for (int i = 0; i &lt; nums.size(); i&#43;&#43;) { presum &#43;= nums[i]; ans &#43;= cnt[presum - k]; cnt[presum]&#43;&#43;; } return ans; } }; 参考资料 leetcode官方题解
+" />
 <meta name="keywords"
   content='blog, google analytics' />
 <meta name="robots" content="noodp" />
@@ -31,10 +33,12 @@
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="leetcode hot100 560 和为k的子数组 - 陈皮的博客" />
 <meta name="twitter:description"
-  content="题目 给你一个整数数组 nums 和一个整数 k ，请你统计并返回 该数组中和为 k 的子数组的个数 。 子数组是数组中元素的连续非空序列。
+  content="leetcode 560 和为k的字数组
+题目 给你一个整数数组 nums 和一个整数 k ，请你统计并返回 该数组中和为 k 的子数组的个数 。 子数组是数组中元素的连续非空序列。
 示例 示例 1： 输入：nums = [1,1,1], k = 2 输出：2
 示例 2： 输入：nums = [1,2,3], k = 3 输出：2
-示例 1 &lt;= nums.length &lt;= 2 * 104 -1000 &lt;= nums[i] &lt;= 1000 -107 &lt;= k &lt;= 107 " />
+提示 1 &lt;= nums.length &lt;= 2 * 104 -1000 &lt;= nums[i] &lt;= 1000 -107 &lt;= k &lt;= 107 题解 方法一 分析 用vector presum记录前缀和 用unordered_map&lt;int, vector&gt; pos 记录不同前缀和所在的所有位置 遍历所有前缀和nowsum, pos[nowsum &#43; k].size()与pos[nowsum - k]即为和为k的子数组的个数 问题 如果nowsum &#43; k 的位置在nowsum前，则中间一段的和为-k 提交结果 62/93个通过的测试样例 结果错误 class Solution { public: int subarraySum(vector&lt;int&gt;&amp; nums, int k) { unordered_map&lt;int, vector&lt;int&gt;&gt; pos; vector&lt;int&gt; presum(nums.size(), 0); pos[0].push_back(-1); presum[0] = nums[0]; for (int i = 0; i &lt; nums.size(); i&#43;&#43;) { if (i) { presum[i] = presum[i - 1] &#43; nums[i]; } pos[presum[i]].push_back(i); } int ans = 0; for (int i = 0; i &lt; presum.size(); i&#43;&#43;) { // cout &lt;&lt; &#34;ans = &#34; &lt;&lt; ans &lt;&lt; endl; // cout &lt;&lt; &#34;i = &#34; &lt;&lt; i &lt;&lt; &#34;, i &#43; k = &#34; &lt;&lt; i &#43; k &lt;&lt; &#34;, i - k = &#34; &lt;&lt; i - k &lt;&lt; endl; int nowsum = presum[i]; cout &lt;&lt; &#34;nowsum = &#34; &lt;&lt; nowsum &lt;&lt; endl; if (!i &amp;&amp; !(nowsum &#43; k)) { ans--; } if (!i &amp;&amp; !(nowsum - k)) { ans--; } // cout &lt;&lt; &#34;ans = &#34; &lt;&lt; ans &lt;&lt; endl; if (!k) { ans &#43;= pos[nowsum].size() - 1; } else { if (pos.find(nowsum &#43; k) != pos.end()) { // cout &lt;&lt; &#34;pos[&#34; &lt;&lt; nowsum &#43; k &lt;&lt; &#34;].siz() = &#34; &lt;&lt; pos[nowsum &#43; k].size() &lt;&lt; endl; ans &#43;= pos[nowsum &#43; k].size(); } if (pos.find(nowsum - k) != pos.end()) { // cout &lt;&lt; &#34;pos[&#34; &lt;&lt; nowsum - k &lt;&lt; &#34;].size() = &#34; &lt;&lt; pos[nowsum - k].size() &lt;&lt; endl; ans &#43;= pos[nowsum - k].size(); } } // cout &lt;&lt; ans &lt;&lt; endl; pos[nowsum].pop_back(); } return ans; } }; 方法二 分析 在方法一的基础上，每次对取到的nowsum，在pos[nowsum]数组中，通过二分查找确定比nowsum的pos更小的nowsum - k的sum的数目 累加 提交结果 通过 class Solution { public: int binary_find(vector&lt;int&gt; &amp;position, int target) // 找到mid以左的所有pos的数量 { // cout &lt;&lt; &#34;target = &#34; &lt;&lt; target &lt;&lt; endl; // for (int i = 0; i &lt; position.size(); i&#43;&#43;) // { // cout &lt;&lt; position[i] &lt;&lt; &#39; &#39;; // } // cout &lt;&lt; endl; int l = 0, r = position.size() - 1; while (l &lt;= r) { int mid = (l &#43; r) / 2; if (position[mid] &lt; target) { l = mid &#43; 1; } else { r = mid - 1; } } if (l == 0 &amp;&amp; position[l] &gt;= target) { // cout &lt;&lt; &#34;add = &#34; &lt;&lt; 0 &lt;&lt; endl; return 0; } // cout &lt;&lt; &#34;add = &#34; &lt;&lt; l &#43; 1 &lt;&lt; endl; return l; } int subarraySum(vector&lt;int&gt;&amp; nums, int k) { vector&lt;int&gt; presum(nums.size() &#43; 1, 0); presum[0] = 0; unordered_map&lt;int, vector&lt;int&gt;&gt; pos; pos[0].push_back(0); for (int i = 0; i &lt; nums.size(); i&#43;&#43;) { presum[i &#43; 1] = presum[i] &#43; nums[i]; pos[presum[i &#43; 1]].push_back(i &#43; 1); } int ans = 0; for (int i = 1; i &lt; presum.size(); i&#43;&#43;) { // cout &lt;&lt; presum[i] - k &lt;&lt; endl; if (pos.find(presum[i] - k) != pos.end()) { ans &#43;= binary_find(pos[presum[i] - k], i); } // cout &lt;&lt; &#34;ans = &#34; &lt;&lt; ans &lt;&lt; endl; } return ans; } }; 方法三 分析 直接遍历，求以i结尾的子数组的和 提交结果 92/93个通过的测试样例 超出时间限制 class Solution { public: int subarraySum(vector&lt;int&gt;&amp; nums, int k) { int nowsum; int ans = 0; for (int i = 0; i &lt; nums.size(); i&#43;&#43;) { nowsum = 0; for (int j = i; j &gt;= 0; j--) { nowsum &#43;= nums[j]; if (nowsum == k) { ans&#43;&#43;; } } } return ans; } }; 方法四 分析 在方法二的基础上改进，一边遍历求前缀和一边累加符合条件的子数组的数量 可省去二分查找消耗的时间 无需使用数组记录所有前缀和，只需要一个数字记录当前前缀和即可 提交结果 通过 class Solution { public: int subarraySum(vector&lt;int&gt;&amp; nums, int k) { unordered_map&lt;int, int&gt; cnt; int presum = 0; int ans = 0; cnt[0]&#43;&#43;; for (int i = 0; i &lt; nums.size(); i&#43;&#43;) { presum &#43;= nums[i]; ans &#43;= cnt[presum - k]; cnt[presum]&#43;&#43;; } return ans; } }; 参考资料 leetcode官方题解
+" />
 <meta name="twitter:site" content="https://y-m-m.github.io/" />
 <meta name="twitter:creator" content="陈皮" />
 <meta name="twitter:image"
@@ -44,10 +48,12 @@
 <meta property="og:type" content="article" />
 <meta property="og:title" content="leetcode hot100 560 和为k的子数组 - 陈皮的博客">
 <meta property="og:description"
-  content="题目 给你一个整数数组 nums 和一个整数 k ，请你统计并返回 该数组中和为 k 的子数组的个数 。 子数组是数组中元素的连续非空序列。
+  content="leetcode 560 和为k的字数组
+题目 给你一个整数数组 nums 和一个整数 k ，请你统计并返回 该数组中和为 k 的子数组的个数 。 子数组是数组中元素的连续非空序列。
 示例 示例 1： 输入：nums = [1,1,1], k = 2 输出：2
 示例 2： 输入：nums = [1,2,3], k = 3 输出：2
-示例 1 &lt;= nums.length &lt;= 2 * 104 -1000 &lt;= nums[i] &lt;= 1000 -107 &lt;= k &lt;= 107 " />
+提示 1 &lt;= nums.length &lt;= 2 * 104 -1000 &lt;= nums[i] &lt;= 1000 -107 &lt;= k &lt;= 107 题解 方法一 分析 用vector presum记录前缀和 用unordered_map&lt;int, vector&gt; pos 记录不同前缀和所在的所有位置 遍历所有前缀和nowsum, pos[nowsum &#43; k].size()与pos[nowsum - k]即为和为k的子数组的个数 问题 如果nowsum &#43; k 的位置在nowsum前，则中间一段的和为-k 提交结果 62/93个通过的测试样例 结果错误 class Solution { public: int subarraySum(vector&lt;int&gt;&amp; nums, int k) { unordered_map&lt;int, vector&lt;int&gt;&gt; pos; vector&lt;int&gt; presum(nums.size(), 0); pos[0].push_back(-1); presum[0] = nums[0]; for (int i = 0; i &lt; nums.size(); i&#43;&#43;) { if (i) { presum[i] = presum[i - 1] &#43; nums[i]; } pos[presum[i]].push_back(i); } int ans = 0; for (int i = 0; i &lt; presum.size(); i&#43;&#43;) { // cout &lt;&lt; &#34;ans = &#34; &lt;&lt; ans &lt;&lt; endl; // cout &lt;&lt; &#34;i = &#34; &lt;&lt; i &lt;&lt; &#34;, i &#43; k = &#34; &lt;&lt; i &#43; k &lt;&lt; &#34;, i - k = &#34; &lt;&lt; i - k &lt;&lt; endl; int nowsum = presum[i]; cout &lt;&lt; &#34;nowsum = &#34; &lt;&lt; nowsum &lt;&lt; endl; if (!i &amp;&amp; !(nowsum &#43; k)) { ans--; } if (!i &amp;&amp; !(nowsum - k)) { ans--; } // cout &lt;&lt; &#34;ans = &#34; &lt;&lt; ans &lt;&lt; endl; if (!k) { ans &#43;= pos[nowsum].size() - 1; } else { if (pos.find(nowsum &#43; k) != pos.end()) { // cout &lt;&lt; &#34;pos[&#34; &lt;&lt; nowsum &#43; k &lt;&lt; &#34;].siz() = &#34; &lt;&lt; pos[nowsum &#43; k].size() &lt;&lt; endl; ans &#43;= pos[nowsum &#43; k].size(); } if (pos.find(nowsum - k) != pos.end()) { // cout &lt;&lt; &#34;pos[&#34; &lt;&lt; nowsum - k &lt;&lt; &#34;].size() = &#34; &lt;&lt; pos[nowsum - k].size() &lt;&lt; endl; ans &#43;= pos[nowsum - k].size(); } } // cout &lt;&lt; ans &lt;&lt; endl; pos[nowsum].pop_back(); } return ans; } }; 方法二 分析 在方法一的基础上，每次对取到的nowsum，在pos[nowsum]数组中，通过二分查找确定比nowsum的pos更小的nowsum - k的sum的数目 累加 提交结果 通过 class Solution { public: int binary_find(vector&lt;int&gt; &amp;position, int target) // 找到mid以左的所有pos的数量 { // cout &lt;&lt; &#34;target = &#34; &lt;&lt; target &lt;&lt; endl; // for (int i = 0; i &lt; position.size(); i&#43;&#43;) // { // cout &lt;&lt; position[i] &lt;&lt; &#39; &#39;; // } // cout &lt;&lt; endl; int l = 0, r = position.size() - 1; while (l &lt;= r) { int mid = (l &#43; r) / 2; if (position[mid] &lt; target) { l = mid &#43; 1; } else { r = mid - 1; } } if (l == 0 &amp;&amp; position[l] &gt;= target) { // cout &lt;&lt; &#34;add = &#34; &lt;&lt; 0 &lt;&lt; endl; return 0; } // cout &lt;&lt; &#34;add = &#34; &lt;&lt; l &#43; 1 &lt;&lt; endl; return l; } int subarraySum(vector&lt;int&gt;&amp; nums, int k) { vector&lt;int&gt; presum(nums.size() &#43; 1, 0); presum[0] = 0; unordered_map&lt;int, vector&lt;int&gt;&gt; pos; pos[0].push_back(0); for (int i = 0; i &lt; nums.size(); i&#43;&#43;) { presum[i &#43; 1] = presum[i] &#43; nums[i]; pos[presum[i &#43; 1]].push_back(i &#43; 1); } int ans = 0; for (int i = 1; i &lt; presum.size(); i&#43;&#43;) { // cout &lt;&lt; presum[i] - k &lt;&lt; endl; if (pos.find(presum[i] - k) != pos.end()) { ans &#43;= binary_find(pos[presum[i] - k], i); } // cout &lt;&lt; &#34;ans = &#34; &lt;&lt; ans &lt;&lt; endl; } return ans; } }; 方法三 分析 直接遍历，求以i结尾的子数组的和 提交结果 92/93个通过的测试样例 超出时间限制 class Solution { public: int subarraySum(vector&lt;int&gt;&amp; nums, int k) { int nowsum; int ans = 0; for (int i = 0; i &lt; nums.size(); i&#43;&#43;) { nowsum = 0; for (int j = i; j &gt;= 0; j--) { nowsum &#43;= nums[j]; if (nowsum == k) { ans&#43;&#43;; } } } return ans; } }; 方法四 分析 在方法二的基础上改进，一边遍历求前缀和一边累加符合条件的子数组的数量 可省去二分查找消耗的时间 无需使用数组记录所有前缀和，只需要一个数字记录当前前缀和即可 提交结果 通过 class Solution { public: int subarraySum(vector&lt;int&gt;&amp; nums, int k) { unordered_map&lt;int, int&gt; cnt; int presum = 0; int ans = 0; cnt[0]&#43;&#43;; for (int i = 0; i &lt; nums.size(); i&#43;&#43;) { presum &#43;= nums[i]; ans &#43;= cnt[presum - k]; cnt[presum]&#43;&#43;; } return ans; } }; 参考资料 leetcode官方题解
+" />
 <meta property="og:url" content="https://y-m-m.github.io/post/leetcodehot560%E5%92%8C%E4%B8%BAk%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84/" />
 <meta property="og:site_name" content="leetcode hot100 560 和为k的子数组" />
 <meta property="og:image"
@@ -159,9 +165,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Thu, 27 Mar 2025 08:08:12 &#43;0800"
+                  Modified <relative-time datetime="Thu, 27 Mar 2025 15:41:27 &#43;0800"
                     class="no-wrap">
-                    Thu, 27 Mar 2025 08:08:12 &#43;0800</relative-time>
+                    Thu, 27 Mar 2025 15:41:27 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -191,7 +197,7 @@
                         </div>
                       </div>
                     </details-menu>
-                      118 Words
+                      1091 Words
                     
 
                   </div>
@@ -259,7 +265,8 @@
 
 
               <div class="Box-body px-5 pb-5" style="z-index: 1">
-                <article class="markdown-body entry-content container-lg"><h1 id="题目">题目</h1>
+                <article class="markdown-body entry-content container-lg"><p><a href="https://leetcode.cn/problems/subarray-sum-equals-k/description/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode 560 和为k的字数组</a></p>
+<h1 id="题目">题目</h1>
 <blockquote>
 <p>给你一个整数数组 nums 和一个整数 k ，请你统计并返回 该数组中和为 k 的子数组的个数 。            <br>
 子数组是数组中元素的连续非空序列。</p>
@@ -275,12 +282,223 @@
 <p><strong>输入</strong>：nums = [1,2,3], k = 3             <br>
 <strong>输出</strong>：2</p>
 </blockquote>
-<h1 id="示例-3">示例</h1>
+<h1 id="提示">提示</h1>
 <ul>
 <li>1 &lt;= nums.length &lt;= 2 * 10<sup>4</sup></li>
 <li>-1000 &lt;= nums[i] &lt;= 1000</li>
 <li>-10<sup>7</sup> &lt;= k &lt;= 10<sup>7</sup></li>
 </ul>
+<h1 id="题解">题解</h1>
+<h2 id="方法一">方法一</h2>
+<ul>
+<li>分析
+<ul>
+<li>用vector<int> presum记录前缀和</li>
+<li>用unordered_map&lt;int, vector<int>&gt; pos 记录不同前缀和所在的所有位置</li>
+<li>遍历所有前缀和nowsum, pos[nowsum + k].size()与pos[nowsum - k]即为和为k的子数组的个数</li>
+</ul>
+</li>
+<li>问题
+<ul>
+<li>如果nowsum + k 的位置在nowsum前，则中间一段的和为-k</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>62/93个通过的测试样例</li>
+<li>结果错误</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">subarraySum</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">pos</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">presum</span><span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">presum</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">presum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">presum</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pos</span><span class="p">[</span><span class="n">presum</span><span class="p">[</span><span class="n">i</span><span class="p">]].</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">presum</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// cout &lt;&lt; &#34;ans = &#34; &lt;&lt; ans &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="c1">// cout &lt;&lt; &#34;i = &#34; &lt;&lt; i &lt;&lt; &#34;, i + k = &#34; &lt;&lt; i + k &lt;&lt; &#34;, i - k = &#34; &lt;&lt; i - k &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="kt">int</span> <span class="n">nowsum</span> <span class="o">=</span> <span class="n">presum</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;nowsum = &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">nowsum</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">i</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="p">(</span><span class="n">nowsum</span> <span class="o">+</span> <span class="n">k</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ans</span><span class="o">--</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">i</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="p">(</span><span class="n">nowsum</span> <span class="o">-</span> <span class="n">k</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ans</span><span class="o">--</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// cout &lt;&lt; &#34;ans = &#34; &lt;&lt; ans &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">k</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ans</span> <span class="o">+=</span> <span class="n">pos</span><span class="p">[</span><span class="n">nowsum</span><span class="p">].</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">nowsum</span> <span class="o">+</span> <span class="n">k</span><span class="p">)</span> <span class="o">!=</span> <span class="n">pos</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="c1">// cout &lt;&lt; &#34;pos[&#34; &lt;&lt; nowsum + k &lt;&lt; &#34;].siz() = &#34; &lt;&lt; pos[nowsum + k].size() &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                    <span class="n">ans</span> <span class="o">+=</span> <span class="n">pos</span><span class="p">[</span><span class="n">nowsum</span> <span class="o">+</span> <span class="n">k</span><span class="p">].</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">nowsum</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span> <span class="o">!=</span> <span class="n">pos</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="c1">// cout &lt;&lt; &#34;pos[&#34; &lt;&lt; nowsum - k &lt;&lt; &#34;].size() = &#34; &lt;&lt; pos[nowsum - k].size() &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                    <span class="n">ans</span> <span class="o">+=</span> <span class="n">pos</span><span class="p">[</span><span class="n">nowsum</span> <span class="o">-</span> <span class="n">k</span><span class="p">].</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// cout &lt;&lt; ans &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">pos</span><span class="p">[</span><span class="n">nowsum</span><span class="p">].</span><span class="n">pop_back</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h2 id="方法二">方法二</h2>
+<ul>
+<li>分析
+<ul>
+<li>在方法一的基础上，每次对取到的nowsum，在pos[nowsum]数组中，通过二分查找确定比nowsum的pos更小的nowsum - k的sum的数目</li>
+<li>累加</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">binary_find</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">position</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="c1">// 找到mid以左的所有pos的数量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// cout &lt;&lt; &#34;target = &#34; &lt;&lt; target &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// for (int i = 0; i &lt; position.size(); i++)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// {
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">//     cout &lt;&lt; position[i] &lt;&lt; &#39; &#39;;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// }
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// cout &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">position</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">position</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">l</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">r</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">position</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">target</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// cout &lt;&lt; &#34;add = &#34; &lt;&lt; 0 &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// cout &lt;&lt; &#34;add = &#34; &lt;&lt; l + 1 &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">return</span> <span class="n">l</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="nf">subarraySum</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">presum</span><span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">presum</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">pos</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">presum</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">presum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pos</span><span class="p">[</span><span class="n">presum</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]].</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">presum</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// cout &lt;&lt; presum[i] - k &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">presum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span> <span class="o">!=</span> <span class="n">pos</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ans</span> <span class="o">+=</span> <span class="n">binary_find</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">presum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">k</span><span class="p">],</span> <span class="n">i</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// cout &lt;&lt; &#34;ans = &#34; &lt;&lt; ans &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h2 id="方法三">方法三</h2>
+<ul>
+<li>分析
+<ul>
+<li>直接遍历，求以i结尾的子数组的和</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>92/93个通过的测试样例</li>
+<li>超出时间限制</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">subarraySum</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">nowsum</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">nowsum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">--</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">nowsum</span> <span class="o">+=</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">nowsum</span> <span class="o">==</span> <span class="n">k</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">ans</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h2 id="方法四">方法四</h2>
+<ul>
+<li>分析
+<ul>
+<li>在方法二的基础上改进，一边遍历求前缀和一边累加符合条件的子数组的数量</li>
+<li>可省去二分查找消耗的时间</li>
+<li>无需使用数组记录所有前缀和，只需要一个数字记录当前前缀和即可</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">subarraySum</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">cnt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">presum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cnt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">presum</span> <span class="o">+=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ans</span> <span class="o">+=</span> <span class="n">cnt</span><span class="p">[</span><span class="n">presum</span> <span class="o">-</span> <span class="n">k</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="n">cnt</span><span class="p">[</span><span class="n">presum</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h1 id="参考资料">参考资料</h1>
+<p><a href="https://leetcode.cn/problems/subarray-sum-equals-k/solutions/238572/he-wei-kde-zi-shu-zu-by-leetcode-solution/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode官方题解</a></p>
 </article>
               </div>
             </div>

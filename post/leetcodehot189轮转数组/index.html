@@ -19,6 +19,10 @@
     
     <meta name="description"
   content="leetcode hot100 189 轮转数组
+题目 给定一个整数数组 nums，将数组中的元素向右轮转 k 个位置，其中 k 是非负数。
+示例 示例 1: 输入: nums = [1,2,3,4,5,6,7], k = 3 输出: [5,6,7,1,2,3,4] 解释:
+向右轮转 1 步: [7,1,2,3,4,5,6] 向右轮转 2 步: [6,7,1,2,3,4,5] 向右轮转 3 步: [5,6,7,1,2,3,4] 示例 2: 输入：nums = [-1,-100,3,99], k = 2 输出：[3,99,-1,-100] 解释:
+向右轮转 1 步: [99,-1,-100,3] 向右轮转 2 步: [3,99,-1,-100] 提示 1 &lt;= nums.length &lt;= 105 -231 &lt;= nums[i] &lt;= 231 - 1 0 &lt;= k &lt;= 105 题解 方法一 分析 直接移动 利用额外的空间vector t(k)存储会被覆盖的值 提交结果 通过 class Solution { public: void rotate(vector&lt;int&gt;&amp; nums, int k) { vector&lt;int&gt; t(k); int n = nums.size(); k = k % n; for (int i = 0; i &lt; k; i&#43;&#43;) { t[i] = nums[i]; nums[i] = nums[i &#43; n - k]; } for (int i = n - 1; i &gt;= 2 * k; i--) { nums[i] = nums[i - k]; } for (int i = 2 * k - 1; i &gt;= k; i--) { if (i &gt;= n) { continue; } nums[i] = t[i - k]; } } }; 方法二 分析 环状替换 用到了最大公因数函数gcd()，交换函数swap(a, b) 提交结果 通过 数学分析 见参考资料 class Solution { public: void rotate(vector&lt;int&gt;&amp; nums, int k) { int n = nums.size(); k = k % n; int count = gcd(k, n); for (int start = 0; start &lt; count; start&#43;&#43;) { int current = start; int prev = nums[start]; do { int next = (current &#43; k) % n; swap(nums[next], prev); current = next; } while (start != current); } } }; 方法三 分析 数组翻转 ！简直是天才 class Solution { public: void reserve(vector&lt;int&gt;&amp; nums, int start, int end) { while (start &lt; end) { swap(nums[start], nums[end]); start &#43;= 1; end -= 1; } } void rotate(vector&lt;int&gt;&amp; nums, int k) { k %= nums.size(); reserve(nums, 0, nums.size() - 1); reserve(nums, 0, k - 1); reserve(nums, k, nums.size() - 1); } }; 参考资料 leetcode官方题解
 " />
 <meta name="keywords"
   content='blog, google analytics' />
@@ -30,6 +34,10 @@
 <meta name="twitter:title" content="leetcode hot100 189 轮转数组 - 陈皮的博客" />
 <meta name="twitter:description"
   content="leetcode hot100 189 轮转数组
+题目 给定一个整数数组 nums，将数组中的元素向右轮转 k 个位置，其中 k 是非负数。
+示例 示例 1: 输入: nums = [1,2,3,4,5,6,7], k = 3 输出: [5,6,7,1,2,3,4] 解释:
+向右轮转 1 步: [7,1,2,3,4,5,6] 向右轮转 2 步: [6,7,1,2,3,4,5] 向右轮转 3 步: [5,6,7,1,2,3,4] 示例 2: 输入：nums = [-1,-100,3,99], k = 2 输出：[3,99,-1,-100] 解释:
+向右轮转 1 步: [99,-1,-100,3] 向右轮转 2 步: [3,99,-1,-100] 提示 1 &lt;= nums.length &lt;= 105 -231 &lt;= nums[i] &lt;= 231 - 1 0 &lt;= k &lt;= 105 题解 方法一 分析 直接移动 利用额外的空间vector t(k)存储会被覆盖的值 提交结果 通过 class Solution { public: void rotate(vector&lt;int&gt;&amp; nums, int k) { vector&lt;int&gt; t(k); int n = nums.size(); k = k % n; for (int i = 0; i &lt; k; i&#43;&#43;) { t[i] = nums[i]; nums[i] = nums[i &#43; n - k]; } for (int i = n - 1; i &gt;= 2 * k; i--) { nums[i] = nums[i - k]; } for (int i = 2 * k - 1; i &gt;= k; i--) { if (i &gt;= n) { continue; } nums[i] = t[i - k]; } } }; 方法二 分析 环状替换 用到了最大公因数函数gcd()，交换函数swap(a, b) 提交结果 通过 数学分析 见参考资料 class Solution { public: void rotate(vector&lt;int&gt;&amp; nums, int k) { int n = nums.size(); k = k % n; int count = gcd(k, n); for (int start = 0; start &lt; count; start&#43;&#43;) { int current = start; int prev = nums[start]; do { int next = (current &#43; k) % n; swap(nums[next], prev); current = next; } while (start != current); } } }; 方法三 分析 数组翻转 ！简直是天才 class Solution { public: void reserve(vector&lt;int&gt;&amp; nums, int start, int end) { while (start &lt; end) { swap(nums[start], nums[end]); start &#43;= 1; end -= 1; } } void rotate(vector&lt;int&gt;&amp; nums, int k) { k %= nums.size(); reserve(nums, 0, nums.size() - 1); reserve(nums, 0, k - 1); reserve(nums, k, nums.size() - 1); } }; 参考资料 leetcode官方题解
 " />
 <meta name="twitter:site" content="https://y-m-m.github.io/" />
 <meta name="twitter:creator" content="陈皮" />
@@ -41,6 +49,10 @@
 <meta property="og:title" content="leetcode hot100 189 轮转数组 - 陈皮的博客">
 <meta property="og:description"
   content="leetcode hot100 189 轮转数组
+题目 给定一个整数数组 nums，将数组中的元素向右轮转 k 个位置，其中 k 是非负数。
+示例 示例 1: 输入: nums = [1,2,3,4,5,6,7], k = 3 输出: [5,6,7,1,2,3,4] 解释:
+向右轮转 1 步: [7,1,2,3,4,5,6] 向右轮转 2 步: [6,7,1,2,3,4,5] 向右轮转 3 步: [5,6,7,1,2,3,4] 示例 2: 输入：nums = [-1,-100,3,99], k = 2 输出：[3,99,-1,-100] 解释:
+向右轮转 1 步: [99,-1,-100,3] 向右轮转 2 步: [3,99,-1,-100] 提示 1 &lt;= nums.length &lt;= 105 -231 &lt;= nums[i] &lt;= 231 - 1 0 &lt;= k &lt;= 105 题解 方法一 分析 直接移动 利用额外的空间vector t(k)存储会被覆盖的值 提交结果 通过 class Solution { public: void rotate(vector&lt;int&gt;&amp; nums, int k) { vector&lt;int&gt; t(k); int n = nums.size(); k = k % n; for (int i = 0; i &lt; k; i&#43;&#43;) { t[i] = nums[i]; nums[i] = nums[i &#43; n - k]; } for (int i = n - 1; i &gt;= 2 * k; i--) { nums[i] = nums[i - k]; } for (int i = 2 * k - 1; i &gt;= k; i--) { if (i &gt;= n) { continue; } nums[i] = t[i - k]; } } }; 方法二 分析 环状替换 用到了最大公因数函数gcd()，交换函数swap(a, b) 提交结果 通过 数学分析 见参考资料 class Solution { public: void rotate(vector&lt;int&gt;&amp; nums, int k) { int n = nums.size(); k = k % n; int count = gcd(k, n); for (int start = 0; start &lt; count; start&#43;&#43;) { int current = start; int prev = nums[start]; do { int next = (current &#43; k) % n; swap(nums[next], prev); current = next; } while (start != current); } } }; 方法三 分析 数组翻转 ！简直是天才 class Solution { public: void reserve(vector&lt;int&gt;&amp; nums, int start, int end) { while (start &lt; end) { swap(nums[start], nums[end]); start &#43;= 1; end -= 1; } } void rotate(vector&lt;int&gt;&amp; nums, int k) { k %= nums.size(); reserve(nums, 0, nums.size() - 1); reserve(nums, 0, k - 1); reserve(nums, k, nums.size() - 1); } }; 参考资料 leetcode官方题解
 " />
 <meta property="og:url" content="https://y-m-m.github.io/post/leetcodehot189%E8%BD%AE%E8%BD%AC%E6%95%B0%E7%BB%84/" />
 <meta property="og:site_name" content="leetcode hot100 189 轮转数组" />
@@ -153,9 +165,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Fri, 28 Mar 2025 16:56:38 &#43;0800"
+                  Modified <relative-time datetime="Fri, 28 Mar 2025 17:49:13 &#43;0800"
                     class="no-wrap">
-                    Fri, 28 Mar 2025 16:56:38 &#43;0800</relative-time>
+                    Fri, 28 Mar 2025 17:49:13 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -185,7 +197,7 @@
                         </div>
                       </div>
                     </details-menu>
-                      7 Words
+                      495 Words
                     
 
                   </div>
@@ -254,6 +266,144 @@
 
               <div class="Box-body px-5 pb-5" style="z-index: 1">
                 <article class="markdown-body entry-content container-lg"><p><a href="https://leetcode.cn/problems/rotate-array/description/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode hot100 189 轮转数组</a></p>
+<h1 id="题目">题目</h1>
+<blockquote>
+<p>给定一个整数数组 nums，将数组中的元素向右轮转 k 个位置，其中 k 是非负数。</p>
+</blockquote>
+<h1 id="示例">示例</h1>
+<h2 id="示例-1">示例 1:</h2>
+<blockquote>
+<p><strong>输入</strong>: nums = [1,2,3,4,5,6,7], k = 3           <br>
+<strong>输出</strong>: [5,6,7,1,2,3,4]           <br>
+<strong>解释</strong>:</p>
+<ul>
+<li>向右轮转 1 步: [7,1,2,3,4,5,6]</li>
+<li>向右轮转 2 步: [6,7,1,2,3,4,5]</li>
+<li>向右轮转 3 步: [5,6,7,1,2,3,4]</li>
+</ul>
+</blockquote>
+<h2 id="示例-2">示例 2:</h2>
+<blockquote>
+<p><strong>输入</strong>：nums = [-1,-100,3,99], k = 2         <br>
+<strong>输出</strong>：[3,99,-1,-100]        <br>
+<strong>解释</strong>:</p>
+<ul>
+<li>向右轮转 1 步: [99,-1,-100,3]</li>
+<li>向右轮转 2 步: [3,99,-1,-100]</li>
+</ul>
+</blockquote>
+<h1 id="提示">提示</h1>
+<ul>
+<li>1 &lt;= nums.length &lt;= 10<sup>5</sup></li>
+<li>-2<sup>31</sup> &lt;= nums[i] &lt;= 2<sup>31</sup> - 1</li>
+<li>0 &lt;= k &lt;= 10<sup>5</sup></li>
+</ul>
+<h1 id="题解">题解</h1>
+<h2 id="方法一">方法一</h2>
+<ul>
+<li>分析
+<ul>
+<li>直接移动</li>
+<li>利用额外的空间vector<int> t(k)存储会被覆盖的值</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="n">rotate</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">t</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">k</span> <span class="o">=</span> <span class="n">k</span> <span class="o">%</span> <span class="n">n</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">n</span> <span class="o">-</span> <span class="n">k</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">k</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">k</span><span class="p">];</span> 
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">k</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">k</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h2 id="方法二">方法二</h2>
+<ul>
+<li>分析
+<ul>
+<li>环状替换</li>
+<li>用到了最大公因数函数gcd()，交换函数swap(a, b)</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+<li>数学分析
+<ul>
+<li>见参考资料</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="n">rotate</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">k</span> <span class="o">=</span> <span class="n">k</span> <span class="o">%</span> <span class="n">n</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">gcd</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">;</span> <span class="n">start</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">current</span> <span class="o">=</span> <span class="n">start</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">prev</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">start</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="k">do</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="kt">int</span> <span class="n">next</span> <span class="o">=</span> <span class="p">(</span><span class="n">current</span> <span class="o">+</span> <span class="n">k</span><span class="p">)</span> <span class="o">%</span> <span class="n">n</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">swap</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">next</span><span class="p">],</span> <span class="n">prev</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">current</span> <span class="o">=</span> <span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">start</span> <span class="o">!=</span> <span class="n">current</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h2 id="方法三">方法三</h2>
+<ul>
+<li>分析
+<ul>
+<li>数组翻转</li>
+<li>！简直是天才</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="n">reserve</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">start</span><span class="p">,</span> <span class="kt">int</span> <span class="n">end</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">start</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">swap</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">start</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">end</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">start</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">end</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">rotate</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">k</span> <span class="o">%=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">reserve</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">reserve</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">reserve</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h1 id="参考资料">参考资料</h1>
+<p><a href="https://leetcode.cn/problems/rotate-array/solutions/551039/xuan-zhuan-shu-zu-by-leetcode-solution-nipk/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode官方题解</a></p>
 </article>
               </div>
             </div>

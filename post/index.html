@@ -1603,6 +1603,61 @@
 <blockquote>
 <p>以数组 intervals 表示若干个区间的集合，其中单个区间为 intervals[i] = [starti, endi] 。请你合并所有重叠的区间，并返回 一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间 。</p>
 </blockquote>
+<h1 id="示例">示例</h1>
+<h2 id="示例-1">示例 1：</h2>
+<blockquote>
+<p><strong>输入</strong>：intervals = [[1,3],[2,6],[8,10],[15,18]]        <br>
+<strong>输出</strong>：[[1,6],[8,10],[15,18]]      <br>
+<strong>解释</strong>：区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6].</p>
+</blockquote>
+<h2 id="示例-2">示例 2：</h2>
+<blockquote>
+<p><strong>输入</strong>：intervals = [[1,4],[4,5]]        <br>
+<strong>输出</strong>：[[1,5]]         <br>
+<strong>解释</strong>：区间 [1,4] 和 [4,5] 可被视为重叠区间。</p>
+</blockquote>
+<h1 id="提示">提示</h1>
+<ul>
+<li>1 &lt;= intervals.length &lt;= 10<sup>4</sup></li>
+<li>intervals[i].length == 2</li>
+<li>0 &lt;= start<sub>i</sub> &lt;= end<sub>i</sub> &lt;= 10<sup>4</sup></li>
+</ul>
+<h1 id="题解">题解</h1>
+<h2 id="方法一">方法一</h2>
+<ul>
+<li>分析
+<ul>
+<li>排序</li>
+<li>遍历一遍排序后的数组，合并重叠区间</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">merge</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">intervals</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sort</span><span class="p">(</span><span class="n">intervals</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">intervals</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">intervals</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="n">intervals</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="n">intervals</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">intervals</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">r</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">intervals</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">({</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">});</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div>
               </div>
             </div>
 

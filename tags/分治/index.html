@@ -149,7 +149,7 @@
                 </path>
               </svg>
               Posts
-              <span class="Counter">112</span>
+              <span class="Counter">113</span>
             </a>
           </nav>
           <div class="profile-color-modes js-promo-color-modes-banner-profile isInitialToggle">
@@ -428,7 +428,7 @@
         </path>
       </svg>
       Posts
-      <span class="Counter ">112</span>
+      <span class="Counter ">113</span>
     </a>
   </nav>
 </div>
@@ -464,7 +464,7 @@
           <div class="col-12 d-inline-block">
             <div class="d-inline-block mb-1">
               <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/leetcodehot53%E6%9C%80%E5%A4%A7%E5%AD%97%E6%95%B0%E7%BB%84%E5%92%8C/">leetcode hot100 53 最大子数组和</a>
+                <a href="https://y-m-m.github.io/post/leetcodehot53%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C/">leetcode hot100 53 最大子数组和</a>
               </h3>
             </div>
 
@@ -537,7 +537,53 @@
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">maxsum</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div>
+</span></span></code></pre></div><h2 id="方法二">方法二</h2>
+<ul>
+<li>分析
+<ul>
+<li>线段树</li>
+<li>维护一棵树，根节点为[0, nums.size() - 1], 叶子结点为[i, i]</li>
+<li>每个节点存储lSum, rSum, mSum, iSum</li>
+<li>从叶子结点开始构建这棵树</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="nc">Status</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">lSum</span><span class="p">,</span> <span class="n">rSum</span><span class="p">,</span> <span class="n">mSum</span><span class="p">,</span> <span class="n">iSum</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">Status</span> <span class="nf">pushUp</span> <span class="p">(</span><span class="n">Status</span> <span class="n">l</span><span class="p">,</span> <span class="n">Status</span> <span class="n">r</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">iSum</span> <span class="o">=</span> <span class="n">l</span><span class="p">.</span><span class="n">iSum</span> <span class="o">+</span> <span class="n">r</span><span class="p">.</span><span class="n">iSum</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">lSum</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">l</span><span class="p">.</span><span class="n">lSum</span><span class="p">,</span> <span class="n">l</span><span class="p">.</span><span class="n">iSum</span> <span class="o">+</span> <span class="n">r</span><span class="p">.</span><span class="n">lSum</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">rSum</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="n">rSum</span><span class="p">,</span> <span class="n">r</span><span class="p">.</span><span class="n">iSum</span> <span class="o">+</span> <span class="n">l</span><span class="p">.</span><span class="n">rSum</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">mSum</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="n">l</span><span class="p">.</span><span class="n">mSum</span><span class="p">,</span> <span class="n">r</span><span class="p">.</span><span class="n">mSum</span><span class="p">),</span> <span class="n">l</span><span class="p">.</span><span class="n">rSum</span> <span class="o">+</span> <span class="n">r</span><span class="p">.</span><span class="n">lSum</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="p">(</span><span class="n">Status</span><span class="p">)</span> <span class="p">{</span> <span class="n">lSum</span><span class="p">,</span> <span class="n">rSum</span><span class="p">,</span> <span class="n">mSum</span><span class="p">,</span> <span class="n">iSum</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">Status</span> <span class="nf">get</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">==</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="p">(</span><span class="n">Status</span><span class="p">)</span> <span class="p">{</span> <span class="n">a</span><span class="p">[</span><span class="n">l</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="n">l</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="n">l</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Status</span> <span class="n">lSub</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">m</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Status</span> <span class="n">rSub</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">pushUp</span><span class="p">(</span><span class="n">lSub</span><span class="p">,</span> <span class="n">rSub</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="nf">maxSubArray</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">get</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">).</span><span class="n">mSum</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h1 id="参考资料">参考资料</h1>
+<p><a href="https://leetcode.cn/problems/maximum-subarray/solutions/228009/zui-da-zi-xu-he-by-leetcode-solution/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode官方题解</a></p>
               </div>
             </div>
 

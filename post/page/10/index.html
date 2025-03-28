@@ -149,7 +149,7 @@
                 </path>
               </svg>
               Posts
-              <span class="Counter">110</span>
+              <span class="Counter">111</span>
             </a>
           </nav>
           <div class="profile-color-modes js-promo-color-modes-banner-profile isInitialToggle">
@@ -428,7 +428,7 @@
         </path>
       </svg>
       Posts
-      <span class="Counter ">110</span>
+      <span class="Counter ">111</span>
     </a>
   </nav>
 </div>
@@ -789,17 +789,6 @@
 		</svg>
 		
 		堆(优先队列)
-	</a>
-	
-	<a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%A0%86%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/">
-		
-		<svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-			<path fill-rule="evenodd"
-				d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-			</path>
-		</svg>
-		
-		堆（优先队列）
 	</a>
 	
 	<a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%A4%8D%E4%B9%A0%E6%95%B4%E7%90%86/">
@@ -1319,17 +1308,6 @@
 		记忆化搜索
 	</a>
 	
-	<a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%B0%E5%BF%86%E7%94%BB%E6%90%9C%E7%B4%A2/">
-		
-		<svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-			<path fill-rule="evenodd"
-				d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-			</path>
-		</svg>
-		
-		记忆画搜索
-	</a>
-	
 	<a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">
 		
 		<svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
@@ -1412,6 +1390,147 @@
         
       
       <ul>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/c&#43;&#43;stl%E4%B8%ADheap%E7%9A%84%E7%94%A8%E6%B3%95/">C&#43;&#43; STL中heap函数的用法</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <h1 id="c-stl中heap函数的用法">C++ STL中heap函数的用法</h1>
+<h2 id="什么是heap">什么是heap？</h2>
+<p>C++STL中提供的一种构建和维护<a href="https://en.wikipedia.org/wiki/Heap_(data_structure)">堆</a>的函数接口</p>
+<h2 id="包括哪些函数">包括哪些函数？</h2>
+<ul>
+<li>make_heap(_First, _Last, _Comp)
+<ul>
+<li>将区间内的元素构建成堆</li>
+<li>_First: 需要构建堆的第一个元素的迭代器；_Last: 需要构建堆的最后一个元素的迭代器</li>
+<li>_Comp 构建方式
+<ul>
+<li>less<int>() 大顶堆，默认是大顶堆</li>
+<li>greater<int>() 小顶堆</li>
+<li>需要#include <functional></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>push_heap(_First, _Last, _Comp)
+<ul>
+<li>新添加一个元素在末尾(vector的end处)，然后重新调整堆序</li>
+<li>第三个参数应该与make_heap保持一致</li>
+<li>在使用push_heap之前，应确保已经用push_back()将数据存入到数组中</li>
+</ul>
+</li>
+<li>pop_heap(_First, _Last, _Comp)
+<ul>
+<li>对heap取出下一个元素，把堆顶元素取出来，放至区间末尾，其余元素进行调整，重新构成堆</li>
+<li>第三个参数应与make_heap保持一致</li>
+<li>如果要弹出原先的堆顶元素，应再使用pop_back()</li>
+</ul>
+</li>
+<li>sort_heap(_First, _Last)
+<ul>
+<li>将heap转化为一个已排序群集</li>
+<li>将堆进行排序，排序后序列将失去堆的特性，小顶堆所得的群集数字从小到大排列，大顶堆所得的群集从大到小排列</li>
+</ul>
+</li>
+<li>is_heap()
+<ul>
+<li>测试范围内的元素是否为一个二叉堆</li>
+</ul>
+</li>
+<li>is_heap_until()
+<ul>
+<li>返回第一个破坏二插堆结构的元素的迭代器</li>
+</ul>
+</li>
+</ul>
+<h2 id="内部是如何实现的">内部是如何实现的？</h2>
+<p><a href="https://www.runoob.com/w3cnote/heap-sort.html">堆排序</a></p>
+<h2 id="举例">举例</h2>
+<p><a href="https://leetcode.cn/problems/seat-reservation-manager/description/">leetcode1845(参考官方题解)</a></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">SeatManager</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">SeatManager</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">seat</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span> <span class="c1">// 为数组增加新的元素
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">make_heap</span><span class="p">(</span><span class="n">seat</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">seat</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">greater</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">());</span> <span class="c1">// 构建小顶堆
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="nf">reserve</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">pop_heap</span><span class="p">(</span><span class="n">seat</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">seat</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">greater</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">());</span> 
+</span></span><span class="line"><span class="cl">        <span class="c1">// 将小顶堆的堆顶元素弹出来，放到数组最后，调整其他元素构成新的堆
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">seat</span><span class="p">.</span><span class="n">back</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">seat</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">unreserve</span><span class="p">(</span><span class="kt">int</span> <span class="n">seatNumber</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">seat</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">seatNumber</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">push_heap</span><span class="p">(</span><span class="n">seat</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">seat</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">greater</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">seat</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Your SeatManager object will be instantiated and called as such:
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * SeatManager* obj = new SeatManager(n);
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * int param_1 = obj-&gt;reserve();
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * obj-&gt;unreserve(seatNumber);
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span></code></pre></div><h2 id="参考资料">参考资料</h2>
+<p><a href="https://blog.csdn.net/bandaoyu/article/details/109441444">csdn1</a> <br>
+<a href="https://blog.csdn.net/longhopefor/article/details/38303545">csdn2</a></p>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学与技术
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%A0%86">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                堆
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/c&#43;&#43;">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                c&#43;&#43;
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Mon, 30 Sep 2024 00:00:00 &#43;0000" class="no-wrap"
+                title=" Mon, 30 Sep 2024 00:00:00 &#43;0000">
+                Mon, 30 Sep 2024 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
         
         <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
           <div class="col-12 d-inline-block">
@@ -2692,155 +2811,6 @@ public:
               <relative-time datetime=" Thu, 23 May 2024 00:00:00 &#43;0000" class="no-wrap"
                 title=" Thu, 23 May 2024 00:00:00 &#43;0000">
                 Thu, 23 May 2024 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86bilibili%E7%89%88/">计算机组成原理bilibili版</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <h1 id="第一章-计算机系统概述">第一章 计算机系统概述</h1>
-<h2 id="1-1-计算机系统的组成">1-1 计算机系统的组成</h2>
-<ul>
-<li>软件系统（软件需要在硬件上运行）
-<ul>
-<li>系统软件：为管理整个计算机系统所编制的程序
-<ul>
-<li>操作系统 数据库管理系统 网络系统</li>
-<li>标准程序库 语言处理程序 服务程序</li>
-</ul>
-</li>
-<li>应用软件：为实现用户应用所编制的各种程序
-<ul>
-<li>科学计算 数据处理</li>
-<li>过程控制 事务管理</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>硬件系统
-<ul>
-<li>主机</li>
-<li>外设</li>
-</ul>
-</li>
-<li>计算机系统性能的好坏，取决于硬件和软件功能的总和</li>
-</ul>
-<h2 id="1-2-计算机的发展电子数字计算机">1-2 计算机的发展（电子数字计算机）</h2>
-<ul>
-<li>图灵机：理想的计算模型
-<ul>
-<li>一种具备读写、存储等功能的通用计算机模型</li>
-<li>一条带子，一个读写头和一个控制装置，能执行任何给定的计算，能执行任何可能的任务</li>
-<li>奠定了现代计算机的基础</li>
-</ul>
-</li>
-<li>1938年 信息论创始人 香农-&gt;布尔代数与开关电路的联系</li>
-<li>世界上第一台真正意义上的电子数字计算机 阿塔纳索夫-贝瑞计算机ABC 300个电子管，不可编程，仅用于求解线性方程组</li>
-<li>1946，基于ABC计算机-&gt;电子数字积分机和计算机ENIAC 十进制、弹道参数计算 莫克利和艾克特得到美国军方的支持和冯·诺依曼等人的帮助</li>
-<li>四个发展阶段
-<ul>
-<li>第1代1946-1957 电子管（真空管） 使用机器语言编程，无操作系统</li>
-<li>第2代1958-1-64 晶体管 主要使用汇编语言编程，开始使用FORTRAN、COBOL等高等语言，单道批处理系统</li>
-<li>第3代1965-1971 集成电路 高级语言进一步发展，出现了B语言（C语言的前身），多道批处理系统，分时系统</li>
-<li>第4代1972至今，超大规模集成电路 各种高级语言，现代操作系统</li>
-</ul>
-</li>
-<li>体积越小、功耗月底、可靠性越高、速度越快-&gt;依赖于电子器件的发展</li>
-<li>摩尔定律：半导体集成电路上可容纳的晶体管数量大约每经过18-24个月便会增加一倍。换言之，处理器的性能大约每两年翻一倍，同时价格下降为之前的一半 （从2013年开始，减缓为3年翻一番</li>
-<li>软件发展
-<ul>
-<li>机器语言</li>
-<li>汇编语言</li>
-<li>高级语言
-<ul>
-<li>第一个高级语言FORTRAN</li>
-<li>最简单的语言Basic</li>
-<li>里程碑Pascal</li>
-<li>现代程序语革命的起点</li>
-</ul>
-</li>
-<li>面向对象
-<ul>
-<li>C++</li>
-<li>Java</li>
-<li>Python</li>
-<li>&hellip;&hellip;</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>当前计算机发展趋势
-<ul>
-<li>更微型化
-<ul>
-<li>低功耗</li>
-<li>较高性能</li>
-<li>多用途</li>
-</ul>
-</li>
-<li>更巨型化
-<ul>
-<li>超高速</li>
-<li>并行处理</li>
-<li>智能化</li>
-</ul>
-</li>
-<li>目前我国最快的超级计算机是神威·太湖之光，每秒可进行9.3亿亿次浮点运算</li>
-</ul>
-</li>
-</ul>
-<h2 id="1-3-计算机硬件">1-3 计算机硬件</h2>
-<ul>
-<li>
-<p>冯诺依曼计算机</p>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机科学
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机组成原理
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AC%94%E8%AE%B0">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                笔记
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Sat, 23 Mar 2024 00:00:00 &#43;0000" class="no-wrap"
-                title=" Sat, 23 Mar 2024 00:00:00 &#43;0000">
-                Sat, 23 Mar 2024 00:00:00 &#43;0000
               </relative-time>
             </div>
           </div>

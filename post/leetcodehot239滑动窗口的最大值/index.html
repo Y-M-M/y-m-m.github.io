@@ -18,7 +18,11 @@
 
     
     <meta name="description"
-  content="" />
+  content="leetcode 239 滑动窗口最大值
+题目 给你一个整数数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k 个数字。滑动窗口每次只向右移动一位。 返回 滑动窗口中的最大值 。
+示例 示例一 输入：nums = [1,3,-1,-3,5,3,6,7], k = 3 输出：[3,3,5,5,6,7] 解释： 示例二 输入：nums = [1], k = 1 输出：[1]
+提示 1 &lt;= nums.length &lt;= 105 -104 &lt;= nums[i] &lt;= 104 1 &lt;= k &lt;= nums.length 题解 方法一 分析 维护一个priority_queue，初始存储第一个窗口内有用的值，第一个窗口内的最大值即为pq.top() 维护一个unordered_map，记录所有数值在原数组中的最大位置 每次移动窗口后，判断当前最大值是否被移出窗口 提交结果 通过 class Solution { public: vector&lt;int&gt; maxSlidingWindow(vector&lt;int&gt;&amp; nums, int k) { priority_queue&lt;int, vector&lt;int&gt;&gt; pq; unordered_map&lt;int, int&gt; pos; vector&lt;int&gt; ans; if (nums.size() &lt; k) { return ans; } for (int i = 0; i &lt; k; i&#43;&#43;) { pq.emplace(nums[i]); pos[nums[i]] = i; } ans.push_back(pq.top()); if (nums.size() == k) { return ans; } for (int i = k ; i &lt; nums.size(); i&#43;&#43;) { pos[nums[i]] = i; pq.emplace(nums[i]); int nowtop = pq.top(); while (pos.find(nowtop) != pos.end()) { if (pos[nowtop] &lt;= i - k) { pq.pop(); nowtop = pq.top(); } else break; } ans.push_back(pq.top()); } return ans; } }; 方法二 分析 在方法一的基础上改进 priorty_queue中存储数字-&gt;位置的pair 提交结果 通过 class Solution { public: vector&lt;int&gt; maxSlidingWindow(vector&lt;int&gt;&amp; nums, int k) { vector&lt;int&gt; ans; if (nums.size() &lt; k) { return ans; } priority_queue&lt;pair&lt;int, int&gt;&gt; pq; // 值-&gt;位置 for (int i = 0; i &lt; k; i&#43;&#43;) { pq.emplace(nums[i], i); } ans.push_back(pq.top().first); for (int i = k; i &lt; nums.size(); i&#43;&#43;) { pq.emplace(nums[i], i); while (pq.top().second &lt;= i - k) { pq.pop(); } ans.push_back(pq.top().first); } return ans; } }; 方法三 单调队列：满足单调性的双端队列
+" />
 <meta name="keywords"
   content='blog, google analytics' />
 <meta name="robots" content="noodp" />
@@ -28,7 +32,11 @@
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="leetcode hot100 239 滑动窗口最大值 - 陈皮的博客" />
 <meta name="twitter:description"
-  content="" />
+  content="leetcode 239 滑动窗口最大值
+题目 给你一个整数数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k 个数字。滑动窗口每次只向右移动一位。 返回 滑动窗口中的最大值 。
+示例 示例一 输入：nums = [1,3,-1,-3,5,3,6,7], k = 3 输出：[3,3,5,5,6,7] 解释： 示例二 输入：nums = [1], k = 1 输出：[1]
+提示 1 &lt;= nums.length &lt;= 105 -104 &lt;= nums[i] &lt;= 104 1 &lt;= k &lt;= nums.length 题解 方法一 分析 维护一个priority_queue，初始存储第一个窗口内有用的值，第一个窗口内的最大值即为pq.top() 维护一个unordered_map，记录所有数值在原数组中的最大位置 每次移动窗口后，判断当前最大值是否被移出窗口 提交结果 通过 class Solution { public: vector&lt;int&gt; maxSlidingWindow(vector&lt;int&gt;&amp; nums, int k) { priority_queue&lt;int, vector&lt;int&gt;&gt; pq; unordered_map&lt;int, int&gt; pos; vector&lt;int&gt; ans; if (nums.size() &lt; k) { return ans; } for (int i = 0; i &lt; k; i&#43;&#43;) { pq.emplace(nums[i]); pos[nums[i]] = i; } ans.push_back(pq.top()); if (nums.size() == k) { return ans; } for (int i = k ; i &lt; nums.size(); i&#43;&#43;) { pos[nums[i]] = i; pq.emplace(nums[i]); int nowtop = pq.top(); while (pos.find(nowtop) != pos.end()) { if (pos[nowtop] &lt;= i - k) { pq.pop(); nowtop = pq.top(); } else break; } ans.push_back(pq.top()); } return ans; } }; 方法二 分析 在方法一的基础上改进 priorty_queue中存储数字-&gt;位置的pair 提交结果 通过 class Solution { public: vector&lt;int&gt; maxSlidingWindow(vector&lt;int&gt;&amp; nums, int k) { vector&lt;int&gt; ans; if (nums.size() &lt; k) { return ans; } priority_queue&lt;pair&lt;int, int&gt;&gt; pq; // 值-&gt;位置 for (int i = 0; i &lt; k; i&#43;&#43;) { pq.emplace(nums[i], i); } ans.push_back(pq.top().first); for (int i = k; i &lt; nums.size(); i&#43;&#43;) { pq.emplace(nums[i], i); while (pq.top().second &lt;= i - k) { pq.pop(); } ans.push_back(pq.top().first); } return ans; } }; 方法三 单调队列：满足单调性的双端队列
+" />
 <meta name="twitter:site" content="https://y-m-m.github.io/" />
 <meta name="twitter:creator" content="陈皮" />
 <meta name="twitter:image"
@@ -38,7 +46,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:title" content="leetcode hot100 239 滑动窗口最大值 - 陈皮的博客">
 <meta property="og:description"
-  content="" />
+  content="leetcode 239 滑动窗口最大值
+题目 给你一个整数数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k 个数字。滑动窗口每次只向右移动一位。 返回 滑动窗口中的最大值 。
+示例 示例一 输入：nums = [1,3,-1,-3,5,3,6,7], k = 3 输出：[3,3,5,5,6,7] 解释： 示例二 输入：nums = [1], k = 1 输出：[1]
+提示 1 &lt;= nums.length &lt;= 105 -104 &lt;= nums[i] &lt;= 104 1 &lt;= k &lt;= nums.length 题解 方法一 分析 维护一个priority_queue，初始存储第一个窗口内有用的值，第一个窗口内的最大值即为pq.top() 维护一个unordered_map，记录所有数值在原数组中的最大位置 每次移动窗口后，判断当前最大值是否被移出窗口 提交结果 通过 class Solution { public: vector&lt;int&gt; maxSlidingWindow(vector&lt;int&gt;&amp; nums, int k) { priority_queue&lt;int, vector&lt;int&gt;&gt; pq; unordered_map&lt;int, int&gt; pos; vector&lt;int&gt; ans; if (nums.size() &lt; k) { return ans; } for (int i = 0; i &lt; k; i&#43;&#43;) { pq.emplace(nums[i]); pos[nums[i]] = i; } ans.push_back(pq.top()); if (nums.size() == k) { return ans; } for (int i = k ; i &lt; nums.size(); i&#43;&#43;) { pos[nums[i]] = i; pq.emplace(nums[i]); int nowtop = pq.top(); while (pos.find(nowtop) != pos.end()) { if (pos[nowtop] &lt;= i - k) { pq.pop(); nowtop = pq.top(); } else break; } ans.push_back(pq.top()); } return ans; } }; 方法二 分析 在方法一的基础上改进 priorty_queue中存储数字-&gt;位置的pair 提交结果 通过 class Solution { public: vector&lt;int&gt; maxSlidingWindow(vector&lt;int&gt;&amp; nums, int k) { vector&lt;int&gt; ans; if (nums.size() &lt; k) { return ans; } priority_queue&lt;pair&lt;int, int&gt;&gt; pq; // 值-&gt;位置 for (int i = 0; i &lt; k; i&#43;&#43;) { pq.emplace(nums[i], i); } ans.push_back(pq.top().first); for (int i = k; i &lt; nums.size(); i&#43;&#43;) { pq.emplace(nums[i], i); while (pq.top().second &lt;= i - k) { pq.pop(); } ans.push_back(pq.top().first); } return ans; } }; 方法三 单调队列：满足单调性的双端队列
+" />
 <meta property="og:url" content="https://y-m-m.github.io/post/leetcodehot239%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC/" />
 <meta property="og:site_name" content="leetcode hot100 239 滑动窗口最大值" />
 <meta property="og:image"
@@ -150,9 +162,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Thu, 27 Mar 2025 15:42:54 &#43;0800"
+                  Modified <relative-time datetime="Fri, 28 Mar 2025 10:11:38 &#43;0800"
                     class="no-wrap">
-                    Thu, 27 Mar 2025 15:42:54 &#43;0800</relative-time>
+                    Fri, 28 Mar 2025 10:11:38 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -182,7 +194,7 @@
                         </div>
                       </div>
                     </details-menu>
-                      0 Words
+                      1040 Words
                     
 
                   </div>
@@ -243,13 +255,22 @@
                       滑动窗口
                     </a>
                     
-                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%A0%86%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97">
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%A0%86">
                       <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
                         <path fill-rule="evenodd"
                           d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
                         </path>
                       </svg>
-                      堆（优先队列）
+                      堆
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E4%BC%98%E5%85%88%E7%BA%A7%E9%98%9F%E5%88%97">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      优先级队列
                     </a>
                     
                     
@@ -259,7 +280,246 @@
 
 
               <div class="Box-body px-5 pb-5" style="z-index: 1">
-                <article class="markdown-body entry-content container-lg"></article>
+                <article class="markdown-body entry-content container-lg"><p><a href="https://leetcode.cn/problems/sliding-window-maximum/description/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode 239 滑动窗口最大值</a></p>
+<h1 id="题目">题目</h1>
+<blockquote>
+<p>给你一个整数数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k 个数字。滑动窗口每次只向右移动一位。    <br>
+返回 滑动窗口中的最大值 。</p>
+</blockquote>
+<h1 id="示例">示例</h1>
+<h2 id="示例一">示例一</h2>
+<blockquote>
+<p><strong>输入</strong>：nums = [1,3,-1,-3,5,3,6,7], k = 3       <br>
+<strong>输出</strong>：[3,3,5,5,6,7]              <br>
+<strong>解释</strong>：      <br>
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-27%2015.50.40.png" alt=""></p>
+</blockquote>
+<h2 id="示例二">示例二</h2>
+<blockquote>
+<p>输入：nums = [1], k = 1       <br>
+输出：[1]</p>
+</blockquote>
+<h1 id="提示">提示</h1>
+<ul>
+<li>1 &lt;= nums.length &lt;= 10<sup>5</sup></li>
+<li>-10<sup>4</sup> &lt;= nums[i] &lt;= 10<sup>4</sup></li>
+<li>1 &lt;= k &lt;= nums.length</li>
+</ul>
+<h1 id="题解">题解</h1>
+<h2 id="方法一">方法一</h2>
+<ul>
+<li>分析
+<ul>
+<li>维护一个priority_queue，初始存储第一个窗口内有用的值，第一个窗口内的最大值即为pq.top()</li>
+<li>维护一个unordered_map，记录所有数值在原数组中的最大位置</li>
+<li>每次移动窗口后，判断当前最大值是否被移出窗口</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">maxSlidingWindow</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">pq</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">pos</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pq</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pos</span><span class="p">[</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="n">k</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">k</span> <span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pos</span><span class="p">[</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pq</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">nowtop</span> <span class="o">=</span> <span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">nowtop</span><span class="p">)</span> <span class="o">!=</span> <span class="n">pos</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">nowtop</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">pq</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">nowtop</span> <span class="o">=</span> <span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span> 
+</span></span><span class="line"><span class="cl">                <span class="k">else</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h2 id="方法二">方法二</h2>
+<ul>
+<li>分析
+<ul>
+<li>在方法一的基础上改进</li>
+<li>priorty_queue中存储数字-&gt;位置的pair</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">maxSlidingWindow</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">pq</span><span class="p">;</span> <span class="c1">// 值-&gt;位置
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pq</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">i</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">().</span><span class="n">first</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">k</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pq</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">i</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="p">(</span><span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">().</span><span class="n">second</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">pq</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">().</span><span class="n">first</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h2 id="方法三">方法三</h2>
+<blockquote>
+<p>单调队列：满足单调性的双端队列</p>
+</blockquote>
+<ul>
+<li>分析
+<ul>
+<li>如果i &lt; j, nums[i] &lt; nums[j]，则nums[i]在nums[j]存在的时候对答案毫无贡献</li>
+<li>用一个双端队列存储窗口中还没有被移除的下标</li>
+<li>每次窗口移动时，对新的即将加入双端队列的元素，移出其前面值比它小的元素，再加入队列中</li>
+<li>！队列的顺序存储nums[i]的相对大小，队列的内容存储i</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">maxSlidingWindow</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">deque</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">pq</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 移除前面对应的值比当前数大的元素
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">pq</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">nums</span><span class="p">[</span><span class="n">pq</span><span class="p">.</span><span class="n">back</span><span class="p">()])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">pq</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pq</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">pq</span><span class="p">.</span><span class="n">front</span><span class="p">()]);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">k</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">pq</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">nums</span><span class="p">[</span><span class="n">pq</span><span class="p">.</span><span class="n">back</span><span class="p">()])</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">pq</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pq</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="p">(</span><span class="n">pq</span><span class="p">.</span><span class="n">front</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">pq</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">pq</span><span class="p">.</span><span class="n">front</span><span class="p">()]);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h2 id="方法四">方法四</h2>
+<ul>
+<li>分析
+<ul>
+<li>要求所有窗口中元素的最大值，可事先对数据做预处理，然后提取最大值构成ans数组即可</li>
+<li>以 i = n * k 为分界</li>
+<li>求preMax和sufMax
+<ul>
+<li>preMax[i]存储从最近的 n * k 到i的最大元素</li>
+<li>sufMax[i]存储从i到最近的 n * k 的最大元素</li>
+</ul>
+</li>
+<li>[i, j]区间的最大值 = max (preMax[j], sufMax[i])</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">maxSlidingWindow</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">preMax</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">sufMax</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">%</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">preMax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">preMax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">preMax</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sufMax</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">back</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">%</span> <span class="n">k</span> <span class="o">==</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">sufMax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">sufMax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">sufMax</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span> <span class="o">-</span> <span class="n">k</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="n">preMax</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">sufMax</span><span class="p">[</span><span class="n">i</span><span class="p">]));</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h1 id="参考资料">参考资料</h1>
+<ul>
+<li><a href="https://y-m-m.github.io/post/c++priority_queue/">priority_queue</a></li>
+<li><a href="https://www.runoob.com/cplusplus/cpp-libs-deque.html">deque</a></li>
+<li><a href="https://leetcode.cn/problems/sliding-window-maximum/solutions/543426/hua-dong-chuang-kou-zui-da-zhi-by-leetco-ki6m/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode官方题解</a></li>
+</ul>
+</article>
               </div>
             </div>
           </div>

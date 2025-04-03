@@ -19,6 +19,11 @@
     
     <meta name="description"
   content="leetcode hot100 21 合并两个有序链表
+题目 将两个升序链表合并为一个新的 升序 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。
+示例 示例一 输入：l1 = [1,2,4], l2 = [1,3,4] 输出：[1,1,2,3,4,4]
+示例二 输入：l1 = [], l2 = [] 输出：[]
+示例三 输入：l1 = [], l2 = [0] 输出：[0]
+提示 两个链表的节点数目范围是 [0, 50] -100 &lt;= Node.val &lt;= 100 l1 和 l2 均按 非递减顺序 排列 题解 方法一 分析 选定一个当作主链 将另一个list插入主链 提交结果 通过 /** * Definition for singly-linked list. * struct ListNode { * int val; * ListNode *next; * ListNode() : val(0), next(nullptr) {} * ListNode(int x) : val(x), next(nullptr) {} * ListNode(int x, ListNode *next) : val(x), next(next) {} * }; */ class Solution { public: ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) { ListNode* head = nullptr; ListNode* subhead = nullptr; ListNode* anotherhead = nullptr; if (list1 == nullptr &amp;&amp; list2 == nullptr) { return nullptr; } if (list1 == nullptr) { return list2; } if (list2 == nullptr) { return list1; } if (list1-&gt;val &lt;= list2-&gt;val) { head = list1; subhead = list1; anotherhead = list2; } else { head = list2; subhead = list2; anotherhead = list1; } while (subhead-&gt;next != nullptr &amp;&amp; anotherhead != nullptr) { // cout &lt;&lt; &#34;subhead-&gt;next-&gt;val = &#34; &lt;&lt; subhead-&gt;next-&gt;val &lt;&lt; &#34;, anotherhead-&gt;val = &#34; &lt;&lt; anotherhead-&gt;val &lt;&lt; endl; if (subhead-&gt;next-&gt;val &lt;= anotherhead-&gt;val) { subhead = subhead-&gt;next; } else { ListNode* temp = anotherhead; anotherhead = anotherhead-&gt;next; temp-&gt;next = subhead-&gt;next; subhead-&gt;next = temp; subhead = temp; } } if (subhead-&gt;next == nullptr) { subhead-&gt;next = anotherhead; } return head; } }; 方法二 分析 迭代 提交结果 通过 class Solution { public: ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) { ListNode* preHead = new ListNode(-1); ListNode* prev = preHead; while (l1 != nullptr &amp;&amp; l2 != nullptr) { if (l1-&gt;val &lt; l2-&gt;val) { prev-&gt;next = l1; l1 = l1-&gt;next; } else { prev-&gt;next = l2; l2 = l2-&gt;next; } prev = prev-&gt;next; } // 合并后 l1 和 l2 最多只有一个还未被合并完，我们直接将链表末尾指向未合并完的链表即可 prev-&gt;next = l1 == nullptr ? l2 : l1; return preHead-&gt;next; } }; 方法三 分析 递归 提交结果 通过 class Solution { public: ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) { if (l1 == nullptr) { return l2; } else if (l2 == nullptr) { return l1; } else if (l1-&gt;val &lt; l2-&gt;val) { l1-&gt;next = mergeTwoLists(l1-&gt;next, l2); return l1; } else { l2-&gt;next = mergeTwoLists(l1, l2-&gt;next); return l2; } } }; 参考资料 leetcode官方题解
 " />
 <meta name="keywords"
   content='blog, google analytics' />
@@ -30,6 +35,11 @@
 <meta name="twitter:title" content="leetcode hot100 21 合并两个有序链表 - 陈皮的博客" />
 <meta name="twitter:description"
   content="leetcode hot100 21 合并两个有序链表
+题目 将两个升序链表合并为一个新的 升序 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。
+示例 示例一 输入：l1 = [1,2,4], l2 = [1,3,4] 输出：[1,1,2,3,4,4]
+示例二 输入：l1 = [], l2 = [] 输出：[]
+示例三 输入：l1 = [], l2 = [0] 输出：[0]
+提示 两个链表的节点数目范围是 [0, 50] -100 &lt;= Node.val &lt;= 100 l1 和 l2 均按 非递减顺序 排列 题解 方法一 分析 选定一个当作主链 将另一个list插入主链 提交结果 通过 /** * Definition for singly-linked list. * struct ListNode { * int val; * ListNode *next; * ListNode() : val(0), next(nullptr) {} * ListNode(int x) : val(x), next(nullptr) {} * ListNode(int x, ListNode *next) : val(x), next(next) {} * }; */ class Solution { public: ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) { ListNode* head = nullptr; ListNode* subhead = nullptr; ListNode* anotherhead = nullptr; if (list1 == nullptr &amp;&amp; list2 == nullptr) { return nullptr; } if (list1 == nullptr) { return list2; } if (list2 == nullptr) { return list1; } if (list1-&gt;val &lt;= list2-&gt;val) { head = list1; subhead = list1; anotherhead = list2; } else { head = list2; subhead = list2; anotherhead = list1; } while (subhead-&gt;next != nullptr &amp;&amp; anotherhead != nullptr) { // cout &lt;&lt; &#34;subhead-&gt;next-&gt;val = &#34; &lt;&lt; subhead-&gt;next-&gt;val &lt;&lt; &#34;, anotherhead-&gt;val = &#34; &lt;&lt; anotherhead-&gt;val &lt;&lt; endl; if (subhead-&gt;next-&gt;val &lt;= anotherhead-&gt;val) { subhead = subhead-&gt;next; } else { ListNode* temp = anotherhead; anotherhead = anotherhead-&gt;next; temp-&gt;next = subhead-&gt;next; subhead-&gt;next = temp; subhead = temp; } } if (subhead-&gt;next == nullptr) { subhead-&gt;next = anotherhead; } return head; } }; 方法二 分析 迭代 提交结果 通过 class Solution { public: ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) { ListNode* preHead = new ListNode(-1); ListNode* prev = preHead; while (l1 != nullptr &amp;&amp; l2 != nullptr) { if (l1-&gt;val &lt; l2-&gt;val) { prev-&gt;next = l1; l1 = l1-&gt;next; } else { prev-&gt;next = l2; l2 = l2-&gt;next; } prev = prev-&gt;next; } // 合并后 l1 和 l2 最多只有一个还未被合并完，我们直接将链表末尾指向未合并完的链表即可 prev-&gt;next = l1 == nullptr ? l2 : l1; return preHead-&gt;next; } }; 方法三 分析 递归 提交结果 通过 class Solution { public: ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) { if (l1 == nullptr) { return l2; } else if (l2 == nullptr) { return l1; } else if (l1-&gt;val &lt; l2-&gt;val) { l1-&gt;next = mergeTwoLists(l1-&gt;next, l2); return l1; } else { l2-&gt;next = mergeTwoLists(l1, l2-&gt;next); return l2; } } }; 参考资料 leetcode官方题解
 " />
 <meta name="twitter:site" content="https://y-m-m.github.io/" />
 <meta name="twitter:creator" content="陈皮" />
@@ -41,6 +51,11 @@
 <meta property="og:title" content="leetcode hot100 21 合并两个有序链表 - 陈皮的博客">
 <meta property="og:description"
   content="leetcode hot100 21 合并两个有序链表
+题目 将两个升序链表合并为一个新的 升序 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。
+示例 示例一 输入：l1 = [1,2,4], l2 = [1,3,4] 输出：[1,1,2,3,4,4]
+示例二 输入：l1 = [], l2 = [] 输出：[]
+示例三 输入：l1 = [], l2 = [0] 输出：[0]
+提示 两个链表的节点数目范围是 [0, 50] -100 &lt;= Node.val &lt;= 100 l1 和 l2 均按 非递减顺序 排列 题解 方法一 分析 选定一个当作主链 将另一个list插入主链 提交结果 通过 /** * Definition for singly-linked list. * struct ListNode { * int val; * ListNode *next; * ListNode() : val(0), next(nullptr) {} * ListNode(int x) : val(x), next(nullptr) {} * ListNode(int x, ListNode *next) : val(x), next(next) {} * }; */ class Solution { public: ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) { ListNode* head = nullptr; ListNode* subhead = nullptr; ListNode* anotherhead = nullptr; if (list1 == nullptr &amp;&amp; list2 == nullptr) { return nullptr; } if (list1 == nullptr) { return list2; } if (list2 == nullptr) { return list1; } if (list1-&gt;val &lt;= list2-&gt;val) { head = list1; subhead = list1; anotherhead = list2; } else { head = list2; subhead = list2; anotherhead = list1; } while (subhead-&gt;next != nullptr &amp;&amp; anotherhead != nullptr) { // cout &lt;&lt; &#34;subhead-&gt;next-&gt;val = &#34; &lt;&lt; subhead-&gt;next-&gt;val &lt;&lt; &#34;, anotherhead-&gt;val = &#34; &lt;&lt; anotherhead-&gt;val &lt;&lt; endl; if (subhead-&gt;next-&gt;val &lt;= anotherhead-&gt;val) { subhead = subhead-&gt;next; } else { ListNode* temp = anotherhead; anotherhead = anotherhead-&gt;next; temp-&gt;next = subhead-&gt;next; subhead-&gt;next = temp; subhead = temp; } } if (subhead-&gt;next == nullptr) { subhead-&gt;next = anotherhead; } return head; } }; 方法二 分析 迭代 提交结果 通过 class Solution { public: ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) { ListNode* preHead = new ListNode(-1); ListNode* prev = preHead; while (l1 != nullptr &amp;&amp; l2 != nullptr) { if (l1-&gt;val &lt; l2-&gt;val) { prev-&gt;next = l1; l1 = l1-&gt;next; } else { prev-&gt;next = l2; l2 = l2-&gt;next; } prev = prev-&gt;next; } // 合并后 l1 和 l2 最多只有一个还未被合并完，我们直接将链表末尾指向未合并完的链表即可 prev-&gt;next = l1 == nullptr ? l2 : l1; return preHead-&gt;next; } }; 方法三 分析 递归 提交结果 通过 class Solution { public: ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) { if (l1 == nullptr) { return l2; } else if (l2 == nullptr) { return l1; } else if (l1-&gt;val &lt; l2-&gt;val) { l1-&gt;next = mergeTwoLists(l1-&gt;next, l2); return l1; } else { l2-&gt;next = mergeTwoLists(l1, l2-&gt;next); return l2; } } }; 参考资料 leetcode官方题解
 " />
 <meta property="og:url" content="https://y-m-m.github.io/post/leetcodehot21%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8/" />
 <meta property="og:site_name" content="leetcode hot100 21 合并两个有序链表" />
@@ -153,9 +168,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Thu, 03 Apr 2025 09:11:36 &#43;0800"
+                  Modified <relative-time datetime="Thu, 03 Apr 2025 09:35:14 &#43;0800"
                     class="no-wrap">
-                    Thu, 03 Apr 2025 09:11:36 &#43;0800</relative-time>
+                    Thu, 03 Apr 2025 09:35:14 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -185,7 +200,7 @@
                         </div>
                       </div>
                     </details-menu>
-                      11 Words
+                      578 Words
                     
 
                   </div>
@@ -245,6 +260,178 @@
 
               <div class="Box-body px-5 pb-5" style="z-index: 1">
                 <article class="markdown-body entry-content container-lg"><p><a href="https://leetcode.cn/problems/merge-two-sorted-lists/description/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode hot100 21 合并两个有序链表</a></p>
+<h1 id="题目">题目</h1>
+<blockquote>
+<p>将两个升序链表合并为一个新的 升序 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。</p>
+</blockquote>
+<h1 id="示例">示例</h1>
+<h2 id="示例一">示例一</h2>
+<blockquote>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-04-03%2009.12.37.png" alt="">       <br>
+<strong>输入</strong>：l1 = [1,2,4], l2 = [1,3,4]       <br>
+<strong>输出</strong>：[1,1,2,3,4,4]</p>
+</blockquote>
+<h2 id="示例二">示例二</h2>
+<blockquote>
+<p><strong>输入</strong>：l1 = [], l2 = []         <br>
+<strong>输出</strong>：[]</p>
+</blockquote>
+<h2 id="示例三">示例三</h2>
+<blockquote>
+<p><strong>输入</strong>：l1 = [], l2 = [0]            <br>
+<strong>输出</strong>：[0]</p>
+</blockquote>
+<h1 id="提示">提示</h1>
+<ul>
+<li>两个链表的节点数目范围是 [0, 50]</li>
+<li>-100 &lt;= Node.val &lt;= 100</li>
+<li>l1 和 l2 均按 非递减顺序 排列</li>
+</ul>
+<h1 id="题解">题解</h1>
+<h2 id="方法一">方法一</h2>
+<ul>
+<li>分析
+<ul>
+<li>选定一个当作主链</li>
+<li>将另一个list插入主链</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Definition for singly-linked list.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * struct ListNode {
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     int val;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode *next;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode() : val(0), next(nullptr) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x) : val(x), next(nullptr) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * };
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ListNode</span><span class="o">*</span> <span class="n">mergeTwoLists</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">list1</span><span class="p">,</span> <span class="n">ListNode</span><span class="o">*</span> <span class="n">list2</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">head</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">subhead</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">anotherhead</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">list1</span> <span class="o">==</span> <span class="k">nullptr</span> <span class="o">&amp;&amp;</span> <span class="n">list2</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="k">nullptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">list1</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">list2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">list2</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">list1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">list1</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&lt;=</span> <span class="n">list2</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">head</span> <span class="o">=</span> <span class="n">list1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">subhead</span> <span class="o">=</span> <span class="n">list1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">anotherhead</span> <span class="o">=</span> <span class="n">list2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">head</span> <span class="o">=</span> <span class="n">list2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">subhead</span> <span class="o">=</span> <span class="n">list2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">anotherhead</span> <span class="o">=</span> <span class="n">list1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">subhead</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">!=</span> <span class="k">nullptr</span> <span class="o">&amp;&amp;</span> <span class="n">anotherhead</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// cout &lt;&lt; &#34;subhead-&gt;next-&gt;val = &#34; &lt;&lt; subhead-&gt;next-&gt;val &lt;&lt; &#34;, anotherhead-&gt;val = &#34; &lt;&lt; anotherhead-&gt;val &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">if</span> <span class="p">(</span><span class="n">subhead</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&lt;=</span> <span class="n">anotherhead</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">subhead</span> <span class="o">=</span> <span class="n">subhead</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ListNode</span><span class="o">*</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">anotherhead</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">anotherhead</span> <span class="o">=</span> <span class="n">anotherhead</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">temp</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">subhead</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">subhead</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">subhead</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">subhead</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">subhead</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">anotherhead</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h2 id="方法二">方法二</h2>
+<ul>
+<li>分析
+<ul>
+<li>迭代</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ListNode</span><span class="o">*</span> <span class="n">mergeTwoLists</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">l1</span><span class="p">,</span> <span class="n">ListNode</span><span class="o">*</span> <span class="n">l2</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">preHead</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ListNode</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">prev</span> <span class="o">=</span> <span class="n">preHead</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">l1</span> <span class="o">!=</span> <span class="k">nullptr</span> <span class="o">&amp;&amp;</span> <span class="n">l2</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">l1</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">l2</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">prev</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">l1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">l1</span> <span class="o">=</span> <span class="n">l1</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">prev</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">l2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">l2</span> <span class="o">=</span> <span class="n">l2</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">prev</span> <span class="o">=</span> <span class="n">prev</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// 合并后 l1 和 l2 最多只有一个还未被合并完，我们直接将链表末尾指向未合并完的链表即可
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">prev</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">l1</span> <span class="o">==</span> <span class="k">nullptr</span> <span class="o">?</span> <span class="nl">l2</span> <span class="p">:</span> <span class="n">l1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">preHead</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h2 id="方法三">方法三</h2>
+<ul>
+<li>分析
+<ul>
+<li>递归</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ListNode</span><span class="o">*</span> <span class="n">mergeTwoLists</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">l1</span><span class="p">,</span> <span class="n">ListNode</span><span class="o">*</span> <span class="n">l2</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">l1</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">l2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">l2</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">l1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">l1</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">l2</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">l1</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">mergeTwoLists</span><span class="p">(</span><span class="n">l1</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">,</span> <span class="n">l2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">l1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">l2</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">mergeTwoLists</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span> <span class="n">l2</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">l2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h1 id="参考资料">参考资料</h1>
+<p><a href="https://leetcode.cn/problems/merge-two-sorted-lists/solutions/226408/he-bing-liang-ge-you-xu-lian-biao-by-leetcode-solu/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode官方题解</a></p>
 </article>
               </div>
             </div>

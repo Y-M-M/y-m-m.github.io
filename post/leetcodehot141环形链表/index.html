@@ -10,7 +10,7 @@
     <link rel="stylesheet" href='https://y-m-m.github.io/css/light.css' />
     <link rel="stylesheet" href='https://y-m-m.github.io/css/dark.css' />
     <link rel="stylesheet" href='https://y-m-m.github.io/css/syntax.css' />
-    <title>leetcode hot100 141 相交链表 - 陈皮的博客</title>
+    <title>leetcode hot100 141 环形链表 - 陈皮的博客</title>
     
     <link rel="icon" type="image/x-icon" href='/images/github-mark.png'>
     
@@ -18,7 +18,7 @@
 
     
     <meta name="description"
-  content="leetcode hot100 141 相交链表
+  content="leetcode hot100 141 环形链表
 题目 给你一个链表的头节点 head ，判断链表中是否有环。 如果链表中有某个节点，可以通过连续跟踪 next 指针再次到达，则链表中存在环。 为了表示给定链表中的环，评测系统内部使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。注意：pos 不作为参数进行传递 。仅仅是为了标识链表的实际情况。 如果链表中存在环 ，则返回 true 。 否则，返回 false 。
 示例 示例一 输入：head = [3,2,0,-4], pos = 1 输出：true 解释：链表中有一个环，其尾部连接到第二个节点。
 示例二 输入：head = [1,2], pos = 0 输出：true 解释：链表中有一个环，其尾部连接到第一个节点。
@@ -32,9 +32,9 @@
 
 
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="leetcode hot100 141 相交链表 - 陈皮的博客" />
+<meta name="twitter:title" content="leetcode hot100 141 环形链表 - 陈皮的博客" />
 <meta name="twitter:description"
-  content="leetcode hot100 141 相交链表
+  content="leetcode hot100 141 环形链表
 题目 给你一个链表的头节点 head ，判断链表中是否有环。 如果链表中有某个节点，可以通过连续跟踪 next 指针再次到达，则链表中存在环。 为了表示给定链表中的环，评测系统内部使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。注意：pos 不作为参数进行传递 。仅仅是为了标识链表的实际情况。 如果链表中存在环 ，则返回 true 。 否则，返回 false 。
 示例 示例一 输入：head = [3,2,0,-4], pos = 1 输出：true 解释：链表中有一个环，其尾部连接到第二个节点。
 示例二 输入：head = [1,2], pos = 0 输出：true 解释：链表中有一个环，其尾部连接到第一个节点。
@@ -48,9 +48,9 @@
 
 
 <meta property="og:type" content="article" />
-<meta property="og:title" content="leetcode hot100 141 相交链表 - 陈皮的博客">
+<meta property="og:title" content="leetcode hot100 141 环形链表 - 陈皮的博客">
 <meta property="og:description"
-  content="leetcode hot100 141 相交链表
+  content="leetcode hot100 141 环形链表
 题目 给你一个链表的头节点 head ，判断链表中是否有环。 如果链表中有某个节点，可以通过连续跟踪 next 指针再次到达，则链表中存在环。 为了表示给定链表中的环，评测系统内部使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。注意：pos 不作为参数进行传递 。仅仅是为了标识链表的实际情况。 如果链表中存在环 ，则返回 true 。 否则，返回 false 。
 示例 示例一 输入：head = [3,2,0,-4], pos = 1 输出：true 解释：链表中有一个环，其尾部连接到第二个节点。
 示例二 输入：head = [1,2], pos = 0 输出：true 解释：链表中有一个环，其尾部连接到第一个节点。
@@ -58,7 +58,7 @@
 提示 链表中节点的数目范围是 [0, 104] -105 &lt;= Node.val &lt;= 105 pos 为 -1 或者链表中的一个 有效索引 。 题解 方法一 分析 不需要判断是否形成环，只要在10000(节点数目最大值)以内，不能找到nullptr，就一定有环存在 提交结果 通过 /** * Definition for singly-linked list. * struct ListNode { * int val; * ListNode *next; * ListNode(int x) : val(x), next(NULL) {} * }; */ class Solution { public: bool hasCycle(ListNode *head) { for (int i = 0; i &lt; 10000; i&#43;&#43;) { if (head == nullptr || head-&gt;next == nullptr) { return false; } head = head-&gt;next; } return true; } }; 方法二 分析 unordered_set存储已经遍历过的node 提交结果 通过 /** * Definition for singly-linked list. * struct ListNode { * int val; * ListNode *next; * ListNode(int x) : val(x), next(NULL) {} * }; */ class Solution { public: bool hasCycle(ListNode *head) { unordered_set&lt;ListNode*&gt; nodes; while (head != nullptr &amp;&amp; head-&gt;next != nullptr) { if (nodes.count(head) &gt; 0) { return true; } nodes.insert(head); head = head-&gt;next; } return false; } }; 方法三 分析 快慢指针 如果存在环的话，快慢指针一定会再次相遇(套圈) 提交结果 通过 /** * Definition for singly-linked list. * struct ListNode { * int val; * ListNode *next; * ListNode(int x) : val(x), next(NULL) {} * }; */ class Solution { public: bool hasCycle(ListNode *head) { if (head == nullptr || head-&gt;next == nullptr) { return false; } ListNode *fast = head-&gt;next-&gt;next; ListNode *slow = head; while (fast != slow) { if (fast == nullptr || fast-&gt;next == nullptr) { return false; } fast = fast-&gt;next-&gt;next; slow = slow-&gt;next; } return true; } }; 参考资料 leetcode官方题解
 " />
 <meta property="og:url" content="https://y-m-m.github.io/post/leetcodehot141%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8/" />
-<meta property="og:site_name" content="leetcode hot100 141 相交链表" />
+<meta property="og:site_name" content="leetcode hot100 141 环形链表" />
 <meta property="og:image"
   content="https://y-m-m.github.io/">
 <meta property="og:image:width" content="2048">
@@ -158,7 +158,7 @@
                   </span>
                   <span class="path-divider">/</span>
                   <strong class="css-truncate css-truncate-target mr-1" style="max-width: 410px">
-                    <a href="https://y-m-m.github.io/post/leetcodehot141%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8/">leetcode hot100 141 相交链表</a>
+                    <a href="https://y-m-m.github.io/post/leetcodehot141%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8/">leetcode hot100 141 环形链表</a>
                   </strong>
                 </h1>
                 <div class="note m-0">
@@ -168,9 +168,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Thu, 03 Apr 2025 08:44:40 &#43;0800"
+                  Modified <relative-time datetime="Thu, 03 Apr 2025 09:48:55 &#43;0800"
                     class="no-wrap">
-                    Thu, 03 Apr 2025 08:44:40 &#43;0800</relative-time>
+                    Thu, 03 Apr 2025 09:48:55 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -268,7 +268,7 @@
 
 
               <div class="Box-body px-5 pb-5" style="z-index: 1">
-                <article class="markdown-body entry-content container-lg"><p><a href="https://leetcode.cn/problems/linked-list-cycle/description/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode hot100 141 相交链表</a></p>
+                <article class="markdown-body entry-content container-lg"><p><a href="https://leetcode.cn/problems/linked-list-cycle/description/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode hot100 141 环形链表</a></p>
 <h1 id="题目">题目</h1>
 <blockquote>
 <p>给你一个链表的头节点 head ，判断链表中是否有环。                           <br>

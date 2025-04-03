@@ -23,7 +23,8 @@
 示例 示例一 输入：head = [3,2,0,-4], pos = 1 输出：true 解释：链表中有一个环，其尾部连接到第二个节点。
 示例二 输入：head = [1,2], pos = 0 输出：true 解释：链表中有一个环，其尾部连接到第一个节点。
 示例三 输入：head = [1], pos = -1 输出：false 解释：链表中没有环。
-提示 链表中节点的数目范围是 [0, 104] -105 &lt;= Node.val &lt;= 105 pos 为 -1 或者链表中的一个 有效索引 。 题解" />
+提示 链表中节点的数目范围是 [0, 104] -105 &lt;= Node.val &lt;= 105 pos 为 -1 或者链表中的一个 有效索引 。 题解 方法一 分析 不需要判断是否形成环，只要在10000(节点数目最大值)以内，不能找到nullptr，就一定有环存在 提交结果 通过 /** * Definition for singly-linked list. * struct ListNode { * int val; * ListNode *next; * ListNode(int x) : val(x), next(NULL) {} * }; */ class Solution { public: bool hasCycle(ListNode *head) { for (int i = 0; i &lt; 10000; i&#43;&#43;) { if (head == nullptr || head-&gt;next == nullptr) { return false; } head = head-&gt;next; } return true; } }; 方法二 分析 unordered_set存储已经遍历过的node 提交结果 通过 /** * Definition for singly-linked list. * struct ListNode { * int val; * ListNode *next; * ListNode(int x) : val(x), next(NULL) {} * }; */ class Solution { public: bool hasCycle(ListNode *head) { unordered_set&lt;ListNode*&gt; nodes; while (head != nullptr &amp;&amp; head-&gt;next != nullptr) { if (nodes.count(head) &gt; 0) { return true; } nodes.insert(head); head = head-&gt;next; } return false; } }; 方法三 分析 快慢指针 如果存在环的话，快慢指针一定会再次相遇(套圈) 提交结果 通过 /** * Definition for singly-linked list. * struct ListNode { * int val; * ListNode *next; * ListNode(int x) : val(x), next(NULL) {} * }; */ class Solution { public: bool hasCycle(ListNode *head) { if (head == nullptr || head-&gt;next == nullptr) { return false; } ListNode *fast = head-&gt;next-&gt;next; ListNode *slow = head; while (fast != slow) { if (fast == nullptr || fast-&gt;next == nullptr) { return false; } fast = fast-&gt;next-&gt;next; slow = slow-&gt;next; } return true; } }; 参考资料 leetcode官方题解
+" />
 <meta name="keywords"
   content='blog, google analytics' />
 <meta name="robots" content="noodp" />
@@ -38,7 +39,8 @@
 示例 示例一 输入：head = [3,2,0,-4], pos = 1 输出：true 解释：链表中有一个环，其尾部连接到第二个节点。
 示例二 输入：head = [1,2], pos = 0 输出：true 解释：链表中有一个环，其尾部连接到第一个节点。
 示例三 输入：head = [1], pos = -1 输出：false 解释：链表中没有环。
-提示 链表中节点的数目范围是 [0, 104] -105 &lt;= Node.val &lt;= 105 pos 为 -1 或者链表中的一个 有效索引 。 题解" />
+提示 链表中节点的数目范围是 [0, 104] -105 &lt;= Node.val &lt;= 105 pos 为 -1 或者链表中的一个 有效索引 。 题解 方法一 分析 不需要判断是否形成环，只要在10000(节点数目最大值)以内，不能找到nullptr，就一定有环存在 提交结果 通过 /** * Definition for singly-linked list. * struct ListNode { * int val; * ListNode *next; * ListNode(int x) : val(x), next(NULL) {} * }; */ class Solution { public: bool hasCycle(ListNode *head) { for (int i = 0; i &lt; 10000; i&#43;&#43;) { if (head == nullptr || head-&gt;next == nullptr) { return false; } head = head-&gt;next; } return true; } }; 方法二 分析 unordered_set存储已经遍历过的node 提交结果 通过 /** * Definition for singly-linked list. * struct ListNode { * int val; * ListNode *next; * ListNode(int x) : val(x), next(NULL) {} * }; */ class Solution { public: bool hasCycle(ListNode *head) { unordered_set&lt;ListNode*&gt; nodes; while (head != nullptr &amp;&amp; head-&gt;next != nullptr) { if (nodes.count(head) &gt; 0) { return true; } nodes.insert(head); head = head-&gt;next; } return false; } }; 方法三 分析 快慢指针 如果存在环的话，快慢指针一定会再次相遇(套圈) 提交结果 通过 /** * Definition for singly-linked list. * struct ListNode { * int val; * ListNode *next; * ListNode(int x) : val(x), next(NULL) {} * }; */ class Solution { public: bool hasCycle(ListNode *head) { if (head == nullptr || head-&gt;next == nullptr) { return false; } ListNode *fast = head-&gt;next-&gt;next; ListNode *slow = head; while (fast != slow) { if (fast == nullptr || fast-&gt;next == nullptr) { return false; } fast = fast-&gt;next-&gt;next; slow = slow-&gt;next; } return true; } }; 参考资料 leetcode官方题解
+" />
 <meta name="twitter:site" content="https://y-m-m.github.io/" />
 <meta name="twitter:creator" content="陈皮" />
 <meta name="twitter:image"
@@ -53,7 +55,8 @@
 示例 示例一 输入：head = [3,2,0,-4], pos = 1 输出：true 解释：链表中有一个环，其尾部连接到第二个节点。
 示例二 输入：head = [1,2], pos = 0 输出：true 解释：链表中有一个环，其尾部连接到第一个节点。
 示例三 输入：head = [1], pos = -1 输出：false 解释：链表中没有环。
-提示 链表中节点的数目范围是 [0, 104] -105 &lt;= Node.val &lt;= 105 pos 为 -1 或者链表中的一个 有效索引 。 题解" />
+提示 链表中节点的数目范围是 [0, 104] -105 &lt;= Node.val &lt;= 105 pos 为 -1 或者链表中的一个 有效索引 。 题解 方法一 分析 不需要判断是否形成环，只要在10000(节点数目最大值)以内，不能找到nullptr，就一定有环存在 提交结果 通过 /** * Definition for singly-linked list. * struct ListNode { * int val; * ListNode *next; * ListNode(int x) : val(x), next(NULL) {} * }; */ class Solution { public: bool hasCycle(ListNode *head) { for (int i = 0; i &lt; 10000; i&#43;&#43;) { if (head == nullptr || head-&gt;next == nullptr) { return false; } head = head-&gt;next; } return true; } }; 方法二 分析 unordered_set存储已经遍历过的node 提交结果 通过 /** * Definition for singly-linked list. * struct ListNode { * int val; * ListNode *next; * ListNode(int x) : val(x), next(NULL) {} * }; */ class Solution { public: bool hasCycle(ListNode *head) { unordered_set&lt;ListNode*&gt; nodes; while (head != nullptr &amp;&amp; head-&gt;next != nullptr) { if (nodes.count(head) &gt; 0) { return true; } nodes.insert(head); head = head-&gt;next; } return false; } }; 方法三 分析 快慢指针 如果存在环的话，快慢指针一定会再次相遇(套圈) 提交结果 通过 /** * Definition for singly-linked list. * struct ListNode { * int val; * ListNode *next; * ListNode(int x) : val(x), next(NULL) {} * }; */ class Solution { public: bool hasCycle(ListNode *head) { if (head == nullptr || head-&gt;next == nullptr) { return false; } ListNode *fast = head-&gt;next-&gt;next; ListNode *slow = head; while (fast != slow) { if (fast == nullptr || fast-&gt;next == nullptr) { return false; } fast = fast-&gt;next-&gt;next; slow = slow-&gt;next; } return true; } }; 参考资料 leetcode官方题解
+" />
 <meta property="og:url" content="https://y-m-m.github.io/post/leetcodehot141%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8/" />
 <meta property="og:site_name" content="leetcode hot100 141 相交链表" />
 <meta property="og:image"
@@ -165,9 +168,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Thu, 03 Apr 2025 08:25:42 &#43;0800"
+                  Modified <relative-time datetime="Thu, 03 Apr 2025 08:44:40 &#43;0800"
                     class="no-wrap">
-                    Thu, 03 Apr 2025 08:25:42 &#43;0800</relative-time>
+                    Thu, 03 Apr 2025 08:44:40 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -197,7 +200,7 @@
                         </div>
                       </div>
                     </details-menu>
-                      328 Words
+                      687 Words
                     
 
                   </div>
@@ -301,6 +304,123 @@
 <li>pos 为 -1 或者链表中的一个 有效索引 。</li>
 </ul>
 <h1 id="题解">题解</h1>
+<h2 id="方法一">方法一</h2>
+<ul>
+<li>分析
+<ul>
+<li>不需要判断是否形成环，只要在10000(节点数目最大值)以内，不能找到nullptr，就一定有环存在</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Definition for singly-linked list.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * struct ListNode {
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     int val;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode *next;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x) : val(x), next(NULL) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * };
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">hasCycle</span><span class="p">(</span><span class="n">ListNode</span> <span class="o">*</span><span class="n">head</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">head</span> <span class="o">==</span> <span class="k">nullptr</span> <span class="o">||</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">head</span> <span class="o">=</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h2 id="方法二">方法二</h2>
+<ul>
+<li>分析
+<ul>
+<li>unordered_set存储已经遍历过的node</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Definition for singly-linked list.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * struct ListNode {
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     int val;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode *next;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x) : val(x), next(NULL) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * };
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">hasCycle</span><span class="p">(</span><span class="n">ListNode</span> <span class="o">*</span><span class="n">head</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">ListNode</span><span class="o">*&gt;</span> <span class="n">nodes</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">head</span> <span class="o">!=</span> <span class="k">nullptr</span> <span class="o">&amp;&amp;</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">nodes</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">head</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">nodes</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">head</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">head</span> <span class="o">=</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h2 id="方法三">方法三</h2>
+<ul>
+<li>分析
+<ul>
+<li>快慢指针</li>
+<li>如果存在环的话，快慢指针一定会再次相遇(套圈)</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Definition for singly-linked list.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * struct ListNode {
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     int val;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode *next;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x) : val(x), next(NULL) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * };
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">hasCycle</span><span class="p">(</span><span class="n">ListNode</span> <span class="o">*</span><span class="n">head</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">head</span> <span class="o">==</span> <span class="k">nullptr</span> <span class="o">||</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span> <span class="o">*</span><span class="n">fast</span> <span class="o">=</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span> <span class="o">*</span><span class="n">slow</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">fast</span> <span class="o">!=</span> <span class="n">slow</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">fast</span> <span class="o">==</span> <span class="k">nullptr</span> <span class="o">||</span> <span class="n">fast</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">fast</span> <span class="o">=</span> <span class="n">fast</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">slow</span> <span class="o">=</span> <span class="n">slow</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h1 id="参考资料">参考资料</h1>
+<p><a href="https://leetcode.cn/problems/linked-list-cycle/solutions/440042/huan-xing-lian-biao-by-leetcode-solution/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode官方题解</a></p>
 </article>
               </div>
             </div>

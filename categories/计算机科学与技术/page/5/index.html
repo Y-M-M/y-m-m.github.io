@@ -149,7 +149,7 @@
                 </path>
               </svg>
               Posts
-              <span class="Counter">141</span>
+              <span class="Counter">143</span>
             </a>
           </nav>
           <div class="profile-color-modes js-promo-color-modes-banner-profile isInitialToggle">
@@ -428,7 +428,7 @@
         </path>
       </svg>
       Posts
-      <span class="Counter ">141</span>
+      <span class="Counter ">143</span>
     </a>
   </nav>
 </div>
@@ -1450,6 +1450,362 @@
           <div class="col-12 d-inline-block">
             <div class="d-inline-block mb-1">
               <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/leetcodehot1/">leetcode hot100 1 两数之和</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <p><a href="https://leetcode.cn/problems/two-sum/description/?envType=study-plan-v2&amp;envId=top-100-liked">两数之和</a></p>
+<h1 id="题目">题目</h1>
+<blockquote>
+<p>给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target  的那 两个 整数，并返回它们的数组下标。         <br>
+你可以假设每种输入只会对应一个答案，并且你不能使用两次相同的元素。      <br>
+你可以按任意顺序返回答案。</p>
+</blockquote>
+<h1 id="示例">示例</h1>
+<h2 id="示例-1">示例 1：</h2>
+<blockquote>
+<p>输入：nums = [2,7,11,15], target = 9        <br>
+输出：[0,1]        <br>
+解释：因为 nums[0] + nums[1] == 9 ，返回 [0, 1] 。</p>
+</blockquote>
+<h2 id="示例-2">示例 2：</h2>
+<blockquote>
+<p>输入：nums = [3,2,4], target = 6       <br>
+输出：[1,2]</p>
+</blockquote>
+<h2 id="示例-3">示例 3：</h2>
+<blockquote>
+<p>输入：nums = [3,3], target = 6          <br>
+输出：[0,1]</p>
+</blockquote>
+<h1 id="提示">提示</h1>
+<ul>
+<li>2 &lt;= nums.length &lt;= 10<sup>4</sup></li>
+<li>-10<sup>9</sup> &lt;= nums[i] &lt;= 10<sup>9</sup></li>
+<li>-10<sup>9</sup> &lt;= target &lt;= 10<sup>9</sup></li>
+<li>只会存在一个有效答案</li>
+</ul>
+<h1 id="题解">题解</h1>
+<h2 id="解法一">解法一</h2>
+<ul>
+<li>分析
+<ul>
+<li>遍历nums, unordered_set needs存储target-nums[i]</li>
+<li>直到找到已经存在于needs中的数字为止</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">twoSum</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">unordered_set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">neednums</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">num</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">neednums</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">!=</span> <span class="n">neednums</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">num</span> <span class="o">==</span> <span class="n">target</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">j</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                        <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">neednums</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">target</span> <span class="o">-</span> <span class="n">num</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h2 id="解法二">解法二</h2>
+<ul>
+<li>unordered_map将数字映射到它在数组中的位置</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">twoSum</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">pos</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">target</span> <span class="o">-</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">!=</span> <span class="n">pos</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="p">{</span><span class="n">pos</span><span class="p">[</span><span class="n">target</span> <span class="o">-</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="n">i</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">pos</span><span class="p">[</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="p">{};</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学与技术
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                算法题
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/leetcode">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                leetcode
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%95%B0%E7%BB%84">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                数组
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%93%88%E5%B8%8C%E8%A1%A8">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                哈希表
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Mon, 24 Mar 2025 00:00:00 &#43;0000" class="no-wrap"
+                title=" Mon, 24 Mar 2025 00:00:00 &#43;0000">
+                Mon, 24 Mar 2025 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/leetcodehot128%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%BA%8F%E5%88%97/">leetcode hot100 128 最长连续序列</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <p><a href="https://leetcode.cn/problems/longest-consecutive-sequence/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode128 最长连续序列</a>
+<a href="https://y-m-m.github.io/tags/%E5%B9%B6%E6%9F%A5%E9%9B%86/">并查集</a></p>
+<h1 id="题目">题目</h1>
+<blockquote>
+<p>给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。        <br>
+请你设计并实现时间复杂度为 O(n) 的算法解决此问题。</p>
+</blockquote>
+<h1 id="示例">示例</h1>
+<h2 id="示例-1">示例 1</h2>
+<blockquote>
+<p>输入：nums = [100,4,200,1,3,2]        <br>
+输出：4
+解释：最长数字连续序列是 [1, 2, 3, 4]。它的长度为 4。</p>
+</blockquote>
+<h2 id="示例-2">示例 2</h2>
+<blockquote>
+<p>输入：nums = [0,3,7,2,5,8,4,6,0,1]            <br>
+输出：9</p>
+</blockquote>
+<h2 id="示例-3">示例 3</h2>
+<blockquote>
+<p>输入：nums = [1,0,1,2]          <br>
+输出：3</p>
+</blockquote>
+<h1 id="提示">提示</h1>
+<ul>
+<li>0 &lt;= nums.length &lt;= 10<sup>5</sup></li>
+<li>-10<sup>9</sup> &lt;= nums[i] &lt;= 10<sup>9</sup></li>
+</ul>
+<h1 id="题解">题解</h1>
+<h2 id="方法一">方法一</h2>
+<ul>
+<li>分析
+<ul>
+<li>排序</li>
+<li>时间复杂度O(nlogn)</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">longestConsecutive</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sort</span><span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">nums</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">nowans</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="p">((</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">||</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]))</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">nowans</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">nowans</span> <span class="o">&gt;</span> <span class="n">ans</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ans</span> <span class="o">=</span> <span class="n">nowans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h2 id="方法二">方法二</h2>
+<ul>
+<li>分析
+<ul>
+<li>构建哈希表，将一个数字映射到以这个数字为开头的最长连续序列的长度</li>
+<li>遍历所有num，更新最大长度</li>
+<li>注意构建unordered_map的时候，会自动去掉重复的情况</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">longestConsecutive</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">len</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="nl">num</span><span class="p">:</span> <span class="n">nums</span><span class="p">)</span> <span class="c1">// 构建哈希表、去重
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">len</span><span class="p">[</span><span class="n">num</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="nl">num</span><span class="p">:</span> <span class="n">nums</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">len</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">!=</span> <span class="n">len</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="kt">int</span> <span class="n">nowans</span> <span class="o">=</span> <span class="n">len</span><span class="p">[</span><span class="n">num</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">                <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="n">num</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">if</span> <span class="p">(</span><span class="n">len</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="o">++</span><span class="n">t</span><span class="p">)</span> <span class="o">!=</span> <span class="n">len</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">nowans</span> <span class="o">+=</span> <span class="n">len</span><span class="p">[</span><span class="n">t</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">len</span><span class="p">[</span><span class="n">num</span><span class="p">]</span> <span class="o">+=</span> <span class="n">len</span><span class="p">[</span><span class="n">t</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">len</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">else</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">nowans</span> <span class="o">&gt;</span> <span class="n">ans</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">ans</span> <span class="o">=</span> <span class="n">nowans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学与技术
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                算法题
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/leetcode">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                leetcode
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%95%B0%E7%BB%84">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                数组
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%93%88%E5%B8%8C%E8%A1%A8">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                哈希表
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Mon, 24 Mar 2025 00:00:00 &#43;0000" class="no-wrap"
+                title=" Mon, 24 Mar 2025 00:00:00 &#43;0000">
+                Mon, 24 Mar 2025 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
                 <a href="https://y-m-m.github.io/post/leetcodehot238%E7%A7%BB%E5%8A%A8%E9%9B%B6/">leetcode hot100 238 移动零</a>
               </h3>
             </div>
@@ -1839,6 +2195,7 @@
 <li><a href="https://y-m-m.github.io/post/leetcodehot543%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E7%9B%B4%E5%BE%84/">543 二叉树的直径</a></li>
 <li><a href="https://y-m-m.github.io/post/leetcodehot102%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86/">102 二叉树的层序遍历</a></li>
 <li><a href="https://y-m-m.github.io/post/leetcodehot108%E5%B0%86%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E8%BD%AC%E5%8C%96%E4%B8%BA%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/">108 将有序数组转化为二叉搜索树</a></li>
+<li><a href="">98 验证二叉搜索树</a></li>
 </ul>
               </div>
             </div>
@@ -2684,779 +3041,6 @@
               <relative-time datetime=" Wed, 26 Feb 2025 00:00:00 &#43;0000" class="no-wrap"
                 title=" Wed, 26 Feb 2025 00:00:00 &#43;0000">
                 Wed, 26 Feb 2025 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/">现代交换原理</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <ul>
-<li>考核方式
-<ul>
-<li>课程实验 15%</li>
-<li>作业 15%</li>
-<li>测验和考勤 5%</li>
-<li>期末成绩(闭卷) 50%</li>
-<li>三次研讨课(三人组队) 15%</li>
-</ul>
-</li>
-<li>邮箱
-<ul>
-<li><a href="mailto:sunyan@bupt.edu.cn">sunyan@bupt.edu.cn</a></li>
-</ul>
-</li>
-</ul>
-<h1 id="第一部分-现代交换技术综述">第一部分 现代交换技术综述</h1>
-<h2 id="通信交换通信网">通信、交换、通信网</h2>
-<h3 id="通信">通信</h3>
-<blockquote>
-<p>以电话通信为例</p>
-</blockquote>
-<ul>
-<li>点到点的通信</li>
-<li>多点间电话通信：电话交换机</li>
-<li>通信网
-<ul>
-<li>由交换设备、终端设备、传输设备，结合信令过程、协议和支撑运行系统组成的网路</li>
-</ul>
-</li>
-</ul>
-<h3 id="交换">交换</h3>
-<ul>
-<li>交换：在通信网上，在通信源点和目的点之间建立通信通道，并传送信息的机制</li>
-<li>选路/寻址操作分类
-<ul>
-<li>有连接操作寻址
-<ul>
-<li>信令网在信源与信宿之间，利用网络资源建立连接</li>
-<li>然后传递信号</li>
-<li>呼叫结束，断开连接</li>
-</ul>
-</li>
-<li>无连接操作寻址
-<ul>
-<li>各个网络节点，根据信息分组中的目的地址数据，借助于路由器具有的地质知识，选择通往目的地的链路，在每个节点都进行竞争接入</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>信道复用与交换
-<ul>
-<li>频分复用
-<ul>
-<li>调制手段和滤波技术使多路信号以频率分割的方式同时在同一条线路上互不干扰地传输</li>
-</ul>
-</li>
-<li><strong>时分复用</strong>
-<ul>
-<li>根据抽样定理使多路信号以时间分割的方式交替在泰国那一条线路上互不干扰地传输
-<ul>
-<li>PCM, ATM</li>
-</ul>
-</li>
-<li>分类
-<ul>
-<li>同步时分复用(固定带宽分配)
-<ul>
-<li>位置化信道：依据数字信号在时间轴上的位置区分各路信号，用于电路交换</li>
-<li>时延很低，但信道会有一定的浪费</li>
-<li>30/32路PCM系统</li>
-<li>采样率 8000Hz</li>
-<li>125um可分为32个时隙，一帧里可以有30个用户，还有一个时隙用于同步，一个时隙用于传输信令</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>统计时分复用
-<ul>
-<li>分组化时分复用
-<ul>
-<li>标志化信道：每个分组前附加标志码，区分传输路径，用于分组交换</li>
-<li>分组长度可变，分组头起定界作用</li>
-<li>统计复用方式提高信道利用率</li>
-<li>需要一定容量的派对存贮器，解决瞬间的出线冲突</li>
-<li>时延
-<ul>
-<li>传输时延比较小</li>
-<li>处理时延与分组大小有关</li>
-<li>排队时延一般与突发流量有关</li>
-</ul>
-</li>
-<li>例如：IP网</li>
-</ul>
-</li>
-<li>异步时分复用
-<ul>
-<li>区分优先级</li>
-<li>时延
-<ul>
-<li>传输时延：至少一个心愿</li>
-<li>处理时延：稳定</li>
-<li>排队时延：依据用户的质量要求</li>
-</ul>
-</li>
-<li>例如：ATM</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>码分复用
-<ul>
-<li>码是正交的</li>
-</ul>
-</li>
-<li>波分复用</li>
-</ul>
-</li>
-</ul>
-<h3 id="通信网">通信网</h3>
-<ul>
-<li>现代通信网的三大支撑
-<ul>
-<li>数字同步网
-<ul>
-<li>保证网络中各节点同步工作</li>
-</ul>
-</li>
-<li>信令网
-<ul>
-<li>通信网中为用户建立和拆除连接，需要网中各个相关设备协调工作，为此在各个设备间传输的控制动作的信号称为信令</li>
-<li>通信网的神经系统</li>
-</ul>
-</li>
-<li>管理网
-<ul>
-<li>完成通信网和通信业务的性能管理、配置管理、故障管理、计费管理、安全管理</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>时钟同步
-<ul>
-<li>由节点时钟和定时链路组成物理网络，为业务网络提供同步参考信号，实现业务网时钟同步</li>
-</ul>
-</li>
-<li>信令
-<ul>
-<li>保证用户信息的有效且可靠的传输</li>
-<li>建立连接、传输信息、断开连接</li>
-</ul>
-</li>
-<li>管理网
-<ul>
-<li>规划、监督、控制网络资源的使用和网络的各种活动，以使网络的性能达到最优，包括拓扑管理、配置管理、性能管理、告警管理以及计费管理</li>
-</ul>
-</li>
-</ul>
-<h3 id="交换技术的发展过程">交换技术的发展过程</h3>
-<ul>
-<li>电路传送模式CTM</li>
-<li>分组传送模式PTM</li>
-<li>异步传送模式ATM</li>
-<li>光交换</li>
-</ul>
-<h3 id="电路交换的特点">电路交换的特点</h3>
-<ul>
-<li>呼叫建立时向网络申请资源，呼叫结束时释放该通路，如果申请不到资源，则会发生呼损</li>
-<li>面向(物理)连接</li>
-<li>只提供透明传输(在中间节点只进行转发，不进行差错控制)</li>
-<li>对通信内容，交换系统不仅行差错控制</li>
-<li>适用于交换同步时分复用的信号</li>
-</ul>
-<h3 id="电报交换系统与报文交换">电报交换系统与报文交换</h3>
-<ul>
-<li>存储-转发</li>
-<li>最小交换单元为报文</li>
-<li>报文传输时无需建立电路，无呼损</li>
-<li>需要排队，那顺序发送</li>
-<li>报文传送中有检错和纠错措施</li>
-<li>一份报文传送完毕，线路可以立即处理下一份报文</li>
-<li>统计时分复用</li>
-<li>不适用于实时通信</li>
-</ul>
-<h3 id="利用电话网进行数据通信">利用电话网进行数据通信</h3>
-<ul>
-<li>优点：时延小，实时性强</li>
-<li>缺点：有呼损；线路利用率低；终端设备要兼容</li>
-</ul>
-<h3 id="利用电报网进行数据通信">利用电报网进行数据通信</h3>
-<ul>
-<li>优点：无呼损；线路利用率高</li>
-<li>缺点：时延大，需要较大的存储空间；实时交互性差</li>
-</ul>
-<h3 id="数据通信系统与分组交换">数据通信系统与分组交换</h3>
-<ul>
-<li>分组
-<ul>
-<li>保证传输时延小</li>
-<li>交换效率高</li>
-<li>将报文分组为packet</li>
-<li>直接在内存中排队和处理</li>
-</ul>
-</li>
-<li>存储转发
-<ul>
-<li>各个分组携带源、目的地址，供交换机路由选择</li>
-</ul>
-</li>
-<li>有序
-<ul>
-<li>各个分组可能走不同的路径，因此要携带序号，使接受短能将各个分组按序重组成长报文</li>
-</ul>
-</li>
-</ul>
-<h3 id="分组交换数据网工作模式">分组交换数据网——工作模式</h3>
-<ul>
-<li>数据报方式 DG
-<ul>
-<li>无连接方式</li>
-<li>每个分组包含完整地址信息，独立寻找路由</li>
-<li>传输时延大，时延差别小，信息无序到达，网络故障适应性强</li>
-</ul>
-</li>
-<li>虚电路方式 VC
-<ul>
-<li>面向连接方式</li>
-<li>建立连接、分组传送、清除连接</li>
-<li>逻辑连接</li>
-<li>传输时延小，时延差别小，分组有序到达，网络故障时要重新连接</li>
-</ul>
-</li>
-</ul>
-<h3 id="分组交换的特点">分组交换的特点</h3>
-<ul>
-<li>面向(逻辑)连接和无连接两种工作模式</li>
-<li>动态分配线路资源，线路利用率高</li>
-<li>对每个分组有差错控制，网络故障时可自动重选路由，可靠性差</li>
-<li>非透明传输</li>
-<li>无呼损，但有可变地呼叫延迟</li>
-<li>最小单位是packet</li>
-</ul>
-<h3 id="综合业务与宽带交换">综合业务与宽带交换</h3>
-<ul>
-<li>多速率电路交换
-<ul>
-<li>目标：在电路交换基础上支持多速率的数据业务</li>
-<li>在64kb/s的基本速率信道基础上，提供n * 64kb/s的高速信道</li>
-<li>方法：信道捆绑</li>
-</ul>
-</li>
-<li>快速电路交换
-<ul>
-<li>在电路交换基础上适应波动和突发的业务</li>
-<li>思路：有信息传送时，快速建立通道；没有信息传送时，释放传输通道</li>
-<li>方法：用户申请资源——网络与分配资源——现传输现连接</li>
-</ul>
-</li>
-<li>快速分组交换——帧中继
-<ul>
-<li>目标：在分组交换基础上适应实时和高速的业务</li>
-<li>思路：降低网络中交换节点的处理负荷，减少网络中的时延</li>
-<li>方法
-<ul>
-<li>差错控制方式由点——点改为端——端</li>
-<li>交换节点只进行差错检查</li>
-<li>在链路层引入数据链路连接标识符DLCI，完成分组交换的虚电路功能</li>
-<li>基本数据交换单元为帧
-<img src="/images/%E6%88%AA%E5%B1%8F2025-03-04%2013.13.23.png" alt=""></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>比较</strong>——电路交换vs分组交换
-<ul>
-<li>物理连接 vs 存储转发</li>
-<li>连接 vs 无连接/连接； 物理连接 vs 洛基连接</li>
-<li>电路交换没有差错控制；电路交换具有差错控制</li>
-<li>电路交换呼叫损失制；分组交换呼叫延迟制</li>
-<li>电路交换具有较好的时间透明性；分组交换具有较好的语义透明性</li>
-<li>分组交换有更大的灵活性，可实现多速率交换，并允许多种业务共享网络资源</li>
-<li>电路交换可达到高速率的交换；分组交换的交换速率受到限制</li>
-<li>分组交换需要一套复杂的队列管理机制</li>
-</ul>
-</li>
-<li>异步转移模式——ATM
-<ul>
-<li>目标：综合电路交换和分组交换的优点，支持所有业务</li>
-<li>思路：信元交换</li>
-<li>方法
-<ul>
-<li>存贮转发——适应不同速率要求</li>
-<li>以更小的定长分组(信元)传送——减少存储转发的时延</li>
-<li>面向连接，并预约传输资源——减少时延差，保证传输有序，但有呼损</li>
-<li>取消逐段的差错控制——支持透明、实时传输</li>
-<li>基本数据交换单元为信元</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>电路交换、分组交换、ATM的关系
-<img src="/images/%E6%88%AA%E5%B1%8F2025-03-04%2013.21.34.png" alt=""></li>
-<li>IP交换
-<img src="/images/%E6%88%AA%E5%B1%8F2025-03-04%2013.22.57.png" alt="">
-<ul>
-<li>目标：解决传统路由器的瓶颈问题</li>
-<li>思路：ATM交换机硬件基础上附加IP路由软件和交换控制驱动器，代替传统路由器</li>
-<li>方法
-<ul>
-<li>持续期长、业务量大的流——ATM方式交换
-<ul>
-<li>FTP HTTP 多媒体视频、音频</li>
-</ul>
-</li>
-<li>持续期短、业务量小的突发业务流——IP路由方式传送
-<ul>
-<li>DNS SNMP SMTP</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>标记(Tag/Label)交换——MPLS
-<img src="/images/%E6%88%AA%E5%B1%8F2025-03-04%2013.22.57.png" alt="">
-<ul>
-<li>目标：基于传统路由器，使用ATM的思想承载IP</li>
-<li>思路：在传统路由器中，借鉴信元交换的方式传送IP包</li>
-<li>方法
-<ul>
-<li>建立标记信息库TFIB，IP地址&lt;&ndash;&gt;出口标记；</li>
-<li>硬件方式完成TFIB的检索和数据转发</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>光交换
-<ul>
-<li>光传输+电交换的模式-&gt;全光网络
-<img src="/images/%E6%88%AA%E5%B1%8F2025-03-04%2013.25.53.png" alt=""></li>
-<li>优点：减少光电转换的成本，更高的速度，更低的成本</li>
-</ul>
-</li>
-</ul>
-<h3 id="交换系统的基本结构">交换系统的基本结构</h3>
-<ul>
-<li>信息传送子系统</li>
-<li>控制子系统</li>
-</ul>
-<h3 id="交换系统的基本技术">交换系统的基本技术</h3>
-<ul>
-<li>交换技术
-<ul>
-<li>交换网络的拓扑结构、选路策略、控制机理、多播方式、阻塞特性、故障防卫</li>
-</ul>
-</li>
-<li>接口技术
-<ul>
-<li>模拟用户接口、数字用户接口、数字中继接口</li>
-</ul>
-</li>
-<li>控制技术
-<ul>
-<li>控制系统的结构方式、处理机间的通信方式、多处理机结构</li>
-</ul>
-</li>
-<li>信令技术
-<ul>
-<li>用户信令、局间信令</li>
-</ul>
-</li>
-</ul>
-<h3 id="物联网">物联网</h3>
-<ul>
-<li>物联时代
-<ul>
-<li>信息世界与物理世界的有机融合</li>
-</ul>
-</li>
-<li>概念
-<ul>
-<li>通过信息传感设备，按照约定的协议，把任何物品与互联网连接起来的网络</li>
-</ul>
-</li>
-<li>物联网分层体系结构模型
-<ul>
-<li>应用服务层(服务)</li>
-<li>信息整合层(理解)</li>
-<li>数据传输层(交换)
-<ul>
-<li>有通信方式和处理能力不同的异质网元组成(组网)</li>
-</ul>
-</li>
-<li>对象感控层(感知)
-<ul>
-<li>通过RFID、传感器、输入设备等方式获取物理对象(人、机、物)的各种行为和状态数据</li>
-<li>通过控制器实现对物理对象的操控</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="思考题">思考题</h3>
-<ul>
-<li>试从以下几方面比较电路交换、分组交换（数据报和虚电路）和ATM交换。
-<ul>
-<li>支持的业务类型（话音/数据/图像/视频）和典型业务特征（实时性/突发性/可靠性/交互性…）</li>
-<li>信息传送单元和信息传送长度（可变/固定）</li>
-<li>适合的信息复用方式和电路利用率</li>
-<li>连接类型（面向连接/无连接）和信息传输时延</li>
-<li>对业务冲突或过载的处理方式（呼损/等待/流控）</li>
-</ul>
-</li>
-</ul>
-<h1 id="第二部分-交换原理">第二部分 交换原理</h1>
-<h2 id="交换单元的基本概念和数学模型">交换单元的基本概念和数学模型</h2>
-<ul>
-<li>交换设备的结构
-<img src="/images/%E6%88%AA%E5%B1%8F2025-03-04%2013.41.35.png" alt="">
-<ul>
-<li>交换网络：将入线上的信息送到出线上，完成交换动作。由一个或多个交换单元组成</li>
-<li>接口单元： 完成外部线路接口标准与交换单元接口标准的转换。</li>
-<li>控制单元： 控制交换单元的动作</li>
-</ul>
-</li>
-<li>交换单元结构模型——按信息流向
-<img src="/images/%E6%88%AA%E5%B1%8F2025-03-04%2013.43.06.png" alt="">
-<ul>
-<li>完成基本电信交换功能的部件，即按一定要求，将入端信息送到出端。</li>
-</ul>
-</li>
-<li>按使用需求
-<img src="/images/%E6%88%AA%E5%B1%8F2025-03-04%2013.44.21.png" alt=""></li>
-</ul>
-<h3 id="连接方式">连接方式</h3>
-<ul>
-<li>
-<p>允许一个入端对一个出端连接</p>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机科学
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                现代交换原理
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AC%94%E8%AE%B0">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                笔记
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Tue, 25 Feb 2025 00:00:00 &#43;0000" class="no-wrap"
-                title=" Tue, 25 Feb 2025 00:00:00 &#43;0000">
-                Tue, 25 Feb 2025 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/mist/">MIST : Multi-modal Iterative Spatial-Temporal Transformer(多模态迭代时空转换器) for Long-form Video Question Answering</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <blockquote>
-<p>2022-12-19 arXiv</p>
-</blockquote>
-<h1 id="abstract">Abstract</h1>
-<ul>
-<li>多模态VQA模型: 短视频片段/图片 -&gt; 长视频
-<ul>
-<li>使用密集视频采样策略计算太复杂</li>
-<li>稀疏采样难以应对多粒度、多事件可视化推理</li>
-</ul>
-</li>
-<li>MIST的特点
-<ul>
-<li>dense spatialtemporal self-attention-&gt;级联的片段和区域选择模块，自适应地选择与问题本身密切相关的帧和图像区域</li>
-<li>然后通过attention model对不同粒度的视觉概念进行高效处理</li>
-<li>MIST在多个层次上迭代地进行选择和关注，以支持对多个事件的推理</li>
-<li>使用数据集
-<ul>
-<li>AGQA, NExT-QA, STAR, Env-QA(平均时长从12s到44s不等)</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h1 id="1-introduction">1 Introduction</h1>
-<h2 id="challenges">Challenges</h2>
-<ul>
-<li>多事件推理(复杂的时序推理，如多事件推理，因果关系)</li>
-<li>不同粒度的视觉概念之间的相互作用(可能涉及跨越不同事件的更复杂的物体、关系和事件的交互)</li>
-<li>目前的多模态transformer依赖于密集的自注意力，随视频时间的延长，计算成本呈指数增长 -&gt; 只对每个视频采样3帧或4帧，不管其长度如何</li>
-</ul>
-<h2 id="新模型mist">新模型MIST</h2>
-<ul>
-<li>考虑所有事件的一般内容，关注与问题相关的少数事件的细节</li>
-<li>MIST将稠密的联合时空自注意力机制分解为问题条件的级联片段和区域选择模块，以及多模态多粒度特征上的时空自注意力
-<ul>
-<li>级联选择通过关注与问题相关的片段和区域，降低了计算成本并提高了性能</li>
-<li>通过对片段和图像块的自注意力，更好的捕获了不同粒度的视觉概念之间的相互作用</li>
-<li>通过迭代的进行选择和自注意力，MIST可以在多个事件上进行推理，并更好的进行时间和因果推理</li>
-</ul>
-</li>
-</ul>
-<h1 id="2-related-work">2 Related work</h1>
-<h2 id="video-question-answering">Video question answering</h2>
-<ul>
-<li>长视频VQA任务主要关注于对情节和、社会交往的理解，和更复杂的时空推理能力；目前的工作在前两类基准上取得了可喜的成果，本文主要关注于最后一类问题</li>
-<li>方法
-<ul>
-<li>早期提出了各种基于LSTM和图神经网络的模型 来捕获 跨模态的或动作与外观的交互</li>
-<li>最近的一项工作将图建模集成到transformers中，以显式地捕获视频中的对象及其关系</li>
-<li>许多工作直接在下游videoQA任务上对预训练模型进行微调</li>
-<li>本文对自注意力机制进行了修正，以便更好的进行多时间、多粒度的视觉推理</li>
-</ul>
-</li>
-</ul>
-<h2 id="将预训练的模型迁移到下游任务中">将预训练的模型迁移到下游任务中</h2>
-<ul>
-<li>预训练的vision-language Transformers, 如CLIP -&gt; 下游任务，如目标检测，图像生成和视频文本检索
-<ul>
-<li>CLIP4Clip: 均值池化，Transformer等-&gt;更好的表示视频</li>
-<li>CLIP2Video: 提出了时间差分块来更好的捕捉运动信息</li>
-<li>我们保留了预训练模型的优点，并改进了它在下游任务上的弱点</li>
-</ul>
-</li>
-</ul>
-<h2 id="long-form-video-modeling">Long-form video modeling</h2>
-<ul>
-<li>利用视频的自然特性，减少计算量</li>
-<li>本文考虑了QA任务的特点，以问题为导向，减少计算量，提高性能</li>
-</ul>
-<h2 id="iterative-attention">Iterative Attention</h2>
-<ul>
-<li>MIST利用了VQA中的多模态对应关系来引导迭代注意</li>
-</ul>
-<h1 id="3-method">3 Method</h1>
-<ul>
-<li>VQA任务目标
-<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2011.23.49.png" alt=""></li>
-<li>MIST回答问题的三步
-<ol>
-<li>利用预训练模型提取输入特征</li>
-<li>迭代地在选定的特征集合上perform自注意力，以执行多事件推理</li>
-<li>根据得到的video, question, answer features预测答案
-<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2011.24.30.png" alt=""></li>
-</ol>
-</li>
-</ul>
-<h2 id="31-input-representation">3.1 Input Representation</h2>
-<ul>
-<li>视频部分
-<ul>
-<li>将视频分为K个长度均匀的片段，每个片段包含T帧，每帧被分为N个小块 -&gt; 图片块和帧的 [CLS] token 以N和T计数</li>
-<li>vision-language Transformer，如CLIP，All-in-one with frozen parameters，提取所有帧的图像块级别的特征
-<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.54.55.png" alt="">
-<ul>
-<li>由于分段特征是单独提取的，表示其在整个视频中的时间位置Pt ∈ {φt(i)|i ∈ [0, K · T ]}和帧索引</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>文本部分
-<ul>
-<li>将问题表征为单词序列</li>
-<li>将它输入到vision-language Transformer来获取单词级别的特征
-<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.55.42.png" alt="">
-<ul>
-<li>w1 corresponds to [CLS] and w2, &hellip;, wM are words in question</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="32-ista">3.2 ISTA</h2>
-<ul>
-<li>Iterative Spatial-Temporal Attention Layer 迭代时空注意力层</li>
-<li>迭代的选择基于问题的长视频中的片段和区域，然后对选择的片段和区域进行多事件推理</li>
-<li>步骤
-<ul>
-<li>Segment selection</li>
-<li>Region selection</li>
-<li>时空自注意力
-<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.56.26.png" alt=""></li>
-</ul>
-</li>
-</ul>
-<h3 id="segment-selection">Segment Selection</h3>
-<ul>
-<li>给定一组image patch特征x，计算segments和问题的特征 -&gt; 选择Topk segments的patch features</li>
-<li>执行temporal attention
-<ul>
-<li>对每一个第k segment第t frame做空间维度的特征池化</li>
-<li>将frame features沿时间维度进行池化得到segment features</li>
-<li>Question feature通过对word features进行池化得到</li>
-<li>池化函数可以根据使用的Transformer的具体类型，从mean pooling, first token pooling, simple MLP layer等中选择</li>
-</ul>
-</li>
-</ul>
-<h3 id="region-selection">Region Selection</h3>
-<ul>
-<li>对采样所得的帧，选择与问题最相关的patches</li>
-</ul>
-<h3 id="spatial-temporal-self-attention">Spatial-Temporal Self-Attention</h3>
-<ul>
-<li>给定选定的frames和选定的regions，使用一个self-attention layer推理出一个融合的特征向量来联合表示question和video</li>
-<li>只保留选择出的patches</li>
-<li>嵌入类型特征 -&gt; 多头注意力机制获得所有输入令牌的上下文特征</li>
-</ul>
-<h3 id="iterative-execution-of-ista">Iterative Execution of ISTA</h3>
-<h2 id="answer-prediction">Answer prediction</h2>
-<ul>
-<li>将所有ISTA层的token特征池化
-<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.58.07.png" alt=""></li>
-<li>计算Xo和所有通过预训练模型获取的候选答案之间的相似度，选择相似度最大的答案作为最终预测答案</li>
-</ul>
-<h1 id="4-experiments">4 Experiments</h1>
-<h2 id="41-datasets">4.1 Datasets</h2>
-<h3 id="agqa">AGQA</h3>
-<ul>
-<li>一个开放的，用于合成时空推理的VQA基准，使用v2版本(有更平衡的分布)</li>
-<li>2.27M QA对，9.7K videos，平均长度30s</li>
-</ul>
-<h3 id="next-qa">NExT-QA</h3>
-<ul>
-<li>用于因果和时序推理的多选择视频问答基准</li>
-<li>包括5440个视频，平均长度44s，约25K个问题</li>
-</ul>
-<h3 id="star">STAR</h3>
-<ul>
-<li>用于情景推理的多选择VQA基准</li>
-<li>22个视频片段，平均长度12s，约60K个问题</li>
-</ul>
-<h3 id="env-qa">Env-QA</h3>
-<ul>
-<li>开放的，用于动态环境理解的VQA基准</li>
-<li>23K个自我中心视频，平均长度20s，85K问题，是在虚拟环境AI2THOR上收集的</li>
-</ul>
-<h2 id="42-implementation-details">4.2 Implementation Details</h2>
-<ul>
-<li>可以建立在大多数预训练的多模态Transformer上，在实验中尝试了针对图像语言预训练的模型CLIP(ViT-B/32)和针对视频语言预训练的模型All-in-One-Base</li>
-<li>Topk = 2, Topj = 12, the layer of ISTA L = 2, 每个视频采样32帧，并将其分割成K = 8个segments</li>
-</ul>
-<h2 id="43-comparison-with-state-of-the-arts">4.3 Comparison with State-of-the-arts</h2>
-<ul>
-<li>与最先进的SOTA方法进行比较
-<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.59.15.png" alt="">
-<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.59.34.png" alt="">
-<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.59.55.png" alt="">
-<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.00.23.png" alt=""></li>
-<li>我们提出的方法达到了最先进的性能，并且在所有数据集上都优于现有的方法</li>
-</ul>
-<h2 id="44-comparison-with-baselines">4.4 Comparison with Baselines</h2>
-<ul>
-<li>在基于CLIP的MIST框架中，我们通过在AGQA v2数据集上微调相同的预训练输入表示，将ISTA与其他解决方案进行比较
-<ul>
-<li>MeanPool: 简单的抽取帧特征的平均值作为整个视频的表示</li>
-<li>Trans.-Frame: 遵循CLIP4Clip中的seqTransf类型，利用Transformer对帧特征进行自注意力来表示视频</li>
-<li>Trans.-Patch: 类似Trans.-Frame, 但它在所有patch tokens上执行自注意力</li>
-<li>Divided STA: 我们遵循视频分类模型中的Transformer对image patches执行uni-modal two-step SpaceTime Attention
-<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.00.59.png" alt=""></li>
-<li>如上结果表示，ISTA优于其他变体</li>
-</ul>
-</li>
-<li>原因</li>
-<li>长格式视频的内容往往复杂多样，简单的聚合所有帧特征的方法，可能会造成信息丢失</li>
-<li>长格式视频问答需要更强大的时空推理能力来关注视频的一些细节，而均值池化只在捕获整体内容上表现良好</li>
-<li>长格式QA中考虑region information是有帮助的，但稠密的自注意力和divided STA都没有考虑多粒度之间的相互作用，性能提升有限</li>
-</ul>
-<h2 id="45-ablation-study">4.5 Ablation Study</h2>
-<ul>
-<li>提出MIST的几组变体，显示其关键组件的有效性</li>
-</ul>
-<h3 id="effect-of-each-component-in-ista">Effect of each component in ISTA</h3>
-<ul>
-<li>删除ISTA层中的关键模块，即Segment Selection(SS), Region Selection(RS), Self-attention layer(STA)
-<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.01.50.png" alt="">
-<ul>
-<li>移除Segment Selection会引入大量的无关区域信息，hurt the performance</li>
-<li>Segment Selection对于多事件推理很重要，会损害需要时序推理的问题的表现</li>
-<li>去除STA时，性能下降显著，原因与mean pooling类似，我们需要一个强大的模型来捕捉多粒度推理</li>
-<li>去除RS无明显影响，原因是视频中的objects相对较少，经过temporal attention后，patch number大大减少；但使用spatial selection module可以显著降低计算成本</li>
-</ul>
-</li>
-</ul>
-<h3 id="effects-of-different-ista-configurations">Effects of different ISTA configurations</h3>
-<p><img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.02.53.png" alt=""></p>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机科学
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                论文阅读
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AC%94%E8%AE%B0">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                笔记
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Thu, 20 Feb 2025 00:00:00 &#43;0000" class="no-wrap"
-                title=" Thu, 20 Feb 2025 00:00:00 &#43;0000">
-                Thu, 20 Feb 2025 00:00:00 &#43;0000
               </relative-time>
             </div>
           </div>

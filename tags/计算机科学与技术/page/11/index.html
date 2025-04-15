@@ -149,7 +149,7 @@
                 </path>
               </svg>
               Posts
-              <span class="Counter">146</span>
+              <span class="Counter">147</span>
             </a>
           </nav>
           <div class="profile-color-modes js-promo-color-modes-banner-profile isInitialToggle">
@@ -428,7 +428,7 @@
         </path>
       </svg>
       Posts
-      <span class="Counter ">146</span>
+      <span class="Counter ">147</span>
     </a>
   </nav>
 </div>
@@ -441,7 +441,7 @@
       
       <div class="TableObject border-bottom border-gray-light py-3">
         <div class="user-repo-search-results-summary TableObject-item TableObject-item--primary v-align-top">
-          <strong>124</strong>
+          <strong>125</strong>
           results
           for <strong>计算机科学与技术</strong>
         </div>
@@ -459,6 +459,81 @@
       </div>
       
       <ul>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/%E5%B9%B6%E6%9F%A5%E9%9B%86/">并查集</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <h1 id="什么是并查集">什么是并查集？</h1>
+<ul>
+<li>并查集是一种用于管理元素所属集合的数据结构，实现为一个森林，其中每棵树表示一个集合，树中的节点表示对应集合中的元素。</li>
+</ul>
+<h1 id="核心思想">核心思想</h1>
+<ul>
+<li>提取树的重点特征：父亲结点-&gt;祖先结点</li>
+<li>拥有相同的祖先节点的子节点属于同一个集合</li>
+<li>被边连通的两个节点并入同一个集合(两棵树的合并)</li>
+<li>为了简化操作，可将将节点与其祖先节点直接连通，将祖先节点作为其父亲节点，即压缩操作</li>
+</ul>
+<h1 id="并查集的创建">并查集的创建</h1>
+<ul>
+<li>创建father数组，存储每个节点的父亲节点，初始的父亲节点为它本身</li>
+<li>对于每一条边，取它连通的两个节点；对每一个节点，通过Find函数返回其祖先节点，并进行路径压缩</li>
+</ul>
+<h2 id="find">Find()</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">Find</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">parent</span><span class="p">,</span> <span class="kt">int</span> <span class="n">index</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 返回祖先节点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">!=</span> <span class="n">index</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">parent</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Find</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">parent</span><span class="p">[</span><span class="n">index</span><span class="p">]);</span> <span class="c1">// 路径压缩
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">parent</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span></code></pre></div><ul>
+<li>当边连通的两个节点祖先不同时，进行连通操作</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">Union</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">parent</span><span class="p">,</span> <span class="kt">int</span> <span class="n">index1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">index2</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 如果边连接的两个节点祖先不同，则将其中一个节点的祖先并入另一个节点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">parent</span><span class="p">[</span><span class="n">Find</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">index1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">Find</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">index2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span></code></pre></div><p><img src="/images/%E6%88%AA%E5%B1%8F2024-10-27%2009.26.57.png" alt=""></p>
+<h1 id="元素的删除">元素的删除</h1>
+<ul>
+<li>将要删除的结点的父亲节点设为它自己即可</li>
+</ul>
+<h1 id="例题">例题</h1>
+<p><a href="https://y-m-m.github.io/post/leetcode684%E5%86%97%E4%BD%99%E8%BF%9E%E6%8E%A5/">leetcode684冗余连接 题解</a></p>
+<h1 id="参考资料">参考资料</h1>
+<p><a href="https://oi-wiki.org/ds/dsu/">OI Wiki</a>
+<a href="https://www.bilibili.com/video/BV1jv411a7LK/?spm_id_from=333.337.search-card.all.click&amp;vd_source=827ffaf4738d7f1c1cad64fcb9ed3890">bilibili视频</a></p>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学与技术
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Sun, 27 Oct 2024 00:00:00 &#43;0000" class="no-wrap"
+                title=" Sun, 27 Oct 2024 00:00:00 &#43;0000">
+                Sun, 27 Oct 2024 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
         
         <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
           <div class="col-12 d-inline-block">
@@ -1554,79 +1629,6 @@
               <relative-time datetime=" Wed, 09 Oct 2024 00:00:00 &#43;0000" class="no-wrap"
                 title=" Wed, 09 Oct 2024 00:00:00 &#43;0000">
                 Wed, 09 Oct 2024 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/c&#43;&#43;unorderedset/">C&#43;&#43; unorderedset的用法</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <h1 id="什么是unordered_set">什么是unordered_set?</h1>
-<p>unordered_set是一个基于Hash算法实现的set</p>
-<h1 id="使用unordered_set有什么好处">使用unordered_set有什么好处？</h1>
-<p>查找、插入、删除的时间复杂度均为O(1)</p>
-<h1 id="unordered_set如何使用">unordered_set如何使用？</h1>
-<h2 id="定义">定义</h2>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">citiesA</span><span class="p">;</span>
-</span></span></code></pre></div><h2 id="有哪些常用成员函数">有哪些常用成员函数?</h2>
-<ul>
-<li>operator= 赋值</li>
-<li>begin/cbegin 返回第一个元素的迭代器</li>
-<li>end/cend 返回最后一个成员的迭代器</li>
-<li>empty 检查是否为空</li>
-<li>size 返回元素的数目</li>
-<li>max_size 返回最大的可能的元素数目</li>
-<li>clear 清空内容</li>
-<li>insert 插入元素</li>
-<li>insert_range(C++23) 插入一系列元素</li>
-<li>erase 删除元素</li>
-<li>emplace 在指定位置构建元素</li>
-<li>find 查找具有特定值的元素，返回该元素的迭代器</li>
-<li>count 查找某元素的数目</li>
-</ul>
-<h1 id="例题">例题</h1>
-<p><a href="https://leetcode.cn/problems/destination-city/description/">leetcode1436旅行终点站</a>
-<a href="https://y-m-m.github.io/post/leetcode2306%E5%85%AC%E5%8F%B8%E5%91%BD%E5%90%8D/">leetcode2306公司命名</a></p>
-<h1 id="参考">参考</h1>
-<p><a href="https://en.cppreference.com/w/cpp/container/unordered_set">cppreference.com</a></p>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机科学与技术
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/c&#43;&#43;">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                C&#43;&#43;
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Tue, 08 Oct 2024 00:00:00 &#43;0000" class="no-wrap"
-                title=" Tue, 08 Oct 2024 00:00:00 &#43;0000">
-                Tue, 08 Oct 2024 00:00:00 &#43;0000
               </relative-time>
             </div>
           </div>

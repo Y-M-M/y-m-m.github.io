@@ -2453,7 +2453,7 @@
 <ul>
 <li>存盘退出
 <ul>
-<li>ZZ</li>
+<li>Shift + ZZ</li>
 <li>:wq</li>
 </ul>
 </li>
@@ -2566,13 +2566,12 @@
 <ul>
 <li>将a[i] * b[j]替换为x[k] * y[n]的命令
 <ul>
-<li>:1,$s/a[i]*b[j]/x[k]*y[n]/g
-<ul>
-<li>将buf.len/1000替为buffer.size/1024的命令</li>
+<li>:1,$s/a[i]*b[j]/x[k]*y[n]/g</li>
 </ul>
 </li>
-<li>:1,$s/buf.len/1000/buffer.size/1024/g
+<li>将buf.len/1000替为buffer.size/1024的命令
 <ul>
+<li>:1,$s/buf.len/1000/buffer.size/1024/g</li>
 <li>模式串和替换字符串中的斜线前加转义符\以区别于替换命令格式中所必须的斜线</li>
 </ul>
 </li>
@@ -2588,9 +2587,42 @@
 </li>
 </ul>
 </li>
+<li>更灵活的替换
+<ul>
+<li>模式描述中增加(和)
+<ul>
+<li>在正则表达式中圆括号，仍然代表它自身</li>
+<li>在正则表达式中出现的(和)不影响匹配操作</li>
+</ul>
+</li>
+<li>例
+<ul>
+<li>[a-zA-Z_][a-zA-Z0-9_]*-&gt;number</li>
+<li>([a-zA-Z_][a-zA-Z0-9_]*)-&gt;number</li>
+<li>替换字符串中的 \0 \1 \2 ……
+<ul>
+<li>将“变量名-&gt;number”替换为“变量名-&gt;num”
+<ul>
+<li>:1,$s/([a-zA-Z_][a-zA-Z0-9_]*)-&gt;number/\1-&gt;num/g</li>
+</ul>
+</li>
+<li>将日期格式“月-日-年”改为“年.月.日”,
+<ul>
+<li>比如：将 04-26-1997替换为1997.04.26使用命令:</li>
+<li>:1,$s/([0-9][0-9])-([0-9][0-9])-([0-9][0-9]*)/\3.\1.\2/g</li>
 </ul>
 </li>
 </ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="总结">总结</h1>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-04-16%2016.09.07.png" alt="">       <br>
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-16%2016.09.50.png" alt="">    <br>
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-16%2016.10.27.png" alt=""></p>
               </div>
             </div>
 

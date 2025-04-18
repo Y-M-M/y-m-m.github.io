@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script type="application/javascript" src='https://y-m-m.github.io/js/theme-mode.js'></script>
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/frameworks.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github-style.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/light.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/dark.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/syntax.css' />
+    <title>软件工程 - 陈皮的博客</title>
+    
+    <link rel="icon" type="image/x-icon" href='/images/github-mark.png'>
+    
+    <meta name="theme-color" content="#1e2327">
+
+    
+    <meta name="description"
+  content="第五章 软件设计 5.1 软件设计概述 目标 概括地描述系统如何实现用户所提出来的功能和性能等方面的需求 根据软件需求分析的结果，设想并设计软件，即根据目标系统的逻辑模型确定目标系统的物理模型 包括 软件体系结构设计 处理方式设计 数据结构和数据存储设计 界面和可靠性设计 过程 重要性 历史和变迁 5.2 软件概要设计的步骤 5.3 软件详细设计的步骤 5.4 软件设计模型 软件设计模型的结构 软件设计模型由静态模型和动态结构组成 静态结构：功能结构、数据结构 动态结构：以某种方式表示功能响应需求时处理数据的过程或条件，用于进一步解释软件结构中个功能之间如何协调工作的机制 软件设计模型取决于需求分析结果模型 面向对象方法 功能结构&lt;-&gt;用例模型(功能图) 数据结构&lt;-&gt;领域模型(类图，类和类的关联关系，属性) 动态结构&lt;-&gt;领域模型中表示业务流程的活动图 结构化方法 功能结构&lt;-&gt;数据流图 数据结构&lt;-&gt;实体关系图 动态结构&lt;-&gt;状态迁移图 5.5 软件设计原则 模块化 模块的定义 又称构件，在传统的方法中指用一个名字就可调用的一段程序，或者可单独命名且可编址的软件组成部分 类似于高级语言中的过程、函数等 一般具有如下三个基本类型 功能 逻辑 状态 模块的表示 外部特性 模块的模块名、参数表以及模块影响 内部特性 完成其功能的程序代码和仅供该模块内部使用的数据 通常先确定外部特性，再确定内部特性 模块化方法的好处 降低了系统的复杂性，使得系统容易修改 推动了系统各个部分的并行开发，从而提高了软件的生产效率 模块划分 两个小问题之间应该保持相对的独立性 C(P1&#43;P2) &gt; C(P1) &#43; C(P2)的前提条件是P1和P2的集成很低，即要保证模块间的独立性 信息隐藏 模块中所包含的信息（包括数据和过程）不允许其它不需要这些信息的模块使用 信息隐藏使得在将来修改软件时偶然引入错误所造成的影响可以局限在一个或几个模块内部，不致波及到软件的其它部分 模块的独立性 软件系统中每个模块之设计软件要求的具体的子功能，而和软件系统中其他的模块的接口是简单的 一般采用两个准则度量模块独立性，即单个模块的内聚和模块间的耦合 内聚是单个模块功能强度(一个模块内部各个元素彼此结合的紧密程度)的度量 耦合是模块之间的互相连接的紧密程度的度量 模块独立性比较强的模块应是高内聚低耦合的模块 内聚性 内聚性与模块独立性正相关 巧合内聚 内聚程度最低，几个模块内凑巧有一些程序代码相同，又没有明确表现出独立的功能，程序员为了减少存储把这些代码独立出来建立一个新的模块，这个模块就是巧合内聚模块 缺点是模块的内容不易理解，不易修改和维护 逻辑内聚 把几种相关的功能组合在一起 每次被调用时，由传送给模块的控制型参数来确定该模块应执行哪一种功能 逻辑内聚模块表明了各部分之间在功能上的相关关系 缺点：会额外加载不必要的代码，破坏了信息隐藏原则 时间内聚 又称为经典内聚 时间内聚模块中所有部分都要在同一时间内执行，所以它的得不逻辑更简单，存在的开关(或判定)转移更少 过程内聚 一个模块由几个字模块组成，且通过一定的次序执行 使用流程图作为工具设计程序的时候，常常通过流程图来确定模块划分，把流程图中的某一部分划出组成模块，就得到过程内聚模块 缺点：仅包括完整功能的一部分，所以它的内聚程度仍然比较低，模块间的耦合程度还比较高；也可能包含多个功能的几部分 通信内聚 如果一个模块内个功能部分都使用了相同的输入数据，或产生了相同的输出留香，则称之为通信内聚模块 通常，通信内聚模块是通过数据流图来定义的 序列内聚 由多个字模块顺序构成，类似过程内聚 于过程内聚的区别在于过程内聚字模块之间须传递数据，而序列内聚字模块之间须传递数据 一个模块中各个处理元素和同一个功能密切相关 功能内聚 一个模块中各个部分都是完成某一具体功能必不可少的组成部分，或者说一个模块中各个部分都是为完成一项具体功能而协同工作，紧密联系，不可分割的，则称该模块为功能内聚模块 是内聚性最强的模块 耦合性 耦合性与模块独立性负相关 内容耦合 最强的耦合性 如果发生下列情形，两个模块之间就发生了内容耦合 一个模块直接访问另一个模块的内部数据 一个模块不通过正常入口转到另一模块内部 正常入口：系统函数调用 不通过正常入口：通过物理地址直接进入 两个模块有一部分程序代码重叠 易发生在汇编和机器语言级别 一个模块由多个入口 坏处：破坏了信息隐藏原则 公共耦合 若一组模块都访问同一个公共数据环境，则它们之间的耦合就称为公共耦合 公共的数据环境可以是全局数据结构、共享的通信区、内存的公共覆盖区等 要求全局变量是一个复杂的数据结构 坏处：任何一个函数对公共数据的修改，都会影响其他函数；必须记住公共模块的物理位置 外部耦合 一组模块都访问同一全局简单变量而不是同一全局数据结构，而不是通过参数表传递该全局变量的信息，称之为外部耦合 控制耦合 如果一个模块通过传送功能开关、标志、名字等控制信息，明显地控制选择另一模块的功能，就是控制耦合 标记耦合 一组模块通过参数表传递记录信息，就是标记耦合(数据信息) 这个记录是某一数据结构的子结构，而不是简单变量(复杂数据结构) 是一种耦合性比较松散的耦合 数据耦合 传递简单参数来交换输入、输出信息 与标记耦合的区别是，传递的是简单类型，而不是复杂数据结构 非直接耦合 两个模块之间没有直接关系，它们之间的联系完全是通过主模块或上层模块的控制和调用来实现的 独立性最强 降低模块间耦合度的方法 尽量避免传递控制信息 尽量传递简单类型而不是复杂的数据结构 降低模块接口的复杂性 传送信息的数量 把出现大量参数的被调用模块分解成更小的模块，使得每个小模块只完成一个任务 联系方式 尽可能使用call方式代替“直接引用“ 传送信息的结构 以标准的、直接的方式提供 将模块的通信信息放在缓冲区 减少模块间互相等待的时间 一个模块执行的速度、频率等问题一般不影响其他模块的设计 5.6 软件设计基础 自顶向下，逐步细化 将软件的体系结构按自顶向下方式，对各个层次的过程细节和数据细节逐层细化，直到用程序设计语言的语句能够实现为止，从而最后确立整个的体系结构 系统控制结构 系统控制结构表明了程序构件（模块）的组织情况。控制层次往往用程序的层次（树形或网状）结构来表示 结构划分和结构图 程序结构可以按水平方向或垂直方向进行划分
+" />
+<meta name="keywords"
+  content='blog, google analytics' />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://y-m-m.github.io/post/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" />
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="软件工程 - 陈皮的博客" />
+<meta name="twitter:description"
+  content="第五章 软件设计 5.1 软件设计概述 目标 概括地描述系统如何实现用户所提出来的功能和性能等方面的需求 根据软件需求分析的结果，设想并设计软件，即根据目标系统的逻辑模型确定目标系统的物理模型 包括 软件体系结构设计 处理方式设计 数据结构和数据存储设计 界面和可靠性设计 过程 重要性 历史和变迁 5.2 软件概要设计的步骤 5.3 软件详细设计的步骤 5.4 软件设计模型 软件设计模型的结构 软件设计模型由静态模型和动态结构组成 静态结构：功能结构、数据结构 动态结构：以某种方式表示功能响应需求时处理数据的过程或条件，用于进一步解释软件结构中个功能之间如何协调工作的机制 软件设计模型取决于需求分析结果模型 面向对象方法 功能结构&lt;-&gt;用例模型(功能图) 数据结构&lt;-&gt;领域模型(类图，类和类的关联关系，属性) 动态结构&lt;-&gt;领域模型中表示业务流程的活动图 结构化方法 功能结构&lt;-&gt;数据流图 数据结构&lt;-&gt;实体关系图 动态结构&lt;-&gt;状态迁移图 5.5 软件设计原则 模块化 模块的定义 又称构件，在传统的方法中指用一个名字就可调用的一段程序，或者可单独命名且可编址的软件组成部分 类似于高级语言中的过程、函数等 一般具有如下三个基本类型 功能 逻辑 状态 模块的表示 外部特性 模块的模块名、参数表以及模块影响 内部特性 完成其功能的程序代码和仅供该模块内部使用的数据 通常先确定外部特性，再确定内部特性 模块化方法的好处 降低了系统的复杂性，使得系统容易修改 推动了系统各个部分的并行开发，从而提高了软件的生产效率 模块划分 两个小问题之间应该保持相对的独立性 C(P1&#43;P2) &gt; C(P1) &#43; C(P2)的前提条件是P1和P2的集成很低，即要保证模块间的独立性 信息隐藏 模块中所包含的信息（包括数据和过程）不允许其它不需要这些信息的模块使用 信息隐藏使得在将来修改软件时偶然引入错误所造成的影响可以局限在一个或几个模块内部，不致波及到软件的其它部分 模块的独立性 软件系统中每个模块之设计软件要求的具体的子功能，而和软件系统中其他的模块的接口是简单的 一般采用两个准则度量模块独立性，即单个模块的内聚和模块间的耦合 内聚是单个模块功能强度(一个模块内部各个元素彼此结合的紧密程度)的度量 耦合是模块之间的互相连接的紧密程度的度量 模块独立性比较强的模块应是高内聚低耦合的模块 内聚性 内聚性与模块独立性正相关 巧合内聚 内聚程度最低，几个模块内凑巧有一些程序代码相同，又没有明确表现出独立的功能，程序员为了减少存储把这些代码独立出来建立一个新的模块，这个模块就是巧合内聚模块 缺点是模块的内容不易理解，不易修改和维护 逻辑内聚 把几种相关的功能组合在一起 每次被调用时，由传送给模块的控制型参数来确定该模块应执行哪一种功能 逻辑内聚模块表明了各部分之间在功能上的相关关系 缺点：会额外加载不必要的代码，破坏了信息隐藏原则 时间内聚 又称为经典内聚 时间内聚模块中所有部分都要在同一时间内执行，所以它的得不逻辑更简单，存在的开关(或判定)转移更少 过程内聚 一个模块由几个字模块组成，且通过一定的次序执行 使用流程图作为工具设计程序的时候，常常通过流程图来确定模块划分，把流程图中的某一部分划出组成模块，就得到过程内聚模块 缺点：仅包括完整功能的一部分，所以它的内聚程度仍然比较低，模块间的耦合程度还比较高；也可能包含多个功能的几部分 通信内聚 如果一个模块内个功能部分都使用了相同的输入数据，或产生了相同的输出留香，则称之为通信内聚模块 通常，通信内聚模块是通过数据流图来定义的 序列内聚 由多个字模块顺序构成，类似过程内聚 于过程内聚的区别在于过程内聚字模块之间须传递数据，而序列内聚字模块之间须传递数据 一个模块中各个处理元素和同一个功能密切相关 功能内聚 一个模块中各个部分都是完成某一具体功能必不可少的组成部分，或者说一个模块中各个部分都是为完成一项具体功能而协同工作，紧密联系，不可分割的，则称该模块为功能内聚模块 是内聚性最强的模块 耦合性 耦合性与模块独立性负相关 内容耦合 最强的耦合性 如果发生下列情形，两个模块之间就发生了内容耦合 一个模块直接访问另一个模块的内部数据 一个模块不通过正常入口转到另一模块内部 正常入口：系统函数调用 不通过正常入口：通过物理地址直接进入 两个模块有一部分程序代码重叠 易发生在汇编和机器语言级别 一个模块由多个入口 坏处：破坏了信息隐藏原则 公共耦合 若一组模块都访问同一个公共数据环境，则它们之间的耦合就称为公共耦合 公共的数据环境可以是全局数据结构、共享的通信区、内存的公共覆盖区等 要求全局变量是一个复杂的数据结构 坏处：任何一个函数对公共数据的修改，都会影响其他函数；必须记住公共模块的物理位置 外部耦合 一组模块都访问同一全局简单变量而不是同一全局数据结构，而不是通过参数表传递该全局变量的信息，称之为外部耦合 控制耦合 如果一个模块通过传送功能开关、标志、名字等控制信息，明显地控制选择另一模块的功能，就是控制耦合 标记耦合 一组模块通过参数表传递记录信息，就是标记耦合(数据信息) 这个记录是某一数据结构的子结构，而不是简单变量(复杂数据结构) 是一种耦合性比较松散的耦合 数据耦合 传递简单参数来交换输入、输出信息 与标记耦合的区别是，传递的是简单类型，而不是复杂数据结构 非直接耦合 两个模块之间没有直接关系，它们之间的联系完全是通过主模块或上层模块的控制和调用来实现的 独立性最强 降低模块间耦合度的方法 尽量避免传递控制信息 尽量传递简单类型而不是复杂的数据结构 降低模块接口的复杂性 传送信息的数量 把出现大量参数的被调用模块分解成更小的模块，使得每个小模块只完成一个任务 联系方式 尽可能使用call方式代替“直接引用“ 传送信息的结构 以标准的、直接的方式提供 将模块的通信信息放在缓冲区 减少模块间互相等待的时间 一个模块执行的速度、频率等问题一般不影响其他模块的设计 5.6 软件设计基础 自顶向下，逐步细化 将软件的体系结构按自顶向下方式，对各个层次的过程细节和数据细节逐层细化，直到用程序设计语言的语句能够实现为止，从而最后确立整个的体系结构 系统控制结构 系统控制结构表明了程序构件（模块）的组织情况。控制层次往往用程序的层次（树形或网状）结构来表示 结构划分和结构图 程序结构可以按水平方向或垂直方向进行划分
+" />
+<meta name="twitter:site" content="https://y-m-m.github.io/" />
+<meta name="twitter:creator" content="陈皮" />
+<meta name="twitter:image"
+  content="https://y-m-m.github.io/">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="软件工程 - 陈皮的博客">
+<meta property="og:description"
+  content="第五章 软件设计 5.1 软件设计概述 目标 概括地描述系统如何实现用户所提出来的功能和性能等方面的需求 根据软件需求分析的结果，设想并设计软件，即根据目标系统的逻辑模型确定目标系统的物理模型 包括 软件体系结构设计 处理方式设计 数据结构和数据存储设计 界面和可靠性设计 过程 重要性 历史和变迁 5.2 软件概要设计的步骤 5.3 软件详细设计的步骤 5.4 软件设计模型 软件设计模型的结构 软件设计模型由静态模型和动态结构组成 静态结构：功能结构、数据结构 动态结构：以某种方式表示功能响应需求时处理数据的过程或条件，用于进一步解释软件结构中个功能之间如何协调工作的机制 软件设计模型取决于需求分析结果模型 面向对象方法 功能结构&lt;-&gt;用例模型(功能图) 数据结构&lt;-&gt;领域模型(类图，类和类的关联关系，属性) 动态结构&lt;-&gt;领域模型中表示业务流程的活动图 结构化方法 功能结构&lt;-&gt;数据流图 数据结构&lt;-&gt;实体关系图 动态结构&lt;-&gt;状态迁移图 5.5 软件设计原则 模块化 模块的定义 又称构件，在传统的方法中指用一个名字就可调用的一段程序，或者可单独命名且可编址的软件组成部分 类似于高级语言中的过程、函数等 一般具有如下三个基本类型 功能 逻辑 状态 模块的表示 外部特性 模块的模块名、参数表以及模块影响 内部特性 完成其功能的程序代码和仅供该模块内部使用的数据 通常先确定外部特性，再确定内部特性 模块化方法的好处 降低了系统的复杂性，使得系统容易修改 推动了系统各个部分的并行开发，从而提高了软件的生产效率 模块划分 两个小问题之间应该保持相对的独立性 C(P1&#43;P2) &gt; C(P1) &#43; C(P2)的前提条件是P1和P2的集成很低，即要保证模块间的独立性 信息隐藏 模块中所包含的信息（包括数据和过程）不允许其它不需要这些信息的模块使用 信息隐藏使得在将来修改软件时偶然引入错误所造成的影响可以局限在一个或几个模块内部，不致波及到软件的其它部分 模块的独立性 软件系统中每个模块之设计软件要求的具体的子功能，而和软件系统中其他的模块的接口是简单的 一般采用两个准则度量模块独立性，即单个模块的内聚和模块间的耦合 内聚是单个模块功能强度(一个模块内部各个元素彼此结合的紧密程度)的度量 耦合是模块之间的互相连接的紧密程度的度量 模块独立性比较强的模块应是高内聚低耦合的模块 内聚性 内聚性与模块独立性正相关 巧合内聚 内聚程度最低，几个模块内凑巧有一些程序代码相同，又没有明确表现出独立的功能，程序员为了减少存储把这些代码独立出来建立一个新的模块，这个模块就是巧合内聚模块 缺点是模块的内容不易理解，不易修改和维护 逻辑内聚 把几种相关的功能组合在一起 每次被调用时，由传送给模块的控制型参数来确定该模块应执行哪一种功能 逻辑内聚模块表明了各部分之间在功能上的相关关系 缺点：会额外加载不必要的代码，破坏了信息隐藏原则 时间内聚 又称为经典内聚 时间内聚模块中所有部分都要在同一时间内执行，所以它的得不逻辑更简单，存在的开关(或判定)转移更少 过程内聚 一个模块由几个字模块组成，且通过一定的次序执行 使用流程图作为工具设计程序的时候，常常通过流程图来确定模块划分，把流程图中的某一部分划出组成模块，就得到过程内聚模块 缺点：仅包括完整功能的一部分，所以它的内聚程度仍然比较低，模块间的耦合程度还比较高；也可能包含多个功能的几部分 通信内聚 如果一个模块内个功能部分都使用了相同的输入数据，或产生了相同的输出留香，则称之为通信内聚模块 通常，通信内聚模块是通过数据流图来定义的 序列内聚 由多个字模块顺序构成，类似过程内聚 于过程内聚的区别在于过程内聚字模块之间须传递数据，而序列内聚字模块之间须传递数据 一个模块中各个处理元素和同一个功能密切相关 功能内聚 一个模块中各个部分都是完成某一具体功能必不可少的组成部分，或者说一个模块中各个部分都是为完成一项具体功能而协同工作，紧密联系，不可分割的，则称该模块为功能内聚模块 是内聚性最强的模块 耦合性 耦合性与模块独立性负相关 内容耦合 最强的耦合性 如果发生下列情形，两个模块之间就发生了内容耦合 一个模块直接访问另一个模块的内部数据 一个模块不通过正常入口转到另一模块内部 正常入口：系统函数调用 不通过正常入口：通过物理地址直接进入 两个模块有一部分程序代码重叠 易发生在汇编和机器语言级别 一个模块由多个入口 坏处：破坏了信息隐藏原则 公共耦合 若一组模块都访问同一个公共数据环境，则它们之间的耦合就称为公共耦合 公共的数据环境可以是全局数据结构、共享的通信区、内存的公共覆盖区等 要求全局变量是一个复杂的数据结构 坏处：任何一个函数对公共数据的修改，都会影响其他函数；必须记住公共模块的物理位置 外部耦合 一组模块都访问同一全局简单变量而不是同一全局数据结构，而不是通过参数表传递该全局变量的信息，称之为外部耦合 控制耦合 如果一个模块通过传送功能开关、标志、名字等控制信息，明显地控制选择另一模块的功能，就是控制耦合 标记耦合 一组模块通过参数表传递记录信息，就是标记耦合(数据信息) 这个记录是某一数据结构的子结构，而不是简单变量(复杂数据结构) 是一种耦合性比较松散的耦合 数据耦合 传递简单参数来交换输入、输出信息 与标记耦合的区别是，传递的是简单类型，而不是复杂数据结构 非直接耦合 两个模块之间没有直接关系，它们之间的联系完全是通过主模块或上层模块的控制和调用来实现的 独立性最强 降低模块间耦合度的方法 尽量避免传递控制信息 尽量传递简单类型而不是复杂的数据结构 降低模块接口的复杂性 传送信息的数量 把出现大量参数的被调用模块分解成更小的模块，使得每个小模块只完成一个任务 联系方式 尽可能使用call方式代替“直接引用“ 传送信息的结构 以标准的、直接的方式提供 将模块的通信信息放在缓冲区 减少模块间互相等待的时间 一个模块执行的速度、频率等问题一般不影响其他模块的设计 5.6 软件设计基础 自顶向下，逐步细化 将软件的体系结构按自顶向下方式，对各个层次的过程细节和数据细节逐层细化，直到用程序设计语言的语句能够实现为止，从而最后确立整个的体系结构 系统控制结构 系统控制结构表明了程序构件（模块）的组织情况。控制层次往往用程序的层次（树形或网状）结构来表示 结构划分和结构图 程序结构可以按水平方向或垂直方向进行划分
+" />
+<meta property="og:url" content="https://y-m-m.github.io/post/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" />
+<meta property="og:site_name" content="软件工程" />
+<meta property="og:image"
+  content="https://y-m-m.github.io/">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+<meta property="article:published_time" content="2025-04-18 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+  <div style="position: relative">
+  <header class="Header js-details-container Details px-3 px-md-4 px-lg-5 flex-wrap flex-md-nowrap open Details--on">
+    <div class="Header-item mobile-none" style="margin-top: -4px; margin-bottom: -4px;">
+      <a class="Header-link" href="https://y-m-m.github.io/">
+        <img class="octicon" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item d-md-none">
+      <button class="Header-link btn-link js-details-target" type="button"
+        onclick="document.querySelector('#header-search').style.display = document.querySelector('#header-search').style.display == 'none'? 'block': 'none'">
+        <svg height="24" class="octicon octicon-three-bars" viewBox="0 0 16 16" version="1.1" width="24">
+          <path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 2.75zm0 5A.75.75 0 011.75 7h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 7.75zM1.75 12a.75.75 0 100 1.5h12.5a.75.75 0 100-1.5H1.75z">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <div style="display: none;" id="header-search"
+      class="Header-item Header-item--full flex-column flex-md-row width-full flex-order-2 flex-md-order-none mr-0 mr-md-3 mt-3 mt-md-0 Details-content--hidden-not-important d-md-flex">
+      <div
+        class="Header-search header-search flex-auto js-site-search position-relative flex-self-stretch flex-md-self-auto mb-3 mb-md-0 mr-0 mr-md-3 scoped-search site-scoped-search js-jump-to">
+        <div class="position-relative">
+          
+          <form target="_blank" id="search-form" action="" accept-charset="UTF-8" method="get"
+            autocomplete="off">
+            <label
+              class="Header-search-label form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative d-flex flex-justify-between flex-items-center">
+              <input type="text"
+                class="Header-search-input form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable"
+                name="q" value="" placeholder="Search" autocomplete="off">
+            </label>
+          </form>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="Header-item Header-item--full flex-justify-center d-md-none position-relative">
+      <a class="Header-link " href="https://y-m-m.github.io/">
+        <img class="octicon octicon-mark-github v-align-middle" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item" style="margin-right: 0;">
+      <a href="javascript:void(0)" class="Header-link no-select" onclick="switchTheme()">
+        <svg style="fill: var(--color-profile-color-modes-toggle-moon);" class="no-select" viewBox="0 0 16 16"
+          version="1.1" width="16" height="16">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M4.52208 7.71754C7.5782 7.71754 10.0557 5.24006 10.0557 2.18394C10.0557 1.93498 10.0392 1.68986 10.0074 1.44961C9.95801 1.07727 10.3495 0.771159 10.6474 0.99992C12.1153 2.12716 13.0615 3.89999 13.0615 5.89383C13.0615 9.29958 10.3006 12.0605 6.89485 12.0605C3.95334 12.0605 1.49286 10.001 0.876728 7.24527C0.794841 6.87902 1.23668 6.65289 1.55321 6.85451C2.41106 7.40095 3.4296 7.71754 4.52208 7.71754Z">
+          </path>
+        </svg>
+      </a>
+    </div>
+  </header>
+</div>
+
+  <div id="search-result" class="container-lg px-3 new-discussion-timeline" style="display: none;">
+</div>
+
+  
+<div class="application-main">
+  <div>
+  <main>
+    <div class="gisthead pagehead bg-gray-light pb-0 pt-3 mb-4">
+      <div class="px-0">
+        <div class="mb-3 d-flex px-3 px-md-3 px-lg-5">
+          <div class="flex-auto min-width-0 width-fit mr-3">
+            <div class="d-flex">
+              <div class="d-none d-md-block">
+                <a class="avatar mr-2 flex-shrink-0" href="https://y-m-m.github.io/">
+                  <img class=" avatar-user"
+                    src="/images/me.png"
+                    width="32" height="32"></a>
+              </div>
+              <div class="d-flex flex-column">
+                <h1 class="break-word f3 text-normal mb-md-0 mb-1">
+                  <span class="author">
+                    <a href="https://y-m-m.github.io/">陈皮</a>
+                  </span>
+                  <span class="path-divider">/</span>
+                  <strong class="css-truncate css-truncate-target mr-1" style="max-width: 410px">
+                    <a href="https://y-m-m.github.io/post/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/">软件工程</a>
+                  </strong>
+                </h1>
+                <div class="note m-0">
+                  Created <relative-time datetime="Fri, 18 Apr 2025 00:00:00 &#43;0000"
+                    class="no-wrap">
+                    Fri, 18 Apr 2025 00:00:00 &#43;0000</relative-time>
+
+                  
+                  <span class="file-info-divider"></span>
+                  Modified <relative-time datetime="Fri, 18 Apr 2025 18:11:09 &#43;0800"
+                    class="no-wrap">
+                    Fri, 18 Apr 2025 18:11:09 &#43;0800</relative-time>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-lg px-3 new-discussion-timeline">
+      <div class="repository-content gist-content">
+        <div>
+          <div class="js-gist-file-update-container js-task-list-container file-box">
+            <div id="file-pytest" class="file my-2">
+              <div id="post-header" class="file-header d-flex flex-md-items-center flex-items-start sticky-header" style="z-index: 2">
+                <div class="file-info d-flex flex-md-items-center flex-items-start flex-order-1 flex-auto">
+                  <div class="text-mono f6 flex-auto pr-3 flex-order-2 flex-md-order-1 mt-2 mt-md-0">
+                    
+                    <summary id="toc-toggle" onclick="clickToc()" class="btn btn-octicon m-0 mr-2 p-2">
+                      <svg aria-hidden="true" viewBox="0 0 16 16" height="16" width="16" class="octicon octicon-list-unordered">
+                        <path fill-rule="evenodd" d="M2 4a1 1 0 100-2 1 1 0 000 2zm3.75-1.5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zM3 8a1 1 0 11-2 0 1 1 0 012 0zm-1 6a1 1 0 100-2 1 1 0 000 2z"></path>
+                      </svg>
+                    </summary>
+                    <details-menu class="SelectMenu" id="toc-details" style="display: none;">
+                      <div class="SelectMenu-modal rounded-3 mt-1" style="max-height: 340px;">
+                        <div class="SelectMenu-list SelectMenu-list--borderless p-2" style="overscroll-behavior: contain;" id="toc-list">
+                        </div>
+                      </div>
+                    </details-menu>
+                      3737 Words
+                    
+
+                  </div>
+                  <div class="file-actions flex-order-2 pt-0">
+                    
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      计算机科学
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      软件工程
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AC%94%E8%AE%B0">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      笔记
+                    </a>
+                    
+                    
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="Box-body px-5 pb-5" style="z-index: 1">
+                <article class="markdown-body entry-content container-lg"><h1 id="第五章-软件设计">第五章 软件设计</h1>
+<h2 id="51-软件设计概述">5.1 软件设计概述</h2>
+<ul>
+<li>目标
+<ul>
+<li>概括地描述系统如何实现用户所提出来的功能和性能等方面的需求</li>
+<li>根据软件需求分析的结果，设想并设计软件，即根据目标系统的逻辑模型确定目标系统的物理模型</li>
+<li>包括
+<ul>
+<li>软件体系结构设计</li>
+<li>处理方式设计</li>
+<li>数据结构和数据存储设计</li>
+<li>界面和可靠性设计</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>过程
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-18%2015.49.21.png" alt=""></li>
+<li>重要性</li>
+<li>历史和变迁</li>
+</ul>
+<h2 id="52-软件概要设计的步骤">5.2 软件概要设计的步骤</h2>
+<h2 id="53-软件详细设计的步骤">5.3 软件详细设计的步骤</h2>
+<h2 id="54-软件设计模型">5.4 软件设计模型</h2>
+<h3 id="软件设计模型的结构">软件设计模型的结构</h3>
+<ul>
+<li>软件设计模型由<strong>静态模型</strong>和<strong>动态结构</strong>组成
+<ul>
+<li>静态结构：功能结构、数据结构</li>
+<li>动态结构：以某种方式表示功能响应需求时处理数据的过程或条件，用于进一步解释软件结构中个功能之间如何协调工作的机制</li>
+</ul>
+</li>
+<li>软件设计模型取决于需求分析结果模型
+<ul>
+<li>面向对象方法
+<ul>
+<li>功能结构&lt;-&gt;用例模型(功能图)</li>
+<li>数据结构&lt;-&gt;领域模型(类图，类和类的关联关系，属性)</li>
+<li>动态结构&lt;-&gt;领域模型中表示业务流程的活动图</li>
+</ul>
+</li>
+<li>结构化方法
+<ul>
+<li>功能结构&lt;-&gt;数据流图</li>
+<li>数据结构&lt;-&gt;实体关系图</li>
+<li>动态结构&lt;-&gt;状态迁移图</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="55-软件设计原则">5.5 软件设计原则</h2>
+<h3 id="模块化">模块化</h3>
+<ul>
+<li>模块的定义
+<ul>
+<li>又称构件，在传统的方法中指用一个名字就可调用的一段程序，或者可单独命名且可编址的软件组成部分</li>
+<li>类似于高级语言中的过程、函数等</li>
+<li>一般具有如下三个基本类型
+<ul>
+<li>功能</li>
+<li>逻辑</li>
+<li>状态</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>模块的表示
+<ul>
+<li>外部特性
+<ul>
+<li>模块的模块名、参数表以及模块影响</li>
+</ul>
+</li>
+<li>内部特性
+<ul>
+<li>完成其功能的程序代码和仅供该模块内部使用的数据</li>
+</ul>
+</li>
+<li>通常先确定外部特性，再确定内部特性</li>
+</ul>
+</li>
+<li>模块化方法的好处
+<ul>
+<li>降低了系统的复杂性，使得系统容易修改</li>
+<li>推动了系统各个部分的并行开发，从而提高了软件的生产效率</li>
+</ul>
+</li>
+<li>模块划分
+<ul>
+<li>两个小问题之间应该保持相对的独立性</li>
+<li>C(P1+P2) &gt; C(P1) + C(P2)的前提条件是P1和P2的集成很低，即要保证模块间的独立性
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-18%2016.08.48.png" alt=""></li>
+</ul>
+</li>
+</ul>
+<h3 id="信息隐藏">信息隐藏</h3>
+<ul>
+<li>模块中所包含的信息（包括数据和过程）不允许其它不需要这些信息的模块使用</li>
+<li>信息隐藏使得在将来修改软件时偶然引入错误所造成的影响可以局限在一个或几个模块内部，不致波及到软件的其它部分</li>
+</ul>
+<h3 id="模块的独立性">模块的独立性</h3>
+<ul>
+<li>软件系统中每个模块之设计软件要求的具体的子功能，而和软件系统中其他的模块的接口是简单的</li>
+<li>一般采用两个准则度量模块独立性，即单个模块的内聚和模块间的耦合
+<ul>
+<li>内聚是单个模块功能强度(一个模块内部各个元素彼此结合的紧密程度)的度量</li>
+<li>耦合是模块之间的互相连接的紧密程度的度量</li>
+<li>模块独立性比较强的模块应是高内聚低耦合的模块</li>
+</ul>
+</li>
+<li>内聚性
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-18%2016.17.11.png" alt="">
+<ul>
+<li>内聚性与模块独立性正相关</li>
+<li>巧合内聚
+<ul>
+<li>内聚程度最低，几个模块内凑巧有一些程序代码相同，又没有明确表现出独立的功能，程序员为了减少存储把这些代码独立出来建立一个新的模块，这个模块就是巧合内聚模块</li>
+<li>缺点是模块的内容不易理解，不易修改和维护</li>
+</ul>
+</li>
+<li>逻辑内聚
+<ul>
+<li>把几种相关的功能组合在一起</li>
+<li>每次被调用时，由传送给模块的<strong>控制型参数</strong>来确定该模块应执行哪一种功能</li>
+<li>逻辑内聚模块表明了各部分之间在功能上的相关关系</li>
+<li>缺点：会额外加载不必要的代码，破坏了信息隐藏原则</li>
+</ul>
+</li>
+<li>时间内聚
+<ul>
+<li>又称为经典内聚</li>
+<li>时间内聚模块中所有部分都要在同一时间内执行，所以它的得不逻辑更简单，存在的开关(或判定)转移更少</li>
+</ul>
+</li>
+<li>过程内聚
+<ul>
+<li>一个模块由几个字模块组成，且通过一定的次序执行</li>
+<li>使用流程图作为工具设计程序的时候，常常通过流程图来确定模块划分，把流程图中的某一部分划出组成模块，就得到过程内聚模块</li>
+<li>缺点：仅包括完整功能的一部分，所以它的内聚程度仍然比较低，模块间的耦合程度还比较高；也可能包含多个功能的几部分</li>
+</ul>
+</li>
+<li>通信内聚
+<ul>
+<li>如果一个模块内个功能部分都使用了相同的输入数据，或产生了相同的输出留香，则称之为通信内聚模块</li>
+<li>通常，通信内聚模块是通过<strong>数据流图</strong>来定义的</li>
+</ul>
+</li>
+<li>序列内聚
+<ul>
+<li>由多个字模块<strong>顺序</strong>构成，类似过程内聚</li>
+<li>于过程内聚的区别在于过程内聚字模块之间须传递数据，而序列内聚字模块之间须<strong>传递数据</strong></li>
+<li>一个模块中各个处理元素和<strong>同一个功能</strong>密切相关</li>
+</ul>
+</li>
+<li>功能内聚
+<ul>
+<li>一个模块中各个部分都是完成某一具体功能必不可少的组成部分，或者说一个模块中各个部分都是为完成一项具体功能而协同工作，紧密联系，不可分割的，则称该模块为功能内聚模块</li>
+<li>是内聚性最强的模块</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>耦合性
+<ul>
+<li>耦合性与模块独立性负相关</li>
+<li>内容耦合
+<ul>
+<li>最强的耦合性</li>
+<li>如果发生下列情形，两个模块之间就发生了内容耦合
+<ul>
+<li>一个模块直接访问另一个模块的内部数据</li>
+<li>一个模块不通过正常入口转到另一模块内部
+<ul>
+<li>正常入口：系统函数调用</li>
+<li>不通过正常入口：通过物理地址直接进入</li>
+</ul>
+</li>
+<li>两个模块有一部分程序代码重叠
+<ul>
+<li>易发生在汇编和机器语言级别</li>
+</ul>
+</li>
+<li>一个模块由多个入口</li>
+</ul>
+</li>
+<li>坏处：破坏了信息隐藏原则
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-18%2016.53.44.png" alt=""></li>
+</ul>
+</li>
+<li>公共耦合
+<ul>
+<li>若一组模块都访问同一个公共数据环境，则它们之间的耦合就称为公共耦合</li>
+<li>公共的数据环境可以是全局数据结构、共享的通信区、内存的公共覆盖区等</li>
+<li>要求全局变量是一个<strong>复杂的数据结构</strong></li>
+<li>坏处：任何一个函数对公共数据的修改，都会影响其他函数；必须记住公共模块的物理位置</li>
+</ul>
+</li>
+<li>外部耦合
+<ul>
+<li>一组模块都访问同一<strong>全局简单变量</strong>而不是同一全局数据结构，而不是通过参数表传递该全局变量的信息，称之为外部耦合</li>
+</ul>
+</li>
+<li>控制耦合
+<ul>
+<li>如果一个模块通过传送功能开关、标志、名字等控制信息，明显地控制选择另一模块的功能，就是控制耦合</li>
+</ul>
+</li>
+<li>标记耦合
+<ul>
+<li>一组模块通过参数表传递<strong>记录信息</strong>，就是标记耦合(<strong>数据信息</strong>)</li>
+<li>这个记录是某一数据结构的子结构，而不是简单变量(<strong>复杂数据结构</strong>)</li>
+<li>是一种耦合性比较松散的耦合
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-18%2017.05.54.png" alt=""></li>
+</ul>
+</li>
+<li>数据耦合
+<ul>
+<li>传递简单参数来交换输入、输出信息</li>
+<li>与标记耦合的区别是，传递的是<strong>简单类型</strong>，而不是复杂数据结构</li>
+</ul>
+</li>
+<li>非直接耦合
+<ul>
+<li>两个模块之间没有直接关系，它们之间的联系完全是通过主模块或上层模块的控制和调用来实现的</li>
+<li>独立性最强</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>降低模块间耦合度的方法
+<ul>
+<li>尽量避免传递控制信息</li>
+<li>尽量传递简单类型而不是复杂的数据结构</li>
+</ul>
+</li>
+<li>降低模块接口的复杂性
+<ul>
+<li>传送信息的数量
+<ul>
+<li>把出现大量参数的被调用模块分解成更小的模块，使得每个小模块只完成一个任务</li>
+</ul>
+</li>
+<li>联系方式
+<ul>
+<li>尽可能使用call方式代替“直接引用“</li>
+</ul>
+</li>
+<li>传送信息的结构
+<ul>
+<li>以标准的、直接的方式提供</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>将模块的通信信息放在缓冲区
+<ul>
+<li>减少模块间互相等待的时间</li>
+<li>一个模块执行的速度、频率等问题一般不影响其他模块的设计</li>
+</ul>
+</li>
+</ul>
+<h2 id="56-软件设计基础">5.6 软件设计基础</h2>
+<h3 id="自顶向下逐步细化">自顶向下，逐步细化</h3>
+<ul>
+<li>将软件的体系结构按自顶向下方式，对各个层次的过程细节和数据细节逐层细化，直到用程序设计语言的语句能够实现为止，从而最后确立整个的体系结构</li>
+</ul>
+<h3 id="系统控制结构">系统控制结构</h3>
+<ul>
+<li>系统控制结构表明了程序构件（模块）的组织情况。控制层次往往用程序的层次（树形或网状）结构来表示
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-18%2017.21.20.png" alt=""></li>
+</ul>
+<h3 id="结构划分和结构图">结构划分和结构图</h3>
+<ul>
+<li>
+<p>程序结构可以按水平方向或垂直方向进行划分</p>
+</li>
+<li>
+<p>水平划分</p>
+<ul>
+<li>按主要的程序功能来定义模块的各个分支</li>
+<li>顶层模块是控制模块，用来协调程序各个功能之间的通信和运行</li>
+<li>其下级模块的最简单的水平划分方法是建立三个分支：输入、处理（数据变换）和输出</li>
+</ul>
+</li>
+<li>
+<p>垂直划分</p>
+<ul>
+<li>也叫做因子划分</li>
+<li>顶层模块执行控制功能，少做实际处理工作</li>
+<li>而低层模块是实际输入、计算和输出的具体执行者。</li>
+</ul>
+</li>
+<li>
+<p>结构图</p>
+<ul>
+<li>精确表达程序结构的图形表示方法</li>
+<li>严格地定义了各个模块的名字、功能和接口，而且还反映了设计思想，以特定的符号表示模块、模块间的调用关系和模块间信息的传递。</li>
+<li>模块
+<ul>
+<li>模块用矩形框表示，并用模块的名字标记它。</li>
+<li>模块的名字应当能够表明该模块的功能。</li>
+<li>对于现成的模块，则以双纵边矩形框表示。
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-18%2017.31.42.png" alt=""></li>
+</ul>
+</li>
+<li>模块的调用关系
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-18%2017.32.14.png" alt=""></li>
+<li>模块间的接口和信息传递
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-18%2017.32.34.png" alt=""></li>
+</ul>
+</li>
+</ul>
+<h3 id="数据结构">数据结构</h3>
+<ul>
+<li>数据结构是数据的各个元素之间的逻辑关系的一种表示。</li>
+<li>数据结构设计应确定数据的组织、存取方式、相关程度、以及信息的不同处理方法。</li>
+<li>数据结构和程序结构一样，可以在不同的抽象层次上表示。</li>
+<li>复杂的数据结构是由一些基本构件块所组成的，这些基本构件块称为典型的数据结构，其种类有限。</li>
+</ul>
+<h3 id="软件过程">软件过程</h3>
+<ul>
+<li>着重描述各个模块的处理细节</li>
+<li>提供精确的处理说明，包括事件的顺序、正确的判定点、重复的操作直至数据的组织和结构等等</li>
+<li>程序结构与软件过程是有关系的。对每个模块的处理必须指明该模块所在的上下级环境。软件过程遵从程序结构的主从关系，因此它也是层次化的
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-18%2017.35.09.png" alt=""></li>
+</ul>
+<h1 id="第六章-面向对象设计">第六章 面向对象设计</h1>
+<h2 id="面向对象设计综述">面向对象设计综述</h2>
+<ul>
+<li>什么是OOD
+<ul>
+<li>通过用例模型描述系统的功能</li>
+<li>通过领域模型描述整个系统的概念流程
+<ul>
+<li>通过类图表达专业领域的概念</li>
+</ul>
+</li>
+<li>在此基础上确定概念类需要包含的方法，产生一个符合具体实现条件的面向对象设计模型</li>
+<li>与实现条件相关的因素
+<ul>
+<li>图形用户界面</li>
+<li>硬件</li>
+<li>操作系统</li>
+<li>网络</li>
+<li>数据库管理系统</li>
+<li>编程语言</li>
+<li>可复用的类库</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>OOD主要工作
+<ul>
+<li>软件体系结构设计(一定要先于用例实现方案设计)</li>
+<li>用例实现方案设计</li>
+<li>用户界面设计(与前两个活动无直接关系，相对独立)
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-18%2017.48.30.png" alt=""></li>
+<li>基于面向对象的分析模型</li>
+</ul>
+</li>
+</ul>
+<h2 id="模型层次化">模型层次化</h2>
+<ul>
+<li>软件体系结构
+<ul>
+<li>描述某一特定领域中系统组织方式的惯用模式</li>
+<li>复用代码程度高</li>
+</ul>
+</li>
+<li>层次化的设计模型
+<ul>
+<li>把软件分为多个层次</li>
+<li>每个层次可看作一个模块</li>
+<li>每个层次由多个类和函数组成，为完成同一功能聚合在一起</li>
+<li>上层模块可以调用下层模块，但下层模块不能调用上层模块</li>
+<li>上层模块调用下层模块必须通过接口</li>
+</ul>
+</li>
+<li>分层的好处
+<ul>
+<li>增加健壮性</li>
+<li>易于扩展和维护</li>
+</ul>
+</li>
+<li>原则
+<ul>
+<li>层应该是模块化的</li>
+<li>增加软件可移植性</li>
+</ul>
+</li>
+<li>MVC(Model, View, Control)</li>
+<li>UML中拥抱图来描述层，常用的五层软件分层结构如下
+<ul>
+<li><img src="/images/%E6%88%AA%E5%B1%8F2025-04-18%2017.58.13.png" alt=""></li>
+<li>用户界面层：接受用户的输入消息，呈现用户的界面，不包含任何处理用户时间的逻辑</li>
+<li>业务逻辑层：处理用户输入事件的类和对象，不包含任何界面</li>
+<li>控制器层：控制将业务消息转发给业务逻辑层，判断将业务消息转发给业务逻辑层的哪个业务对象
+<ul>
+<li>-&gt;开发界面与开发业务逻辑不需要相关</li>
+<li>使得用户界面与业务逻辑松耦合</li>
+<li>允许从用户界面层直接调用业务逻辑层</li>
+</ul>
+</li>
+<li>持久化层
+<ul>
+<li>使业务逻辑层有统一的访问不同数据库的方式</li>
+<li>对业务逻辑的访问接口一样</li>
+<li>屏蔽了不同的底层数据库</li>
+</ul>
+</li>
+<li>系统管理层
+<ul>
+<li>用统一的方式访问操作系统</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="面向对象设计原则">面向对象设计原则</h2>
+<h2 id="设计用例实现方案">设计用例实现方案</h2>
+</article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="application/javascript" src='https://y-m-m.github.io/js/toc.js'></script>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/toc.css' />
+
+  
+<div id="gitalk-container" class="gitalk-container"></div>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/gitalk.css'>
+<script src='https://y-m-m.github.io/js/gitalk.min.js'></script>
+<script>
+  const gitalk = new Gitalk({
+    clientID: 'Ov23livxKNtTlPeMjV2H',
+    clientSecret: '6d3bc9f47a1296f29628a63701ea5624cd28a26b',
+    repo: 'y-m-m.github.io',
+    owner: 'Y-M-M',
+    admin: ['Y-M-M'],
+    id: eval("location.pathname"), 
+    distractionFreeMode: false 
+  });
+  (function() {
+    gitalk.render('gitalk-container');
+  })();
+</script>
+
+</div>
+
+  <div class="footer container-xl width-full p-responsive">
+  <div
+    class="position-relative d-flex flex-row-reverse flex-lg-row flex-wrap flex-lg-nowrap flex-justify-center flex-lg-justify-between flex-sm-items-center pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
+    <a aria-label="Homepage" title="GitHub" class="footer-octicon d-none d-lg-block mr-lg-4" href="https://y-m-m.github.io/">
+      <svg height="24" class="octicon octicon-mark-github" viewBox="0 0 16 16" version="1.1" width="24">
+        <path fill-rule="evenodd"
+          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+        </path>
+      </svg>
+    </a>
+    <ul class="list-style-none d-flex flex-wrap col-12 flex-justify-center flex-lg-justify-between mb-2 mb-lg-0">
+      
+      <li class="mr-3 mr-lg-0">Theme by <a href='https://github.com/MeiK2333/github-style'>github-style</a></li>
+      
+    </ul>
+  </div>
+  <div class="d-flex flex-justify-center pb-6">
+    <span class="f6 text-gray-light"></span>
+  </div>
+
+
+</div>
+</body>
+
+<script type="application/javascript" src="https://y-m-m.github.io/js/github-style.js"></script>
+
+
+
+<script type="text/javascript" async
+  src="https://cdn.bootcss.com/mathjax/2.7.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\[\[', '\]\]']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        TeX: {
+          equationNumbers: { autoNumber: "AMS" },
+          extensions: ["AMSmath.js", "AMSsymbols.js"]
+        }
+      }
+    });
+
+    MathJax.Hub.Queue(function () {
+      
+      
+      
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+
+<style>
+  code.has-jax {
+    font: inherit;
+    font-size: 100%;
+    background: inherit;
+    border: inherit;
+    color: #515151;
+  }
+</style>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+<script type="application/javascript" src='https://y-m-m.github.io/js/search.js'></script>
+
+
+
+</html>

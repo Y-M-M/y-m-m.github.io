@@ -149,7 +149,7 @@
                 </path>
               </svg>
               Posts
-              <span class="Counter">162</span>
+              <span class="Counter">163</span>
             </a>
           </nav>
           <div class="profile-color-modes js-promo-color-modes-banner-profile isInitialToggle">
@@ -428,7 +428,7 @@
         </path>
       </svg>
       Posts
-      <span class="Counter ">162</span>
+      <span class="Counter ">163</span>
     </a>
   </nav>
 </div>
@@ -457,6 +457,17 @@
 		</svg>
 		
 		c&#43;&#43;
+	</a>
+	
+	<a class="muted-link mr-3" href="https://y-m-m.github.io/categories/linux/">
+		
+		<svg class="octicon octicon-package" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+			<path fill-rule="evenodd"
+				d="M8.878.392a1.75 1.75 0 00-1.756 0l-5.25 3.045A1.75 1.75 0 001 4.951v6.098c0 .624.332 1.2.872 1.514l5.25 3.045a1.75 1.75 0 001.756 0l5.25-3.045c.54-.313.872-.89.872-1.514V4.951c0-.624-.332-1.2-.872-1.514L8.878.392zM7.875 1.69a.25.25 0 01.25 0l4.63 2.685L8 7.133 3.245 4.375l4.63-2.685zM2.5 5.677v5.372c0 .09.047.171.125.216l4.625 2.683V8.432L2.5 5.677zm6.25 8.271l4.625-2.683a.25.25 0 00.125-.216V5.677L8.75 8.432v5.516z">
+			</path>
+		</svg>
+		
+		linux
 	</a>
 	
 	<a class="muted-link mr-3" href="https://y-m-m.github.io/categories/mac%E7%9A%84%E4%BD%BF%E7%94%A8/">
@@ -548,6 +559,17 @@
 	</a>
 	
 	
+	
+	<a class="muted-link mr-3" href="https://y-m-m.github.io/tags/bash/">
+		
+		<svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+			<path fill-rule="evenodd"
+				d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+			</path>
+		</svg>
+		
+		bash
+	</a>
 	
 	<a class="muted-link mr-3" href="https://y-m-m.github.io/tags/c&#43;&#43;/">
 		
@@ -1966,6 +1988,297 @@ n 皇后问题 研究的是如何将 n 个皇后放置在 n×n 的棋盘上，�
           <div class="col-12 d-inline-block">
             <div class="d-inline-block mb-1">
               <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/linux_bash%E8%84%9A%E6%9C%AC%E5%8F%8A%E8%84%9A%E6%9C%AC%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/">Linux bash脚本及脚本程序设计</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <h1 id="1-shell的基本机制">1 shell的基本机制</h1>
+<h2 id="关于shell">关于shell</h2>
+<ul>
+<li>shell种类
+<ul>
+<li>B-shell</li>
+<li>C-shell</li>
+<li>K-shell</li>
+<li>/bin/bash Linux上的标准shell</li>
+<li>管理员在创建用户时，设置了用户的登录shell</li>
+</ul>
+</li>
+<li>shell的功能
+<ul>
+<li>shell是命令解释器</li>
+<li>文件名替换，命令替换，变量替换</li>
+<li>历史替换</li>
+<li>别名替换</li>
+<li>流程控制的内部命令(内部命令和外部命令)</li>
+</ul>
+</li>
+<li>shell的特点
+<ul>
+<li>主要用途：批处理，执行效率比算法语言低</li>
+<li>shell编程风格和C语言等算法语言的区别
+<ul>
+<li>shell是面向命令处理的语言，提供的流程控制结构通过对一些内部命令的解释实现</li>
+</ul>
+</li>
+<li>如同C语言设计思路一样，shell本身设计的非常精炼，但是它提供了灵活的机制(策略与机制相分离)
+<ul>
+<li>shell有许多灵活的功能，通过shell替换实现</li>
+<li>例如：流程控制所需的条件判断，四则运算，都由shell之外的命令完成</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>理解Unix的shell
+<ul>
+<li>学习bash的目的
+<ul>
+<li>在交互方式下：熟习shell的替换机制、转义机制，掌握循环等控制流程，可以编写符合命令</li>
+<li>非交互方式：编写shell脚本程序，把一系列操作，编纂成一个脚本文件，批量处理</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="bash的启动">bash的启动</h2>
+<ul>
+<li>三种启动方法
+<ul>
+<li>注册shell</li>
+<li>键入bash命令</li>
+<li>脚本解释器</li>
+</ul>
+</li>
+<li>自动执行的一批命令(用户偏好)
+<ul>
+<li>当bash作为注册shell被启动时，自动执行用户住目录下的.bash_profile文件中命令，~/.bash_profile或$HOME/.bash_profile</li>
+<li>当bash作为注册shell退出时：自动执行$HOME/.bash_logout</li>
+<li>当bash作为交互式shell启动时: 自动执行$HOME/.bashrc</li>
+<li>类似umask之类的命令，应当写在.profile文件中</li>
+</ul>
+</li>
+<li>自动执行的一批命令（系统级）
+<ul>
+<li>当bash作为注册shell被启动时:自动执行 /etc/profile文件中命令</li>
+<li>当bash作为交互式shell启动时: 自动执行 /etc/bash.bashrc</li>
+<li>当bash作为注册shell退出时:自动执行/etc/bash.bash.logout</li>
+</ul>
+</li>
+<li>脚本文件
+<ul>
+<li>编辑文件lsdir (格式为文本文件，文件名不必须为.sh后缀，只是个惯例)
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-23%2017.37.26.png" alt=""></li>
+</ul>
+</li>
+<li>脚本文件的执行
+<ul>
+<li>新创建子进程，并在子进程中执行脚本
+<ul>
+<li>方法一
+<ul>
+<li>bash&lt;lsdir</li>
+<li>无法携带命令行参数</li>
+</ul>
+</li>
+<li>方法二
+<ul>
+<li>bash lsdir</li>
+<li>bash -x lsdir</li>
+<li>bash lsdir /usr/lib/gcc</li>
+</ul>
+</li>
+<li>方法三
+<ul>
+<li>给文件设置可执行属性x：chmod u+x lsdir</li>
+<li>然后执行 ./lsdir /usr/lib/gcc</li>
+<li>三种方法均启动程序/bin/bash，生成新进程</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>在当前shell中执行脚本
+<ul>
+<li>. lsdir /usr/lib/gcc</li>
+<li>source lsdir /usr/lib/gcc</li>
+<li>脚本执行后对当前shell状态有影响</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="历史与别名">历史与别名</h2>
+<ul>
+<li>历史表
+<ul>
+<li>先前键入的命令存在于历史表，编号递增，FIFO刷新</li>
+<li>历史表大小
+<ul>
+<li>由变量HISTSIZE设定</li>
+<li>修改HISTSIZE的配置应放入~/.bashrc</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>查看历史表
+<ul>
+<li>内部命令history</li>
+<li>文件 $HOME/.bash_history</li>
+</ul>
+</li>
+<li>历史替换
+<ul>
+<li>人机交互时直接使用上下箭头键</li>
+<li>其他引用历史机制的方法
+<ul>
+<li>!! 引用上一命令</li>
+<li>!str 以str开头的最近用过的命令，如:!v !m !.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>别名和别名替换
+<ul>
+<li>在别名表中增加一个别名(内部命令 alias)
+<ul>
+<li>alias dir=&ldquo;ls -flad&rdquo;</li>
+<li>alias n=&ldquo;netstat -p tcp -s | head -10&rdquo;</li>
+</ul>
+</li>
+<li>如果需要，应把alias命令放入.bashrc</li>
+<li>查看别名表alias</li>
+<li>取消别名(内部命令unalias)
+<ul>
+<li>unalias n 在别名表中取消n</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>TAB键补全
+<ul>
+<li>每行的首个单词
+<ul>
+<li>TAB键补全搜索$PATH下的命令</li>
+</ul>
+</li>
+<li>行中的其它单词
+<ul>
+<li>TAB键补全当前目录下的文件名</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="输入重定向">输入重定向</h2>
+<ul>
+<li>从数据文件中获取stdin &lt;filename</li>
+<li>&laquo; word 从shell脚本获取数据直到遇到定界符word（ 允许替换）
+<ul>
+<li>cat &laquo; TOAST</li>
+<li>
+<ul>
+<li>Now : <code>date</code></li>
+</ul>
+</li>
+<li>
+<ul>
+<li>My Home Directory is $HOME</li>
+</ul>
+</li>
+<li>TOAST</li>
+</ul>
+</li>
+<li>定界符所界定内容加工处理(等同双引号处理): 变量替换，命令替换</li>
+<li>从shell中获得stdin：不许替换
+<ul>
+<li>cat &laquo; &lsquo;TOAST&rsquo;</li>
+<li>
+<ul>
+<li>Now : <code>date</code></li>
+</ul>
+</li>
+<li>
+<ul>
+<li>My Home Directory is $HOME</li>
+</ul>
+</li>
+<li>TOAST</li>
+<li>Pwd</li>
+</ul>
+</li>
+<li>&laquo;&lt; word 从命令行获取信息作为标准输入
+<ul>
+<li>base64 &laquo;&lt; meiyoumima</li>
+<li>base64 &laquo;&lt; &lsquo;mei you mi ma&rsquo;</li>
+</ul>
+</li>
+</ul>
+<h2 id="输出重定向与管道">输出重定向与管道</h2>
+<ul>
+<li>程序的标准输入/输出
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-23%2017.54.39.png" alt=""></li>
+<li>使用系统调用(原始I/O)
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-23%2017.56.32.png" alt=""></li>
+<li>使用库函数
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-23%2017.59.44.png" alt="">
+<ul>
+<li>变量名stdin, stdout, stderr用于C语言调用</li>
+</ul>
+</li>
+<li>stdout输出重定向
+<ul>
+<li>
+<blockquote>
+<p>filename 将stdout重定向到文件filename，文件已存在则先清空（覆盖方式）</p>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学与技术
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/linux">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                Linux
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/bash">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                bash
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Wed, 23 Apr 2025 00:00:00 &#43;0000" class="no-wrap"
+                title=" Wed, 23 Apr 2025 00:00:00 &#43;0000">
+                Wed, 23 Apr 2025 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
                 <a href="https://y-m-m.github.io/post/leetcodehot22%E6%8B%AC%E5%8F%B7%E7%94%9F%E6%88%90/">leetcode hot100 22 括号生成</a>
               </h3>
             </div>
@@ -3189,98 +3502,6 @@ trie.search(&ldquo;app&rdquo;);     // 返回 True</p>
               <relative-time datetime=" Sun, 20 Apr 2025 00:00:00 &#43;0000" class="no-wrap"
                 title=" Sun, 20 Apr 2025 00:00:00 &#43;0000">
                 Sun, 20 Apr 2025 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/leetcodehot207%E8%AF%BE%E7%A8%8B%E8%A1%A8/">leetcode hot100 207 课程排序</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <p><a href="https://leetcode.cn/problems/course-schedule/description/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode hot100 207 课程排序</a></p>
-<h1 id="题目">题目</h1>
-<blockquote>
-<p>你这个学期必须选修 numCourses 门课程，记为 0 到 numCourses - 1 。          <br>
-在选修某些课程之前需要一些先修课程。 先修课程按数组 prerequisites 给出，其中 prerequisites[i] = [ai, bi] ，表示如果要学习课程 ai 则 必须 先学习课程  bi 。        <br>
-例如，先修课程对 [0, 1] 表示：想要学习课程 0 ，你需要先完成课程 1 。       <br>
-请你判断是否可能完成所有课程的学习？如果可以，返回 true ；否则，返回 false 。</p>
-</blockquote>
-<h1 id="示例">示例</h1>
-<h2 id="示例一">示例一</h2>
-<blockquote>
-<p><strong>输入</strong>：numCourses = 2, prerequisites = [[1,0]]       <br>
-<strong>输出</strong>：true   <br>
-<strong>解释</strong>：总共有 2 门课程。学习课程 1 之前，你需要完成课程 0 。这是可能的。</p>
-</blockquote>
-<h2 id="示例二">示例二</h2>
-<blockquote>
-<p><strong>输入</strong>：numCourses = 2, prerequisites = [[1,0],[0,1]]          <br>
-<strong>输出</strong>：false          <br>
-<strong>解释</strong>：总共有 2 门课程。学习课程 1 之前，你需要先完成​课程 0 ；并且学习课程 0 之前，你还应先完成课程 1 。这是不可能的。</p>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机科学与技术
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                算法题
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/leetcode">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                leetcode
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                深度优先搜索
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%B9%BF%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                广度优先搜索
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Fri, 18 Apr 2025 00:00:00 &#43;0000" class="no-wrap"
-                title=" Fri, 18 Apr 2025 00:00:00 &#43;0000">
-                Fri, 18 Apr 2025 00:00:00 &#43;0000
               </relative-time>
             </div>
           </div>

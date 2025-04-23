@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script type="application/javascript" src='https://y-m-m.github.io/js/theme-mode.js'></script>
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/frameworks.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github-style.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/light.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/dark.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/syntax.css' />
+    <title>Linux bash脚本及脚本程序设计 - 陈皮的博客</title>
+    
+    <link rel="icon" type="image/x-icon" href='/images/github-mark.png'>
+    
+    <meta name="theme-color" content="#1e2327">
+
+    
+    <meta name="description"
+  content="1 shell的基本机制 关于shell shell种类 B-shell C-shell K-shell /bin/bash Linux上的标准shell 管理员在创建用户时，设置了用户的登录shell shell的功能 shell是命令解释器 文件名替换，命令替换，变量替换 历史替换 别名替换 流程控制的内部命令(内部命令和外部命令) shell的特点 主要用途：批处理，执行效率比算法语言低 shell编程风格和C语言等算法语言的区别 shell是面向命令处理的语言，提供的流程控制结构通过对一些内部命令的解释实现 如同C语言设计思路一样，shell本身设计的非常精炼，但是它提供了灵活的机制(策略与机制相分离) shell有许多灵活的功能，通过shell替换实现 例如：流程控制所需的条件判断，四则运算，都由shell之外的命令完成 理解Unix的shell 学习bash的目的 在交互方式下：熟习shell的替换机制、转义机制，掌握循环等控制流程，可以编写符合命令 非交互方式：编写shell脚本程序，把一系列操作，编纂成一个脚本文件，批量处理 bash的启动 三种启动方法 注册shell 键入bash命令 脚本解释器 自动执行的一批命令(用户偏好) 当bash作为注册shell被启动时，自动执行用户住目录下的.bash_profile文件中命令，~/.bash_profile或$HOME/.bash_profile 当bash作为注册shell退出时：自动执行$HOME/.bash_logout 当bash作为交互式shell启动时: 自动执行$HOME/.bashrc 类似umask之类的命令，应当写在.profile文件中 自动执行的一批命令（系统级） 当bash作为注册shell被启动时:自动执行 /etc/profile文件中命令 当bash作为交互式shell启动时: 自动执行 /etc/bash.bashrc 当bash作为注册shell退出时:自动执行/etc/bash.bash.logout 脚本文件 编辑文件lsdir (格式为文本文件，文件名不必须为.sh后缀，只是个惯例) 脚本文件的执行 新创建子进程，并在子进程中执行脚本 方法一 bash&lt;lsdir 无法携带命令行参数 方法二 bash lsdir bash -x lsdir bash lsdir /usr/lib/gcc 方法三 给文件设置可执行属性x：chmod u&#43;x lsdir 然后执行 ./lsdir /usr/lib/gcc 三种方法均启动程序/bin/bash，生成新进程 在当前shell中执行脚本 . lsdir /usr/lib/gcc source lsdir /usr/lib/gcc 脚本执行后对当前shell状态有影响 历史与别名 历史表 先前键入的命令存在于历史表，编号递增，FIFO刷新 历史表大小 由变量HISTSIZE设定 修改HISTSIZE的配置应放入~/.bashrc 查看历史表 内部命令history 文件 $HOME/.bash_history 历史替换 人机交互时直接使用上下箭头键 其他引用历史机制的方法 !! 引用上一命令 !str 以str开头的最近用过的命令，如:!v !m !. 别名和别名替换 在别名表中增加一个别名(内部命令 alias) alias dir=&ldquo;ls -flad&rdquo; alias n=&ldquo;netstat -p tcp -s | head -10&rdquo; 如果需要，应把alias命令放入.bashrc 查看别名表alias 取消别名(内部命令unalias) unalias n 在别名表中取消n TAB键补全 每行的首个单词 TAB键补全搜索$PATH下的命令 行中的其它单词 TAB键补全当前目录下的文件名 输入重定向 从数据文件中获取stdin &lt;filename &laquo; word 从shell脚本获取数据直到遇到定界符word（ 允许替换） cat &laquo; TOAST Now : date My Home Directory is $HOME TOAST 定界符所界定内容加工处理(等同双引号处理): 变量替换，命令替换 从shell中获得stdin：不许替换 cat &laquo; &lsquo;TOAST&rsquo; Now : date My Home Directory is $HOME TOAST Pwd &laquo;&lt; word 从命令行获取信息作为标准输入 base64 &laquo;&lt; meiyoumima base64 &laquo;&lt; &lsquo;mei you mi ma&rsquo; 输出重定向与管道 程序的标准输入/输出 使用系统调用(原始I/O) 使用库函数 变量名stdin, stdout, stderr用于C语言调用 stdout输出重定向 filename 将stdout重定向到文件filename，文件已存在则先清空（覆盖方式）
+" />
+<meta name="keywords"
+  content='blog, google analytics' />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://y-m-m.github.io/post/linux_bash%E8%84%9A%E6%9C%AC%E5%8F%8A%E8%84%9A%E6%9C%AC%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/" />
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Linux bash脚本及脚本程序设计 - 陈皮的博客" />
+<meta name="twitter:description"
+  content="1 shell的基本机制 关于shell shell种类 B-shell C-shell K-shell /bin/bash Linux上的标准shell 管理员在创建用户时，设置了用户的登录shell shell的功能 shell是命令解释器 文件名替换，命令替换，变量替换 历史替换 别名替换 流程控制的内部命令(内部命令和外部命令) shell的特点 主要用途：批处理，执行效率比算法语言低 shell编程风格和C语言等算法语言的区别 shell是面向命令处理的语言，提供的流程控制结构通过对一些内部命令的解释实现 如同C语言设计思路一样，shell本身设计的非常精炼，但是它提供了灵活的机制(策略与机制相分离) shell有许多灵活的功能，通过shell替换实现 例如：流程控制所需的条件判断，四则运算，都由shell之外的命令完成 理解Unix的shell 学习bash的目的 在交互方式下：熟习shell的替换机制、转义机制，掌握循环等控制流程，可以编写符合命令 非交互方式：编写shell脚本程序，把一系列操作，编纂成一个脚本文件，批量处理 bash的启动 三种启动方法 注册shell 键入bash命令 脚本解释器 自动执行的一批命令(用户偏好) 当bash作为注册shell被启动时，自动执行用户住目录下的.bash_profile文件中命令，~/.bash_profile或$HOME/.bash_profile 当bash作为注册shell退出时：自动执行$HOME/.bash_logout 当bash作为交互式shell启动时: 自动执行$HOME/.bashrc 类似umask之类的命令，应当写在.profile文件中 自动执行的一批命令（系统级） 当bash作为注册shell被启动时:自动执行 /etc/profile文件中命令 当bash作为交互式shell启动时: 自动执行 /etc/bash.bashrc 当bash作为注册shell退出时:自动执行/etc/bash.bash.logout 脚本文件 编辑文件lsdir (格式为文本文件，文件名不必须为.sh后缀，只是个惯例) 脚本文件的执行 新创建子进程，并在子进程中执行脚本 方法一 bash&lt;lsdir 无法携带命令行参数 方法二 bash lsdir bash -x lsdir bash lsdir /usr/lib/gcc 方法三 给文件设置可执行属性x：chmod u&#43;x lsdir 然后执行 ./lsdir /usr/lib/gcc 三种方法均启动程序/bin/bash，生成新进程 在当前shell中执行脚本 . lsdir /usr/lib/gcc source lsdir /usr/lib/gcc 脚本执行后对当前shell状态有影响 历史与别名 历史表 先前键入的命令存在于历史表，编号递增，FIFO刷新 历史表大小 由变量HISTSIZE设定 修改HISTSIZE的配置应放入~/.bashrc 查看历史表 内部命令history 文件 $HOME/.bash_history 历史替换 人机交互时直接使用上下箭头键 其他引用历史机制的方法 !! 引用上一命令 !str 以str开头的最近用过的命令，如:!v !m !. 别名和别名替换 在别名表中增加一个别名(内部命令 alias) alias dir=&ldquo;ls -flad&rdquo; alias n=&ldquo;netstat -p tcp -s | head -10&rdquo; 如果需要，应把alias命令放入.bashrc 查看别名表alias 取消别名(内部命令unalias) unalias n 在别名表中取消n TAB键补全 每行的首个单词 TAB键补全搜索$PATH下的命令 行中的其它单词 TAB键补全当前目录下的文件名 输入重定向 从数据文件中获取stdin &lt;filename &laquo; word 从shell脚本获取数据直到遇到定界符word（ 允许替换） cat &laquo; TOAST Now : date My Home Directory is $HOME TOAST 定界符所界定内容加工处理(等同双引号处理): 变量替换，命令替换 从shell中获得stdin：不许替换 cat &laquo; &lsquo;TOAST&rsquo; Now : date My Home Directory is $HOME TOAST Pwd &laquo;&lt; word 从命令行获取信息作为标准输入 base64 &laquo;&lt; meiyoumima base64 &laquo;&lt; &lsquo;mei you mi ma&rsquo; 输出重定向与管道 程序的标准输入/输出 使用系统调用(原始I/O) 使用库函数 变量名stdin, stdout, stderr用于C语言调用 stdout输出重定向 filename 将stdout重定向到文件filename，文件已存在则先清空（覆盖方式）
+" />
+<meta name="twitter:site" content="https://y-m-m.github.io/" />
+<meta name="twitter:creator" content="陈皮" />
+<meta name="twitter:image"
+  content="https://y-m-m.github.io/">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Linux bash脚本及脚本程序设计 - 陈皮的博客">
+<meta property="og:description"
+  content="1 shell的基本机制 关于shell shell种类 B-shell C-shell K-shell /bin/bash Linux上的标准shell 管理员在创建用户时，设置了用户的登录shell shell的功能 shell是命令解释器 文件名替换，命令替换，变量替换 历史替换 别名替换 流程控制的内部命令(内部命令和外部命令) shell的特点 主要用途：批处理，执行效率比算法语言低 shell编程风格和C语言等算法语言的区别 shell是面向命令处理的语言，提供的流程控制结构通过对一些内部命令的解释实现 如同C语言设计思路一样，shell本身设计的非常精炼，但是它提供了灵活的机制(策略与机制相分离) shell有许多灵活的功能，通过shell替换实现 例如：流程控制所需的条件判断，四则运算，都由shell之外的命令完成 理解Unix的shell 学习bash的目的 在交互方式下：熟习shell的替换机制、转义机制，掌握循环等控制流程，可以编写符合命令 非交互方式：编写shell脚本程序，把一系列操作，编纂成一个脚本文件，批量处理 bash的启动 三种启动方法 注册shell 键入bash命令 脚本解释器 自动执行的一批命令(用户偏好) 当bash作为注册shell被启动时，自动执行用户住目录下的.bash_profile文件中命令，~/.bash_profile或$HOME/.bash_profile 当bash作为注册shell退出时：自动执行$HOME/.bash_logout 当bash作为交互式shell启动时: 自动执行$HOME/.bashrc 类似umask之类的命令，应当写在.profile文件中 自动执行的一批命令（系统级） 当bash作为注册shell被启动时:自动执行 /etc/profile文件中命令 当bash作为交互式shell启动时: 自动执行 /etc/bash.bashrc 当bash作为注册shell退出时:自动执行/etc/bash.bash.logout 脚本文件 编辑文件lsdir (格式为文本文件，文件名不必须为.sh后缀，只是个惯例) 脚本文件的执行 新创建子进程，并在子进程中执行脚本 方法一 bash&lt;lsdir 无法携带命令行参数 方法二 bash lsdir bash -x lsdir bash lsdir /usr/lib/gcc 方法三 给文件设置可执行属性x：chmod u&#43;x lsdir 然后执行 ./lsdir /usr/lib/gcc 三种方法均启动程序/bin/bash，生成新进程 在当前shell中执行脚本 . lsdir /usr/lib/gcc source lsdir /usr/lib/gcc 脚本执行后对当前shell状态有影响 历史与别名 历史表 先前键入的命令存在于历史表，编号递增，FIFO刷新 历史表大小 由变量HISTSIZE设定 修改HISTSIZE的配置应放入~/.bashrc 查看历史表 内部命令history 文件 $HOME/.bash_history 历史替换 人机交互时直接使用上下箭头键 其他引用历史机制的方法 !! 引用上一命令 !str 以str开头的最近用过的命令，如:!v !m !. 别名和别名替换 在别名表中增加一个别名(内部命令 alias) alias dir=&ldquo;ls -flad&rdquo; alias n=&ldquo;netstat -p tcp -s | head -10&rdquo; 如果需要，应把alias命令放入.bashrc 查看别名表alias 取消别名(内部命令unalias) unalias n 在别名表中取消n TAB键补全 每行的首个单词 TAB键补全搜索$PATH下的命令 行中的其它单词 TAB键补全当前目录下的文件名 输入重定向 从数据文件中获取stdin &lt;filename &laquo; word 从shell脚本获取数据直到遇到定界符word（ 允许替换） cat &laquo; TOAST Now : date My Home Directory is $HOME TOAST 定界符所界定内容加工处理(等同双引号处理): 变量替换，命令替换 从shell中获得stdin：不许替换 cat &laquo; &lsquo;TOAST&rsquo; Now : date My Home Directory is $HOME TOAST Pwd &laquo;&lt; word 从命令行获取信息作为标准输入 base64 &laquo;&lt; meiyoumima base64 &laquo;&lt; &lsquo;mei you mi ma&rsquo; 输出重定向与管道 程序的标准输入/输出 使用系统调用(原始I/O) 使用库函数 变量名stdin, stdout, stderr用于C语言调用 stdout输出重定向 filename 将stdout重定向到文件filename，文件已存在则先清空（覆盖方式）
+" />
+<meta property="og:url" content="https://y-m-m.github.io/post/linux_bash%E8%84%9A%E6%9C%AC%E5%8F%8A%E8%84%9A%E6%9C%AC%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/" />
+<meta property="og:site_name" content="Linux bash脚本及脚本程序设计" />
+<meta property="og:image"
+  content="https://y-m-m.github.io/">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+<meta property="article:published_time" content="2025-04-23 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+  <div style="position: relative">
+  <header class="Header js-details-container Details px-3 px-md-4 px-lg-5 flex-wrap flex-md-nowrap open Details--on">
+    <div class="Header-item mobile-none" style="margin-top: -4px; margin-bottom: -4px;">
+      <a class="Header-link" href="https://y-m-m.github.io/">
+        <img class="octicon" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item d-md-none">
+      <button class="Header-link btn-link js-details-target" type="button"
+        onclick="document.querySelector('#header-search').style.display = document.querySelector('#header-search').style.display == 'none'? 'block': 'none'">
+        <svg height="24" class="octicon octicon-three-bars" viewBox="0 0 16 16" version="1.1" width="24">
+          <path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 2.75zm0 5A.75.75 0 011.75 7h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 7.75zM1.75 12a.75.75 0 100 1.5h12.5a.75.75 0 100-1.5H1.75z">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <div style="display: none;" id="header-search"
+      class="Header-item Header-item--full flex-column flex-md-row width-full flex-order-2 flex-md-order-none mr-0 mr-md-3 mt-3 mt-md-0 Details-content--hidden-not-important d-md-flex">
+      <div
+        class="Header-search header-search flex-auto js-site-search position-relative flex-self-stretch flex-md-self-auto mb-3 mb-md-0 mr-0 mr-md-3 scoped-search site-scoped-search js-jump-to">
+        <div class="position-relative">
+          
+          <form target="_blank" id="search-form" action="" accept-charset="UTF-8" method="get"
+            autocomplete="off">
+            <label
+              class="Header-search-label form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative d-flex flex-justify-between flex-items-center">
+              <input type="text"
+                class="Header-search-input form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable"
+                name="q" value="" placeholder="Search" autocomplete="off">
+            </label>
+          </form>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="Header-item Header-item--full flex-justify-center d-md-none position-relative">
+      <a class="Header-link " href="https://y-m-m.github.io/">
+        <img class="octicon octicon-mark-github v-align-middle" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item" style="margin-right: 0;">
+      <a href="javascript:void(0)" class="Header-link no-select" onclick="switchTheme()">
+        <svg style="fill: var(--color-profile-color-modes-toggle-moon);" class="no-select" viewBox="0 0 16 16"
+          version="1.1" width="16" height="16">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M4.52208 7.71754C7.5782 7.71754 10.0557 5.24006 10.0557 2.18394C10.0557 1.93498 10.0392 1.68986 10.0074 1.44961C9.95801 1.07727 10.3495 0.771159 10.6474 0.99992C12.1153 2.12716 13.0615 3.89999 13.0615 5.89383C13.0615 9.29958 10.3006 12.0605 6.89485 12.0605C3.95334 12.0605 1.49286 10.001 0.876728 7.24527C0.794841 6.87902 1.23668 6.65289 1.55321 6.85451C2.41106 7.40095 3.4296 7.71754 4.52208 7.71754Z">
+          </path>
+        </svg>
+      </a>
+    </div>
+  </header>
+</div>
+
+  <div id="search-result" class="container-lg px-3 new-discussion-timeline" style="display: none;">
+</div>
+
+  
+<div class="application-main">
+  <div>
+  <main>
+    <div class="gisthead pagehead bg-gray-light pb-0 pt-3 mb-4">
+      <div class="px-0">
+        <div class="mb-3 d-flex px-3 px-md-3 px-lg-5">
+          <div class="flex-auto min-width-0 width-fit mr-3">
+            <div class="d-flex">
+              <div class="d-none d-md-block">
+                <a class="avatar mr-2 flex-shrink-0" href="https://y-m-m.github.io/">
+                  <img class=" avatar-user"
+                    src="/images/me.png"
+                    width="32" height="32"></a>
+              </div>
+              <div class="d-flex flex-column">
+                <h1 class="break-word f3 text-normal mb-md-0 mb-1">
+                  <span class="author">
+                    <a href="https://y-m-m.github.io/">陈皮</a>
+                  </span>
+                  <span class="path-divider">/</span>
+                  <strong class="css-truncate css-truncate-target mr-1" style="max-width: 410px">
+                    <a href="https://y-m-m.github.io/post/linux_bash%E8%84%9A%E6%9C%AC%E5%8F%8A%E8%84%9A%E6%9C%AC%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/">Linux bash脚本及脚本程序设计</a>
+                  </strong>
+                </h1>
+                <div class="note m-0">
+                  Created <relative-time datetime="Wed, 23 Apr 2025 00:00:00 &#43;0000"
+                    class="no-wrap">
+                    Wed, 23 Apr 2025 00:00:00 &#43;0000</relative-time>
+
+                  
+                  <span class="file-info-divider"></span>
+                  Modified <relative-time datetime="Wed, 23 Apr 2025 20:29:19 &#43;0800"
+                    class="no-wrap">
+                    Wed, 23 Apr 2025 20:29:19 &#43;0800</relative-time>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-lg px-3 new-discussion-timeline">
+      <div class="repository-content gist-content">
+        <div>
+          <div class="js-gist-file-update-container js-task-list-container file-box">
+            <div id="file-pytest" class="file my-2">
+              <div id="post-header" class="file-header d-flex flex-md-items-center flex-items-start sticky-header" style="z-index: 2">
+                <div class="file-info d-flex flex-md-items-center flex-items-start flex-order-1 flex-auto">
+                  <div class="text-mono f6 flex-auto pr-3 flex-order-2 flex-md-order-1 mt-2 mt-md-0">
+                    
+                    <summary id="toc-toggle" onclick="clickToc()" class="btn btn-octicon m-0 mr-2 p-2">
+                      <svg aria-hidden="true" viewBox="0 0 16 16" height="16" width="16" class="octicon octicon-list-unordered">
+                        <path fill-rule="evenodd" d="M2 4a1 1 0 100-2 1 1 0 000 2zm3.75-1.5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zM3 8a1 1 0 11-2 0 1 1 0 012 0zm-1 6a1 1 0 100-2 1 1 0 000 2z"></path>
+                      </svg>
+                    </summary>
+                    <details-menu class="SelectMenu" id="toc-details" style="display: none;">
+                      <div class="SelectMenu-modal rounded-3 mt-1" style="max-height: 340px;">
+                        <div class="SelectMenu-list SelectMenu-list--borderless p-2" style="overscroll-behavior: contain;" id="toc-list">
+                        </div>
+                      </div>
+                    </details-menu>
+                      2851 Words
+                    
+
+                  </div>
+                  <div class="file-actions flex-order-2 pt-0">
+                    
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      计算机科学与技术
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/linux">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      Linux
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/bash">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      bash
+                    </a>
+                    
+                    
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="Box-body px-5 pb-5" style="z-index: 1">
+                <article class="markdown-body entry-content container-lg"><h1 id="1-shell的基本机制">1 shell的基本机制</h1>
+<h2 id="关于shell">关于shell</h2>
+<ul>
+<li>shell种类
+<ul>
+<li>B-shell</li>
+<li>C-shell</li>
+<li>K-shell</li>
+<li>/bin/bash Linux上的标准shell</li>
+<li>管理员在创建用户时，设置了用户的登录shell</li>
+</ul>
+</li>
+<li>shell的功能
+<ul>
+<li>shell是命令解释器</li>
+<li>文件名替换，命令替换，变量替换</li>
+<li>历史替换</li>
+<li>别名替换</li>
+<li>流程控制的内部命令(内部命令和外部命令)</li>
+</ul>
+</li>
+<li>shell的特点
+<ul>
+<li>主要用途：批处理，执行效率比算法语言低</li>
+<li>shell编程风格和C语言等算法语言的区别
+<ul>
+<li>shell是面向命令处理的语言，提供的流程控制结构通过对一些内部命令的解释实现</li>
+</ul>
+</li>
+<li>如同C语言设计思路一样，shell本身设计的非常精炼，但是它提供了灵活的机制(策略与机制相分离)
+<ul>
+<li>shell有许多灵活的功能，通过shell替换实现</li>
+<li>例如：流程控制所需的条件判断，四则运算，都由shell之外的命令完成</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>理解Unix的shell
+<ul>
+<li>学习bash的目的
+<ul>
+<li>在交互方式下：熟习shell的替换机制、转义机制，掌握循环等控制流程，可以编写符合命令</li>
+<li>非交互方式：编写shell脚本程序，把一系列操作，编纂成一个脚本文件，批量处理</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="bash的启动">bash的启动</h2>
+<ul>
+<li>三种启动方法
+<ul>
+<li>注册shell</li>
+<li>键入bash命令</li>
+<li>脚本解释器</li>
+</ul>
+</li>
+<li>自动执行的一批命令(用户偏好)
+<ul>
+<li>当bash作为注册shell被启动时，自动执行用户住目录下的.bash_profile文件中命令，~/.bash_profile或$HOME/.bash_profile</li>
+<li>当bash作为注册shell退出时：自动执行$HOME/.bash_logout</li>
+<li>当bash作为交互式shell启动时: 自动执行$HOME/.bashrc</li>
+<li>类似umask之类的命令，应当写在.profile文件中</li>
+</ul>
+</li>
+<li>自动执行的一批命令（系统级）
+<ul>
+<li>当bash作为注册shell被启动时:自动执行 /etc/profile文件中命令</li>
+<li>当bash作为交互式shell启动时: 自动执行 /etc/bash.bashrc</li>
+<li>当bash作为注册shell退出时:自动执行/etc/bash.bash.logout</li>
+</ul>
+</li>
+<li>脚本文件
+<ul>
+<li>编辑文件lsdir (格式为文本文件，文件名不必须为.sh后缀，只是个惯例)
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-23%2017.37.26.png" alt=""></li>
+</ul>
+</li>
+<li>脚本文件的执行
+<ul>
+<li>新创建子进程，并在子进程中执行脚本
+<ul>
+<li>方法一
+<ul>
+<li>bash&lt;lsdir</li>
+<li>无法携带命令行参数</li>
+</ul>
+</li>
+<li>方法二
+<ul>
+<li>bash lsdir</li>
+<li>bash -x lsdir</li>
+<li>bash lsdir /usr/lib/gcc</li>
+</ul>
+</li>
+<li>方法三
+<ul>
+<li>给文件设置可执行属性x：chmod u+x lsdir</li>
+<li>然后执行 ./lsdir /usr/lib/gcc</li>
+<li>三种方法均启动程序/bin/bash，生成新进程</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>在当前shell中执行脚本
+<ul>
+<li>. lsdir /usr/lib/gcc</li>
+<li>source lsdir /usr/lib/gcc</li>
+<li>脚本执行后对当前shell状态有影响</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="历史与别名">历史与别名</h2>
+<ul>
+<li>历史表
+<ul>
+<li>先前键入的命令存在于历史表，编号递增，FIFO刷新</li>
+<li>历史表大小
+<ul>
+<li>由变量HISTSIZE设定</li>
+<li>修改HISTSIZE的配置应放入~/.bashrc</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>查看历史表
+<ul>
+<li>内部命令history</li>
+<li>文件 $HOME/.bash_history</li>
+</ul>
+</li>
+<li>历史替换
+<ul>
+<li>人机交互时直接使用上下箭头键</li>
+<li>其他引用历史机制的方法
+<ul>
+<li>!! 引用上一命令</li>
+<li>!str 以str开头的最近用过的命令，如:!v !m !.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>别名和别名替换
+<ul>
+<li>在别名表中增加一个别名(内部命令 alias)
+<ul>
+<li>alias dir=&ldquo;ls -flad&rdquo;</li>
+<li>alias n=&ldquo;netstat -p tcp -s | head -10&rdquo;</li>
+</ul>
+</li>
+<li>如果需要，应把alias命令放入.bashrc</li>
+<li>查看别名表alias</li>
+<li>取消别名(内部命令unalias)
+<ul>
+<li>unalias n 在别名表中取消n</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>TAB键补全
+<ul>
+<li>每行的首个单词
+<ul>
+<li>TAB键补全搜索$PATH下的命令</li>
+</ul>
+</li>
+<li>行中的其它单词
+<ul>
+<li>TAB键补全当前目录下的文件名</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="输入重定向">输入重定向</h2>
+<ul>
+<li>从数据文件中获取stdin &lt;filename</li>
+<li>&laquo; word 从shell脚本获取数据直到遇到定界符word（ 允许替换）
+<ul>
+<li>cat &laquo; TOAST</li>
+<li>
+<ul>
+<li>Now : <code>date</code></li>
+</ul>
+</li>
+<li>
+<ul>
+<li>My Home Directory is $HOME</li>
+</ul>
+</li>
+<li>TOAST</li>
+</ul>
+</li>
+<li>定界符所界定内容加工处理(等同双引号处理): 变量替换，命令替换</li>
+<li>从shell中获得stdin：不许替换
+<ul>
+<li>cat &laquo; &lsquo;TOAST&rsquo;</li>
+<li>
+<ul>
+<li>Now : <code>date</code></li>
+</ul>
+</li>
+<li>
+<ul>
+<li>My Home Directory is $HOME</li>
+</ul>
+</li>
+<li>TOAST</li>
+<li>Pwd</li>
+</ul>
+</li>
+<li>&laquo;&lt; word 从命令行获取信息作为标准输入
+<ul>
+<li>base64 &laquo;&lt; meiyoumima</li>
+<li>base64 &laquo;&lt; &lsquo;mei you mi ma&rsquo;</li>
+</ul>
+</li>
+</ul>
+<h2 id="输出重定向与管道">输出重定向与管道</h2>
+<ul>
+<li>程序的标准输入/输出
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-23%2017.54.39.png" alt=""></li>
+<li>使用系统调用(原始I/O)
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-23%2017.56.32.png" alt=""></li>
+<li>使用库函数
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-23%2017.59.44.png" alt="">
+<ul>
+<li>变量名stdin, stdout, stderr用于C语言调用</li>
+</ul>
+</li>
+<li>stdout输出重定向
+<ul>
+<li>
+<blockquote>
+<p>filename 将stdout重定向到文件filename，文件已存在则先清空（覆盖方式）</p>
+</blockquote>
+</li>
+<li>
+<blockquote>
+<blockquote>
+<p>filename 将stdout重定向追加到文件filename尾</p>
+</blockquote>
+</blockquote>
+</li>
+</ul>
+</li>
+<li>stderr输出重定向
+<ul>
+<li>2&gt;filename
+<ul>
+<li>将文件句柄2重定向到文件filename</li>
+<li>分离stdout与stderr的意义：程序结果与错误信息分开显示</li>
+</ul>
+</li>
+<li>2&gt;&amp;1
+<ul>
+<li>将文件句柄2重定向到文件描述符1指向的文件</li>
+<li>允许对除0，1，2外其它文件句柄输入或输出重定向,
+<ul>
+<li>例如：
+<ul>
+<li>./myap 5&lt; a.txt 6&gt; b.dat</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>例
+<ul>
+<li>ls -l &gt; file.list
+<ul>
+<li>将命令ls标准输出stdout定向到文件file.list中</li>
+</ul>
+</li>
+<li>cc try.c -o try 2&gt; try.err
+<ul>
+<li>将cc命令的stderr重定向到文件try.err中</li>
+</ul>
+</li>
+<li>try &gt; try.out 2&gt;try.err / try 1&gt; try.out 2&gt;try.err
+<ul>
+<li>将try程序执行后的stdout和stderr分别重定向到不同的文件</li>
+</ul>
+</li>
+<li>./stda 1&gt; try.out 2&gt;/dev/null</li>
+<li>./stda &gt;rpt 2&gt;&amp;1
+<ul>
+<li>stdout和stderr均存入文件rpt</li>
+</ul>
+</li>
+<li>错误的用法：./stda 2&gt;&amp;1 &gt;rpt
+<ul>
+<li>stderr定向到终端，stdout重定向到文件</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>管道
+<ul>
+<li>ls -l | grep &lsquo;^d&rsquo;
+<ul>
+<li>前一命令的stdout作后一命令的stdin</li>
+</ul>
+</li>
+<li>cc try.c -o try 2&gt;&amp;1 | more
+<ul>
+<li>前一命令的stdout+stderr作为下一命令的stdin</li>
+</ul>
+</li>
+<li>管道：将前一个命令的标准输出重定向到后面命令的标准输入，但不重定向标准错误</li>
+<li>| 先将前一个命令的标准输出重定向到后面命令的标准输入，再处理前一个命令中的重定向</li>
+</ul>
+</li>
+</ul>
+<h1 id="2-变量">2 变量</h1>
+<h2 id="变量赋值及使用">变量赋值及使用</h2>
+<ul>
+<li>变量名
+<ul>
+<li>第一个字符必须为字母</li>
+<li>其余字符可以是字母、数字、下划线</li>
+</ul>
+</li>
+<li>存储的内容
+<ul>
+<li>字符串 -&gt; 对于数字串来说，不是二进制形式</li>
+<li>在执行过程中其内容可以被修改</li>
+</ul>
+</li>
+<li>变量的赋值和引用
+<ul>
+<li>变量无需声明</li>
+<li>赋值
+<ul>
+<li>addr=20.1.1.254</li>
+<li>ftp $addr</li>
+<li>注意：<strong>赋值</strong>作为单独一条命令，等号两侧<strong>不许多余空格</strong></li>
+<li>赋值时，等号右侧字符串中含有特殊字符，用“”
+<ul>
+<li>unit=”Beiyou University” // 含有空格</li>
+<li>echo $unit</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>引用
+<ul>
+<li>引用addr变量的方法: $addr 或 ${addr}
+<ul>
+<li>echo ${addr}A // 引用变量addr的值之后级联字母A</li>
+<li>echo $addrA // 引用变量addrA的值</li>
+<li>命令行中含有$符的变量引用，shell会先完成变量替换</li>
+</ul>
+</li>
+<li>引用未定义变量，变量值为空字符串
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-23%2019.57.51.png" alt=""></li>
+<li>shell内部开关
+<ul>
+<li>set -u 当引用一个未定义的变量时，产生一个错误</li>
+<li>set +u 当引用一个未定义的变量时，认为是一个空串(默认情形)</li>
+<li>set -x 执行命令前打印出shell替换后的命令行参数</li>
+<li>set +x 取消上述设置</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>命令echo
+<ul>
+<li>语法与功能
+<ul>
+<li>echo arg1 arg2 arg3&hellip;</li>
+<li>打印各命令行参数，每两个间用一个空格分开，最后打印换行符非文字字符需转义，加选项-e</li>
+<li>echo支持C语言字符串常数描述格式的转义和\c
+<ul>
+<li>\c 打印完毕，不换行 \b 退格</li>
+<li>\n 换行 \r 回车 \t 水平制表 \ 反斜线</li>
+<li>\nnn 八进制描述的字符ASCII码</li>
+</ul>
+</li>
+<li>举例
+<ul>
+<li>echo Beijing China</li>
+<li>echo &ldquo;Beijing China&rdquo;</li>
+<li>echo –e ‘\065’ //O65=53,字符5的ASCII值。打印5</li>
+<li>echo -e &ldquo;\r$cnt \c&rdquo;</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>命令printf
+<ul>
+<li>用法与C函数printf类似</li>
+<li>printf &lsquo;\033[01;33mConnect to %s Network\n’ $proto</li>
+<li>printf”\033[01;33mConnect to %s Network\n” $proto</li>
+<li>格式: echo -e &ldquo;\033[字背景颜色;字体颜色m字符串\033[0m&rdquo;</li>
+<li>ANSI控制码
+<ul>
+<li>\033[y;xH 设置光标位置(\033代表转义序列开始)</li>
+<li>\033[0m 关闭所有属性</li>
+</ul>
+</li>
+<li>区分
+<ul>
+<li>H结尾控制光标位置</li>
+<li>m结尾控制字背景颜色和字体颜色</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="在脚本中编辑文件">在脚本中编辑文件</h2>
+<ul>
+<li>read 读用户的输入
+<ul>
+<li>内部命令read: 变量取值的另外一种方法
+<ul>
+<li>从标准输入读入一行内容赋值给变量</li>
+<li>例：读取用户输入，并使用输入的信息</li>
+</ul>
+</li>
+<li>$ read name</li>
+<li>ccp.c</li>
+<li>$ echo $name
+<ul>
+<li>ccp.c</li>
+</ul>
+</li>
+<li>$ ls -l $name
+<ul>
+<li>-rw-r&ndash;r&ndash; 1 jiang usr 32394 May 27 10:10 ccp.c</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>脚本程序中的行编辑
+<ul>
+<li>假设应用程序myap运行时从myap.conf中读取配置参数</li>
+</ul>
+</li>
+</ul>
+<h2 id="环境变量">环境变量</h2>
+<h1 id="3-替换">3 替换</h1>
+<h1 id="4-元字符和转义">4 元字符和转义</h1>
+<h2 id="元字符">元字符</h2>
+<h2 id="引号和转义处理">引号和转义处理</h2>
+<h2 id="例题终止指定名字的所有进程">例题：终止指定名字的所有进程</h2>
+</article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="application/javascript" src='https://y-m-m.github.io/js/toc.js'></script>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/toc.css' />
+
+  
+<div id="gitalk-container" class="gitalk-container"></div>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/gitalk.css'>
+<script src='https://y-m-m.github.io/js/gitalk.min.js'></script>
+<script>
+  const gitalk = new Gitalk({
+    clientID: 'Ov23livxKNtTlPeMjV2H',
+    clientSecret: '6d3bc9f47a1296f29628a63701ea5624cd28a26b',
+    repo: 'y-m-m.github.io',
+    owner: 'Y-M-M',
+    admin: ['Y-M-M'],
+    id: eval("location.pathname"), 
+    distractionFreeMode: false 
+  });
+  (function() {
+    gitalk.render('gitalk-container');
+  })();
+</script>
+
+</div>
+
+  <div class="footer container-xl width-full p-responsive">
+  <div
+    class="position-relative d-flex flex-row-reverse flex-lg-row flex-wrap flex-lg-nowrap flex-justify-center flex-lg-justify-between flex-sm-items-center pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
+    <a aria-label="Homepage" title="GitHub" class="footer-octicon d-none d-lg-block mr-lg-4" href="https://y-m-m.github.io/">
+      <svg height="24" class="octicon octicon-mark-github" viewBox="0 0 16 16" version="1.1" width="24">
+        <path fill-rule="evenodd"
+          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+        </path>
+      </svg>
+    </a>
+    <ul class="list-style-none d-flex flex-wrap col-12 flex-justify-center flex-lg-justify-between mb-2 mb-lg-0">
+      
+      <li class="mr-3 mr-lg-0">Theme by <a href='https://github.com/MeiK2333/github-style'>github-style</a></li>
+      
+    </ul>
+  </div>
+  <div class="d-flex flex-justify-center pb-6">
+    <span class="f6 text-gray-light"></span>
+  </div>
+
+
+</div>
+</body>
+
+<script type="application/javascript" src="https://y-m-m.github.io/js/github-style.js"></script>
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+<script type="application/javascript" src='https://y-m-m.github.io/js/search.js'></script>
+
+
+
+</html>

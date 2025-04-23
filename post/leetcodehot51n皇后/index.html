@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script type="application/javascript" src='https://y-m-m.github.io/js/theme-mode.js'></script>
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/frameworks.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github-style.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/light.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/dark.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/syntax.css' />
+    <title>leetcode 51/52 N皇后一/二 - 陈皮的博客</title>
+    
+    <link rel="icon" type="image/x-icon" href='/images/github-mark.png'>
+    
+    <meta name="theme-color" content="#1e2327">
+
+    
+    <meta name="description"
+  content="leetcode 51 N皇后 leetcode 52 N皇后
+题目 按照国际象棋的规则，皇后可以攻击与之处在同一行或同一列或同一斜线上的棋子。 n 皇后问题 研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并且使皇后彼此之间不能相互攻击。 给你一个整数 n ，返回所有不同的 n 皇后问题 的解决方案。 每一种解法包含一个不同的 n 皇后问题 的棋子放置方案，该方案中 &lsquo;Q&rsquo; 和 &lsquo;.&rsquo; 分别代表了皇后和空位。
+示例 示例一 输入：n = 4 输出：[[&quot;.Q..&quot;,&quot;&hellip;Q&quot;,&ldquo;Q&hellip;&rdquo;,&quot;..Q.&quot;],[&quot;..Q.&quot;,&ldquo;Q&hellip;&rdquo;,&quot;&hellip;Q&quot;,&quot;.Q..&quot;]] 解释：如上图所示，4 皇后问题存在两个不同的解法。
+示例二 输入：n = 1 输出：[[&ldquo;Q&rdquo;]]
+提示 1 &lt;= n &lt;= 9 题解 方法一 分析 判断对角线上有没有皇后： 寻找规律，左上到右下的对角线，行与列之差相等；右上到左下的对角线，行与列之和相等 建立unordered_set dig1, dig2来记录有皇后的对角线 提交结果 N皇后一通过 class Solution { public: void findans(vector&lt;vector&lt;string&gt;&gt;&amp;ans, vector&lt;int&gt;&amp;quene, unordered_set&lt;int&gt;&amp;dig1, unordered_set&lt;int&gt;&amp; dig2, unordered_set&lt;int&gt;&amp;col, const int&amp; row, const int&amp; pos, const int&amp; n) { quene[row] = pos; col.insert(pos); if (row == n - 1) { ans.push_back(buildsolution(quene, n)); } else { for (int i = 0; i &lt; n; i&#43;&#43;) { if (i == pos) continue; if (col.find(i) != col.end()) continue; int dignal1 = row &#43; 1 - i; int dignal2 = row &#43; 1 &#43; i; if (dig1.find(dignal1) != dig1.end() || dig2.find(dignal2) != dig2.end()) { continue; } dig1.insert(dignal1); dig2.insert(dignal2); findans(ans, quene, dig1, dig2, col, row&#43;1, i, n); dig1.erase(dignal1); dig2.erase(dignal2); } } col.erase(pos); quene[row] = -1; } vector&lt;string&gt; buildsolution(const vector&lt;int&gt;&amp; quene, const int&amp; n) { vector&lt;string&gt; asolution; for (int i = 0; i &lt; n; i&#43;&#43;) { string arow = string(n, &#39;.&#39;); arow[quene[i]] = &#39;Q&#39;; asolution.push_back(arow); } return asolution; } vector&lt;vector&lt;string&gt;&gt; solveNQueens(int n) { vector&lt;vector&lt;string&gt;&gt; ans; unordered_set&lt;int&gt; dig1; unordered_set&lt;int&gt; dig2; unordered_set&lt;int&gt; col; vector&lt;int&gt; quene(n, -1); for (int i = 0; i &lt; n; i&#43;&#43;) { dig1.insert(0 - i); dig2.insert(i); findans(ans, quene, dig1, dig2, col, 0, i, n); dig1.erase(0 - i); dig2.erase(i); } return ans; } }; 方法二 class Solution { public: vector&lt;vector&lt;string&gt;&gt; solveNQueens(int n) { vector&lt;vector&lt;string&gt;&gt; solutions; vector&lt;int&gt; quenes(n, -1); find_pos(solutions, quenes, n, 0, 0, 0, 0); return solutions; } void find_pos(vector&lt;vector&lt;string&gt;&gt;&amp; solutions, vector&lt;int&gt;&amp; quenes, const int&amp; n, const int&amp;col, const int &amp;dig1, const int &amp;dig2, const int&amp; row) { if (row == n) { addans(solutions, quenes, n); } else { int available = ((1 &lt;&lt; n) - 1) &amp; (~(col | dig1 | dig2)); while (available != 0) { int pos = available &amp; (-available); available = available &amp; (available - 1); int column = __builtin_ctz(pos); quenes[row] = column; find_pos(solutions, quenes, n, col | pos, (dig1 | pos) &gt;&gt; 1, (dig2 | pos) &lt;&lt; 1, row &#43; 1); quenes[row] = -1; } } } void addans(vector&lt;vector&lt;string&gt;&gt; &amp;solutions, vector&lt;int&gt; &amp;quenes, const int&amp; n) { vector&lt;string&gt; asolution; for (int i = 0; i &lt; n; i&#43;&#43;) { string row = string(n, &#39;.&#39;); row[quenes[i]] = &#39;Q&#39;; asolution.push_back(row); } solutions.push_back(asolution); } }; 提交结果 N皇后二通过 分析 位运算 &#43; 回溯 利用int代替unordered_set 小技巧 num &amp; (num - 1) 可将最低位的1置为0 (1 &laquo; n) - 1 &amp; (~num) 可将num中所有值为0的数置为1，并且不会影响更高位的0(其中n是num的位数) 用上一行的dig表示这一行的dig (dig1 | pos) &raquo; 1 (dig2 | pos) &laquo; 1 在函数调用时，不修改现在的dig和col值，而是现在的值构造表达式传入函数，这样在回溯时就无需把值修改回原来的样子了 class Solution { public: void findans(int&amp; ans, const int&amp; col, const int&amp; dig1, const int&amp; dig2, const int&amp; n, const int&amp; row) { if (row == n) { ans&#43;&#43;; } else { int available = ((1 &lt;&lt; n) - 1) &amp; (~(col | dig1 | dig2)); while (available &gt; 0) { int pos = available &amp; (-available); available = available &amp; (available - 1); findans(ans, col | pos, (dig1 | pos) &lt;&lt; 1, (dig2 | pos) &gt;&gt; 1, n, row &#43; 1); } } } int totalNQueens(int n) { int ans = 0; int col = 0; int dig1 = 0; int dig2 = 0; findans(ans, col, dig1, dig2, n, 0); return ans; } }; 提交结果 N皇后二通过 参考资料 leetcode官方题解
+" />
+<meta name="keywords"
+  content='blog, google analytics' />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://y-m-m.github.io/post/leetcodehot51n%E7%9A%87%E5%90%8E/" />
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="leetcode 51/52 N皇后一/二 - 陈皮的博客" />
+<meta name="twitter:description"
+  content="leetcode 51 N皇后 leetcode 52 N皇后
+题目 按照国际象棋的规则，皇后可以攻击与之处在同一行或同一列或同一斜线上的棋子。 n 皇后问题 研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并且使皇后彼此之间不能相互攻击。 给你一个整数 n ，返回所有不同的 n 皇后问题 的解决方案。 每一种解法包含一个不同的 n 皇后问题 的棋子放置方案，该方案中 &lsquo;Q&rsquo; 和 &lsquo;.&rsquo; 分别代表了皇后和空位。
+示例 示例一 输入：n = 4 输出：[[&quot;.Q..&quot;,&quot;&hellip;Q&quot;,&ldquo;Q&hellip;&rdquo;,&quot;..Q.&quot;],[&quot;..Q.&quot;,&ldquo;Q&hellip;&rdquo;,&quot;&hellip;Q&quot;,&quot;.Q..&quot;]] 解释：如上图所示，4 皇后问题存在两个不同的解法。
+示例二 输入：n = 1 输出：[[&ldquo;Q&rdquo;]]
+提示 1 &lt;= n &lt;= 9 题解 方法一 分析 判断对角线上有没有皇后： 寻找规律，左上到右下的对角线，行与列之差相等；右上到左下的对角线，行与列之和相等 建立unordered_set dig1, dig2来记录有皇后的对角线 提交结果 N皇后一通过 class Solution { public: void findans(vector&lt;vector&lt;string&gt;&gt;&amp;ans, vector&lt;int&gt;&amp;quene, unordered_set&lt;int&gt;&amp;dig1, unordered_set&lt;int&gt;&amp; dig2, unordered_set&lt;int&gt;&amp;col, const int&amp; row, const int&amp; pos, const int&amp; n) { quene[row] = pos; col.insert(pos); if (row == n - 1) { ans.push_back(buildsolution(quene, n)); } else { for (int i = 0; i &lt; n; i&#43;&#43;) { if (i == pos) continue; if (col.find(i) != col.end()) continue; int dignal1 = row &#43; 1 - i; int dignal2 = row &#43; 1 &#43; i; if (dig1.find(dignal1) != dig1.end() || dig2.find(dignal2) != dig2.end()) { continue; } dig1.insert(dignal1); dig2.insert(dignal2); findans(ans, quene, dig1, dig2, col, row&#43;1, i, n); dig1.erase(dignal1); dig2.erase(dignal2); } } col.erase(pos); quene[row] = -1; } vector&lt;string&gt; buildsolution(const vector&lt;int&gt;&amp; quene, const int&amp; n) { vector&lt;string&gt; asolution; for (int i = 0; i &lt; n; i&#43;&#43;) { string arow = string(n, &#39;.&#39;); arow[quene[i]] = &#39;Q&#39;; asolution.push_back(arow); } return asolution; } vector&lt;vector&lt;string&gt;&gt; solveNQueens(int n) { vector&lt;vector&lt;string&gt;&gt; ans; unordered_set&lt;int&gt; dig1; unordered_set&lt;int&gt; dig2; unordered_set&lt;int&gt; col; vector&lt;int&gt; quene(n, -1); for (int i = 0; i &lt; n; i&#43;&#43;) { dig1.insert(0 - i); dig2.insert(i); findans(ans, quene, dig1, dig2, col, 0, i, n); dig1.erase(0 - i); dig2.erase(i); } return ans; } }; 方法二 class Solution { public: vector&lt;vector&lt;string&gt;&gt; solveNQueens(int n) { vector&lt;vector&lt;string&gt;&gt; solutions; vector&lt;int&gt; quenes(n, -1); find_pos(solutions, quenes, n, 0, 0, 0, 0); return solutions; } void find_pos(vector&lt;vector&lt;string&gt;&gt;&amp; solutions, vector&lt;int&gt;&amp; quenes, const int&amp; n, const int&amp;col, const int &amp;dig1, const int &amp;dig2, const int&amp; row) { if (row == n) { addans(solutions, quenes, n); } else { int available = ((1 &lt;&lt; n) - 1) &amp; (~(col | dig1 | dig2)); while (available != 0) { int pos = available &amp; (-available); available = available &amp; (available - 1); int column = __builtin_ctz(pos); quenes[row] = column; find_pos(solutions, quenes, n, col | pos, (dig1 | pos) &gt;&gt; 1, (dig2 | pos) &lt;&lt; 1, row &#43; 1); quenes[row] = -1; } } } void addans(vector&lt;vector&lt;string&gt;&gt; &amp;solutions, vector&lt;int&gt; &amp;quenes, const int&amp; n) { vector&lt;string&gt; asolution; for (int i = 0; i &lt; n; i&#43;&#43;) { string row = string(n, &#39;.&#39;); row[quenes[i]] = &#39;Q&#39;; asolution.push_back(row); } solutions.push_back(asolution); } }; 提交结果 N皇后二通过 分析 位运算 &#43; 回溯 利用int代替unordered_set 小技巧 num &amp; (num - 1) 可将最低位的1置为0 (1 &laquo; n) - 1 &amp; (~num) 可将num中所有值为0的数置为1，并且不会影响更高位的0(其中n是num的位数) 用上一行的dig表示这一行的dig (dig1 | pos) &raquo; 1 (dig2 | pos) &laquo; 1 在函数调用时，不修改现在的dig和col值，而是现在的值构造表达式传入函数，这样在回溯时就无需把值修改回原来的样子了 class Solution { public: void findans(int&amp; ans, const int&amp; col, const int&amp; dig1, const int&amp; dig2, const int&amp; n, const int&amp; row) { if (row == n) { ans&#43;&#43;; } else { int available = ((1 &lt;&lt; n) - 1) &amp; (~(col | dig1 | dig2)); while (available &gt; 0) { int pos = available &amp; (-available); available = available &amp; (available - 1); findans(ans, col | pos, (dig1 | pos) &lt;&lt; 1, (dig2 | pos) &gt;&gt; 1, n, row &#43; 1); } } } int totalNQueens(int n) { int ans = 0; int col = 0; int dig1 = 0; int dig2 = 0; findans(ans, col, dig1, dig2, n, 0); return ans; } }; 提交结果 N皇后二通过 参考资料 leetcode官方题解
+" />
+<meta name="twitter:site" content="https://y-m-m.github.io/" />
+<meta name="twitter:creator" content="陈皮" />
+<meta name="twitter:image"
+  content="https://y-m-m.github.io/">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="leetcode 51/52 N皇后一/二 - 陈皮的博客">
+<meta property="og:description"
+  content="leetcode 51 N皇后 leetcode 52 N皇后
+题目 按照国际象棋的规则，皇后可以攻击与之处在同一行或同一列或同一斜线上的棋子。 n 皇后问题 研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并且使皇后彼此之间不能相互攻击。 给你一个整数 n ，返回所有不同的 n 皇后问题 的解决方案。 每一种解法包含一个不同的 n 皇后问题 的棋子放置方案，该方案中 &lsquo;Q&rsquo; 和 &lsquo;.&rsquo; 分别代表了皇后和空位。
+示例 示例一 输入：n = 4 输出：[[&quot;.Q..&quot;,&quot;&hellip;Q&quot;,&ldquo;Q&hellip;&rdquo;,&quot;..Q.&quot;],[&quot;..Q.&quot;,&ldquo;Q&hellip;&rdquo;,&quot;&hellip;Q&quot;,&quot;.Q..&quot;]] 解释：如上图所示，4 皇后问题存在两个不同的解法。
+示例二 输入：n = 1 输出：[[&ldquo;Q&rdquo;]]
+提示 1 &lt;= n &lt;= 9 题解 方法一 分析 判断对角线上有没有皇后： 寻找规律，左上到右下的对角线，行与列之差相等；右上到左下的对角线，行与列之和相等 建立unordered_set dig1, dig2来记录有皇后的对角线 提交结果 N皇后一通过 class Solution { public: void findans(vector&lt;vector&lt;string&gt;&gt;&amp;ans, vector&lt;int&gt;&amp;quene, unordered_set&lt;int&gt;&amp;dig1, unordered_set&lt;int&gt;&amp; dig2, unordered_set&lt;int&gt;&amp;col, const int&amp; row, const int&amp; pos, const int&amp; n) { quene[row] = pos; col.insert(pos); if (row == n - 1) { ans.push_back(buildsolution(quene, n)); } else { for (int i = 0; i &lt; n; i&#43;&#43;) { if (i == pos) continue; if (col.find(i) != col.end()) continue; int dignal1 = row &#43; 1 - i; int dignal2 = row &#43; 1 &#43; i; if (dig1.find(dignal1) != dig1.end() || dig2.find(dignal2) != dig2.end()) { continue; } dig1.insert(dignal1); dig2.insert(dignal2); findans(ans, quene, dig1, dig2, col, row&#43;1, i, n); dig1.erase(dignal1); dig2.erase(dignal2); } } col.erase(pos); quene[row] = -1; } vector&lt;string&gt; buildsolution(const vector&lt;int&gt;&amp; quene, const int&amp; n) { vector&lt;string&gt; asolution; for (int i = 0; i &lt; n; i&#43;&#43;) { string arow = string(n, &#39;.&#39;); arow[quene[i]] = &#39;Q&#39;; asolution.push_back(arow); } return asolution; } vector&lt;vector&lt;string&gt;&gt; solveNQueens(int n) { vector&lt;vector&lt;string&gt;&gt; ans; unordered_set&lt;int&gt; dig1; unordered_set&lt;int&gt; dig2; unordered_set&lt;int&gt; col; vector&lt;int&gt; quene(n, -1); for (int i = 0; i &lt; n; i&#43;&#43;) { dig1.insert(0 - i); dig2.insert(i); findans(ans, quene, dig1, dig2, col, 0, i, n); dig1.erase(0 - i); dig2.erase(i); } return ans; } }; 方法二 class Solution { public: vector&lt;vector&lt;string&gt;&gt; solveNQueens(int n) { vector&lt;vector&lt;string&gt;&gt; solutions; vector&lt;int&gt; quenes(n, -1); find_pos(solutions, quenes, n, 0, 0, 0, 0); return solutions; } void find_pos(vector&lt;vector&lt;string&gt;&gt;&amp; solutions, vector&lt;int&gt;&amp; quenes, const int&amp; n, const int&amp;col, const int &amp;dig1, const int &amp;dig2, const int&amp; row) { if (row == n) { addans(solutions, quenes, n); } else { int available = ((1 &lt;&lt; n) - 1) &amp; (~(col | dig1 | dig2)); while (available != 0) { int pos = available &amp; (-available); available = available &amp; (available - 1); int column = __builtin_ctz(pos); quenes[row] = column; find_pos(solutions, quenes, n, col | pos, (dig1 | pos) &gt;&gt; 1, (dig2 | pos) &lt;&lt; 1, row &#43; 1); quenes[row] = -1; } } } void addans(vector&lt;vector&lt;string&gt;&gt; &amp;solutions, vector&lt;int&gt; &amp;quenes, const int&amp; n) { vector&lt;string&gt; asolution; for (int i = 0; i &lt; n; i&#43;&#43;) { string row = string(n, &#39;.&#39;); row[quenes[i]] = &#39;Q&#39;; asolution.push_back(row); } solutions.push_back(asolution); } }; 提交结果 N皇后二通过 分析 位运算 &#43; 回溯 利用int代替unordered_set 小技巧 num &amp; (num - 1) 可将最低位的1置为0 (1 &laquo; n) - 1 &amp; (~num) 可将num中所有值为0的数置为1，并且不会影响更高位的0(其中n是num的位数) 用上一行的dig表示这一行的dig (dig1 | pos) &raquo; 1 (dig2 | pos) &laquo; 1 在函数调用时，不修改现在的dig和col值，而是现在的值构造表达式传入函数，这样在回溯时就无需把值修改回原来的样子了 class Solution { public: void findans(int&amp; ans, const int&amp; col, const int&amp; dig1, const int&amp; dig2, const int&amp; n, const int&amp; row) { if (row == n) { ans&#43;&#43;; } else { int available = ((1 &lt;&lt; n) - 1) &amp; (~(col | dig1 | dig2)); while (available &gt; 0) { int pos = available &amp; (-available); available = available &amp; (available - 1); findans(ans, col | pos, (dig1 | pos) &lt;&lt; 1, (dig2 | pos) &gt;&gt; 1, n, row &#43; 1); } } } int totalNQueens(int n) { int ans = 0; int col = 0; int dig1 = 0; int dig2 = 0; findans(ans, col, dig1, dig2, n, 0); return ans; } }; 提交结果 N皇后二通过 参考资料 leetcode官方题解
+" />
+<meta property="og:url" content="https://y-m-m.github.io/post/leetcodehot51n%E7%9A%87%E5%90%8E/" />
+<meta property="og:site_name" content="leetcode 51/52 N皇后一/二" />
+<meta property="og:image"
+  content="https://y-m-m.github.io/">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+<meta property="article:published_time" content="2025-04-23 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+  <div style="position: relative">
+  <header class="Header js-details-container Details px-3 px-md-4 px-lg-5 flex-wrap flex-md-nowrap open Details--on">
+    <div class="Header-item mobile-none" style="margin-top: -4px; margin-bottom: -4px;">
+      <a class="Header-link" href="https://y-m-m.github.io/">
+        <img class="octicon" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item d-md-none">
+      <button class="Header-link btn-link js-details-target" type="button"
+        onclick="document.querySelector('#header-search').style.display = document.querySelector('#header-search').style.display == 'none'? 'block': 'none'">
+        <svg height="24" class="octicon octicon-three-bars" viewBox="0 0 16 16" version="1.1" width="24">
+          <path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 2.75zm0 5A.75.75 0 011.75 7h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 7.75zM1.75 12a.75.75 0 100 1.5h12.5a.75.75 0 100-1.5H1.75z">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <div style="display: none;" id="header-search"
+      class="Header-item Header-item--full flex-column flex-md-row width-full flex-order-2 flex-md-order-none mr-0 mr-md-3 mt-3 mt-md-0 Details-content--hidden-not-important d-md-flex">
+      <div
+        class="Header-search header-search flex-auto js-site-search position-relative flex-self-stretch flex-md-self-auto mb-3 mb-md-0 mr-0 mr-md-3 scoped-search site-scoped-search js-jump-to">
+        <div class="position-relative">
+          
+          <form target="_blank" id="search-form" action="" accept-charset="UTF-8" method="get"
+            autocomplete="off">
+            <label
+              class="Header-search-label form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative d-flex flex-justify-between flex-items-center">
+              <input type="text"
+                class="Header-search-input form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable"
+                name="q" value="" placeholder="Search" autocomplete="off">
+            </label>
+          </form>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="Header-item Header-item--full flex-justify-center d-md-none position-relative">
+      <a class="Header-link " href="https://y-m-m.github.io/">
+        <img class="octicon octicon-mark-github v-align-middle" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item" style="margin-right: 0;">
+      <a href="javascript:void(0)" class="Header-link no-select" onclick="switchTheme()">
+        <svg style="fill: var(--color-profile-color-modes-toggle-moon);" class="no-select" viewBox="0 0 16 16"
+          version="1.1" width="16" height="16">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M4.52208 7.71754C7.5782 7.71754 10.0557 5.24006 10.0557 2.18394C10.0557 1.93498 10.0392 1.68986 10.0074 1.44961C9.95801 1.07727 10.3495 0.771159 10.6474 0.99992C12.1153 2.12716 13.0615 3.89999 13.0615 5.89383C13.0615 9.29958 10.3006 12.0605 6.89485 12.0605C3.95334 12.0605 1.49286 10.001 0.876728 7.24527C0.794841 6.87902 1.23668 6.65289 1.55321 6.85451C2.41106 7.40095 3.4296 7.71754 4.52208 7.71754Z">
+          </path>
+        </svg>
+      </a>
+    </div>
+  </header>
+</div>
+
+  <div id="search-result" class="container-lg px-3 new-discussion-timeline" style="display: none;">
+</div>
+
+  
+<div class="application-main">
+  <div>
+  <main>
+    <div class="gisthead pagehead bg-gray-light pb-0 pt-3 mb-4">
+      <div class="px-0">
+        <div class="mb-3 d-flex px-3 px-md-3 px-lg-5">
+          <div class="flex-auto min-width-0 width-fit mr-3">
+            <div class="d-flex">
+              <div class="d-none d-md-block">
+                <a class="avatar mr-2 flex-shrink-0" href="https://y-m-m.github.io/">
+                  <img class=" avatar-user"
+                    src="/images/me.png"
+                    width="32" height="32"></a>
+              </div>
+              <div class="d-flex flex-column">
+                <h1 class="break-word f3 text-normal mb-md-0 mb-1">
+                  <span class="author">
+                    <a href="https://y-m-m.github.io/">陈皮</a>
+                  </span>
+                  <span class="path-divider">/</span>
+                  <strong class="css-truncate css-truncate-target mr-1" style="max-width: 410px">
+                    <a href="https://y-m-m.github.io/post/leetcodehot51n%E7%9A%87%E5%90%8E/">leetcode 51/52 N皇后一/二</a>
+                  </strong>
+                </h1>
+                <div class="note m-0">
+                  Created <relative-time datetime="Wed, 23 Apr 2025 00:00:00 &#43;0000"
+                    class="no-wrap">
+                    Wed, 23 Apr 2025 00:00:00 &#43;0000</relative-time>
+
+                  
+                  <span class="file-info-divider"></span>
+                  Modified <relative-time datetime="Wed, 23 Apr 2025 10:27:59 &#43;0800"
+                    class="no-wrap">
+                    Wed, 23 Apr 2025 10:27:59 &#43;0800</relative-time>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-lg px-3 new-discussion-timeline">
+      <div class="repository-content gist-content">
+        <div>
+          <div class="js-gist-file-update-container js-task-list-container file-box">
+            <div id="file-pytest" class="file my-2">
+              <div id="post-header" class="file-header d-flex flex-md-items-center flex-items-start sticky-header" style="z-index: 2">
+                <div class="file-info d-flex flex-md-items-center flex-items-start flex-order-1 flex-auto">
+                  <div class="text-mono f6 flex-auto pr-3 flex-order-2 flex-md-order-1 mt-2 mt-md-0">
+                    
+                    <summary id="toc-toggle" onclick="clickToc()" class="btn btn-octicon m-0 mr-2 p-2">
+                      <svg aria-hidden="true" viewBox="0 0 16 16" height="16" width="16" class="octicon octicon-list-unordered">
+                        <path fill-rule="evenodd" d="M2 4a1 1 0 100-2 1 1 0 000 2zm3.75-1.5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zM3 8a1 1 0 11-2 0 1 1 0 012 0zm-1 6a1 1 0 100-2 1 1 0 000 2z"></path>
+                      </svg>
+                    </summary>
+                    <details-menu class="SelectMenu" id="toc-details" style="display: none;">
+                      <div class="SelectMenu-modal rounded-3 mt-1" style="max-height: 340px;">
+                        <div class="SelectMenu-list SelectMenu-list--borderless p-2" style="overscroll-behavior: contain;" id="toc-list">
+                        </div>
+                      </div>
+                    </details-menu>
+                      1167 Words
+                    
+
+                  </div>
+                  <div class="file-actions flex-order-2 pt-0">
+                    
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      计算机科学与技术
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      算法题
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/leetcode">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      leetcode
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%95%B0%E7%BB%84">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      数组
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%9B%9E%E6%BA%AF">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      回溯
+                    </a>
+                    
+                    
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="Box-body px-5 pb-5" style="z-index: 1">
+                <article class="markdown-body entry-content container-lg"><p><a href="https://leetcode.cn/problems/n-queens/description/">leetcode 51 N皇后</a>          <br>
+<a href="https://leetcode.cn/problems/n-queens-ii/description/">leetcode 52 N皇后</a></p>
+<h1 id="题目">题目</h1>
+<blockquote>
+<p>按照国际象棋的规则，皇后可以攻击与之处在同一行或同一列或同一斜线上的棋子。  <br>
+n 皇后问题 研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并且使皇后彼此之间不能相互攻击。     <br>
+给你一个整数 n ，返回所有不同的 n 皇后问题 的解决方案。   <br>
+每一种解法包含一个不同的 n 皇后问题 的棋子放置方案，该方案中 &lsquo;Q&rsquo; 和 &lsquo;.&rsquo; 分别代表了皇后和空位。</p>
+</blockquote>
+<h1 id="示例">示例</h1>
+<h2 id="示例一">示例一</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2024-12-01%2011.03.03.png" alt=""></p>
+<blockquote>
+<p>输入：n = 4
+输出：[[&quot;.Q..&quot;,&quot;&hellip;Q&quot;,&ldquo;Q&hellip;&rdquo;,&quot;..Q.&quot;],[&quot;..Q.&quot;,&ldquo;Q&hellip;&rdquo;,&quot;&hellip;Q&quot;,&quot;.Q..&quot;]]
+解释：如上图所示，4 皇后问题存在两个不同的解法。</p>
+</blockquote>
+<h2 id="示例二">示例二</h2>
+<blockquote>
+<p>输入：n = 1
+输出：[[&ldquo;Q&rdquo;]]</p>
+</blockquote>
+<h1 id="提示">提示</h1>
+<ul>
+<li>1 &lt;= n &lt;= 9</li>
+</ul>
+<h1 id="题解">题解</h1>
+<h2 id="方法一">方法一</h2>
+<ul>
+<li>分析
+<ul>
+<li>判断对角线上有没有皇后：
+<ul>
+<li>寻找规律，左上到右下的对角线，行与列之差相等；右上到左下的对角线，行与列之和相等</li>
+<li>建立unordered_set<int> dig1, dig2来记录有皇后的对角线</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>N皇后一通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="n">findans</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;&amp;</span><span class="n">ans</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span><span class="n">quene</span><span class="p">,</span> <span class="n">unordered_set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span><span class="n">dig1</span><span class="p">,</span> <span class="n">unordered_set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">dig2</span><span class="p">,</span> <span class="n">unordered_set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span><span class="n">col</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">row</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">pos</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">quene</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">=</span> <span class="n">pos</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">col</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">pos</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">row</span> <span class="o">==</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">buildsolution</span><span class="p">(</span><span class="n">quene</span><span class="p">,</span> <span class="n">n</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">pos</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">col</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">!=</span> <span class="n">col</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="kt">int</span> <span class="n">dignal1</span> <span class="o">=</span> <span class="n">row</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="kt">int</span> <span class="n">dignal2</span> <span class="o">=</span> <span class="n">row</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">dig1</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">dignal1</span><span class="p">)</span> <span class="o">!=</span> <span class="n">dig1</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="o">||</span> <span class="n">dig2</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">dignal2</span><span class="p">)</span> <span class="o">!=</span> <span class="n">dig2</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="n">dig1</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">dignal1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">dig2</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">dignal2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">findans</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">quene</span><span class="p">,</span> <span class="n">dig1</span><span class="p">,</span> <span class="n">dig2</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">row</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">dig1</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">dignal1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">dig2</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">dignal2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="n">col</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">pos</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">quene</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">buildsolution</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">quene</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">asolution</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">string</span> <span class="n">arow</span> <span class="o">=</span> <span class="n">string</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="sc">&#39;.&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">arow</span><span class="p">[</span><span class="n">quene</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="sc">&#39;Q&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">asolution</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">arow</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">asolution</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;</span> <span class="n">solveNQueens</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">unordered_set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">dig1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">unordered_set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">dig2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">unordered_set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">col</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">quene</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">dig1</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span> <span class="o">-</span> <span class="n">i</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">dig2</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">findans</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">quene</span><span class="p">,</span> <span class="n">dig1</span><span class="p">,</span> <span class="n">dig2</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">dig1</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="mi">0</span> <span class="o">-</span> <span class="n">i</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">dig2</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h2 id="方法二">方法二</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;</span> <span class="n">solveNQueens</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;</span> <span class="n">solutions</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">quenes</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">find_pos</span><span class="p">(</span><span class="n">solutions</span><span class="p">,</span> <span class="n">quenes</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">solutions</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">find_pos</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;&amp;</span> <span class="n">solutions</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">quenes</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">n</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span><span class="n">col</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="o">&amp;</span><span class="n">dig1</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="o">&amp;</span><span class="n">dig2</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">row</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">row</span> <span class="o">==</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">addans</span><span class="p">(</span><span class="n">solutions</span><span class="p">,</span> <span class="n">quenes</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> 
+</span></span><span class="line"><span class="cl">        <span class="k">else</span> 
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">available</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="p">(</span><span class="n">col</span> <span class="o">|</span> <span class="n">dig1</span> <span class="o">|</span> <span class="n">dig2</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="p">(</span><span class="n">available</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="kt">int</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">available</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">-</span><span class="n">available</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">available</span> <span class="o">=</span> <span class="n">available</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">available</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="kt">int</span> <span class="n">column</span> <span class="o">=</span> <span class="n">__builtin_ctz</span><span class="p">(</span><span class="n">pos</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">quenes</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">=</span> <span class="n">column</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">find_pos</span><span class="p">(</span><span class="n">solutions</span><span class="p">,</span> <span class="n">quenes</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">col</span> <span class="o">|</span> <span class="n">pos</span><span class="p">,</span> <span class="p">(</span><span class="n">dig1</span> <span class="o">|</span> <span class="n">pos</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">dig2</span> <span class="o">|</span> <span class="n">pos</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">quenes</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">addans</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&gt;</span> <span class="o">&amp;</span><span class="n">solutions</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">quenes</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">asolution</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">string</span> <span class="n">row</span> <span class="o">=</span> <span class="n">string</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="sc">&#39;.&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">row</span><span class="p">[</span><span class="n">quenes</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="sc">&#39;Q&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">asolution</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">row</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">solutions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">asolution</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><ul>
+<li>提交结果
+<ul>
+<li>N皇后二通过</li>
+</ul>
+</li>
+<li>分析
+<ul>
+<li>位运算 + 回溯</li>
+<li>利用int代替unordered_set</li>
+<li>小技巧
+<ul>
+<li>num &amp; (num - 1) 可将最低位的1置为0</li>
+<li>(1 &laquo; n) - 1 &amp; (~num) 可将num中所有值为0的数置为1，并且不会影响更高位的0(其中n是num的位数)</li>
+<li>用上一行的dig表示这一行的dig
+<ul>
+<li>(dig1 | pos) &raquo; 1</li>
+<li>(dig2 | pos) &laquo; 1</li>
+</ul>
+</li>
+<li>在函数调用时，不修改现在的dig和col值，而是现在的值构造表达式传入函数，这样在回溯时就无需把值修改回原来的样子了</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="n">findans</span><span class="p">(</span><span class="kt">int</span><span class="o">&amp;</span> <span class="n">ans</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">col</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">dig1</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">dig2</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">n</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">row</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">row</span> <span class="o">==</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>    
+</span></span><span class="line"><span class="cl">            <span class="n">ans</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">available</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="p">(</span><span class="n">col</span> <span class="o">|</span> <span class="n">dig1</span> <span class="o">|</span> <span class="n">dig2</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="p">(</span><span class="n">available</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="kt">int</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">available</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">-</span><span class="n">available</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">available</span> <span class="o">=</span> <span class="n">available</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">available</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">findans</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">col</span> <span class="o">|</span> <span class="n">pos</span><span class="p">,</span> <span class="p">(</span><span class="n">dig1</span> <span class="o">|</span> <span class="n">pos</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">dig2</span> <span class="o">|</span> <span class="n">pos</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="nf">totalNQueens</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">col</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">dig1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">dig2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">findans</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">dig1</span><span class="p">,</span> <span class="n">dig2</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><ul>
+<li>提交结果
+<ul>
+<li>N皇后二通过</li>
+</ul>
+</li>
+</ul>
+<h1 id="参考资料">参考资料</h1>
+<p><a href="https://leetcode.cn/problems/n-queens/solutions/398929/nhuang-hou-by-leetcode-solution/">leetcode官方题解</a></p>
+</article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="application/javascript" src='https://y-m-m.github.io/js/toc.js'></script>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/toc.css' />
+
+  
+<div id="gitalk-container" class="gitalk-container"></div>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/gitalk.css'>
+<script src='https://y-m-m.github.io/js/gitalk.min.js'></script>
+<script>
+  const gitalk = new Gitalk({
+    clientID: 'Ov23livxKNtTlPeMjV2H',
+    clientSecret: '6d3bc9f47a1296f29628a63701ea5624cd28a26b',
+    repo: 'y-m-m.github.io',
+    owner: 'Y-M-M',
+    admin: ['Y-M-M'],
+    id: eval("location.pathname"), 
+    distractionFreeMode: false 
+  });
+  (function() {
+    gitalk.render('gitalk-container');
+  })();
+</script>
+
+</div>
+
+  <div class="footer container-xl width-full p-responsive">
+  <div
+    class="position-relative d-flex flex-row-reverse flex-lg-row flex-wrap flex-lg-nowrap flex-justify-center flex-lg-justify-between flex-sm-items-center pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
+    <a aria-label="Homepage" title="GitHub" class="footer-octicon d-none d-lg-block mr-lg-4" href="https://y-m-m.github.io/">
+      <svg height="24" class="octicon octicon-mark-github" viewBox="0 0 16 16" version="1.1" width="24">
+        <path fill-rule="evenodd"
+          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+        </path>
+      </svg>
+    </a>
+    <ul class="list-style-none d-flex flex-wrap col-12 flex-justify-center flex-lg-justify-between mb-2 mb-lg-0">
+      
+      <li class="mr-3 mr-lg-0">Theme by <a href='https://github.com/MeiK2333/github-style'>github-style</a></li>
+      
+    </ul>
+  </div>
+  <div class="d-flex flex-justify-center pb-6">
+    <span class="f6 text-gray-light"></span>
+  </div>
+
+
+</div>
+</body>
+
+<script type="application/javascript" src="https://y-m-m.github.io/js/github-style.js"></script>
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+<script type="application/javascript" src='https://y-m-m.github.io/js/search.js'></script>
+
+
+
+</html>

@@ -153,9 +153,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Wed, 23 Apr 2025 20:29:19 &#43;0800"
+                  Modified <relative-time datetime="Thu, 24 Apr 2025 09:33:33 &#43;0800"
                     class="no-wrap">
-                    Wed, 23 Apr 2025 20:29:19 &#43;0800</relative-time>
+                    Thu, 24 Apr 2025 09:33:33 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -185,7 +185,7 @@
                         </div>
                       </div>
                     </details-menu>
-                      2851 Words
+                      3695 Words
                     
 
                   </div>
@@ -671,12 +671,125 @@
 </li>
 <li>脚本程序中的行编辑
 <ul>
-<li>假设应用程序myap运行时从myap.conf中读取配置参数</li>
+<li>假设应用程序myap运行时从myap.conf中读取配置参数
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-24%2009.09.33.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-24%2009.10.34.png" alt=""></li>
+<li>ed命令
+<ul>
+<li>ed [选项][filename]</li>
+<li>单行纯文本编辑器</li>
+<li>内置命令
+<ul>
+<li>A：切换到输入模式，在文件的最后一行之后输入新的内容</li>
+<li>C：切换到输入模式，用输入的内容替换掉最后一行的内容</li>
+<li>i：切换到输入模式，在当前行之前加入一个新的空行来输入内容</li>
+<li>d：用于删除最后一行文本内容</li>
+<li>n：用于显示最后一行的行号和内容</li>
+<li>w：&lt;文件名&gt;：一给定的文件名保存当前正在编辑的文件</li>
+<li>q：退出ed编辑器</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 <h2 id="环境变量">环境变量</h2>
+<ul>
+<li>环境变量和局部变量
+<ul>
+<li>所创建的shell变量，默认为局部变量（限于当前shell）</li>
+<li>内部命令export 局部变量转换为环境变量，例如：export proto</li>
+<li>局部变量和环境变量
+<ul>
+<li>hell启动的子进程继承环境变量，不继承局部变量</li>
+<li>子进程对环境变量的修改，不影响父进程中同名变量</li>
+<li>（环境变量的设置，如PATH，CLASSPATH，LANG，若有必要放在~/.bashrc中或/etc/profile中）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>系统的环境变量
+<ul>
+<li>创建：登录后系统自动创建一些环境变量影响应用程序运行</li>
+<li>HOME：用户主目录的路径名</li>
+<li>PATH：命令查找路径
+<ul>
+<li>PATH=/bin:/usr/bin:/etc</li>
+<li>与DOS/Windows不同的是，它不首先搜索当前目录</li>
+<li>PATH=.:/bin:/usr/bin:/etc 先搜索当前目录(危险!)</li>
+</ul>
+</li>
+<li>TERM：终端类型
+<ul>
+<li>全屏幕操作的软件(如vi)，使用它搜索终端库</li>
+<li>环境变量的赋值对某个应用程序（包括java虚拟机以及其他的系统软件），有什么影响，与这个AP的设计相关，需要查阅相关的手册</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>相关命令
+<ul>
+<li>set/env</li>
+<li>内部命令set列出当前所有变量及其值以及函数定义</li>
+<li>包括环境变量和局部变量、函数定义
+<ul>
+<li>set | grep ^fname=</li>
+</ul>
+</li>
+<li>外部命令/bin/env列出环境变量及其值</li>
+</ul>
+</li>
+<li>环境变量的引用
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-24%2009.23.48.png" alt="">
+<ul>
+<li>为什么脚本程序可以直接引用？
+<ul>
+<li>脚本程序由当前子shell解释执行，而环境变量可继承</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>环境变量的继承
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-24%2009.27.22.png" alt=""></li>
+</ul>
 <h1 id="3-替换">3 替换</h1>
+<ul>
+<li>shell替换
+<ul>
+<li>shell的替换工作：先替换命令行再执行命令
+<ul>
+<li>文件名生成</li>
+<li>变量替换</li>
+<li>命令替换</li>
+</ul>
+</li>
+<li>变量替换
+<ul>
+<li>ls $HOME</li>
+<li>echo ”My home is $HOME, Terminal is $TERM”</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>文件名生成
+<ul>
+<li>遵循文件通配符规则，按照字典序排列
+<ul>
+<li>如: ls *.c 文件名替换后实际执行ls a.c x.c</li>
+</ul>
+</li>
+<li>无匹配文件：保持原文，例如：*.php展开后还是 *.php
+<ul>
+<li>例如：ls &gt; *.php #新建一个文件 *.php ，但保存时会变成 ‘ *.php ’</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<h2 id="命令替换">命令替换</h2>
+</li>
+</ul>
 <h1 id="4-元字符和转义">4 元字符和转义</h1>
 <h2 id="元字符">元字符</h2>
 <h2 id="引号和转义处理">引号和转义处理</h2>

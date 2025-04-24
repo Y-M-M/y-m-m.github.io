@@ -153,9 +153,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Thu, 24 Apr 2025 09:33:33 &#43;0800"
+                  Modified <relative-time datetime="Thu, 24 Apr 2025 15:52:30 &#43;0800"
                     class="no-wrap">
-                    Thu, 24 Apr 2025 09:33:33 &#43;0800</relative-time>
+                    Thu, 24 Apr 2025 15:52:30 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -185,7 +185,7 @@
                         </div>
                       </div>
                     </details-menu>
-                      3695 Words
+                      4801 Words
                     
 
                   </div>
@@ -755,7 +755,8 @@
 </ul>
 <h1 id="3-替换">3 替换</h1>
 <ul>
-<li>shell替换
+<li>
+<p>shell替换</p>
 <ul>
 <li>shell的替换工作：先替换命令行再执行命令
 <ul>
@@ -772,7 +773,8 @@
 </li>
 </ul>
 </li>
-<li>文件名生成
+<li>
+<p>文件名生成</p>
 <ul>
 <li>遵循文件通配符规则，按照字典序排列
 <ul>
@@ -787,13 +789,219 @@
 </ul>
 </li>
 <li>
-<h2 id="命令替换">命令替换</h2>
+<p>命令替换</p>
+<ul>
+<li>反撇号
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-24%2015.03.54.png" alt=""></li>
+<li>$()格式
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-24%2015.04.24.png" alt=""></li>
+</ul>
+</li>
+<li>
+<p>shell内部变量：位置参数</p>
+<ul>
+<li>$0 脚本文件本身的名字</li>
+<li>$1 $2 1号命令行参数，2号命令行参数，以此类推</li>
+<li>$# 命令行参数的个数</li>
+<li>”$*” 等同于”$1 $2 $3 $4 &hellip;”</li>
+<li>”$@” 等同于”$1” ”$2” ”$3” …</li>
+<li>用于把变长的命令行参数传递给其他命令</li>
+<li>内部命令shift
+<ul>
+<li>位置参数的移位操作， $#的值减1，旧的$2变为$1，旧的$3变为$2，以此类推其他用法如：shift 3（移位三个位置）
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-24%2015.11.32.png" alt=""></li>
+</ul>
+</li>
+</ul>
 </li>
 </ul>
 <h1 id="4-元字符和转义">4 元字符和转义</h1>
 <h2 id="元字符">元字符</h2>
+<ul>
+<li>空格、制表符
+<ul>
+<li>命令行参数的分隔符</li>
+</ul>
+</li>
+<li>回车
+<ul>
+<li>执行键入的命令</li>
+</ul>
+</li>
+<li>/&gt; &lt; |
+<ul>
+<li>重定向与管道(还有||)</li>
+</ul>
+</li>
+<li>;
+<ul>
+<li>用于一行内输入多个命令(还有;;)</li>
+<li>双分号是case语句的终结符</li>
+</ul>
+</li>
+<li>&amp;
+<ul>
+<li>后台运行(还有&amp;&amp;)</li>
+</ul>
+</li>
+<li>$
+<ul>
+<li>引用shell变量</li>
+</ul>
+</li>
+<li>`
+<ul>
+<li>反向单引号，用于命令替换</li>
+</ul>
+</li>
+<li>*[]?
+<ul>
+<li>文件通配符</li>
+<li>echo &ldquo;*&ldquo;与echo *不同</li>
+</ul>
+</li>
+<li>\
+<ul>
+<li>取消后继字符的特殊作用(转义)</li>
+</ul>
+</li>
+<li>()
+<ul>
+<li>用于定义shell函数或在子shell中执行一组命令</li>
+</ul>
+</li>
+<li>()&gt;&lt;|;&amp; 等除了它们自身的特殊含义外还同时起到分隔符的作用(同空格)
+<ul>
+<li>例如：ls&gt;file.txt;wc -l file.txt&amp;sort&lt;file.txt|uniq</li>
+</ul>
+</li>
+</ul>
 <h2 id="引号和转义处理">引号和转义处理</h2>
+<ul>
+<li>转义符
+<ul>
+<li>反斜线作转义符，取消其后元字符的特殊作用</li>
+<li>如果反斜线加在非元字符前面，反斜线跟没有一样
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-24%2015.22.58.png" alt=""></li>
+</ul>
+</li>
+<li>单引号与双引号
+<ul>
+<li>双引号&rdquo;
+<ul>
+<li>除$和`外特殊字符的特殊含义被取消(保留一定的灵活性)</li>
+<li>需要的转义 \“  \$  \` \\</li>
+<li>echo * 与 echo &ldquo;*&rdquo;</li>
+</ul>
+</li>
+<li>单引号&rsquo;
+<ul>
+<li>对所括起的任何字符，不作特殊解释
+<ul>
+<li>系统扫描单引号开始，停止对所有字符的特殊解释，直到再次遇到</li>
+<li>单引号
+<ul>
+<li>echo &ldquo;My home dir is $HOME&rdquo;</li>
+<li>echo &lsquo;My home dir is $HOME&rsquo;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>一对单引号内无法再转义单引号，只能分段处理
+<ul>
+<li>$ echo &lsquo;Don&rsquo;'&rsquo;t remove Peter&rsquo;'&rsquo;s Windows dir &ldquo;C:\PETER&rdquo;!&rsquo;</li>
+<li>Don&rsquo;t remove Peter&rsquo;s Windows dir &ldquo;C:\PETER&rdquo;!</li>
+</ul>
+</li>
+<li>一对双引号内，可以转义单引号
+<ul>
+<li>$ echo &ldquo;<code>whoami</code>&rsquo;s $HOME is &quot;$HOME&quot;&rdquo;</li>
+<li>zhang&rsquo;s $HOME is &ldquo;/home/zhang&rdquo;</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>引号及转义处理
+<ul>
+<li>转义问题
+<ul>
+<li>在人机交互时，需要准确传达信息（对于特殊字符，是其特殊含义还是字面含义）</li>
+<li>正则表达式描述，C语言字符串，Shell的元字符
+<ul>
+<li>3.14</li>
+<li>printf(&quot;\033[Hvalue=&quot;%s&quot;\n&rdquo;, val);</li>
+<li>echo -e &ldquo;\033[Hvalue=&quot;$value&quot;\n&rdquo;</li>
+<li>vi Data\ File.txt</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>转义符后面跟非特殊字符
+<ul>
+<li>转义符后面跟非特殊字符，不同场合处理方式不同</li>
+<li>引号内，尽量维持字面含义，以便于类似awk在命令行中的程序片段
+<ul>
+<li>printf &ldquo;\033[2J\033[H value = [$value]\n&rdquo;</li>
+</ul>
+</li>
+<li>没有引号时，属于“未定义”的情况，转义符后面最好不跟非特殊字符
+<ul>
+<li>echo $ $</li>
+<li>echo &ldquo;$&rdquo; $</li>
+<li>echo \A A</li>
+<li>echo &ldquo;\A&rdquo; \A</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>转义符与引号及反撇号
+<ul>
+<li>配对的单引号中
+<ul>
+<li>\代表反斜线自身，不许任何转义，不许中间插入单引号，或者人为把两个单引号之间的单引号修改为四个字符&rsquo;''</li>
+</ul>
+</li>
+<li>配对的双引号中
+<ul>
+<li>&quot; 代替双引号自身</li>
+<li>\\ 代表反斜线自身</li>
+<li>\` 代替反撇号自身</li>
+<li>\$ 代表美元符自身</li>
+</ul>
+</li>
+<li>配对的反撇号中
+<ul>
+<li>\\ 代表反斜线自身</li>
+<li>\` 代替反撇号自身</li>
+<li>这样设计的目的是为了反撇号的嵌套，例如：10年前是哪一年？
+<ul>
+<li>year=` expr \ `date &lsquo;+%Y&rsquo;\` - 10`</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>应用程序转义与shell转义
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-24%2015.46.21.png" alt=""></li>
+</ul>
+</li>
+</ul>
 <h2 id="例题终止指定名字的所有进程">例题：终止指定名字的所有进程</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-04-24%2015.49.48.png" alt=""></p>
+<h1 id="5-条件">5 条件</h1>
+<h2 id="shell中的逻辑判断">shell中的逻辑判断</h2>
+<h2 id="test命令和方括号命令">test命令和方括号命令</h2>
+<h2 id="命令组合">命令组合</h2>
+<h2 id="条件分支">条件分支</h2>
+<h1 id="6-循环">6 循环</h1>
+<h2 id="表达式运算">表达式运算</h2>
+<h2 id="内部命令eval">内部命令eval</h2>
+<h2 id="while循环">while循环</h2>
+<h2 id="for循环">for循环</h2>
+<h1 id="7-函数">7 函数</h1>
 </article>
               </div>
             </div>

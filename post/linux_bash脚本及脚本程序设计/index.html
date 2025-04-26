@@ -153,9 +153,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Sat, 26 Apr 2025 11:18:17 &#43;0800"
+                  Modified <relative-time datetime="Sat, 26 Apr 2025 19:54:54 &#43;0800"
                     class="no-wrap">
-                    Sat, 26 Apr 2025 11:18:17 &#43;0800</relative-time>
+                    Sat, 26 Apr 2025 19:54:54 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -185,7 +185,7 @@
                         </div>
                       </div>
                     </details-menu>
-                      6315 Words
+                      7517 Words
                     
 
                   </div>
@@ -1232,10 +1232,168 @@
 </ul>
 <h1 id="6-循环">6 循环</h1>
 <h2 id="表达式运算">表达式运算</h2>
+<ul>
+<li>shell不支持除字符串以外的数据类型，不支持加减乘除等算数运算和关于字符串的正则表达式运算
+<ul>
+<li>需要这些功能，借助于shell之外的可执行程序/usr/bin/expr实现</li>
+<li>有的shell（包括bash）为了提高执行效率，提供内部命令版本的echo,printf,expr, test,[等命令，但这仅仅是一种性能优化措施。只依赖外部命令完全可以实现</li>
+<li>bash提供的这种机制使得程序员可以根据需要设计更多更方便的运算</li>
+</ul>
+</li>
+<li>expr命令：算术运算、关系运算、逻辑运算、正则表达式运算
+<ul>
+<li>括号 ()</li>
+<li>算数运算(5种) + - * / %</li>
+<li>关系运算(6种)  &gt; &gt;= &lt; &lt;= = !=</li>
+<li>逻辑运算(2种)  | &amp;</li>
+<li>正则表达式运算  ：
+<ul>
+<li>expr string : pattern
+<ul>
+<li>正则表达式pattern匹配字符串string，打印匹配长度</li>
+<li>pattern中用(和)括起一部分，能匹配时打印括号内能匹配的部分，否则为空字符串
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-26%2019.31.06.png" alt=""></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>空格与转义
+<ul>
+<li>算术运算、关系运算和逻辑运算，shell脚本用到的时候不是很多
+<ul>
+<li>应该转义的地方必须加反斜线转义</li>
+<li>应该有空格的地方不允许漏掉
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-26%2019.26.23.png" alt=""></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>从标准输出中抽取数据
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-26%2019.32.10.png" alt=""></li>
+</ul>
+</li>
+</ul>
 <h2 id="内部命令eval">内部命令eval</h2>
+<ul>
+<li>将程序中输入的或者加工出来的数据作为程序来执行
+<ul>
+<li>解释和编译</li>
+<li>将数据（程序生成的数据或者外部输入的数据）当做程序来执行是只有解释型语言才可能具备的特点，类似C这样的编译型语言无法具备这样的功能（但可以通过“动态链接”的方式，在程序运行期间不停止程序的运行有限度地变换处理程序）
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-26%2019.33.26.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-26%2019.37.46.png" alt=""></li>
+</ul>
+</li>
+</ul>
 <h2 id="while循环">while循环</h2>
+<ul>
+<li>while结构
+<ul>
+<li><img src="/images/%E6%88%AA%E5%B1%8F2025-04-26%2019.39.51.png" alt=""></li>
+<li>while、do、done作为关键字，必须以独立命令行的首个单词身份出现，shell才能将它们解释为内部命令</li>
+</ul>
+</li>
+<li>倒计数
+<ul>
+<li><img src="/images/%E6%88%AA%E5%B1%8F2025-04-26%2019.41.02.png" alt=""></li>
+</ul>
+</li>
+<li>ping测试多个网站
+<ul>
+<li><img src="/images/%E6%88%AA%E5%B1%8F2025-04-26%2019.43.23.png" alt=""></li>
+</ul>
+</li>
+</ul>
 <h2 id="for循环">for循环</h2>
+<ul>
+<li>for 结构
+<ul>
+<li><img src="/images/%E6%88%AA%E5%B1%8F2025-04-26%2019.44.00.png" alt=""></li>
+</ul>
+</li>
+<li>seq命令
+<ul>
+<li><img src="/images/%E6%88%AA%E5%B1%8F2025-04-26%2019.44.39.png" alt=""></li>
+<li>人交互式时可以直接写为一行：
+<ul>
+<li>for i in <code>seq 1 254</code>;do ping -c1 -w1 192.168.0.$i;done</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>系统启动时自动执行的一段脚本
+<ul>
+<li><img src="/images/%E6%88%AA%E5%B1%8F2025-04-26%2019.45.51.png" alt=""></li>
+<li>检索/etc/rc.d目录下的所有直属或一级子目录下的可执行文件，并依次执行</li>
+</ul>
+</li>
+<li>枚举命令行参数中的所有名字对应进程并终止这些进程
+<ul>
+<li><img src="/images/%E6%88%AA%E5%B1%8F2025-04-26%2019.48.35.png" alt=""></li>
+</ul>
+</li>
+<li>break，continue，exit
+<ul>
+<li>内部命令break
+<ul>
+<li>循环结构for/while中使用，中止循环</li>
+<li>例：break
+<ul>
+<li>break 2 # 中止两重循环</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>内部命令continue
+<ul>
+<li>在循环结构for/while中使用，提前结束本轮循环</li>
+</ul>
+</li>
+<li>内部命令exit
+<ul>
+<li>结束脚本程序的执行，退出。exit的参数为该进程执行结束后的返回码</li>
+<li>例：exit 1</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 <h1 id="7-函数">7 函数</h1>
+<ul>
+<li>shell函数
+<ul>
+<li>语法
+<ul>
+<li>name() { list;}</li>
+</ul>
+</li>
+<li>参数引用
+<ul>
+<li>函数定义完成之后，该函数名作为一个自定义内部命令执行，后面可以调用</li>
+<li>调用时函数名后附加上0到多个参数</li>
+<li>在函数体内部以$1，$2，&hellip;或$*，$@方式引用</li>
+</ul>
+</li>
+<li>返回值
+<ul>
+<li>函数体内用内部命令return使函数有返回码，0表示成功，非零表示失败</li>
+<li>函数内部可以创建和修改变量，函数返回后其它程序可以访问</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>shell函数举例
+<ul>
+<li>给出用户提示信息和默认值，等待用户输入配置信息。</li>
+<li>要求：用户的输入必须从一个列表中选择。</li>
+<li>用户直接按下回车则选择默认值，否则对输入值进行检查，强行用户在列表中选择。</li>
+<li>配置结束后，将配置信息赋值给某一指定名称的变量，后续的程序中使用这些变量。</li>
+<li>主程序
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-26%2019.54.11.png" alt=""></li>
+<li>函数定义（要放在调用程序之前）
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-26%2019.54.43.png" alt=""></li>
+</ul>
+</li>
+</ul>
 </article>
               </div>
             </div>

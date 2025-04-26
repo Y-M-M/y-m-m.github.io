@@ -153,9 +153,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Thu, 24 Apr 2025 15:52:30 &#43;0800"
+                  Modified <relative-time datetime="Sat, 26 Apr 2025 11:18:17 &#43;0800"
                     class="no-wrap">
-                    Thu, 24 Apr 2025 15:52:30 &#43;0800</relative-time>
+                    Sat, 26 Apr 2025 11:18:17 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -185,7 +185,7 @@
                         </div>
                       </div>
                     </details-menu>
-                      4801 Words
+                      6315 Words
                     
 
                   </div>
@@ -993,9 +993,243 @@
 <p><img src="/images/%E6%88%AA%E5%B1%8F2025-04-24%2015.49.48.png" alt=""></p>
 <h1 id="5-条件">5 条件</h1>
 <h2 id="shell中的逻辑判断">shell中的逻辑判断</h2>
+<ul>
+<li>
+<p>shell中的条件判断</p>
+<ul>
+<li>判定一条命令是否执行成功。方法:命令执行的返回码，0表示成功，非0表示失败。可以把命令执行结束后的“返回码”理解为“出错代码”</li>
+</ul>
+</li>
+<li>
+<p>命令执行结束后的返回码</p>
+<ul>
+<li>int main(void) { … }</li>
+<li>int main(int argc, char **argv) { … }</li>
+<li>int main(int argc, char **argv, char **env) { … }</li>
+<li>main()函数的返回值，或者程序调用了系统调用exit(code)导致进程终止，exit函数的参数值code。取值0~255</li>
+<li>如果代码中main()函数没有return一个确定的值，返回码就是随机值，不可用来做条件判断
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-26%2009.51.57.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-26%2009.52.57.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-26%2009.53.17.png" alt=""></li>
+</ul>
+</li>
+<li>
+<p>shell内部变量$
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-26%2009.54.47.png" alt=""></p>
+</li>
+<li>
+<p>复合逻辑</p>
+<ul>
+<li>用&amp;&amp;或||连结两个命令</li>
+<li>可以利用复合逻辑中的“短路计算”特性实现最简单的条件</li>
+<li>cmd1 &amp;&amp; cmd2
+<ul>
+<li>若cmd1执行成功(返回码为0)则执行cmd2，否则不执行cmd2</li>
+</ul>
+</li>
+<li>cmd1 || cmd2</li>
+<li>cmd1执行失败(返回码不为0)则执行cmd2，否则不执行cmd2</li>
+</ul>
+</li>
+<li>
+<p>true与false</p>
+<ul>
+<li>/bin/true
+<ul>
+<li>返回码总为0</li>
+</ul>
+</li>
+<li>/bin/false
+<ul>
+<li>返回码总不为0</li>
+</ul>
+</li>
+<li>有的shell为了提高效率，将true和false设置为内部命令</li>
+</ul>
+</li>
+<li>
+<p>自编程序用于条件判断
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-26%2010.00.14.png" alt=""></p>
+</li>
+</ul>
 <h2 id="test命令和方括号命令">test命令和方括号命令</h2>
+<ul>
+<li>命令/usr/bin/[ 要求其最后一个命令行参数必须为]</li>
+<li>除此之外/usr/bin/[ 与 /usr/bin/test功能相同
+<ul>
+<li>有的Linux系统中/usr/bin/[是一个指向test的符号连接</li>
+</ul>
+</li>
+<li>注意：不要将方括号理解成一个词法符号
+<ul>
+<li>test -r /etc/motd</li>
+<li>[ -r /etc/motd ]
+<ul>
+<li>[是命令， ]是参数。空格不能省略</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>文件特性检测
+<ul>
+<li>-f 普通文件</li>
+<li>-d 目录文件</li>
+<li>-r 可读</li>
+<li>-w 可写</li>
+<li>-x 可执行</li>
+<li>-s size&gt;0</li>
+</ul>
+</li>
+<li>例
+<ul>
+<li>test -r /etc/motd &amp;&amp; echo readable</li>
+<li>[ -r /etc/motd ] &amp;&amp; echo readable</li>
+</ul>
+</li>
+<li>字符串比较
+<ul>
+<li>str1 = str2 str1与str2串相等 (bash也允许以==代替=)</li>
+<li>str1 != str2 str1串与str2串不等</li>
+<li>注意:等号和不等号两侧的空格不可少</li>
+<li>[ &ldquo;$a&rdquo; = &quot;&quot; ] &amp;&amp; echo empty string 注意:$a的引号</li>
+<li>test $# = 0 &amp;&amp; echo &ldquo;No argument &quot;
+<ul>
+<li>$#传递给脚本的参数个数</li>
+</ul>
+</li>
+<li>[ $level = 0 ] &amp;&amp; echo level is Zero
+<ul>
+<li>仅判断字符串是否为空</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>整数的比较
+<ul>
+<li>整数的比较（六种关系运算，注意与字符串比较的区别）
+<ul>
+<li>-eq＝ -ne ≠</li>
+<li>-gt ＞-ge ≥</li>
+<li>-lt ＜-le ≤</li>
+</ul>
+</li>
+<li>例:
+<ul>
+<li>test <code>ls | wc -l</code> -ge 100 &amp;&amp; echo &ldquo;Too many files&rdquo;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>复合条件
+<ul>
+<li>逻辑运算
+<ul>
+<li>! NOT（非）</li>
+<li>-o OR （或）</li>
+<li>-a AND （与）</li>
+</ul>
+</li>
+<li>例: 如果变量cmd的值为一个可执行命令，执行该命令
+<ul>
+<li>[ ! -d $cmd -a -x $cmd ] &amp;&amp; $cmd</li>
+<li>注意：必需的空格不可省略</li>
+<li>$cmd：执行命令</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 <h2 id="命令组合">命令组合</h2>
+<ul>
+<li>命令组合的两种方式{}与()
+<ul>
+<li>命令组合类似C语言中的复合语句，组合在一起的几个命令作为一个整体看待：可以集体管道和重定向或者当条件满足时执行若干个命令。
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-26%2011.05.46.png" alt=""></li>
+</ul>
+</li>
+<li>{}与()在语义上的不同
+<ul>
+<li>{} 在当前shell中执行一组命令</li>
+<li>() 在子shell中执行一组命令
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-26%2011.06.57.png" alt=""></li>
+</ul>
+</li>
+<li>{}与()在语法上的不同
+<ul>
+<li>(list) 在子shell中执行命令表list</li>
+<li>{ list;} 在当前shell中执行命令表list
+<ul>
+<li>注意:左花括号后面必须有一个空格</li>
+<li>圆括号是shell元字符，花括号不是，它作为一个特殊内部命令处理。所以必须是一行的行首单词</li>
+<li>(ls -l;ps)|more</li>
+<li>{ ls -l;ps;}|more</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>举例
+<ul>
+<li>使用{}时，多行并为一行不要漏掉必需的空格和分号</li>
+<li>[ -f core ] &amp;&amp; {</li>
+<li>echo &ldquo;rm core&rdquo;</li>
+<li>rm core</li>
+<li>}</li>
+<li>写成一行应当为
+<ul>
+<li>[ -f core ] &amp;&amp; { echo &ldquo;rm core&rdquo;;rm core;}</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 <h2 id="条件分支">条件分支</h2>
+<ul>
+<li>条件结构if：两个或多个分支
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-26%2011.10.31.png" alt="">
+<ul>
+<li>其中：if/then/elif/else/fi为关键字(内部命令)</li>
+</ul>
+</li>
+<li>举例
+<ul>
+<li><img src="/images/%E6%88%AA%E5%B1%8F2025-04-26%2011.12.11.png" alt=""></li>
+<li>关键字作为内部命令，要么在行首，要么前面有分号来分隔命令</li>
+<li>then行可和cat行合并成一行</li>
+<li>if行不可以和then行直接合并成一行
+<ul>
+<li>将两行合并: 分号使得一行内可以输入多条命令</li>
+<li>if test -r errfile; then</li>
+</ul>
+</li>
+<li>与C语言不同，if的语法中then与else或fi配对，使得不需要花括号这样的命令组合</li>
+</ul>
+</li>
+<li>条件结构if：终止指定名字的进程
+<ul>
+<li><img src="/images/%E6%88%AA%E5%B1%8F2025-04-26%2011.15.27.png" alt=""></li>
+</ul>
+</li>
+<li>case结构：多条件分支
+<ul>
+<li>语法</li>
+<li><img src="/images/%E6%88%AA%E5%B1%8F2025-04-26%2011.16.16.png" alt="">
+<ul>
+<li>word与pattern匹配：使用shell的文件名匹配规则</li>
+<li>;;是一个整体，不能在两分号间加空格，也不能用两个连续的空行代替</li>
+<li>可以使用竖线表示多个模式</li>
+<li>word与多个模式匹配时，执行遇到的第一个命令表</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>shell脚本中的注释
+<ul>
+<li>shell中使用#号作注释</li>
+<li>#号出现在一个单词的首部，那么，从#号至行尾的所有字符被忽略
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-26%2011.18.04.png" alt=""></li>
+</ul>
+</li>
+</ul>
 <h1 id="6-循环">6 循环</h1>
 <h2 id="表达式运算">表达式运算</h2>
 <h2 id="内部命令eval">内部命令eval</h2>

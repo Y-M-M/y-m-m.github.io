@@ -6,8 +6,15 @@
     <description>Recent content in 笔记 on 陈皮的博客</description>
     <generator>Hugo</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 09 May 2025 18:09:11 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 13 May 2025 15:04:02 +0800</lastBuildDate>
     <atom:link href="https://y-m-m.github.io/tags/%E7%AC%94%E8%AE%B0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Pregel: A System for Large-Scale Graph Processing</title>
+      <link>https://y-m-m.github.io/post/pregel/</link>
+      <pubDate>Tue, 13 May 2025 00:00:00 +0000</pubDate>
+      <guid>https://y-m-m.github.io/post/pregel/</guid>
+      <description>&lt;h1 id=&#34;abstract&#34;&gt;Abstract&lt;/h1&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;程序被表示为一个迭代序列，每一次迭代中的顶点可以接收上一次迭代中发送的消息，向其他顶点和输出边发送消息，或改变图的拓扑&lt;/li&gt;&#xA;&lt;li&gt;这种以顶点为中心的算法足够灵活，可以表达广泛的算法集&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;对大图的高效处理是具有挑战性的。图算法通常表现出较差的内存访问局部性，每个顶点的工作很少，并且在执行的过程中并行度是变化的&lt;/li&gt;&#xA;&lt;li&gt;在许多机器上的Districution加剧了局部性问题，并增加了机器在计算过程中失败的概率&lt;/li&gt;&#xA;&lt;li&gt;在大规模分布式环境中，没有可扩展的通用系统来实现任意图表示上的任意图算法&lt;/li&gt;&#xA;&lt;li&gt;实现一个算法来处理一个大图通常意味着在下面的选项中进行选择&#xA;&lt;ul&gt;&#xA;&lt;li&gt;构建自定义的分布式基础架构，通常需要实现大量的工作，每个新的算法和图表示应用时都必须重复&lt;/li&gt;&#xA;&lt;li&gt;依靠现有的分布式计算平台，往往不适用于图处理&#xA;&lt;ul&gt;&#xA;&lt;li&gt;例如：MapReduce，非常适用于各种大规模计算问题&lt;/li&gt;&#xA;&lt;li&gt;它有时会被用来挖掘大图，但这会导致次优的性能和可用性问题&lt;/li&gt;&#xA;&lt;li&gt;处理数据的基本模型已经扩展，以方便聚合和类似SQL的查询，但这些扩展对于通常需要更好的拟合消息传递模型的图算法来说通常并不理想&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;使用单机图算法库，如BGL, LEDA, NetworkX, JDSL, Stanford GraphBase, 或者 FGL，限制可以处理的问题的规模&lt;/li&gt;&#xA;&lt;li&gt;使用现有的并行图系统&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Parallel BGL和CGMgraph库解决了并行图算法，但没有解决容错等对超大规模分布式系统很重要的问题&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;我们构建了一个可扩展的容错平台，具有足够灵活的API来表达任意的图算法&lt;/li&gt;&#xA;&lt;li&gt;Pregel程序的高层组织受到Valiant’s Bulk Synchronous Parallel model的启发&#xA;&lt;ul&gt;&#xA;&lt;li&gt;计算由一系列的迭代组成，称为超步&lt;/li&gt;&#xA;&lt;li&gt;在一个超步中，框架为每个顶点调用一个用户定义的函数，该函数规定了单个顶点V和单个超步S的行为&lt;/li&gt;&#xA;&lt;li&gt;它可以读取S-1中发送给V的消息，将消息发送给超步S+1中接收到的其他顶点，并修改状态V及其出边的状态&lt;/li&gt;&#xA;&lt;li&gt;消息通常沿着向外的边发送，但消息可以发送到任何标识符已知的顶点&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;以顶点为中心的方法类似于MapReduce&#xA;&lt;ul&gt;&#xA;&lt;li&gt;用户专注于一个局部动作，独立地处理每个项&lt;/li&gt;&#xA;&lt;li&gt;系统将这些动作组合起来，从而将计算提升到一个大数据集&lt;/li&gt;&#xA;&lt;li&gt;通过设计，该模型非常适合分布式实现：它不公开任何检测超步执行顺序的机制，所有通信从超步S到超步S + 1&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;该模型的同步性使得在实现算法时更容易对程序语义进行推理，并确保Pregel程序在本质上不存在异步系统中常见的死锁和数据竞争&#xA;&lt;ul&gt;&#xA;&lt;li&gt;由于典型的图计算比机器拥有更多的顶点，因此需要能够平衡机器的负载，使得超步之间的同步不会增加过多的延迟&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h1 id=&#34;model-of-computation计算模型&#34;&gt;MODEL OF COMPUTATION(计算模型)&lt;/h1&gt;</description>
+    </item>
     <item>
       <title>软件工程</title>
       <link>https://y-m-m.github.io/post/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/</link>

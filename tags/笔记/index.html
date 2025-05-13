@@ -149,7 +149,7 @@
                 </path>
               </svg>
               Posts
-              <span class="Counter">179</span>
+              <span class="Counter">180</span>
             </a>
           </nav>
           <div class="profile-color-modes js-promo-color-modes-banner-profile isInitialToggle">
@@ -428,7 +428,7 @@
         </path>
       </svg>
       Posts
-      <span class="Counter ">179</span>
+      <span class="Counter ">180</span>
     </a>
   </nav>
 </div>
@@ -441,7 +441,7 @@
       
       <div class="TableObject border-bottom border-gray-light py-3">
         <div class="user-repo-search-results-summary TableObject-item TableObject-item--primary v-align-top">
-          <strong>20</strong>
+          <strong>21</strong>
           results
           for <strong>笔记</strong>
         </div>
@@ -459,6 +459,111 @@
       </div>
       
       <ul>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/pregel/">Pregel: A System for Large-Scale Graph Processing</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <h1 id="abstract">Abstract</h1>
+<ul>
+<li>程序被表示为一个迭代序列，每一次迭代中的顶点可以接收上一次迭代中发送的消息，向其他顶点和输出边发送消息，或改变图的拓扑</li>
+<li>这种以顶点为中心的算法足够灵活，可以表达广泛的算法集</li>
+</ul>
+<h1 id="introduction">Introduction</h1>
+<ul>
+<li>对大图的高效处理是具有挑战性的。图算法通常表现出较差的内存访问局部性，每个顶点的工作很少，并且在执行的过程中并行度是变化的</li>
+<li>在许多机器上的Districution加剧了局部性问题，并增加了机器在计算过程中失败的概率</li>
+<li>在大规模分布式环境中，没有可扩展的通用系统来实现任意图表示上的任意图算法</li>
+<li>实现一个算法来处理一个大图通常意味着在下面的选项中进行选择
+<ul>
+<li>构建自定义的分布式基础架构，通常需要实现大量的工作，每个新的算法和图表示应用时都必须重复</li>
+<li>依靠现有的分布式计算平台，往往不适用于图处理
+<ul>
+<li>例如：MapReduce，非常适用于各种大规模计算问题</li>
+<li>它有时会被用来挖掘大图，但这会导致次优的性能和可用性问题</li>
+<li>处理数据的基本模型已经扩展，以方便聚合和类似SQL的查询，但这些扩展对于通常需要更好的拟合消息传递模型的图算法来说通常并不理想</li>
+</ul>
+</li>
+<li>使用单机图算法库，如BGL, LEDA, NetworkX, JDSL, Stanford GraphBase, 或者 FGL，限制可以处理的问题的规模</li>
+<li>使用现有的并行图系统
+<ul>
+<li>Parallel BGL和CGMgraph库解决了并行图算法，但没有解决容错等对超大规模分布式系统很重要的问题</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>我们构建了一个可扩展的容错平台，具有足够灵活的API来表达任意的图算法</li>
+<li>Pregel程序的高层组织受到Valiant’s Bulk Synchronous Parallel model的启发
+<ul>
+<li>计算由一系列的迭代组成，称为超步</li>
+<li>在一个超步中，框架为每个顶点调用一个用户定义的函数，该函数规定了单个顶点V和单个超步S的行为</li>
+<li>它可以读取S-1中发送给V的消息，将消息发送给超步S+1中接收到的其他顶点，并修改状态V及其出边的状态</li>
+<li>消息通常沿着向外的边发送，但消息可以发送到任何标识符已知的顶点</li>
+</ul>
+</li>
+<li>以顶点为中心的方法类似于MapReduce
+<ul>
+<li>用户专注于一个局部动作，独立地处理每个项</li>
+<li>系统将这些动作组合起来，从而将计算提升到一个大数据集</li>
+<li>通过设计，该模型非常适合分布式实现：它不公开任何检测超步执行顺序的机制，所有通信从超步S到超步S + 1</li>
+</ul>
+</li>
+<li>该模型的同步性使得在实现算法时更容易对程序语义进行推理，并确保Pregel程序在本质上不存在异步系统中常见的死锁和数据竞争
+<ul>
+<li>由于典型的图计算比机器拥有更多的顶点，因此需要能够平衡机器的负载，使得超步之间的同步不会增加过多的延迟</li>
+</ul>
+</li>
+</ul>
+<h1 id="model-of-computation计算模型">MODEL OF COMPUTATION(计算模型)</h1>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                论文阅读
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AC%94%E8%AE%B0">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                笔记
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Tue, 13 May 2025 00:00:00 &#43;0000" class="no-wrap"
+                title=" Tue, 13 May 2025 00:00:00 &#43;0000">
+                Tue, 13 May 2025 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
         
         <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
           <div class="col-12 d-inline-block">
@@ -3117,118 +3222,6 @@
               <relative-time datetime=" Wed, 11 Sep 2024 00:00:00 &#43;0000" class="no-wrap"
                 title=" Wed, 11 Sep 2024 00:00:00 &#43;0000">
                 Wed, 11 Sep 2024 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/%E7%BB%88%E7%AB%AF%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/">mac下终端常用命令</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <h1 id="关于目录的操作">关于目录的操作</h1>
-<ul>
-<li>ls
-<ul>
-<li>ls: 查看当前目录下文件</li>
-<li>ls-a: 查看当前目录下文件以及隐藏文件</li>
-</ul>
-</li>
-<li>mkdir: 创建新目录</li>
-<li>cd
-<ul>
-<li>cd 目录名: 进入目录</li>
-<li>cd ..: 返回上一级目录</li>
-</ul>
-</li>
-<li>rm
-<ul>
-<li>rmdir 目录名: 删除空目录，此删除不会出现在废纸篓里</li>
-<li>rm -rf 目录名: 删除空目录/非空目录，此删除不会出现在废纸篓里(强制删除，不会询问)</li>
-<li>rm -r 目录名: 删除目录，会提示你确认删除文件</li>
-<li>rm 文件名: 此删除不会出现在废纸篓里</li>
-</ul>
-</li>
-<li>cp
-<ul>
-<li>cp 文件名1 文件名2: 拷贝文件1，并命名为文件2</li>
-<li>cp 文件名 文件夹名/: 将文件拷贝到文件夹中</li>
-<li>cp -r 文件夹名1 文件夹名2: 将文件夹1拷贝为文件夹2</li>
-</ul>
-</li>
-<li>mv
-<ul>
-<li>mv 文件夹名 文件夹名/: 将一个文件夹移动到另一个文件夹中</li>
-</ul>
-</li>
-<li>find *.txt: 查找当前目录下所有.txt文件</li>
-<li>pwd: 显示当前目录</li>
-<li>open
-<ul>
-<li>open .: 打开成可视化的文件夹(当前目录)</li>
-<li>open 路径: 打开路径对应的文件夹</li>
-</ul>
-</li>
-</ul>
-<h1 id="关于文件的操作">关于文件的操作</h1>
-<ul>
-<li>touch 文件名: 创建文件</li>
-<li>mv 文件名1 文件名2: 将文件重命名为文件名2</li>
-<li>less 文件路径
-<ul>
-<li>查询文件内容</li>
-<li>按q退出</li>
-</ul>
-</li>
-<li>cat 文件名: 显示文件内容</li>
-</ul>
-<h1 id="关于系统的操作">关于系统的操作</h1>
-<ul>
-<li>关机
-<ul>
-<li>sudo shutdown -h now立刻关机</li>
-<li>sudo shutdown -h +10十分钟后关机</li>
-<li>sudo shutdown -h 20:00晚上八点关机</li>
-</ul>
-</li>
-<li>sudo shutdown -r now重启</li>
-</ul>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AC%94%E8%AE%B0">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                笔记
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%91%BD%E4%BB%A4%E8%A1%8C">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                命令行
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Thu, 23 May 2024 00:00:00 &#43;0000" class="no-wrap"
-                title=" Thu, 23 May 2024 00:00:00 &#43;0000">
-                Thu, 23 May 2024 00:00:00 &#43;0000
               </relative-time>
             </div>
           </div>

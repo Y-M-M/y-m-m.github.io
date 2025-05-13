@@ -20,7 +20,7 @@
     <meta name="description"
   content="进程的基本概念 进程的基本概念和逻辑内存 进程与程序
 程序 指令和数据的集合 存放在磁盘上的一个普通文件里 文件的i节点中标为可执行，内容符合系统要求 进程 包括指令段、用户数据段和系统数据段的执行环境 进程与程序的关系 程序用于初始化进程的指令段和用户数据段，初始化后，进程和初始化它的程序之间无联系 进程运行时磁盘上的程序文件不可修改/删除 同时运行的多个进程可由统一程序初始化得到，进程之间没什么联系。内核通过安排它们共享指令段甚至不同程序的进程共享函数库(动态链接)以节省内存，但这种安排对用户来说是透明的 进程的组成部分
-四部分：指令段、数据段、栈段和系统数据 指令段Text 程序的CPU指令代码,包括：主程序和子程序编译后的CPU指令代码，以及调用的库函数代码 指令段的大小固定不变，只读 用户数据段 全局变量，静态(static)变量，字符串常数 允许数据段增长和缩小，实现内存的动态分配 系统调用sbrk()允许编程调整数据段的大小（调整单位为“页”） 内存管理库函数，如：malloc()，free() sbrk vs. malloc 用户栈段 程序执行所需要的栈空间，实现函数的调用 用于保存子程序返回地址 在函数和被调函数之间传递参数 函数体内部定义的变量(静态变量除外) main函数得到的命令行参数以及环境参数 存放在栈的最底部 main函数运行之前，这些部分就已经被系统初始化 栈段的动态增长与增长限制（getrlimit, setrlimit） 系统数据段 上述三部分在进程私有的独立的逻辑地址空间内（CPU用户态访问） 系统数据段是内核内的数据，每个进程对应一套 包括页表和进程控制块PCB 进程虚拟地址空间的布局 size命令观察可执行程序的段大小
+四部分：指令段、数据段、栈段和系统数据 指令段Text 程序的CPU指令代码,包括：主程序和子程序编译后的CPU指令代码，以及调用的库函数代码 指令段的大小固定不变，只读 用户数据段 全局变量，静态(static)变量，字符串常数 允许数据段增长和缩小，实现内存的动态分配 系统调用sbrk()允许编程调整数据段的大小（调整单位为“页”） 内存管理库函数，如：malloc()，free() sbrk vs. malloc sbrk malloc 用户栈段 程序执行所需要的栈空间，实现函数的调用 用于保存子程序返回地址 在函数和被调函数之间传递参数 函数体内部定义的变量(静态变量除外) main函数得到的命令行参数以及环境参数 存放在栈的最底部 main函数运行之前，这些部分就已经被系统初始化 栈段的动态增长与增长限制（getrlimit, setrlimit） 系统数据段 上述三部分在进程私有的独立的逻辑地址空间内（CPU用户态访问） 系统数据段是内核内的数据，每个进程对应一套 包括页表和进程控制块PCB 进程虚拟地址空间的布局 size命令观察可执行程序的段大小
 size filename-list 列出程序或目标文件的相应段大小 Pentinum虚拟地址到物理地址转换 一个4K是一个页 VPN页号 VPO业内偏移量 术语 两级页表 虚实地址转换 PDE （Page Directory Entry） PTE （Page Table Entry） PDE与PTE中的标志位能解决的问题 内存越界 内存读写保护 缺页调入 利用磁盘交换区实现以较小物理内存提供较大逻辑内存的效果 栈段的生长 多进程共享内存，写时复制 LRU算法判断页有没有被访问 淘汰页面时判断是否需要回写磁盘 进程的执行状态 进程的系统数据
 " />
 <meta name="keywords"
@@ -34,7 +34,7 @@ size filename-list 列出程序或目标文件的相应段大小 Pentinum虚拟�
 <meta name="twitter:description"
   content="进程的基本概念 进程的基本概念和逻辑内存 进程与程序
 程序 指令和数据的集合 存放在磁盘上的一个普通文件里 文件的i节点中标为可执行，内容符合系统要求 进程 包括指令段、用户数据段和系统数据段的执行环境 进程与程序的关系 程序用于初始化进程的指令段和用户数据段，初始化后，进程和初始化它的程序之间无联系 进程运行时磁盘上的程序文件不可修改/删除 同时运行的多个进程可由统一程序初始化得到，进程之间没什么联系。内核通过安排它们共享指令段甚至不同程序的进程共享函数库(动态链接)以节省内存，但这种安排对用户来说是透明的 进程的组成部分
-四部分：指令段、数据段、栈段和系统数据 指令段Text 程序的CPU指令代码,包括：主程序和子程序编译后的CPU指令代码，以及调用的库函数代码 指令段的大小固定不变，只读 用户数据段 全局变量，静态(static)变量，字符串常数 允许数据段增长和缩小，实现内存的动态分配 系统调用sbrk()允许编程调整数据段的大小（调整单位为“页”） 内存管理库函数，如：malloc()，free() sbrk vs. malloc 用户栈段 程序执行所需要的栈空间，实现函数的调用 用于保存子程序返回地址 在函数和被调函数之间传递参数 函数体内部定义的变量(静态变量除外) main函数得到的命令行参数以及环境参数 存放在栈的最底部 main函数运行之前，这些部分就已经被系统初始化 栈段的动态增长与增长限制（getrlimit, setrlimit） 系统数据段 上述三部分在进程私有的独立的逻辑地址空间内（CPU用户态访问） 系统数据段是内核内的数据，每个进程对应一套 包括页表和进程控制块PCB 进程虚拟地址空间的布局 size命令观察可执行程序的段大小
+四部分：指令段、数据段、栈段和系统数据 指令段Text 程序的CPU指令代码,包括：主程序和子程序编译后的CPU指令代码，以及调用的库函数代码 指令段的大小固定不变，只读 用户数据段 全局变量，静态(static)变量，字符串常数 允许数据段增长和缩小，实现内存的动态分配 系统调用sbrk()允许编程调整数据段的大小（调整单位为“页”） 内存管理库函数，如：malloc()，free() sbrk vs. malloc sbrk malloc 用户栈段 程序执行所需要的栈空间，实现函数的调用 用于保存子程序返回地址 在函数和被调函数之间传递参数 函数体内部定义的变量(静态变量除外) main函数得到的命令行参数以及环境参数 存放在栈的最底部 main函数运行之前，这些部分就已经被系统初始化 栈段的动态增长与增长限制（getrlimit, setrlimit） 系统数据段 上述三部分在进程私有的独立的逻辑地址空间内（CPU用户态访问） 系统数据段是内核内的数据，每个进程对应一套 包括页表和进程控制块PCB 进程虚拟地址空间的布局 size命令观察可执行程序的段大小
 size filename-list 列出程序或目标文件的相应段大小 Pentinum虚拟地址到物理地址转换 一个4K是一个页 VPN页号 VPO业内偏移量 术语 两级页表 虚实地址转换 PDE （Page Directory Entry） PTE （Page Table Entry） PDE与PTE中的标志位能解决的问题 内存越界 内存读写保护 缺页调入 利用磁盘交换区实现以较小物理内存提供较大逻辑内存的效果 栈段的生长 多进程共享内存，写时复制 LRU算法判断页有没有被访问 淘汰页面时判断是否需要回写磁盘 进程的执行状态 进程的系统数据
 " />
 <meta name="twitter:site" content="https://y-m-m.github.io/" />
@@ -48,7 +48,7 @@ size filename-list 列出程序或目标文件的相应段大小 Pentinum虚拟�
 <meta property="og:description"
   content="进程的基本概念 进程的基本概念和逻辑内存 进程与程序
 程序 指令和数据的集合 存放在磁盘上的一个普通文件里 文件的i节点中标为可执行，内容符合系统要求 进程 包括指令段、用户数据段和系统数据段的执行环境 进程与程序的关系 程序用于初始化进程的指令段和用户数据段，初始化后，进程和初始化它的程序之间无联系 进程运行时磁盘上的程序文件不可修改/删除 同时运行的多个进程可由统一程序初始化得到，进程之间没什么联系。内核通过安排它们共享指令段甚至不同程序的进程共享函数库(动态链接)以节省内存，但这种安排对用户来说是透明的 进程的组成部分
-四部分：指令段、数据段、栈段和系统数据 指令段Text 程序的CPU指令代码,包括：主程序和子程序编译后的CPU指令代码，以及调用的库函数代码 指令段的大小固定不变，只读 用户数据段 全局变量，静态(static)变量，字符串常数 允许数据段增长和缩小，实现内存的动态分配 系统调用sbrk()允许编程调整数据段的大小（调整单位为“页”） 内存管理库函数，如：malloc()，free() sbrk vs. malloc 用户栈段 程序执行所需要的栈空间，实现函数的调用 用于保存子程序返回地址 在函数和被调函数之间传递参数 函数体内部定义的变量(静态变量除外) main函数得到的命令行参数以及环境参数 存放在栈的最底部 main函数运行之前，这些部分就已经被系统初始化 栈段的动态增长与增长限制（getrlimit, setrlimit） 系统数据段 上述三部分在进程私有的独立的逻辑地址空间内（CPU用户态访问） 系统数据段是内核内的数据，每个进程对应一套 包括页表和进程控制块PCB 进程虚拟地址空间的布局 size命令观察可执行程序的段大小
+四部分：指令段、数据段、栈段和系统数据 指令段Text 程序的CPU指令代码,包括：主程序和子程序编译后的CPU指令代码，以及调用的库函数代码 指令段的大小固定不变，只读 用户数据段 全局变量，静态(static)变量，字符串常数 允许数据段增长和缩小，实现内存的动态分配 系统调用sbrk()允许编程调整数据段的大小（调整单位为“页”） 内存管理库函数，如：malloc()，free() sbrk vs. malloc sbrk malloc 用户栈段 程序执行所需要的栈空间，实现函数的调用 用于保存子程序返回地址 在函数和被调函数之间传递参数 函数体内部定义的变量(静态变量除外) main函数得到的命令行参数以及环境参数 存放在栈的最底部 main函数运行之前，这些部分就已经被系统初始化 栈段的动态增长与增长限制（getrlimit, setrlimit） 系统数据段 上述三部分在进程私有的独立的逻辑地址空间内（CPU用户态访问） 系统数据段是内核内的数据，每个进程对应一套 包括页表和进程控制块PCB 进程虚拟地址空间的布局 size命令观察可执行程序的段大小
 size filename-list 列出程序或目标文件的相应段大小 Pentinum虚拟地址到物理地址转换 一个4K是一个页 VPN页号 VPO业内偏移量 术语 两级页表 虚实地址转换 PDE （Page Directory Entry） PTE （Page Table Entry） PDE与PTE中的标志位能解决的问题 内存越界 内存读写保护 缺页调入 利用磁盘交换区实现以较小物理内存提供较大逻辑内存的效果 栈段的生长 多进程共享内存，写时复制 LRU算法判断页有没有被访问 淘汰页面时判断是否需要回写磁盘 进程的执行状态 进程的系统数据
 " />
 <meta property="og:url" content="https://y-m-m.github.io/post/linux_%E8%BF%9B%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E8%BF%9B%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1/" />
@@ -162,9 +162,9 @@ size filename-list 列出程序或目标文件的相应段大小 Pentinum虚拟�
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Thu, 08 May 2025 10:55:39 &#43;0800"
+                  Modified <relative-time datetime="Tue, 13 May 2025 10:28:11 &#43;0800"
                     class="no-wrap">
-                    Thu, 08 May 2025 10:55:39 &#43;0800</relative-time>
+                    Tue, 13 May 2025 10:28:11 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -194,7 +194,7 @@ size filename-list 列出程序或目标文件的相应段大小 Pentinum虚拟�
                         </div>
                       </div>
                     </details-menu>
-                      2894 Words
+                      5105 Words
                     
 
                   </div>
@@ -284,7 +284,12 @@ size filename-list 列出程序或目标文件的相应段大小 Pentinum虚拟�
 </ul>
 </li>
 <li>sbrk vs. malloc
-<img src="/images/%E6%88%AA%E5%B1%8F2025-04-30%2008.12.48.png" alt=""></li>
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-30%2008.12.48.png" alt="">
+<ul>
+<li>sbrk</li>
+<li>malloc</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>用户栈段
@@ -395,7 +400,17 @@ size filename-list 列出程序或目标文件的相应段大小 Pentinum虚拟�
 <li>用户程序不能直接存取和修改进程的系统数据
 <ul>
 <li>系统调用可用来访问或修改这些属性</li>
-<li>chdir， umask，open， close，setpgrp， getpid， getppid</li>
+<li>chdir， umask，open， close，setpgrp， getpid， getppid
+<ul>
+<li>chdir 改变当前进程的工作目录，将进程的当前工作目录改为path指定的路径，失败返回-1</li>
+<li>umask 设置进程的文件创建源码，返回旧的umask值(权限计算：最终权限 = mode &amp; ~umask)</li>
+<li>open 打开或创建文件，返回文件描述符，成功返回文件描述符fd，失败返回-1</li>
+<li>close 关闭文件描述符，释放资源，失败返回-1</li>
+<li>setpgrp 设置进程的进程组ID，将当前进程的PGID设置成自身或pgid</li>
+<li>getpid 获取当前进程的PID</li>
+<li>getppid 获取复进程的pid</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -583,6 +598,276 @@ size filename-list 列出程序或目标文件的相应段大小 Pentinum虚拟�
 <ul>
 <li>进程的用户数据
 <img src="/images/%E6%88%AA%E5%B1%8F2025-05-08%2010.55.28.png" alt=""></li>
+<li>进程的系统数据
+<ul>
+<li>在操作系统内核中，含有进程的属性，包括:
+<ul>
+<li>页表（32位奔腾CPU，页表作为管理数据约占已分配虚拟内存的1/1024）</li>
+<li>打开的文件描述符表</li>
+<li>核心态堆栈（几KB）</li>
+<li>进程状态，优先级信息</li>
+<li>当前目录(记录了当前目录的i-节点)，根目录</li>
+<li>umask值</li>
+<li>进程PID，PPID</li>
+<li>进程主的实际UID/GID，有效UID/GID</li>
+<li>进程组组号（一个终端上启动的所有进程构成一个进程组）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>fork创建新进程
+<ul>
+<li>功能 int fork(void)
+<ul>
+<li>fork系统调用是创建新进程的唯一方式，没有参数</li>
+<li>原先的进程称做“父进程”，新创建进程被称作“子进程”</li>
+<li>完全复制：新进程的指令，用户数据段，堆栈段</li>
+<li>部分复制：系统数据段</li>
+</ul>
+</li>
+<li>fork返回值：父子进程都收到返回值，但不相同
+<ul>
+<li>1次调用，两次返回
+<ul>
+<li>父进程(返回值&gt;0，是子进程的PID)</li>
+<li>子进程(返回值=0)，失败时返回-1</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>内核实现
+<ul>
+<li>创建新的PCB，复制父进程环境给子进程</li>
+<li>父子进程可以共享程序的数据(例如：copy-on-write技术，COW)，但是系统核心的这些安排，对程序员透明</li>
+</ul>
+</li>
+<li>fork举例
+<ul>
+<li>fork之后，父、子进程各自从fork()后面那条语句开始执行
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-12%2021.12.22.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-12%2021.23.50.png" alt=""></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>exec系统调用
+<ul>
+<li>功能
+<ul>
+<li>用一个指定的程序文件，重新初始化一个进程</li>
+<li>可指定新的命令行参数和环境参数(初始化堆栈底部)</li>
+<li>exec不创建新进程，只是将当前进程重新初始化了指令段和用户数据段，堆栈段以及CPU的PC指针（指向新程序的main函数）</li>
+</ul>
+</li>
+<li>6种格式exec系统调用
+<ul>
+<li>exec前缀，后跟一至两个字母
+<ul>
+<li>l—list, v—vector, e—env, p—path</li>
+<li>l与v：指定命令行参数的两种方式，l以表的形式，v要事先组织成一个指针数组</li>
+<li>e：需要指定envp来初始化进程</li>
+<li>p：使用环境变量PATH查找可执行文件</li>
+<li>六种格式的区别：不同的参数方式初始化堆栈底部
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-13%2009.15.25.png" alt=""></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>命令行参数和环境参数
+<ul>
+<li>位于进程堆栈底部的初始化数据</li>
+<li>访问命令行参数的方法(argc, argv)</li>
+<li>访问环境参数的三种方法
+<ul>
+<li>通过C库定义的外部变量environ</li>
+<li>main函数的第三个参数</li>
+<li>getenv库函数调用
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-13%2009.18.54.png" alt=""></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>&ldquo;僵尸进程&rdquo;(zombie或defunct)
+<ul>
+<li>进程生命期结束时的特殊状态
+<ul>
+<li>系统已经释放了进程占用的包括内存在内的系统资源，但仍在内核中保留进程的部分数据结构，记录进程的终止状态，等待父进程来“收尸”</li>
+<li>父进程的“收尸”动作完成之后，“僵尸”进程不再存在</li>
+</ul>
+</li>
+<li>僵尸进程占用资源很少，仅占用内核进程表资源
+<ul>
+<li>过多的僵尸进程会导致系统有限数目的进程表被用光</li>
+</ul>
+</li>
+<li>孤儿进程
+<ul>
+<li>所有孤儿进程都作为1号进程（操作系统的init进程）的子进程</li>
+<li>0号：调度进程 swapper</li>
+<li>2号：页守护进程 page daemon</li>
+</ul>
+</li>
+<li>wait系统调用
+<ul>
+<li>功能
+<ul>
+<li>等待进程的子进程终止</li>
+<li>如果已经有子进程终止，则立即返回</li>
+</ul>
+</li>
+<li>函数原型
+<ul>
+<li>#include &lt;sys/types.h&gt;</li>
+<li>#include &lt;sys/wait.h&gt;</li>
+<li>pid_t wait(int *stat_loc);</li>
+<li>函数返回值为已终止的子进程PID</li>
+</ul>
+</li>
+<li>waitpid()和wait3() : wait系统调用的升级版本，资源等管理信息
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-13%2009.26.18.png" alt=""></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="自编shell-xsh0">自编shell: xsh0</h2>
+<ul>
+<li>字符串分割库函数strtok
+<ul>
+<li>char *strtok(char *str, char *tokens)</li>
+<li>功能: 返回第一个单词的首字节指针
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-13%2009.34.40.png" alt=""></li>
+<li>将手工录入的命令行参数字符串转换成一个指针数组给exec使用</li>
+<li>空格、制表符、换行都作为字符串结束标识</li>
+<li>NULL指示继续分割</li>
+<li>无从分割则返回NULL
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-13%2009.40.10.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-13%2009.41.08.png" alt=""></li>
+</ul>
+</li>
+<li>执行xsh0
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-13%2009.46.49.png" alt=""></li>
+<li>库函数system：运行一个命令
+<ul>
+<li>int system(char *string);
+<ul>
+<li>执行用字符串传递的shell命令，可使用管道符和重定向</li>
+<li>库函数system()是利用系统调用fork，exec，wait实现的
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-13%2009.57.13.png" alt=""></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="小结">小结</h2>
+<ul>
+<li>深入理解系统调用fork()</li>
+<li>进程的命令行参数和环境变量：访问方法和在逻辑地址空间的位置</li>
+<li>环境变量的三种访问方法</li>
+<li>exec系统调用</li>
+<li>exec的六种格式以及为何设置6种格式</li>
+<li>僵尸进程</li>
+<li>孤儿进程</li>
+<li>wait：等待子进程终止并销毁僵尸子进程获取其退出状态</li>
+<li>C语言库函数strtok</li>
+<li>fork+exec+wait:xsh0.c</li>
+<li>库函数system的作用</li>
+</ul>
+<h1 id="重定向与管道">重定向与管道</h1>
+<h2 id="进程与文件描述符">进程与文件描述符</h2>
+<ul>
+<li>磁盘文件目录(分两级)
+<ul>
+<li>i节点，文件名</li>
+</ul>
+</li>
+<li>活动文件目录(分三级)
+<ul>
+<li>文件描述符表FDT：每进程一张，PCB的user结构中
+<ul>
+<li>user结构中整型数组u_ofile记录进程打开的文件</li>
+<li>文件描述符fd是u_ofile数组的下标</li>
+</ul>
+</li>
+<li>系统文件表SFT：整个内核一张，file结构
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-13%2010.05.18.png" alt=""></li>
+<li>活动i节点表：整个内核一张，inode结构
+<ul>
+<li>内存中inode表是外存中inode的缓存</li>
+<li>内存inode表里也有个专用的引用计数
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-13%2010.06.00.png" alt=""></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>文件描述符的继承与关闭
+<ul>
+<li>fork创建的子进程继承父进程的文件描述符表</li>
+<li>父进程在fork前打开的文件，父子进程有相同的文件偏移
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-13%2010.06.52.png" alt=""></li>
+<li>例
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-13%2010.08.06.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-13%2010.11.10.png" alt=""></li>
+</ul>
+</li>
+<li>close-on-exec标志
+<ul>
+<li>文件设置了close-on-exec标志，执行exec()系统会自动关闭这些文件
+<ul>
+<li>在open()调用的第二个参数里可以加O_CLOEXEC属性</li>
+<li>通过系统调用fcntl()设置</li>
+</ul>
+</li>
+<li>函数
+<ul>
+<li>#include &lt;fcntl.h&gt;</li>
+<li>int fcntl (fd, cmd, arg);</li>
+<li>cmd: F_GETFD 获取文件fd的控制字flag，控制字的比特0为close-on-exec标志位
+<ul>
+<li>flag = fcntl(fd, F_GETFD, 0);</li>
+</ul>
+</li>
+<li>cmd: F_SETFD 设置文件fd的控制字 fcntl(fd, F_SETFD, flag);</li>
+</ul>
+</li>
+<li>例
+<ul>
+<li>flags = fcntl(fd, F_GETFD, 0);</li>
+<li>flags |= FD_CLOEXEC;</li>
+<li>fcntl(fd, F_SETFD, flags);</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="重定向">重定向</h2>
+<ul>
+<li>文件描述符的复制
+<ul>
+<li>系统调用
+<ul>
+<li>int dup2(int fd1, int fd2);</li>
+</ul>
+</li>
+<li>功能
+<ul>
+<li>复制文件描述符fd1到fd2
+<ul>
+<li>fd2可以是空闲的文件描述符</li>
+<li>如果fd2是已打开文件，则关闭已打开文件
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-13%2010.20.34.png" alt=""></li>
+</ul>
+</li>
+<li>xsh1:输入输出重定向(1)
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-13%2010.22.02.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-13%2010.27.50.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-13%2010.23.54.png" alt=""></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </article>
               </div>

@@ -162,9 +162,9 @@ size filename-list 列出程序或目标文件的相应段大小 Pentinum虚拟�
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Tue, 13 May 2025 10:28:11 &#43;0800"
+                  Modified <relative-time datetime="Wed, 14 May 2025 10:13:44 &#43;0800"
                     class="no-wrap">
-                    Tue, 13 May 2025 10:28:11 &#43;0800</relative-time>
+                    Wed, 14 May 2025 10:13:44 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -194,7 +194,7 @@ size filename-list 列出程序或目标文件的相应段大小 Pentinum虚拟�
                         </div>
                       </div>
                     </details-menu>
-                      5105 Words
+                      8668 Words
                     
 
                   </div>
@@ -844,6 +844,40 @@ size filename-list 列出程序或目标文件的相应段大小 Pentinum虚拟�
 </ul>
 <h2 id="重定向">重定向</h2>
 <ul>
+<li>活动文件目录——AFD
+<ul>
+<li>磁盘文件目录(分两级)
+<ul>
+<li>i节点，文件名</li>
+</ul>
+</li>
+<li>活动文件目录(分三级)
+<ul>
+<li>文件描述符表FDT：每进程一张，PCB的user结构中
+<ul>
+<li>user结构中整型数组u_ofile记录进程打开的文件</li>
+<li>文件描述符fd是u_ofile数组的下标</li>
+</ul>
+</li>
+<li>系统文件表SFT：整个内核一张，元素是file结构
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">file</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="kt">char</span> <span class="n">flag</span><span class="p">;</span> <span class="cm">/* 读、写操作要求 */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">char</span> <span class="n">fcount</span><span class="p">;</span> <span class="cm">/* 引用计数 */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">long</span> <span class="n">foffset</span><span class="p">;</span> <span class="cm">/* 文件读写位置指针 */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">finode</span><span class="p">;</span> <span class="cm">/* 内核中inode数组的下标 */</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div></li>
+<li>活动i节点表：整个内核一张，inode结构
+<ul>
+<li>内存中inode表是外存中inode的缓存</li>
+<li>内存inode表里也有个专用的引用计数
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-14%2008.27.34.png" alt=""></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li>文件描述符的复制
 <ul>
 <li>系统调用
@@ -866,6 +900,445 @@ size filename-list 列出程序或目标文件的相应段大小 Pentinum虚拟�
 <img src="/images/%E6%88%AA%E5%B1%8F2025-05-13%2010.23.54.png" alt=""></li>
 </ul>
 </li>
+</ul>
+</li>
+<li>xsh1:输入输出重定向
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-14%2008.28.47.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-14%2008.29.06.png" alt=""></li>
+</ul>
+<h2 id="管道">管道</h2>
+<ul>
+<li>
+<p>创建管道</p>
+<ul>
+<li>int pipe(int pfd[2]);</li>
+<li>int pipe(int *pfd);</li>
+<li>int pipe(int pfd[]);</li>
+<li>简记：“先读 pfd[0] 后写 pfd[1]”</li>
+<li>创建一个管道，pfd[0]和pfd[1]分别为管道两端的文件描述符，pfd[0]用于读，pfd[1]用于写</li>
+</ul>
+</li>
+<li>
+<p>管道写</p>
+<ul>
+<li>ret = write(pfd[1], buf, n)</li>
+<li>若管道已满，则被阻塞，直到管道另一端read将已进入管道的数据取走为止</li>
+<li>管道容量：某一有限值，如8192字节，与操作系统的实现相关</li>
+</ul>
+</li>
+<li>
+<p>管道读</p>
+<ul>
+<li>ret = read(pfd[0], buf, n)</li>
+<li>若管道写端已关闭，则返回0</li>
+<li>若管道为空，且写端文件描述字未关闭，则被阻塞</li>
+<li>若管道不为空(设管道中实际有m个字节)
+<ul>
+<li>n≥m，则读m个；</li>
+<li>如果n＜m则读取n个</li>
+</ul>
+</li>
+<li>实际读取的数目作为read的返回值。</li>
+<li>注意：管道是无记录边界的字节流通信</li>
+</ul>
+</li>
+<li>
+<p>关闭管道close</p>
+<ul>
+<li>关闭写端则读端read调用返回0</li>
+<li>关闭读端则写端write导致进程收到SIGPIPE信号(默认处理是终止进程，该信号可以被捕捉)</li>
+<li>写端write调用返回-1，errno被设为EPIPE</li>
+</ul>
+</li>
+<li>
+<p>进程间使用管道通信
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-14%2008.50.31.png" alt=""></p>
+</li>
+<li>
+<p>管道通信：写端
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-14%2010.12.18.png" alt=""></p>
+</li>
+<li>
+<p>管道通信：读端
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-14%2010.12.56.png" alt=""></p>
+</li>
+<li>
+<p>管道通信：应注意的问题
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-14%2010.13.32.png" alt=""></p>
+</li>
+<li>
+<p>xsh2 管道
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-14%2008.30.09.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-14%2008.30.41.png" alt=""></p>
+</li>
+<li>
+<p>命名管道</p>
+<ul>
+<li>pipe创建的管道(匿名管道)的缺点
+<ul>
+<li>只限于同祖先进程间的通信</li>
+</ul>
+</li>
+<li>命名管道：允许不相干的进程(没有共同祖先)访问FIFO管道</li>
+<li>命名管道的创建
+<ul>
+<li>用命令mknod pipe0 p</li>
+<li>创建一个文件，名字为pipe0</li>
+<li>用ls -l 列出时，文件类行为p(管道类型)</li>
+</ul>
+</li>
+<li>发送者
+<ul>
+<li>fd = open(”pipe0”, O_WRONLY);</li>
+<li>write(fd, buf, len);</li>
+</ul>
+</li>
+<li>接收者
+<ul>
+<li>fd = open(”pipe0”, O_RDONLY);</li>
+<li>read(fd, buf, sizeof(buf));</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>重定向与管道：小结</p>
+<ul>
+<li>fork/exec与文件描述符关系</li>
+<li>三级活动文件目录</li>
+<li>设置三级活动文件目录的原因</li>
+<li>文件描述符的继承与关闭</li>
+<li>close-on-exec标志</li>
+<li>文件描述符的复制</li>
+<li>输入输出重定向：xsh1.c</li>
+<li>管道</li>
+<li>管道与进程状态</li>
+<li>管道的读写模型</li>
+<li>命名管道</li>
+<li>管道操作：xsh2.c</li>
+</ul>
+</li>
+</ul>
+<h2 id="信号">信号</h2>
+<ul>
+<li>信号的产生及类型
+<ul>
+<li>命令kill
+<ul>
+<li>用法与功能
+<ul>
+<li>kill –signal PID-list</li>
+<li>kill命令用于向进程发送一个信号</li>
+</ul>
+</li>
+<li>举例
+<ul>
+<li>kill 1275
+<ul>
+<li>向进程1275的进程发送信号，默认信号为15(SIGTERM)，一般会导致进程死亡</li>
+</ul>
+</li>
+<li>kill -9 1326
+<ul>
+<li>向进程1326发送信号9(SIGKILL)，导致进程死亡</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>会晤组和进程组
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-14%2008.40.08.png" alt="">
+<ul>
+<li>进程组
+<ul>
+<li>进程在其PCB结构中有p_pgrp域</li>
+<li>p_pgrp都相同的进程构成一个“进程组”</li>
+<li>如果p_pgrp=p_pid则该进程是组长</li>
+<li>setsid()系统调用将PCB中的p_pgrp改为进程自己的PID，从而脱离原进程组，成为新进程组的组长</li>
+<li>fork创建的进程继承父进程p_pgrp，与父进程同组</li>
+<li>kill命令的PID为0时，向与本进程同组的所有进程发送信号</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>信号机制
+<ul>
+<li>功能：信号是送到进程的“软件中断”，通知进程出现了非正常事件</li>
+<li>信号的产生
+<ul>
+<li>用户态进程：自己或者其他进程发出的
+<ul>
+<li>使用kill()或者alarm()调用</li>
+</ul>
+</li>
+<li>操作系统内核产生信号（往往由中断引发，也有软件触发）
+<ul>
+<li>段违例信号SIGSEGV：当进程试图存取它的地址空间以外的存贮单元时，内核向进程发送段违例信号</li>
+<li>浮点溢出信号SIGFPE：零做除数时，内核向进程发送浮点溢出信号</li>
+<li>信号SIGPIPE：关闭管道读端则写端write导致进程收到信号SIGPIPE</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>信号类型
+<ul>
+<li>在&lt;sys/signal.h&gt;文件中定义宏（只有几十种）
+<ul>
+<li>SIGTERM 软件终止信号。kill命令默认信号</li>
+<li>SIGHUP 挂断。用户从注册shell中退出时，同组的进程都收到SIGHUP</li>
+<li>SIGINT 中断。用户按Ctrl-C键（或Del键）时产生</li>
+<li>SIGQUIT 退出。按Ctrl-\时产生，产生core文件</li>
+<li>SIGALRM 闹钟信号。计时器时间到，与alarm()有关</li>
+<li>SIGCLD 进程的一个子进程终止。</li>
+<li>SIGKILL 无条件终止，该信号不能被捕获或忽略。</li>
+<li>SIGUSR1，SIGUSR2 用户定义的信号</li>
+<li>SIGFPE 浮点溢出</li>
+<li>SIGILL 非法指令</li>
+<li>SIGSEGV 段违例</li>
+<li>SIGWINCH 终端窗口大小发生变化
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-14%2008.57.01.png" alt=""></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="进程对信号的处理">进程对信号的处理</h2>
+<ul>
+<li>
+<p>进程对到达的信号可以在下列处理中选取一种</p>
+<ul>
+<li>设置为缺省处理方式(大部分处理是程序中止，有的会产生core文件)</li>
+<li>信号被忽略</li>
+<li>信号被捕捉
+<ul>
+<li>用户事先注册好一个函数，当信号发生后就去执行这一函数</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>信号被设为缺省处理方式</p>
+<ul>
+<li>signal(SIGINT, SIG_DFL);</li>
+</ul>
+</li>
+<li>
+<p>信号被忽略</p>
+<ul>
+<li>signal(SIGINT,SIG_IGN);</li>
+<li>在执行了这个调用后，进程就不再收到SIGINT信号</li>
+<li>注意：“某信号被忽略”作为进程的一种属性被它的子进程所继承</li>
+</ul>
+</li>
+<li>
+<p>信号被忽略：举例
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-14%2009.00.31.png" alt=""></p>
+<ul>
+<li>单独运行bar时，使用kill -15命令或者Ctrl-C按键可杀死该进程</li>
+<li>由foo进程来启动的bar进程就不能用kill -15命令或按键杀死
+<ul>
+<li>子进程bar继承了父进程中对信号SIGTERM和SIGINT的忽略属性SIG_IGN</li>
+<li>发未被忽略的信号，如SIGHUP,可以将它们杀死</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>信号的捕捉</p>
+<ul>
+<li>信号被捕捉并由一个用户函数来处理</li>
+<li>信号到达时，这个函数将被调用来处理那个信号
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-14%2009.03.02.png" alt=""></li>
+</ul>
+</li>
+<li>
+<p>僵尸进程</p>
+<ul>
+<li>僵尸子进程
+<ul>
+<li>子进程终止，僵尸进程(defunct或zombie)出现，父进程使用wait系统调用收尸后消除僵尸</li>
+<li>僵尸进程不占用内存资源等但占用内核proc表项，僵尸进程太多会导致proc表耗尽而无法再创建新进程</li>
+</ul>
+</li>
+<li>子进程中止后的异步通知机制
+<ul>
+<li>子进程中止后，系统会向父进程发送信号SIGCLD</li>
+</ul>
+</li>
+<li>不导致僵尸子进程出现的方法
+<ul>
+<li>忽略对SIGCLD信号的处理</li>
+<li>signal(SIGCLD,SIG_IGN); 子进程死亡后内核直接销毁</li>
+<li>捕获SIGCLD信号，执行wait系统调用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>发送信号</p>
+<ul>
+<li>系统调用kill
+<ul>
+<li>int kill(int pid, int sig)</li>
+<li>返回值： 0&ndash;成功-1&ndash;失败</li>
+</ul>
+</li>
+<li>kill调用分几种情况
+<ul>
+<li>当pid&gt;0时，向指定的进程发信号</li>
+<li>当pid=0时，向与本进程同组的所有进程发信号</li>
+<li>当pid&lt;0时，向以-pid为组长的所有进程发信号</li>
+<li>当sig=0时，则信号根本就没有发送，但可据此判断一个已知PID的进程是否仍然运行
+<ul>
+<li>kill(pid, 0)；如果函数返回值为-1就可根据errno判断：errno=ESRCH 说明不存在pid进程</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>系统调用与信号</p>
+<ul>
+<li>进程睡眠
+<ul>
+<li>系统调用执行时会导致进程处于睡眠状态
+<ul>
+<li>如：scanf()，sleep()，msgrcv()，操作外设的read()，write()，等等。</li>
+</ul>
+</li>
+<li>睡眠进程收到信号后处理
+<ul>
+<li>进程正在睡眠时收到信号，进程就会从睡眠中被惊醒，系统调用立即被半途终止，返回值-1， errno一般被置为EINTR</li>
+<li>注意：有的系统调用在特殊情况（与内核中的代码相关尤其是驱动程序）下睡眠很深，信号到达不能将它惊醒(有的进程用kill -9也杀不死)</li>
+<li>例：sleep(1000)返回，有可能只睡眠了10秒</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>pause与alarm系统调用</p>
+<ul>
+<li>pause()
+<ul>
+<li>等待信号，进程收到信号前一直处于睡眠状态</li>
+</ul>
+</li>
+<li>设置进程报警时钟(闹钟)
+<ul>
+<li>int alarm(int secs)</li>
+<li>进程报警时钟存贮在它内核系统数据中，报警时钟到时，进程收到SIGALRM信号
+<ul>
+<li>子进程继承父进程的报警时钟值。报警时钟在exec执行后保持这一设置</li>
+<li>进程收到SIGALRM后的默认处理是终止进程（可以利用这一功能，fork后exec前做设置，限制加载程序的执行时间）</li>
+</ul>
+</li>
+<li>alarm参数为secs
+<ul>
+<li>当secs&gt;0时，将时钟设置成secs指定的秒数</li>
+<li>当secs=0时，关闭报警时钟
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-14%2009.12.43.png" alt=""></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="全局跳转">全局跳转</h2>
+<ul>
+<li>
+<p>案例
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-14%2009.15.24.png" alt=""></p>
+</li>
+<li>
+<p>将主循环封装为子程序，利用信号解决问题
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-14%2009.17.22.png" alt=""></p>
+</li>
+<li>
+<p>问题</p>
+<ul>
+<li>每次按下中断键，程序停留在信号捕捉函数中，堆栈没有清理，嵌套越来越深浪费越来越大</li>
+<li>main_control()一旦返回，进程的执行将弹回到刚才被SIGINT中断的地方恢复刚才的执行
+<ul>
+<li>会让用户感到迷惑不解，刚才的动作已打断而且又已经开始了新的工作，可过一段时间后又开始运行</li>
+</ul>
+</li>
+<li>C语言中的goto语句只限于一个函数体内使用，不能解决上述的问题</li>
+<li>零做除数问题</li>
+</ul>
+</li>
+<li>
+<p>解决方法</p>
+<ul>
+<li>把栈恢复为进程某一留存的状态，程序执行也跳转到此</li>
+</ul>
+</li>
+<li>
+<p>有两个函数用于这个目的</p>
+<ul>
+<li>#include &lt;setjmp.h&gt;</li>
+<li>int sigsetjmp(jmp_buf jmpenv, int savemask);
+<ul>
+<li>/* 返回值为零，或者是siglongjmp提供的val, savemask一般设为1 */</li>
+</ul>
+</li>
+<li>void siglongjmp(jmp_buf jmpenv, int val)
+<ul>
+<li>/* val是提供给sigsetjmp作返回值*/
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-14%2009.21.36.png" alt=""></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>全局跳转举例：0做除数
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-14%2009.24.04.png" alt=""></p>
+</li>
+<li>
+<p>关于信号</p>
+<ul>
+<li>破坏了“程序顺序执行”的模型，导致重入
+<ul>
+<li>例如：程序中有printf，在信号处理程序中也有printf</li>
+</ul>
+</li>
+<li>两种常见应用
+<ul>
+<li>进程收到信号后，做完相关后事处理，进程终止运行</li>
+<li>后台运行的网络服务进程等借用SIGHUP信号捕获以接受新编辑好的</li>
+</ul>
+</li>
+<li>配置文件中的配置信息（重读配置文件）</li>
+<li>函数sigaction()
+<ul>
+<li>signal()的升级版本,使用起来更复杂</li>
+</ul>
+</li>
+<li>其他编程语言中的try-catch-finally结构</li>
+</ul>
+</li>
+<li>
+<p>信号：小结</p>
+<ul>
+<li>kill命令</li>
+<li>进程组，分组的目的</li>
+<li>信号机制</li>
+<li>常用的信号</li>
+<li>忽略信号</li>
+<li>捕捉信号</li>
+<li>信号的发送：kill的三种用法</li>
+<li>系统调用和进程状态与信号关系</li>
+<li>sleep,pause,alarm</li>
+<li>全局跳转的必要性</li>
+<li>全局跳转的两个主要调用</li>
 </ul>
 </li>
 </ul>

@@ -162,9 +162,9 @@ size filename-list 列出程序或目标文件的相应段大小 Pentinum虚拟�
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Wed, 14 May 2025 10:13:44 &#43;0800"
+                  Modified <relative-time datetime="Wed, 21 May 2025 09:29:29 &#43;0800"
                     class="no-wrap">
-                    Wed, 14 May 2025 10:13:44 &#43;0800</relative-time>
+                    Wed, 21 May 2025 09:29:29 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -194,7 +194,7 @@ size filename-list 列出程序或目标文件的相应段大小 Pentinum虚拟�
                         </div>
                       </div>
                     </details-menu>
-                      8668 Words
+                      12846 Words
                     
 
                   </div>
@@ -1341,6 +1341,395 @@ size filename-list 列出程序或目标文件的相应段大小 Pentinum虚拟�
 <li>全局跳转的两个主要调用</li>
 </ul>
 </li>
+</ul>
+<h1 id="进程间协作">进程间协作</h1>
+<h2 id="信号灯与共享内存ipc">信号灯与共享内存(IPC)</h2>
+<ul>
+<li>UNIX的IPC结构
+<ul>
+<li>消息队列(MSG)
+<ul>
+<li>用于进程间双向数据传送，可由pipe, Socket代替</li>
+<li>无速度优势，不再推荐使用</li>
+</ul>
+</li>
+<li>信号灯(SEM)
+<ul>
+<li>计数器，为多个进程提供共享内存数据的访问</li>
+<li>实现了P操作和V操作，而且比简单PV操作功能更强</li>
+</ul>
+</li>
+<li>共享内存(SHM)
+<ul>
+<li>多个进程共享一个给定的存储区</li>
+<li>最快的IPC，无需在客户和服务器进程间复制数据</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>IPC结构的共性特征
+<ul>
+<li>三种结构都以 客户进程-服务器进程 模式工作
+<ul>
+<li>共享资源：请求、使用、释放三个阶段</li>
+<li>服务器进程在内核中创建</li>
+</ul>
+</li>
+<li>不适用文件系统命名空间，IPC构造了自己的命名空间
+<ul>
+<li>key: IPC结构的外部名字，类比文件名</li>
+<li>ipc_id：IPC结构的内部名字，类比文件描述符</li>
+<li>创建IPC结构时在用户态指定key（不能已经被使用），之后由内核转变为ipc_id，多个进程通过引用ipc_id来使用IPC结构</li>
+<li>IPC结构在系统范围内起作用，没有引用计数：不使用时，进程需要自己删除IPC结构而不是系统的职责</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>权限结构： &lt;sys/ipc.h&gt;中定义
+<ul>
+<li>每个IPC结构关联一个ipc_perm结构，规定权限和所有者共享资源
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-21%2008.11.01.png" alt=""></li>
+</ul>
+</li>
+<li>信号灯/信号量(semaphore)
+<ul>
+<li>信号量
+<ul>
+<li>控制多进程对共享资源的互斥性访问和进程间同步，资源在一个时刻只由一个进程独享
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-21%2008.13.25.png" alt=""></li>
+</ul>
+</li>
+<li>信号量集
+<ul>
+<li>创建多个信号量组成一个数组sem[]，同时管理多个共享资源，共用1个进程等待队列
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-21%2008.15.21.png" alt=""></li>
+</ul>
+</li>
+<li>信号量的工作原理
+<ul>
+<li>信号量值表示系统中某类资源的数目
+<ul>
+<li>其值大于0时，表示系统中当前可用的资源数目；</li>
+<li>其值小于0时，其绝对值表示系统中因请求该类资源而被封锁的进程数目</li>
+</ul>
+</li>
+<li>进程如何获得共享资源
+<ul>
+<li>测试控制该资源的信号量</li>
+<li>信号量的值为正，进程获得该资源的使用权，进程将信号量减1，表示它使用了一个资源单位</li>
+<li>若此时信号量的值为0，则进程进入挂起状态（进程状态改变），直到信号量的值大于0，若进程被唤醒则返回至步骤(1)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>用于同步和互斥的信号量操作
+<ul>
+<li>P、V操作都是原子操作，不会被中断
+<ul>
+<li>P、V分别是荷兰语的test(proberen)和increment(verhogen)</li>
+</ul>
+</li>
+<li>P操作意味着请求系统分配一个单位资源
+<ul>
+<li>P(sv)：如果sv的值大于零，就给它减1；如果它的值为零，就挂起该进程的执行</li>
+<li>注意：此处是P、V操作的原理，后面的函数semop中：请求资源，sv&lt;0;释放资源，sv&gt;0</li>
+</ul>
+</li>
+<li>V操作意味着释放一个单位资源
+<ul>
+<li>V(sv)：如果有其他进程因等待sv而被挂起，就让它恢复运行，如果没有进程因等待sv而挂起，就给它加1</li>
+</ul>
+</li>
+<li>互斥操作：进程互斥进入临界区，mutex=1
+<ul>
+<li>P(mutex); //互斥信号量，占用 资源临界区活动;</li>
+<li>V(mutex); //释放资源</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>信号灯的创建
+<ul>
+<li>#include &lt;sys/types.h&gt;</li>
+<li>#include &lt;sys/ipc.h&gt;</li>
+<li>#include &lt;sys/sem.h&gt;</li>
+<li>int semget(int key, int nsems, int flags);
+<ul>
+<li>创建一个新的或获取一个已存在的信号灯组</li>
+<li>nsems：该信号灯组中包含有多少个信号灯</li>
+<li>函数返回一个整数，信号灯组的ID号；如果返回-1，表明调用失败</li>
+<li>flags：创建或者获取；
+<ul>
+<li>IPC_CREAT：如果不存在就创建</li>
+<li>IPC_EXCL： 如果已经存在则返回失败</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>信号灯的删除
+<ul>
+<li>int semctl(int sem_id, int snum, int cmd, char *arg);</li>
+<li>对信号灯的控制操作，如：删除，查询状态</li>
+<li>snum: 信号灯在信号灯组中的编号</li>
+<li>cmd: 控制命令</li>
+<li>arg: 执行这一控制命令所需要的参数存放区</li>
+<li>返回值为-1，标志操作失败；否则，表示执行成功，对返回值的解释依赖于cmd</li>
+<li>删除系统中信号灯组的调用 semctl(sem_id, 0, IPC_RMID, 0);</li>
+</ul>
+</li>
+<li>信号灯操作
+<ul>
+<li>int semop(int sem_id, struct sembuf *ops, int nops);</li>
+<li>信号灯操作（可能会导致调用进程在此睡眠）</li>
+<li>ops: 有nops个元素的sembuf结构体数组，每个元素描述对某一信号灯操作</li>
+<li>返回值：-1，标志操作失败；否则，表示执行成功</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">sembuf</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">short</span> <span class="n">sem_num</span><span class="p">;</span> <span class="c1">// 信号灯在信号灯组中的编号0,1,2…
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kt">short</span> <span class="n">sem_op</span><span class="p">;</span> <span class="c1">// 信号灯操作
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kt">short</span> <span class="n">sem_flg</span><span class="p">;</span> <span class="c1">// 操作选项
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span><span class="err">；</span>
+</span></span></code></pre></div><ul>
+<li>当sem_op&lt;0时，请求资源，P操作；当sem_op&gt;0时，释放资源，V操作</li>
+<li>当sem_op=0时，不修改信号灯的值，等待直到变为非负数</li>
+<li><strong>原子性</strong>：一次semop()调用指定的多个信号灯的操作，Linux内核要么把多个操作一下全部做完，要么什么都不做</li>
+</ul>
+</li>
+<li>共享内存
+<ul>
+<li>特点
+<ul>
+<li>多个进程共同使用同一段物理内存空间</li>
+<li>使用共享内存在多进程间传送数据，速度快，但进程必须自行解决对共享内存访问的互斥和同步问题（例如：使用信号灯通过P/V操作）
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-21%2008.30.49.png" alt=""></li>
+</ul>
+</li>
+<li>应用举例
+<ul>
+<li>数据交换：多进程使用共享内存交换数据（最快的进程间通信方式）</li>
+<li>运行监视：协议处理程序把有限状态机状态和统计信息放入共享内存中
+<ul>
+<li>协议处理程序运行过程中可随时启动监视程序，从共享内存中读取数据以窥视当前的状态，了解通信状况</li>
+<li>监视程序的启动与终止不影响通信进程，而且这种机制不影响协议处理程序的效率</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>共享内存操作
+<ul>
+<li>int shmget(int key, int nbytes, int flags);
+<ul>
+<li>创建一个新的或获取一个已存在的共享内存段</li>
+<li>函数返回的整数是共享内存段的ID号；返回-1，表明调用失败</li>
+</ul>
+</li>
+<li>void *shmat(int shm_id, void *shmaddr, int shmflg);
+<ul>
+<li>获取指向共享内存段的指针(进程逻辑地址)，返回-1：操作失败</li>
+<li>推荐shmaddr=0，让内核选择可用的程序地址空间</li>
+</ul>
+</li>
+<li>int shmctl(int shm_id, int cmd, char *arg) ;
+<ul>
+<li>对共享内存段的控制操作，如：删除，查询状态</li>
+<li>cmd: 控制命令</li>
+<li>arg: 执行这一控制命令所需要的参数存放区</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>生产者-消费者”问题
+<ul>
+<li>一个进程能产生并释放资源，则该进程称作生产者；如果一个进程单纯使用（消耗）资源，则该进程称作消费者。</li>
+<li>一组生产者进程和一组消费者进程（设每组有多个进程）通过缓冲区发生联系。生产者进程将生产的产品（数据、消息等统称为产品）送入缓冲区，消费者进程从中取出产品。
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-21%2008.36.05.png" alt=""></li>
+<li>生产和消费满足同步条件
+<ul>
+<li>一、任一时刻所有生产者存放产品的单元数不能超过缓冲区的总容量（N）</li>
+<li>二、所有消费者取出产品的总量不能超过所有生产者当前生产产品的数量</li>
+</ul>
+</li>
+<li>为使两类进程实行同步操作，应设置三个信号量
+<ul>
+<li>两个计数信号量full和empty
+<ul>
+<li>full：表示放有产品的缓冲区数，其初值为0</li>
+<li>empty：表示可供使用的缓冲区数，其初值为0</li>
+</ul>
+</li>
+<li>一个互斥信号量mutex，初值为1，表示各进程互斥进入临界区，保证任何时候只有一个进程使用缓冲区</li>
+</ul>
+</li>
+<li>在生产者-消费者问题中应注意下面三点：
+<ul>
+<li>一、在每个程序中必须有先做P(mutex)，后做V(mutex)，二者要成对出现。夹在二者中间的代码就是该进程的临界区。</li>
+<li>二、对同步信号量full和empty的P、V操作同样必须成对出现，但它们分别位于不同的程序中。</li>
+<li>三、无论在生产者进程中还是消费者进程中，两个P操作的次序不能颠倒：应先执行同步信号量的P操作，然后执行互斥信号量的P操作。否则可能造成进程死锁</li>
+</ul>
+</li>
+<li>问题：生产者/消费者用N个缓冲区构成的环形队列交换数据
+<ul>
+<li>程序设计：使用共享内存和信号量
+<ul>
+<li>ctl create 创建共享内存段和信号灯</li>
+<li>ctl remove 删除所创建的共享内存段和信号灯</li>
+<li>producer 启动1个生产者进程(可以同时启动多个)</li>
+<li>consumer 启动1个消费者进程(可以同时启动多个)</li>
+</ul>
+</li>
+<li>源程序文件有四个
+<ul>
+<li>ctl.h 公用头文件</li>
+<li>ctl.c 控制程序，创建/删除所需要的IPC机制</li>
+<li>producer-consumer.c 生产者和消费者程序（二合一）</li>
+</ul>
+</li>
+<li>系统命令ipcs</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="内存映射文件io">内存映射文件I/O</h2>
+<ul>
+<li>传统的访问磁盘文件的模式
+<ul>
+<li>打开一个文件，然后通过read和write访问文件，涉及内核内存、进程内存与磁盘之间的读写操作，效率不高
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-21%2009.03.54.png" alt=""></li>
+</ul>
+</li>
+<li>“内存映射”(Memory Map)方式读写文件
+<ul>
+<li>现代的Linux和Windows都提供了“内存映射”(Memory Map)方式读写文件的方法。</li>
+<li>将文件中的一部分连续的区域映射成一段进程虚拟地址空间中的内存</li>
+<li>进程获取这段映射内存的指针后，就把这个指针当作普通的数据指针一样引用。修改其中的数据，实际修改了文件；引用其中的数据值，就是读取了文件</li>
+<li>访问文件跟内存中的数据访问一样</li>
+<li>系统不会为数据文件的内存映射区域分配相同大小的物理内存，而是由页面调度算法自动进行物理内存分配</li>
+<li>根据虚拟内存的页面调度算法，按需调入数据文件中的内容，必要时淘汰(可能需要写入)内存页面</li>
+</ul>
+</li>
+<li>优点
+<ul>
+<li>比使用read，write方式速度更快这两个系统调用的典型用法：
+<ul>
+<li>len = read(fd, buf, nbyte);</li>
+<li>len = write(fd, buf, nbyte);</li>
+<li>read需要内核将磁盘数据读入到内核缓冲区，再复制到用户进程的缓冲区中，write方法类似（页面对齐）</li>
+<li>内存映射方式是访问文件速度最快的方法</li>
+</ul>
+</li>
+<li>提供了多个独立启动的进程共享内存的一种手段
+<ul>
+<li>多个进程都通过指针映射同一个文件的相同区域，实际访问同一段内存区域，这段内存是同一文件区域的内存映射</li>
+<li>某进程修改数据，就会导致另个进程可以访问到的数据发生变化，实现多进程共享内存的另外一种方式</li>
+<li>在Windows下就可以通过这种方式实现多进程共享内存</li>
+<li>注意：多进程之间访问时的同步和互斥，必须通过信号量等机制保证</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>内存映射文件相关系统调用
+<ul>
+<li>系统调用mmap
+<ul>
+<li>通知系统把哪个文件的哪个区域以<strong>何种方式</strong>映射</li>
+<li>void *mmap(void *addr, size_t len, int prot, int flags, int fd, off_t offset);</li>
+<li>执行成功，返回一个虚拟内存地址指针；否则返回-1，errno记录失败原因</li>
+</ul>
+</li>
+<li>mmap的参数
+<ul>
+<li>addr指定逻辑地址空间中映射区的起始地址，一般选为0，让系统自动选择</li>
+<li>fd：已打开文件的文件描述符</li>
+<li>映射的范围是从offset开始的len个字节</li>
+<li>prot对映射区的保护要求：PROT_READ和PROT_WRITE，必须与open打开匹配</li>
+<li>flags选MAP_SHARE，多进程共享方式</li>
+</ul>
+</li>
+<li>举例
+<ul>
+<li>char *p;</li>
+<li>p = mmap(0, 65536, PROT_READ | PROTO_WRITE, MAP_SHARED, fd, 0);</li>
+<li>p是一个指针，是文件fd从0开始的65536个字节</li>
+<li>程序像访问数组那样访问p[0]~p[65535]。操作这段内存最终读写磁盘文件。系统在合适时机将修改内容写回磁盘文件或者读取文件</li>
+</ul>
+</li>
+<li>系统调用munmap
+<ul>
+<li>程序调用函数munmap，或者，进程终止时，文件的内存映射区被删除</li>
+<li>int munmap(void *addr, size_t len);</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="文件和记录的锁定">文件和记录的锁定</h2>
+<ul>
+<li>
+<p>一个文件访问的问题程序
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-21%2009.13.00.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-21%2009.17.15.png" alt=""></p>
+</li>
+<li>
+<p>文件和记录锁定机制</p>
+<ul>
+<li>文件可以同时被多个进程访问，需要互斥
+<ul>
+<li>操作系统教科书中的“读者写者问题”）</li>
+<li>使用信号灯机制和共享内存等方法</li>
+</ul>
+</li>
+<li>非常复杂，Linux提供了对文件和记录的锁定机制，用于多进程间对文件的互斥性访问</li>
+<li>术语“记录”
+<ul>
+<li>指的是一个文件中从某一位置开始的连续字节流，Linux提供了对记录锁定的机制，用于锁定文件中的某一部分</li>
+<li>可以把一个记录定义为从文件首开始直至文件尾，所以，文件锁定实际上是记录锁定的一种特例</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>共享锁和互斥锁</p>
+<ul>
+<li>多进程读操作可以同时进行，即某一进程读记录时，不排斥其它进程也读该记录，但是排斥任何对该记录的写操作</li>
+</ul>
+</li>
+<li>
+<p>互斥锁（也叫写锁）</p>
+<ul>
+<li>当某进程写记录时，排斥所有其它进程对该记录的读和写</li>
+</ul>
+</li>
+<li>
+<p>文件锁操作(咨询式锁定)
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-21%2009.21.44.png" alt=""></p>
+</li>
+<li>
+<p>售票程序举例(写锁)
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-21%2009.25.05.png" alt=""></p>
+</li>
+<li>
+<p>查询程序举例（读锁）
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-21%2009.25.25.png" alt=""></p>
+</li>
+</ul>
+<h2 id="小结-1">小结</h2>
+<ul>
+<li>IPC，消息队列，死锁问题</li>
+<li>信号灯</li>
+<li>共享内存机制</li>
+<li>信号灯+共享内存:生产者消费者问题</li>
+<li>内存映射方式访问文件</li>
+<li>mmap与read/write比较</li>
+<li>文件和记录的锁定的必要性</li>
+<li>读锁与写锁</li>
+<li>咨询式锁的使用：注意安全性保障以及进程状态的变化</li>
 </ul>
 </article>
               </div>

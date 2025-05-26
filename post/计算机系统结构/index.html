@@ -156,9 +156,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Mon, 28 Apr 2025 14:26:08 &#43;0800"
+                  Modified <relative-time datetime="Mon, 26 May 2025 11:02:11 &#43;0800"
                     class="no-wrap">
-                    Mon, 28 Apr 2025 14:26:08 &#43;0800</relative-time>
+                    Mon, 26 May 2025 11:02:11 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -188,7 +188,7 @@
                         </div>
                       </div>
                     </details-menu>
-                      12927 Words
+                      14258 Words
                     
 
                   </div>
@@ -1320,7 +1320,172 @@
 </ol>
 <h2 id="35-流水线的实现">3.5 流水线的实现</h2>
 <h1 id="第9章-互连网络">第9章 互连网络</h1>
+<ul>
+<li>互连网络是一种由开关元件按照一定的拓扑结构和控制方式构成的网络，用来实现计算机系统中结点之间的相互连接
+<ul>
+<li>结点：处理器、存储模块或其它设备</li>
+<li>在拓扑上，互连网络为输入结点到输出结点之间的一组互连或映象</li>
+<li>SIMD计算机和MIMD计算机的关键组成部分</li>
+<li>3大要素：互连结构，开关元件，控制方式</li>
+</ul>
+</li>
+</ul>
 <h2 id="91-互连函数">9.1 互连函数</h2>
+<h3 id="911-互连函数">9.1.1 互连函数</h3>
+<ul>
+<li>变量x：输入（设x=0，1，…，N－1）</li>
+<li>函数f(x)：输出
+<ul>
+<li>通过数学表达式建立输入端号与输出端号的连接关系。即在互连函数f的作用下，输入端x连接到输出端f(x)。</li>
+</ul>
+</li>
+<li>互连函数反映了网络输入数组和输出数组之间对应的置换关系或排列关系。
+<ul>
+<li>（有时也称为置换函数或排列函数）</li>
+</ul>
+</li>
+<li>互连函数f(x)有时可以采用循环表示
+<ul>
+<li>即：（x<sub>0</sub> x<sub>1</sub> x<sub>2</sub>… x<sub>j-1</sub>）</li>
+<li>表示： f(x<sub>0</sub>)=x<sub>1</sub>，f(x<sub>1</sub>)=x<sub>2</sub>，…，f(x<sub>j-1</sub>)=x<sub>0</sub>，j称为该循环的长度。</li>
+<li>设n=log<sub>2</sub>N，则可以用n位二进制来表示N个输入端和输出端的二进制地址，互连函数表示为：f（x<sub>n-1</sub>x<sub>n-2</sub>…x<sub>1</sub>x<sub>0</sub>）</li>
+</ul>
+</li>
+</ul>
+<h3 id="912-几种基本的互连函数">9.1.2 几种基本的互连函数</h3>
+<p>介绍几种常用的基本互连函数及其主要特征。</p>
+<ol>
+<li>恒等函数</li>
+</ol>
+<ul>
+<li>恒等函数：实现同号输入端和输出端之间的连接</li>
+<li>I（x<sub>n-1</sub>x<sub>n-2</sub>…x<sub>1</sub>x<sub>0</sub>）=x<sub>n-1</sub>x<sub>n-2</sub>…x<sub>1</sub>x<sub>0</sub></li>
+</ul>
+<ol start="2">
+<li>交换函数</li>
+</ol>
+<ul>
+<li>交换函数：实现二进制地址编码中第k位互反的输入端与输出端之间的连接</li>
+<li><img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2010.28.15.png" alt=""></li>
+<li>主要用于构造立方体互连网络和各种超立方体互连网络</li>
+<li>它共有n＝log<sub>2</sub>N种互连函数。（N为结点个数）</li>
+<li>当N＝8时，n＝3，可得到常用的立方体互连函数：</li>
+<li><img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2010.32.28.png" alt=""></li>
+<li>变换图形</li>
+<li><img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2010.33.17.png" alt=""></li>
+<li><img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2010.35.25.png" alt=""></li>
+</ul>
+<ol start="3">
+<li>均匀洗牌函数</li>
+</ol>
+<ul>
+<li>均匀洗牌函数：将输入端分成数目相等的两半，前一半和后一半按类似均匀混洗扑克牌的方式交叉地连接到输出端（输出端相当于混洗的结果）
+<ul>
+<li>也称为混洗函数（置换）</li>
+<li>函数关系
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2010.38.34.png" alt=""></li>
+</ul>
+</li>
+<li>互连函数（设为s）的第k个子函数：把s作用于输入端的二进制编号的低k位</li>
+<li>互连函数（设为s）的第k个超函数：把s作用于输入端的二进制编号的高k位</li>
+<li>例如：对于均匀洗牌函数
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2010.40.31.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2010.40.52.png" alt=""></li>
+<li>逆均匀洗牌函数
+<ul>
+<li>对于任意一种函数f(x)，如果存在g(x)，使得f(x)×g(x)=I(x)则称g(x)是f(x)的逆函数，记为f-1(x)。f<sup>-1</sup>(x)= g(x)</li>
+<li>逆均匀洗牌函数：将输入端的二进制编号循环右移一位而得到所连接的输出端编号
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2010.42.50.png" alt=""></li>
+</ul>
+</li>
+<li>当N=8是，有
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2010.43.09.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2010.43.46.png" alt=""></li>
+</ul>
+<ol start="4">
+<li>碟式函数</li>
+</ol>
+<ul>
+<li>蝶式互连函数：把输入端的二进制编号的最高位与最低位互换位置，便得到了输出端的编号
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2010.45.00.png" alt=""></li>
+<li>第k个子函数
+<ul>
+<li>把输入端的二进制编号的低k位中的最高位与最低位互换
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2010.45.44.png" alt=""></li>
+</ul>
+</li>
+<li>第k个超函数
+<ul>
+<li>把输入端的二进制编号的高k位中的最高位与最低位互换
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2010.46.14.png" alt=""></li>
+</ul>
+</li>
+<li>下列等式成立
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2010.47.37.png" alt=""></li>
+<li>当N=8时，有：
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2010.47.57.png" alt=""></li>
+<li>蝶式变换与交换变换的多级组合可作为构成方体多级网络的基础</li>
+</ul>
+<ol start="5">
+<li>反位序函数</li>
+</ol>
+<ul>
+<li>反位序函数：将输入端二进制编号的位序颠倒过来求得相应输出端的编号
+<ul>
+<li>互连函数
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2010.52.50.png" alt=""></li>
+</ul>
+</li>
+<li>第k个子函数
+<ul>
+<li>即把输入端的二进制编号的低k位中各位的次序颠倒过来
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2010.53.14.png" alt=""></li>
+</ul>
+</li>
+<li>第k个超函数
+<ul>
+<li>即把输入端的二进制编号的高k位中各位的次序颠倒过来
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2010.53.42.png" alt=""></li>
+</ul>
+</li>
+<li>下列等式成立
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2010.54.13.png" alt=""></li>
+<li>当N=8时，有：
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2010.54.40.png" alt=""></li>
+<li>N=8的碟式函数和反位序函数
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2010.50.53.png" alt=""></li>
+</ul>
+<ol start="6">
+<li>移数函数</li>
+</ol>
+<ul>
+<li>移数函数：将各输入端都错开一定的位置（模N）后连到输出端。
+<ul>
+<li>函数式
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2010.55.36.png" alt=""></li>
+</ul>
+</li>
+</ul>
+<ol start="7">
+<li>PM2I函数</li>
+</ol>
+<ul>
+<li>P和M分别表示加和减，2I表示2i</li>
+<li>该函数又称为“加减2i”函数</li>
+<li>PM2I函数：一种移数函数，将各输入端都错开一定的位置（模N）后连到输出端</li>
+<li>互连函数
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2010.57.30.png" alt=""></li>
+<li>PM2I互连网络共有2n个互连函数</li>
+<li>当N＝8时，有6个PM2I函数
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2010.59.09.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2010.59.36.png" alt=""></li>
+<li>阵列计算机ILLIAC Ⅳ
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2011.01.00.png" alt=""></li>
+<li>练习
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2011.01.29.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2011.01.49.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-26%2011.02.02.png" alt=""></li>
+</ul>
 <h2 id="92-互连网络的结构参数与性能指标">9.2 互连网络的结构参数与性能指标</h2>
 <h3 id="921-互连网络的结构参数">9.2.1 互连网络的结构参数</h3>
 <ul>

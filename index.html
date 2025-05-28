@@ -151,7 +151,7 @@
                 </path>
               </svg>
               Posts
-              <span class="Counter">184</span>
+              <span class="Counter">185</span>
             </a>
           </nav>
           <div class="profile-color-modes js-promo-color-modes-banner-profile isInitialToggle">
@@ -430,7 +430,7 @@
         </path>
       </svg>
       Posts
-      <span class="Counter ">184</span>
+      <span class="Counter ">185</span>
     </a>
   </nav>
 </div>
@@ -454,6 +454,240 @@
           Popular posts
         </h2>
         <ol class="d-flex flex-wrap list-style-none gutter-condensed mb-4 js-pinned-items-reorder-list">
+          
+          <li class="col-12 col-md-6 col-lg-6 mb-3 d-flex flex-content-stretch">
+            <div
+              class="Box pinned-item-list-item d-flex p-3 width-full js-pinned-item-list-item public source reorderable sortable-button-item">
+              <div class="pinned-item-list-item-content">
+                <div class="d-flex width-full flex-items-center position-relative">
+                  <svg class="octicon octicon-repo mr-2 text-gray flex-shrink-0" viewBox="0 0 16 16" version="1.1"
+                    width="16" height="16">
+                    <path fill-rule="evenodd"
+                      d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z">
+                    </path>
+                  </svg>
+                  <a class="text-bold flex-auto min-width-0" href="https://y-m-m.github.io/post/linux_%E7%BD%91%E7%BB%9C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/">
+                    <span class="repo" title="Linux 网络程序设计">Linux 网络程序设计</span>
+                  </a>
+                </div>
+
+
+                <div name="summary" class="pinned-item-desc text-gray text-small d-block mt-2 mb-3">
+                  <h1 id="socket概述">Socket概述</h1>
+<h2 id="socket">Socket</h2>
+<ul>
+<li>协议栈实现
+<ul>
+<li>传输层以上由用户态应用程序实现</li>
+<li>传输层和网络互联层协议在内核中实现（路由协议由用户态进程实现）</li>
+<li>第一第二层一般由硬件实现</li>
+</ul>
+</li>
+<li>UNIX提供给应用程序使用网络功能的方法
+<ul>
+<li>BSD将设备和通信管道组织成文件方式，创建方式不同，访问方法相同
+<ul>
+<li>终端设备</li>
+<li>管道</li>
+<li>通信服务Socket</li>
+</ul>
+</li>
+<li>AT&amp;T UNIX的TLI编程接口</li>
+</ul>
+</li>
+<li>Socket编程接口面向网络通信，不仅仅用于TCP/IP
+<ul>
+<li>利用虚拟loopback接口(127.0.0.1)，可实现同台计算机进程间通信</li>
+</ul>
+</li>
+</ul>
+<h2 id="tcp与udp">TCP与UDP</h2>
+<ul>
+<li>TCP
+<ul>
+<li>面向连接</li>
+<li>可靠</li>
+<li>字节流传输</li>
+<li>不保证报文边界</li>
+</ul>
+</li>
+<li>UDP
+<ul>
+<li>面向数据报</li>
+<li>不可靠</li>
+<li>数据报传输</li>
+<li>广播和组播</li>
+</ul>
+</li>
+</ul>
+<h2 id="网络字节顺序">网络字节顺序</h2>
+<ul>
+<li>CPU字节顺序
+<ul>
+<li>Big Endian (大尾)，即将低位字节排在前
+<ul>
+<li>Power PC，SPARC，Motorola</li>
+</ul>
+</li>
+<li>Little Endian (小尾)
+<ul>
+<li>Intel X86</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>网络字节顺序
+<ul>
+<li>big endian (大尾) 排序方式 , 与X86相反</li>
+</ul>
+</li>
+<li>网络字节转换的库函数
+<ul>
+<li>htonl ntohl 四字节整数(long)</li>
+<li>htons ntohs 两字节整数(short)</li>
+</ul>
+</li>
+</ul>
+<h2 id="socket系统调用">socket系统调用</h2>
+<ul>
+<li>int socket( int family, int type, int protocol);
+<ul>
+<li>创建socket文件描述符，端点名未指定</li>
+<li>family：协议栈，TCP/IP为AF_INET</li>
+<li>type：套接字类型
+<ul>
+<li>流式虚电路：SOCK_STREAM</li>
+<li>数据报：SOCK_DGRAM</li>
+<li>IP、ICMP：SOCK_RAW</li>
+</ul>
+</li>
+<li>protocol：协议（常为0），IPPROTO_TCP、 IPPROTO_UDP</li>
+<li>返回值：文件描述符sockfd</li>
+</ul>
+</li>
+<li>int bind( int sockfd, struct sockaddr *name, int namelen)
+<ul>
+<li>为文件描述符sockfd设定本地端点名name，也可以用在客户端程序</li>
+<li>端口被其他进程占用时，失败返回-1</li>
+<li>传输层：端到端
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">sockaddr_in</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">short</span> <span class="n">sin_family</span><span class="p">;</span>           <span class="c1">// AF_INE
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">u_short</span> <span class="n">sin_port</span><span class="p">;</span>           <span class="c1">// port number
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">struct</span> <span class="nc">in_addr</span> <span class="n">sin_addr</span><span class="p">;</span>    <span class="c1">// IP address
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">char</span> <span class="n">sin_zero</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>           <span class="c1">// unsed
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">in_addr</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">u_long</span> <span class="n">s_addr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div></li>
+</ul>
+</li>
+<li>int connect( int sockfd, struct sockaddr *name, size_t name_len);
+<ul>
+<li>对应sockfd，设定<strong>对端</strong>端点名到name</li>
+<li>TCP执行三次握手，等待对方应答，进程睡眠</li>
+<li>连接成功返回0，失败返回-1</li>
+<li>UDP:无连接建立，<strong>对端</strong>端点名记录到内核中sockfd对应的数据结构</li>
+</ul>
+</li>
+<li>int listen( int sockfd, int backlog);
+<ul>
+<li>开始监听到达的连接请求，连接到sockfd关联的端点名上</li>
+<li>backlog：最多的排队请求个数，常设为5</li>
+<li>不会阻塞，不负责数据通信</li>
+</ul>
+</li>
+<li>int accept( int sockfd, struct sockaddr *name, int *namelen);
+<ul>
+<li>接受一个连接请求，将远端端点名计入name</li>
+<li>依次取得在sockfd上排队的连接请求，建立并返回一个新的文件描述符</li>
+<li>若sockfd上无连接请求，accept调用被阻塞</li>
+<li>TCP三次握手结束后accept返回</li>
+</ul>
+</li>
+<li>int read( int sockfd, void *buf, int nbyte);</li>
+<li>int write( int sockfd, void *buf, int nbyte);
+<ul>
+<li>在用户缓存buf和文件描述符sockfd对应的内核缓存之间搬送数据</li>
+<li>read ：读到数据就返回；接收缓存无数据则阻塞</li>
+<li>write：写完缓存就返回；发送连接忙则阻塞</li>
+<li>返回值：实际收到和写出的数据长度；出错返回-1；read返回0，表明连接被对方关闭</li>
+</ul>
+</li>
+<li>int close( int sockfd);
+<ul>
+<li>关闭连接，释放文件描述符</li>
+<li>发送缓冲区不为空时：
+<ul>
+<li>默认继续发送缓冲区中数据；</li>
+<li>系统调用setsockop可以设置sockfd的SO_LINGER选项，（设定时限后）直接丢弃缓冲区数据</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="tcp客户-服务器程序">TCP客户-服务器程序</h1>
+<h2 id="客户端程序">客户端程序</h2>
+<ul>
+<li>创建文件描述符socket</li>
+<li>建立连接connect
+<ul>
+<li>进程阻塞，等待TCP连接建立</li>
+</ul>
+</li>
+<li>端点名的概念：IP地址+端口号
+<ul>
+<li>本地端点名：可动态分配</li>
+<li>远端端点名：well-known port</li>
+</ul>
+</li>
+<li>发送数据
+<ul>
+<li>发送速率大于通信速率，进程会被阻塞</li>
+</ul>
+</li>
+<li>关闭连接</li>
+</ul>
+<h2 id="clientc">client.c</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-05-28%2008.29.24.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-28%2008.32.11.png" alt=""></p>
+                </div>
+
+                <p class="mb-0 f6 text-gray">
+                  
+                  
+                  <a href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    计算机科学与技术
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/linux" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    Linux
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/linux-%E7%BD%91%E7%BB%9C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    Linux 网络程序设计
+                  </a>
+                  
+                  
+                </p>
+              </div>
+            </div>
+          </li>
           
           <li class="col-12 col-md-6 col-lg-6 mb-3 d-flex flex-content-stretch">
             <div
@@ -1832,112 +2066,18 @@
             </div>
           </li>
           
-          <li class="col-12 col-md-6 col-lg-6 mb-3 d-flex flex-content-stretch">
-            <div
-              class="Box pinned-item-list-item d-flex p-3 width-full js-pinned-item-list-item public source reorderable sortable-button-item">
-              <div class="pinned-item-list-item-content">
-                <div class="d-flex width-full flex-items-center position-relative">
-                  <svg class="octicon octicon-repo mr-2 text-gray flex-shrink-0" viewBox="0 0 16 16" version="1.1"
-                    width="16" height="16">
-                    <path fill-rule="evenodd"
-                      d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z">
-                    </path>
-                  </svg>
-                  <a class="text-bold flex-auto min-width-0" href="https://y-m-m.github.io/post/leetcodehot295%E6%95%B0%E6%8D%AE%E6%B5%81%E7%9A%84%E4%B8%AD%E4%BD%8D%E6%95%B0/">
-                    <span class="repo" title="leetcode hot100 295 数据流的中位数">leetcode hot100 295 数据流的中位数</span>
-                  </a>
-                </div>
-
-
-                <div name="summary" class="pinned-item-desc text-gray text-small d-block mt-2 mb-3">
-                  <p><a href="https://leetcode.cn/problems/find-median-from-data-stream/description/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode hot100 295 数据流的中位数</a></p>
-<h1 id="题目">题目</h1>
-<blockquote>
-<p>中位数是有序整数列表中的中间值。如果列表的大小是偶数，则没有中间值，中位数是两个中间值的平均值。           <br>
-例如 arr = [2,3,4] 的中位数是 3 。             <br>
-例如 arr = [2,3] 的中位数是 (2 + 3) / 2 = 2.5 。          <br>
-实现 MedianFinder 类:             <br>
-MedianFinder() 初始化 MedianFinder 对象。                <br>
-void addNum(int num) 将数据流中的整数 num 添加到数据结构中。               <br>
-double findMedian() 返回到目前为止所有元素的中位数。与实际答案相差 10-5 以内的答案将被接受。</p>
-</blockquote>
-<h1 id="示例">示例</h1>
-<h2 id="示例一">示例一</h2>
-<blockquote>
-<p>输入              <br>
-[&ldquo;MedianFinder&rdquo;, &ldquo;addNum&rdquo;, &ldquo;addNum&rdquo;, &ldquo;findMedian&rdquo;, &ldquo;addNum&rdquo;, &ldquo;findMedian&rdquo;]           <br>
-[[], [1], [2], [], [3], []]           <br>
-输出             <br>
-[null, null, null, 1.5, null, 2.0]            <br>
-解释        <br>
-MedianFinder medianFinder = new MedianFinder();            <br>
-medianFinder.addNum(1);    // arr = [1]       <br>
-medianFinder.addNum(2);    // arr = [1, 2]        <br>
-medianFinder.findMedian(); // 返回 1.5 ((1 + 2) / 2)       <br>
-medianFinder.addNum(3);    // arr[1, 2, 3]      <br>
-medianFinder.findMedian(); // return 2.0</p>
-                </div>
-
-                <p class="mb-0 f6 text-gray">
-                  
-                  
-                  <a href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    计算机科学与技术
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    算法题
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/leetcode" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    leetcode
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/%E8%AE%BE%E8%AE%A1" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    设计
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/%E5%8F%8C%E6%8C%87%E9%92%88" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    双指针
-                  </a>
-                  
-                  
-                </p>
-              </div>
-            </div>
-          </li>
-          
         </ol>
       </div>
     </div>
 
     
     <div class="mt-4 position-relative" id="contributions" data='[
+{
+  "title": "Linux%20%e7%bd%91%e7%bb%9c%e7%a8%8b%e5%ba%8f%e8%ae%be%e8%ae%a1",
+  "link": "https://y-m-m.github.io/post/linux_%E7%BD%91%E7%BB%9C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/",
+  "publishDate": "2025-05-28%2000:00:00"
+},
+
 {
   "title": "Linux%20%e6%96%87%e6%9c%ac%e6%96%87%e4%bb%b6%e5%a4%84%e7%90%86",
   "link": "https://y-m-m.github.io/post/linux_%E6%96%87%E6%9C%AC%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86/",

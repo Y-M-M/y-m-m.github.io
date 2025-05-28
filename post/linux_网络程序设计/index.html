@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script type="application/javascript" src='https://y-m-m.github.io/js/theme-mode.js'></script>
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/frameworks.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github.min.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/github-style.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/light.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/dark.css' />
+    <link rel="stylesheet" href='https://y-m-m.github.io/css/syntax.css' />
+    <title>Linux 网络程序设计 - 陈皮的博客</title>
+    
+    <link rel="icon" type="image/x-icon" href='/images/github-mark.png'>
+    
+    <meta name="theme-color" content="#1e2327">
+
+    
+    <meta name="description"
+  content="Socket概述 Socket 协议栈实现 传输层以上由用户态应用程序实现 传输层和网络互联层协议在内核中实现（路由协议由用户态进程实现） 第一第二层一般由硬件实现 UNIX提供给应用程序使用网络功能的方法 BSD将设备和通信管道组织成文件方式，创建方式不同，访问方法相同 终端设备 管道 通信服务Socket AT&amp;T UNIX的TLI编程接口 Socket编程接口面向网络通信，不仅仅用于TCP/IP 利用虚拟loopback接口(127.0.0.1)，可实现同台计算机进程间通信 TCP与UDP TCP 面向连接 可靠 字节流传输 不保证报文边界 UDP 面向数据报 不可靠 数据报传输 广播和组播 网络字节顺序 CPU字节顺序 Big Endian (大尾)，即将低位字节排在前 Power PC，SPARC，Motorola Little Endian (小尾) Intel X86 网络字节顺序 big endian (大尾) 排序方式 , 与X86相反 网络字节转换的库函数 htonl ntohl 四字节整数(long) htons ntohs 两字节整数(short) socket系统调用 int socket( int family, int type, int protocol); 创建socket文件描述符，端点名未指定 family：协议栈，TCP/IP为AF_INET type：套接字类型 流式虚电路：SOCK_STREAM 数据报：SOCK_DGRAM IP、ICMP：SOCK_RAW protocol：协议（常为0），IPPROTO_TCP、 IPPROTO_UDP 返回值：文件描述符sockfd int bind( int sockfd, struct sockaddr *name, int namelen) 为文件描述符sockfd设定本地端点名name，也可以用在客户端程序 端口被其他进程占用时，失败返回-1 传输层：端到端 struct sockaddr_in { short sin_family; // AF_INE u_short sin_port; // port number struct in_addr sin_addr; // IP address char sin_zero[8]; // unsed }; struct in_addr { u_long s_addr; }; int connect( int sockfd, struct sockaddr *name, size_t name_len); 对应sockfd，设定对端端点名到name TCP执行三次握手，等待对方应答，进程睡眠 连接成功返回0，失败返回-1 UDP:无连接建立，对端端点名记录到内核中sockfd对应的数据结构 int listen( int sockfd, int backlog); 开始监听到达的连接请求，连接到sockfd关联的端点名上 backlog：最多的排队请求个数，常设为5 不会阻塞，不负责数据通信 int accept( int sockfd, struct sockaddr *name, int *namelen); 接受一个连接请求，将远端端点名计入name 依次取得在sockfd上排队的连接请求，建立并返回一个新的文件描述符 若sockfd上无连接请求，accept调用被阻塞 TCP三次握手结束后accept返回 int read( int sockfd, void *buf, int nbyte); int write( int sockfd, void *buf, int nbyte); 在用户缓存buf和文件描述符sockfd对应的内核缓存之间搬送数据 read ：读到数据就返回；接收缓存无数据则阻塞 write：写完缓存就返回；发送连接忙则阻塞 返回值：实际收到和写出的数据长度；出错返回-1；read返回0，表明连接被对方关闭 int close( int sockfd); 关闭连接，释放文件描述符 发送缓冲区不为空时： 默认继续发送缓冲区中数据； 系统调用setsockop可以设置sockfd的SO_LINGER选项，（设定时限后）直接丢弃缓冲区数据 TCP客户-服务器程序 客户端程序 创建文件描述符socket 建立连接connect 进程阻塞，等待TCP连接建立 端点名的概念：IP地址&#43;端口号 本地端点名：可动态分配 远端端点名：well-known port 发送数据 发送速率大于通信速率，进程会被阻塞 关闭连接 client.c " />
+<meta name="keywords"
+  content='blog, google analytics' />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://y-m-m.github.io/post/linux_%E7%BD%91%E7%BB%9C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/" />
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Linux 网络程序设计 - 陈皮的博客" />
+<meta name="twitter:description"
+  content="Socket概述 Socket 协议栈实现 传输层以上由用户态应用程序实现 传输层和网络互联层协议在内核中实现（路由协议由用户态进程实现） 第一第二层一般由硬件实现 UNIX提供给应用程序使用网络功能的方法 BSD将设备和通信管道组织成文件方式，创建方式不同，访问方法相同 终端设备 管道 通信服务Socket AT&amp;T UNIX的TLI编程接口 Socket编程接口面向网络通信，不仅仅用于TCP/IP 利用虚拟loopback接口(127.0.0.1)，可实现同台计算机进程间通信 TCP与UDP TCP 面向连接 可靠 字节流传输 不保证报文边界 UDP 面向数据报 不可靠 数据报传输 广播和组播 网络字节顺序 CPU字节顺序 Big Endian (大尾)，即将低位字节排在前 Power PC，SPARC，Motorola Little Endian (小尾) Intel X86 网络字节顺序 big endian (大尾) 排序方式 , 与X86相反 网络字节转换的库函数 htonl ntohl 四字节整数(long) htons ntohs 两字节整数(short) socket系统调用 int socket( int family, int type, int protocol); 创建socket文件描述符，端点名未指定 family：协议栈，TCP/IP为AF_INET type：套接字类型 流式虚电路：SOCK_STREAM 数据报：SOCK_DGRAM IP、ICMP：SOCK_RAW protocol：协议（常为0），IPPROTO_TCP、 IPPROTO_UDP 返回值：文件描述符sockfd int bind( int sockfd, struct sockaddr *name, int namelen) 为文件描述符sockfd设定本地端点名name，也可以用在客户端程序 端口被其他进程占用时，失败返回-1 传输层：端到端 struct sockaddr_in { short sin_family; // AF_INE u_short sin_port; // port number struct in_addr sin_addr; // IP address char sin_zero[8]; // unsed }; struct in_addr { u_long s_addr; }; int connect( int sockfd, struct sockaddr *name, size_t name_len); 对应sockfd，设定对端端点名到name TCP执行三次握手，等待对方应答，进程睡眠 连接成功返回0，失败返回-1 UDP:无连接建立，对端端点名记录到内核中sockfd对应的数据结构 int listen( int sockfd, int backlog); 开始监听到达的连接请求，连接到sockfd关联的端点名上 backlog：最多的排队请求个数，常设为5 不会阻塞，不负责数据通信 int accept( int sockfd, struct sockaddr *name, int *namelen); 接受一个连接请求，将远端端点名计入name 依次取得在sockfd上排队的连接请求，建立并返回一个新的文件描述符 若sockfd上无连接请求，accept调用被阻塞 TCP三次握手结束后accept返回 int read( int sockfd, void *buf, int nbyte); int write( int sockfd, void *buf, int nbyte); 在用户缓存buf和文件描述符sockfd对应的内核缓存之间搬送数据 read ：读到数据就返回；接收缓存无数据则阻塞 write：写完缓存就返回；发送连接忙则阻塞 返回值：实际收到和写出的数据长度；出错返回-1；read返回0，表明连接被对方关闭 int close( int sockfd); 关闭连接，释放文件描述符 发送缓冲区不为空时： 默认继续发送缓冲区中数据； 系统调用setsockop可以设置sockfd的SO_LINGER选项，（设定时限后）直接丢弃缓冲区数据 TCP客户-服务器程序 客户端程序 创建文件描述符socket 建立连接connect 进程阻塞，等待TCP连接建立 端点名的概念：IP地址&#43;端口号 本地端点名：可动态分配 远端端点名：well-known port 发送数据 发送速率大于通信速率，进程会被阻塞 关闭连接 client.c " />
+<meta name="twitter:site" content="https://y-m-m.github.io/" />
+<meta name="twitter:creator" content="陈皮" />
+<meta name="twitter:image"
+  content="https://y-m-m.github.io/">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Linux 网络程序设计 - 陈皮的博客">
+<meta property="og:description"
+  content="Socket概述 Socket 协议栈实现 传输层以上由用户态应用程序实现 传输层和网络互联层协议在内核中实现（路由协议由用户态进程实现） 第一第二层一般由硬件实现 UNIX提供给应用程序使用网络功能的方法 BSD将设备和通信管道组织成文件方式，创建方式不同，访问方法相同 终端设备 管道 通信服务Socket AT&amp;T UNIX的TLI编程接口 Socket编程接口面向网络通信，不仅仅用于TCP/IP 利用虚拟loopback接口(127.0.0.1)，可实现同台计算机进程间通信 TCP与UDP TCP 面向连接 可靠 字节流传输 不保证报文边界 UDP 面向数据报 不可靠 数据报传输 广播和组播 网络字节顺序 CPU字节顺序 Big Endian (大尾)，即将低位字节排在前 Power PC，SPARC，Motorola Little Endian (小尾) Intel X86 网络字节顺序 big endian (大尾) 排序方式 , 与X86相反 网络字节转换的库函数 htonl ntohl 四字节整数(long) htons ntohs 两字节整数(short) socket系统调用 int socket( int family, int type, int protocol); 创建socket文件描述符，端点名未指定 family：协议栈，TCP/IP为AF_INET type：套接字类型 流式虚电路：SOCK_STREAM 数据报：SOCK_DGRAM IP、ICMP：SOCK_RAW protocol：协议（常为0），IPPROTO_TCP、 IPPROTO_UDP 返回值：文件描述符sockfd int bind( int sockfd, struct sockaddr *name, int namelen) 为文件描述符sockfd设定本地端点名name，也可以用在客户端程序 端口被其他进程占用时，失败返回-1 传输层：端到端 struct sockaddr_in { short sin_family; // AF_INE u_short sin_port; // port number struct in_addr sin_addr; // IP address char sin_zero[8]; // unsed }; struct in_addr { u_long s_addr; }; int connect( int sockfd, struct sockaddr *name, size_t name_len); 对应sockfd，设定对端端点名到name TCP执行三次握手，等待对方应答，进程睡眠 连接成功返回0，失败返回-1 UDP:无连接建立，对端端点名记录到内核中sockfd对应的数据结构 int listen( int sockfd, int backlog); 开始监听到达的连接请求，连接到sockfd关联的端点名上 backlog：最多的排队请求个数，常设为5 不会阻塞，不负责数据通信 int accept( int sockfd, struct sockaddr *name, int *namelen); 接受一个连接请求，将远端端点名计入name 依次取得在sockfd上排队的连接请求，建立并返回一个新的文件描述符 若sockfd上无连接请求，accept调用被阻塞 TCP三次握手结束后accept返回 int read( int sockfd, void *buf, int nbyte); int write( int sockfd, void *buf, int nbyte); 在用户缓存buf和文件描述符sockfd对应的内核缓存之间搬送数据 read ：读到数据就返回；接收缓存无数据则阻塞 write：写完缓存就返回；发送连接忙则阻塞 返回值：实际收到和写出的数据长度；出错返回-1；read返回0，表明连接被对方关闭 int close( int sockfd); 关闭连接，释放文件描述符 发送缓冲区不为空时： 默认继续发送缓冲区中数据； 系统调用setsockop可以设置sockfd的SO_LINGER选项，（设定时限后）直接丢弃缓冲区数据 TCP客户-服务器程序 客户端程序 创建文件描述符socket 建立连接connect 进程阻塞，等待TCP连接建立 端点名的概念：IP地址&#43;端口号 本地端点名：可动态分配 远端端点名：well-known port 发送数据 发送速率大于通信速率，进程会被阻塞 关闭连接 client.c " />
+<meta property="og:url" content="https://y-m-m.github.io/post/linux_%E7%BD%91%E7%BB%9C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/" />
+<meta property="og:site_name" content="Linux 网络程序设计" />
+<meta property="og:image"
+  content="https://y-m-m.github.io/">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+<meta property="article:published_time" content="2025-05-28 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+  <div style="position: relative">
+  <header class="Header js-details-container Details px-3 px-md-4 px-lg-5 flex-wrap flex-md-nowrap open Details--on">
+    <div class="Header-item mobile-none" style="margin-top: -4px; margin-bottom: -4px;">
+      <a class="Header-link" href="https://y-m-m.github.io/">
+        <img class="octicon" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item d-md-none">
+      <button class="Header-link btn-link js-details-target" type="button"
+        onclick="document.querySelector('#header-search').style.display = document.querySelector('#header-search').style.display == 'none'? 'block': 'none'">
+        <svg height="24" class="octicon octicon-three-bars" viewBox="0 0 16 16" version="1.1" width="24">
+          <path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 2.75zm0 5A.75.75 0 011.75 7h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 7.75zM1.75 12a.75.75 0 100 1.5h12.5a.75.75 0 100-1.5H1.75z">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <div style="display: none;" id="header-search"
+      class="Header-item Header-item--full flex-column flex-md-row width-full flex-order-2 flex-md-order-none mr-0 mr-md-3 mt-3 mt-md-0 Details-content--hidden-not-important d-md-flex">
+      <div
+        class="Header-search header-search flex-auto js-site-search position-relative flex-self-stretch flex-md-self-auto mb-3 mb-md-0 mr-0 mr-md-3 scoped-search site-scoped-search js-jump-to">
+        <div class="position-relative">
+          
+          <form target="_blank" id="search-form" action="" accept-charset="UTF-8" method="get"
+            autocomplete="off">
+            <label
+              class="Header-search-label form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative d-flex flex-justify-between flex-items-center">
+              <input type="text"
+                class="Header-search-input form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable"
+                name="q" value="" placeholder="Search" autocomplete="off">
+            </label>
+          </form>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="Header-item Header-item--full flex-justify-center d-md-none position-relative">
+      <a class="Header-link " href="https://y-m-m.github.io/">
+        <img class="octicon octicon-mark-github v-align-middle" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item" style="margin-right: 0;">
+      <a href="javascript:void(0)" class="Header-link no-select" onclick="switchTheme()">
+        <svg style="fill: var(--color-profile-color-modes-toggle-moon);" class="no-select" viewBox="0 0 16 16"
+          version="1.1" width="16" height="16">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M4.52208 7.71754C7.5782 7.71754 10.0557 5.24006 10.0557 2.18394C10.0557 1.93498 10.0392 1.68986 10.0074 1.44961C9.95801 1.07727 10.3495 0.771159 10.6474 0.99992C12.1153 2.12716 13.0615 3.89999 13.0615 5.89383C13.0615 9.29958 10.3006 12.0605 6.89485 12.0605C3.95334 12.0605 1.49286 10.001 0.876728 7.24527C0.794841 6.87902 1.23668 6.65289 1.55321 6.85451C2.41106 7.40095 3.4296 7.71754 4.52208 7.71754Z">
+          </path>
+        </svg>
+      </a>
+    </div>
+  </header>
+</div>
+
+  <div id="search-result" class="container-lg px-3 new-discussion-timeline" style="display: none;">
+</div>
+
+  
+<div class="application-main">
+  <div>
+  <main>
+    <div class="gisthead pagehead bg-gray-light pb-0 pt-3 mb-4">
+      <div class="px-0">
+        <div class="mb-3 d-flex px-3 px-md-3 px-lg-5">
+          <div class="flex-auto min-width-0 width-fit mr-3">
+            <div class="d-flex">
+              <div class="d-none d-md-block">
+                <a class="avatar mr-2 flex-shrink-0" href="https://y-m-m.github.io/">
+                  <img class=" avatar-user"
+                    src="/images/me.png"
+                    width="32" height="32"></a>
+              </div>
+              <div class="d-flex flex-column">
+                <h1 class="break-word f3 text-normal mb-md-0 mb-1">
+                  <span class="author">
+                    <a href="https://y-m-m.github.io/">陈皮</a>
+                  </span>
+                  <span class="path-divider">/</span>
+                  <strong class="css-truncate css-truncate-target mr-1" style="max-width: 410px">
+                    <a href="https://y-m-m.github.io/post/linux_%E7%BD%91%E7%BB%9C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/">Linux 网络程序设计</a>
+                  </strong>
+                </h1>
+                <div class="note m-0">
+                  Created <relative-time datetime="Wed, 28 May 2025 00:00:00 &#43;0000"
+                    class="no-wrap">
+                    Wed, 28 May 2025 00:00:00 &#43;0000</relative-time>
+
+                  
+                  <span class="file-info-divider"></span>
+                  Modified <relative-time datetime="Wed, 28 May 2025 09:30:53 &#43;0800"
+                    class="no-wrap">
+                    Wed, 28 May 2025 09:30:53 &#43;0800</relative-time>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-lg px-3 new-discussion-timeline">
+      <div class="repository-content gist-content">
+        <div>
+          <div class="js-gist-file-update-container js-task-list-container file-box">
+            <div id="file-pytest" class="file my-2">
+              <div id="post-header" class="file-header d-flex flex-md-items-center flex-items-start sticky-header" style="z-index: 2">
+                <div class="file-info d-flex flex-md-items-center flex-items-start flex-order-1 flex-auto">
+                  <div class="text-mono f6 flex-auto pr-3 flex-order-2 flex-md-order-1 mt-2 mt-md-0">
+                    
+                    <summary id="toc-toggle" onclick="clickToc()" class="btn btn-octicon m-0 mr-2 p-2">
+                      <svg aria-hidden="true" viewBox="0 0 16 16" height="16" width="16" class="octicon octicon-list-unordered">
+                        <path fill-rule="evenodd" d="M2 4a1 1 0 100-2 1 1 0 000 2zm3.75-1.5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zM3 8a1 1 0 11-2 0 1 1 0 012 0zm-1 6a1 1 0 100-2 1 1 0 000 2z"></path>
+                      </svg>
+                    </summary>
+                    <details-menu class="SelectMenu" id="toc-details" style="display: none;">
+                      <div class="SelectMenu-modal rounded-3 mt-1" style="max-height: 340px;">
+                        <div class="SelectMenu-list SelectMenu-list--borderless p-2" style="overscroll-behavior: contain;" id="toc-list">
+                        </div>
+                      </div>
+                    </details-menu>
+                      3848 Words
+                    
+
+                  </div>
+                  <div class="file-actions flex-order-2 pt-0">
+                    
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      计算机科学与技术
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/linux">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      Linux
+                    </a>
+                    
+                    <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/linux-%E7%BD%91%E7%BB%9C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1">
+                      <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd"
+                          d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                        </path>
+                      </svg>
+                      Linux 网络程序设计
+                    </a>
+                    
+                    
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="Box-body px-5 pb-5" style="z-index: 1">
+                <article class="markdown-body entry-content container-lg"><h1 id="socket概述">Socket概述</h1>
+<h2 id="socket">Socket</h2>
+<ul>
+<li>协议栈实现
+<ul>
+<li>传输层以上由用户态应用程序实现</li>
+<li>传输层和网络互联层协议在内核中实现（路由协议由用户态进程实现）</li>
+<li>第一第二层一般由硬件实现</li>
+</ul>
+</li>
+<li>UNIX提供给应用程序使用网络功能的方法
+<ul>
+<li>BSD将设备和通信管道组织成文件方式，创建方式不同，访问方法相同
+<ul>
+<li>终端设备</li>
+<li>管道</li>
+<li>通信服务Socket</li>
+</ul>
+</li>
+<li>AT&amp;T UNIX的TLI编程接口</li>
+</ul>
+</li>
+<li>Socket编程接口面向网络通信，不仅仅用于TCP/IP
+<ul>
+<li>利用虚拟loopback接口(127.0.0.1)，可实现同台计算机进程间通信</li>
+</ul>
+</li>
+</ul>
+<h2 id="tcp与udp">TCP与UDP</h2>
+<ul>
+<li>TCP
+<ul>
+<li>面向连接</li>
+<li>可靠</li>
+<li>字节流传输</li>
+<li>不保证报文边界</li>
+</ul>
+</li>
+<li>UDP
+<ul>
+<li>面向数据报</li>
+<li>不可靠</li>
+<li>数据报传输</li>
+<li>广播和组播</li>
+</ul>
+</li>
+</ul>
+<h2 id="网络字节顺序">网络字节顺序</h2>
+<ul>
+<li>CPU字节顺序
+<ul>
+<li>Big Endian (大尾)，即将低位字节排在前
+<ul>
+<li>Power PC，SPARC，Motorola</li>
+</ul>
+</li>
+<li>Little Endian (小尾)
+<ul>
+<li>Intel X86</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>网络字节顺序
+<ul>
+<li>big endian (大尾) 排序方式 , 与X86相反</li>
+</ul>
+</li>
+<li>网络字节转换的库函数
+<ul>
+<li>htonl ntohl 四字节整数(long)</li>
+<li>htons ntohs 两字节整数(short)</li>
+</ul>
+</li>
+</ul>
+<h2 id="socket系统调用">socket系统调用</h2>
+<ul>
+<li>int socket( int family, int type, int protocol);
+<ul>
+<li>创建socket文件描述符，端点名未指定</li>
+<li>family：协议栈，TCP/IP为AF_INET</li>
+<li>type：套接字类型
+<ul>
+<li>流式虚电路：SOCK_STREAM</li>
+<li>数据报：SOCK_DGRAM</li>
+<li>IP、ICMP：SOCK_RAW</li>
+</ul>
+</li>
+<li>protocol：协议（常为0），IPPROTO_TCP、 IPPROTO_UDP</li>
+<li>返回值：文件描述符sockfd</li>
+</ul>
+</li>
+<li>int bind( int sockfd, struct sockaddr *name, int namelen)
+<ul>
+<li>为文件描述符sockfd设定本地端点名name，也可以用在客户端程序</li>
+<li>端口被其他进程占用时，失败返回-1</li>
+<li>传输层：端到端
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">sockaddr_in</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">short</span> <span class="n">sin_family</span><span class="p">;</span>           <span class="c1">// AF_INE
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">u_short</span> <span class="n">sin_port</span><span class="p">;</span>           <span class="c1">// port number
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">struct</span> <span class="nc">in_addr</span> <span class="n">sin_addr</span><span class="p">;</span>    <span class="c1">// IP address
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">char</span> <span class="n">sin_zero</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>           <span class="c1">// unsed
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">in_addr</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">u_long</span> <span class="n">s_addr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div></li>
+</ul>
+</li>
+<li>int connect( int sockfd, struct sockaddr *name, size_t name_len);
+<ul>
+<li>对应sockfd，设定<strong>对端</strong>端点名到name</li>
+<li>TCP执行三次握手，等待对方应答，进程睡眠</li>
+<li>连接成功返回0，失败返回-1</li>
+<li>UDP:无连接建立，<strong>对端</strong>端点名记录到内核中sockfd对应的数据结构</li>
+</ul>
+</li>
+<li>int listen( int sockfd, int backlog);
+<ul>
+<li>开始监听到达的连接请求，连接到sockfd关联的端点名上</li>
+<li>backlog：最多的排队请求个数，常设为5</li>
+<li>不会阻塞，不负责数据通信</li>
+</ul>
+</li>
+<li>int accept( int sockfd, struct sockaddr *name, int *namelen);
+<ul>
+<li>接受一个连接请求，将远端端点名计入name</li>
+<li>依次取得在sockfd上排队的连接请求，建立并返回一个新的文件描述符</li>
+<li>若sockfd上无连接请求，accept调用被阻塞</li>
+<li>TCP三次握手结束后accept返回</li>
+</ul>
+</li>
+<li>int read( int sockfd, void *buf, int nbyte);</li>
+<li>int write( int sockfd, void *buf, int nbyte);
+<ul>
+<li>在用户缓存buf和文件描述符sockfd对应的内核缓存之间搬送数据</li>
+<li>read ：读到数据就返回；接收缓存无数据则阻塞</li>
+<li>write：写完缓存就返回；发送连接忙则阻塞</li>
+<li>返回值：实际收到和写出的数据长度；出错返回-1；read返回0，表明连接被对方关闭</li>
+</ul>
+</li>
+<li>int close( int sockfd);
+<ul>
+<li>关闭连接，释放文件描述符</li>
+<li>发送缓冲区不为空时：
+<ul>
+<li>默认继续发送缓冲区中数据；</li>
+<li>系统调用setsockop可以设置sockfd的SO_LINGER选项，（设定时限后）直接丢弃缓冲区数据</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="tcp客户-服务器程序">TCP客户-服务器程序</h1>
+<h2 id="客户端程序">客户端程序</h2>
+<ul>
+<li>创建文件描述符socket</li>
+<li>建立连接connect
+<ul>
+<li>进程阻塞，等待TCP连接建立</li>
+</ul>
+</li>
+<li>端点名的概念：IP地址+端口号
+<ul>
+<li>本地端点名：可动态分配</li>
+<li>远端端点名：well-known port</li>
+</ul>
+</li>
+<li>发送数据
+<ul>
+<li>发送速率大于通信速率，进程会被阻塞</li>
+</ul>
+</li>
+<li>关闭连接</li>
+</ul>
+<h2 id="clientc">client.c</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-05-28%2008.29.24.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-28%2008.32.11.png" alt=""></p>
+<h2 id="服务端程序">服务端程序</h2>
+<ul>
+<li>bind
+<ul>
+<li>设定本地端点名</li>
+<li>也可以用在客户端程序</li>
+</ul>
+</li>
+<li>listen
+<ul>
+<li>进程不会在此被阻塞，仅仅给内核一个通知</li>
+</ul>
+</li>
+<li>accept
+<ul>
+<li>进程会在这里阻塞等待新连接到来</li>
+</ul>
+</li>
+<li>创建新进程时的文件描述符处理</li>
+<li>问题：不能同时接纳多个连接
+<ul>
+<li>多进程并发处理</li>
+<li>单进程并发处理</li>
+</ul>
+</li>
+</ul>
+<h2 id="server0c">server0.c</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-05-28%2008.35.12.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-28%2008.35.27.png" alt=""></p>
+<h1 id="多进程并发处理">多进程并发处理</h1>
+<h2 id="server1c">server1.c</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-05-28%2008.40.58.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-28%2008.41.18.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-28%2008.41.55.png" alt=""></p>
+<h2 id="server1ac">server1a.c</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-05-28%2008.52.46.png" alt=""></p>
+<h2 id="端点名相关的系统调用">端点名相关的系统调用</h2>
+<ul>
+<li>getpeername获取对方的端点名
+<ul>
+<li>getpeername(int sockfd, struct sockaddr *name, int *namelen);</li>
+</ul>
+</li>
+<li>getsockname获取本地的端点名
+<ul>
+<li>getsockname(int sockfd, struct sockaddr *name, int *namelen);</li>
+</ul>
+</li>
+<li>注意：namelen是传入传出型参数，函数调用之前要先给整数namelen赋值，指出name缓冲区的可用字节数；函数返回时，namelen表示实际在name
+处写入了多少字节有效数据</li>
+</ul>
+<h2 id="readwrite系统调用的语义">read/write系统调用的语义</h2>
+<ul>
+<li>
+<p>read/write与TCP通信的时序</p>
+<ul>
+<li>主机A用write()通过TCP连接向B发送数据，B接收数据用read()
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-28%2008.57.38.png" alt=""></li>
+</ul>
+</li>
+<li>
+<p>read/write与TCP通信故障和流控</p>
+<ul>
+<li>流控问题</li>
+<li>断线</li>
+<li>对方重启动</li>
+<li>Keepalive(默认两小时)</li>
+<li>getsockopt/setsockopt可以设置保活间隔，重传次数，重传时间</li>
+</ul>
+</li>
+<li>
+<p>“粘连问题”</p>
+</li>
+<li>
+<p>read/write与UDP通信</p>
+<ul>
+<li>网络故障</li>
+<li>没有数据粘连</li>
+<li>没有流控功能</li>
+<li>不可靠</li>
+</ul>
+</li>
+</ul>
+<h2 id="readwrite的其他版本">read/write的其他版本</h2>
+<ul>
+<li>int recv(int sockfd, void *buf, int nbyte, int flags); //加急数据</li>
+<li>int recvfrom(int sockfd, void *buf, int nbyte, int flags, struct sockaddr *from, int *fromlen); //得到对方端点名</li>
+<li>int send(int sockfd, void *buf, int nbyte, int flags);</li>
+<li>int sendto(int sockfd, void *buf, int nbyte, int flags, struct sockaddr *to, int tolen);</li>
+<li>recvfrom/sendto可以指定对方的端点名，常用于UDP</li>
+<li>Winsock只能用recv/send不可用read/write</li>
+</ul>
+<h2 id="shutdown系统调用">shutdown系统调用</h2>
+<ul>
+<li>shutdown是通用的套接字上的操作</li>
+<li>执行后对通信的影响，会与具体的通信协议相关</li>
+<li>TCP协议
+<ul>
+<li>允许关闭发送方向的<strong>半个连接</strong></li>
+<li>没有一种机制让对方关闭它的发送，但TCP协议的流量控制机制，可以通知对方自己的接收窗口为0，对方的write会继续，并将数据堆积在发送缓冲区</li>
+</ul>
+</li>
+<li>UDP协议
+<ul>
+<li>UDP关闭接收方向内核仅记下一个标记，不再提供数据，但无法阻止对方的发送而导致的网络上数据</li>
+<li>即使套接字关闭也不影响对方发出无人接收的数据报</li>
+</ul>
+</li>
+<li>int shutdown(int sockfd, int howto);
+<ul>
+<li>禁止发送或接收。socket提供全双工通信，两个方向上都可以收发数据，shutdown提供了对于一个方向的通信控制</li>
+</ul>
+</li>
+<li>参数howto取值
+<ul>
+<li>SHUT_RD：不能再接收数据，随后read均返回0</li>
+<li>SHUT_WR：不能再发送数据，对方read返回0；本方向再次write会导致SIGPIPE信号</li>
+<li>SHUT_RDWR：禁止这个sockfd上的任何收发</li>
+</ul>
+</li>
+</ul>
+<h2 id="socket控制">socket控制</h2>
+<ul>
+<li>Socket控制
+<ul>
+<li>int getsockopt(int sokfd, int level, int optname, void *optval, int *optlen);</li>
+<li>int setsockopt(int sockfd, int level, int optname, void *optval, int optlen);</li>
+<li>int ioctl(int fd, int cmd, void *arg);</li>
+</ul>
+</li>
+<li>无阻塞I/O
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;sys/fcntl.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="kt">int</span> <span class="n">flags</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">flags</span> <span class="o">=</span> <span class="nf">fcntl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">F_GETFL</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">fcntl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">F_SETFL</span><span class="p">,</span> <span class="n">flags</span> <span class="o">|</span> <span class="n">O_NDELAY</span><span class="p">);</span>
+</span></span></code></pre></div><ul>
+<li>发送缓冲区满，write立即以-1返回，errno置为EWOULDBLOCK（或EAGAIN）</li>
+<li>发送缓冲区半满，write返回实际发送的字节数</li>
+<li>接收缓冲区空，read立即以-1返回，errno置为EWOULDBLOCK</li>
+</ul>
+</li>
+</ul>
+<h1 id="单进程并发处理">单进程并发处理</h1>
+<h2 id="select多路io">select：多路I/O</h2>
+<ul>
+<li>引入select系统调用的原因
+<ul>
+<li>使得用户进程可同时等待多个事件发生</li>
+<li>用户进程告知内核多个事件，某一个或多个事件发生时select返回，否则，进程睡眠等待</li>
+</ul>
+</li>
+<li>int select(int maxfdp1, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeval *timeout);
+<ul>
+<li>例如：告知内核在rfds集合{4,5,7}中的任何文件描述符“读准备好”，或在wfds集合{3,7}中的任何文件描述符“写准备好”，或在efds集合{4,5,8}中的任何文件描述符有“异常情况”发生</li>
+<li>集合参数是传入传出型，select返回后会被修改，只有准备好的文件描述符，仍出现在集合中</li>
+<li>集合参数允许传NULL，表示不关心这方面事件</li>
+</ul>
+</li>
+</ul>
+<h2 id="select准备好">select：“准备好”</h2>
+<ul>
+<li>什么叫“准备好”
+<ul>
+<li>rfds中某文件描述符的read不会阻塞</li>
+<li>wfds中某文件描述符的write不会阻塞</li>
+<li>efds中某文件描述符发生了异常情况</li>
+<li>TCP协议，只有加急数据到达才算“异常情况”</li>
+<li>对方连接关闭或网络故障，不算“异常情况”</li>
+</ul>
+</li>
+<li>“准备好”后可以进行的操作
+<ul>
+<li>当“读准备好”时，调用read会立刻返回-1/0/字节数</li>
+<li>当“写准备好”时，调用write可以写多少字节？
+<ul>
+<li>
+<blockquote>
+<p>=1个字节</p>
+</blockquote>
+</li>
+<li>“无阻塞I/O”方式</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="集合操作">集合操作</h2>
+<ul>
+<li>预定义数据类型fd_set（在C语言头文件定义）
+<ul>
+<li>void FD_ZERO(fd_set *fds);
+<ul>
+<li>将fds清零：将集合fds设置为“空集”</li>
+</ul>
+</li>
+<li>void FD_SET(int fd, fd_set *fds);
+<ul>
+<li>向集合fds中加入一个元素fd</li>
+</ul>
+</li>
+<li>void FD_CLR(int fd, fd_set *fds);
+<ul>
+<li>从集合fds中删除一个元素fd</li>
+</ul>
+</li>
+<li>int FD_ISSET(int fd, fd_set *fds);
+<ul>
+<li>判断元素fd是否在集合fds内</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="select时间">select：时间</h2>
+<ul>
+<li>select的最后一个参数timeout</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">timeval</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="kt">long</span> <span class="n">tv_sec</span><span class="p">;</span> <span class="cm">/* 秒 */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">long</span> <span class="n">tv_usec</span><span class="p">;</span> <span class="cm">/* 微秒 */</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><ul>
+<li>定时值不为0：select在某一个描述符I/O就绪时立即返回；否则等待但不超过timeout规定的时限
+<ul>
+<li>尽管timeout可指定微秒级精度的时间段，依赖于硬件和软件的设定，实际实现一般是10毫秒级别</li>
+</ul>
+</li>
+<li>定时值为0：select立即返回(无阻塞方式查询)</li>
+<li>空指针NULL：select等待到至少有一个文件描述符准备好后才返回，否则<strong>无限期地等</strong>下去</li>
+</ul>
+<h2 id="单进程并发-server2c">单进程并发: server2.c</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-05-28%2009.16.35.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-28%2009.16.56.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-28%2009.17.20.png" alt=""></p>
+<h2 id="libevent开源跨平台轻量级事件管理库">libevent：开源跨平台轻量级事件管理库</h2>
+<ul>
+<li>C语言编写的、轻量级的开源高性能事件通知库</li>
+<li>事件驱动(event-driven)，高性能</li>
+<li>跨平台(Windows/Linux/BSD/MacOS)</li>
+<li>支持多种I/O多路复用技术：select，epoll，kqueue等</li>
+<li>支持I/O，定时器和信号等事件</li>
+<li>可作为一些应用的底层的网络库</li>
+</ul>
+<h1 id="udp通信">UDP通信</h1>
+<h2 id="udp通信程序">UDP通信程序</h2>
+<ul>
+<li>接收
+<ul>
+<li>没有数据到达时，read调用会使得进程睡眠等待</li>
+<li>一般需区分数据来自何处，常用recvfrom获得对方的端点名</li>
+</ul>
+</li>
+<li>发送
+<ul>
+<li>服务器端发送数据常用sendto，指定远端端点名</li>
+<li>对接收来的数据作应答，sendto引用的对方端点名利用recvfrom返回得到的端点名</li>
+</ul>
+</li>
+<li>select定时
+<ul>
+<li>select可实现同时等待两个事件：收到数据和定时器超时</li>
+<li>用time(0)或者gettimeofday()获得时间坐标，计算时间间隔决定是否执行超时后的动作</li>
+</ul>
+</li>
+<li>死锁问题</li>
+</ul>
+<h2 id="客户端udpclientc">客户端udpclient.c</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-05-28%2009.25.19.png" alt=""></p>
+<ul>
+<li>connect
+<ul>
+<li>不产生网络流量，内核记下远端端点名</li>
+<li>之前未用bind指定本地端点名，系统自动分配<strong>本地端点名</strong></li>
+</ul>
+</li>
+<li>write
+<ul>
+<li>使用前面的connect调用指定的端点名</li>
+<li>UDP不是面向连接的协议，可在sendto参数中指定对方端点名，而且允许对方端点名不同</li>
+<li>每次都使用sendto发送数据，前面的connect调用没必要了</li>
+<li>connect/第一次sendto可使得socket获得系统动态分配的本地端点名，未获得本地端点名之前不该执行read或recv以及recvfrom</li>
+</ul>
+</li>
+</ul>
+<h2 id="服务端程序udpserverc">服务端程序udpserver.c</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-05-28%2009.28.04.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-28%2009.30.07.png" alt=""></p>
+<h1 id="小结">小结</h1>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-05-28%2009.30.26.png" alt=""></p>
+</article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="application/javascript" src='https://y-m-m.github.io/js/toc.js'></script>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/toc.css' />
+
+  
+<div id="gitalk-container" class="gitalk-container"></div>
+<link rel="stylesheet" href='https://y-m-m.github.io/css/gitalk.css'>
+<script src='https://y-m-m.github.io/js/gitalk.min.js'></script>
+<script>
+  const gitalk = new Gitalk({
+    clientID: 'Ov23livxKNtTlPeMjV2H',
+    clientSecret: '6d3bc9f47a1296f29628a63701ea5624cd28a26b',
+    repo: 'y-m-m.github.io',
+    owner: 'Y-M-M',
+    admin: ['Y-M-M'],
+    id: eval("location.pathname"), 
+    distractionFreeMode: false 
+  });
+  (function() {
+    gitalk.render('gitalk-container');
+  })();
+</script>
+
+</div>
+
+  <div class="footer container-xl width-full p-responsive">
+  <div
+    class="position-relative d-flex flex-row-reverse flex-lg-row flex-wrap flex-lg-nowrap flex-justify-center flex-lg-justify-between flex-sm-items-center pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
+    <a aria-label="Homepage" title="GitHub" class="footer-octicon d-none d-lg-block mr-lg-4" href="https://y-m-m.github.io/">
+      <svg height="24" class="octicon octicon-mark-github" viewBox="0 0 16 16" version="1.1" width="24">
+        <path fill-rule="evenodd"
+          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+        </path>
+      </svg>
+    </a>
+    <ul class="list-style-none d-flex flex-wrap col-12 flex-justify-center flex-lg-justify-between mb-2 mb-lg-0">
+      
+      <li class="mr-3 mr-lg-0">Theme by <a href='https://github.com/MeiK2333/github-style'>github-style</a></li>
+      
+    </ul>
+  </div>
+  <div class="d-flex flex-justify-center pb-6">
+    <span class="f6 text-gray-light"></span>
+  </div>
+
+
+</div>
+</body>
+
+<script type="application/javascript" src="https://y-m-m.github.io/js/github-style.js"></script>
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+<script type="application/javascript" src='https://y-m-m.github.io/js/search.js'></script>
+
+
+
+</html>

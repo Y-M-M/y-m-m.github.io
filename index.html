@@ -773,6 +773,201 @@
                       d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z">
                     </path>
                   </svg>
+                  <a class="text-bold flex-auto min-width-0" href="https://y-m-m.github.io/post/leetcodehot279%E5%AE%8C%E5%85%A8%E5%B9%B3%E6%96%B9%E6%95%B0/">
+                    <span class="repo" title="leetcode hot100 279 完全平方数">leetcode hot100 279 完全平方数</span>
+                  </a>
+                </div>
+
+
+                <div name="summary" class="pinned-item-desc text-gray text-small d-block mt-2 mb-3">
+                  <p><a href="https://leetcode.cn/problems/perfect-squares/description/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode hot100 279 完全平方数</a></p>
+<h1 id="题目">题目</h1>
+<blockquote>
+<p>给你一个整数 n ，返回 和为 n 的完全平方数的最少数量 。         <br>
+完全平方数 是一个整数，其值等于另一个整数的平方；换句话说，其值等于一个整数自乘的积。例如，1、4、9 和 16 都是完全平方数，而 3 和 11 不是。</p>
+</blockquote>
+<h1 id="示例">示例</h1>
+<h2 id="示例一">示例一</h2>
+<blockquote>
+<p>输入：n = 12      <br>
+输出：3         <br>
+解释：12 = 4 + 4 + 4</p>
+</blockquote>
+<h2 id="示例二">示例二</h2>
+<blockquote>
+<p>输入：n = 13         <br>
+输出：2       <br>
+解释：13 = 4 + 9</p>
+</blockquote>
+<h1 id="提示">提示</h1>
+<ul>
+<li>1 &lt;= n &lt;= 10<sup>4</sup></li>
+</ul>
+<h1 id="题解">题解</h1>
+<h2 id="方法一">方法一</h2>
+<ul>
+<li>分析
+<ul>
+<li>当i是完全平方数的时候，num[i] = 1</li>
+<li>当i不是完全平方数的时候，num[i] = min(num[j] + num[i - j])</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+<li>复杂度
+<ul>
+<li>时间复杂度O(n<sup>2</sup>)</li>
+<li>空间复杂度O(n)</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">numSquares</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">num</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">INT32_MAX</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">*</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">num</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">INT32_MAX</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">num</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span><span class="p">],</span> <span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">num</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h2 id="方法二">方法二</h2>
+<ul>
+<li>分析
+<ul>
+<li>一个数学定理可以帮助解决本题：「四平方和定理」。</li>
+<li>四平方和定理证明了任意一个正整数都可以被表示为至多四个正整数的平方和。这给出了本题的答案的上界。</li>
+<li>同时四平方和定理包含了一个更强的结论：当且仅当 n ≠ 4<sup>k</sup>×(8m+7) 时，n 可以被表示为至多三个正整数的平方和。因此，当 n=4<sup>k</sup> × (8m + 7) 时，n 只能被表示为四个正整数的平方和。此时我们可以直接返回 4。当 n ≠ 4<sup>k</sup> × (8m + 7) 时，我们需要判断到底多少个完全平方数能够表示 n，我们知道答案只会是 1,2,3 中的一个：
+<ul>
+<li>答案为 1 时，则必有 n 为完全平方数，这很好判断；</li>
+<li>答案为 2 时，则有 n = a<sup>2</sup> + b<sup>2</sup>，我们只需要枚举所有的 a(1 ≤ a ≤ n)，判断 n − a<sup>2</sup>是否为完全平方数即可；</li>
+<li>答案为 3 时，我们很难在一个优秀的时间复杂度内解决它，但我们只需要检查答案为 1 或 2 的两种情况，即可利用排除法确定答案。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 判断是否为完全平方数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">bool</span> <span class="n">isPerfectSquare</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">y</span> <span class="o">*</span> <span class="n">y</span> <span class="o">==</span> <span class="n">x</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 判断是否能表示为 4^k*(8m+7)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">bool</span> <span class="nf">checkAnswer4</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">x</span> <span class="o">%</span> <span class="mi">4</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">x</span> <span class="o">/=</span> <span class="mi">4</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">8</span> <span class="o">==</span> <span class="mi">7</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="nf">numSquares</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">isPerfectSquare</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">checkAnswer4</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="mi">4</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">*</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="n">i</span> <span class="o">*</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">isPerfectSquare</span><span class="p">(</span><span class="n">j</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h1 id="参考资料">参考资料</h1>
+<p><a href="https://leetcode.cn/problems/perfect-squares/solutions/822940/wan-quan-ping-fang-shu-by-leetcode-solut-t99c/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode官方题解</a></p>
+                </div>
+
+                <p class="mb-0 f6 text-gray">
+                  
+                  
+                  <a href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    计算机科学与技术
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    算法题
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/leetcode" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    leetcode
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/%E5%B9%BF%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    广度优先搜索
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/%E6%95%B0%E5%AD%A6" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    数学
+                  </a>
+                  
+                  
+                </p>
+              </div>
+            </div>
+          </li>
+          
+          <li class="col-12 col-md-6 col-lg-6 mb-3 d-flex flex-content-stretch">
+            <div
+              class="Box pinned-item-list-item d-flex p-3 width-full js-pinned-item-list-item public source reorderable sortable-button-item">
+              <div class="pinned-item-list-item-content">
+                <div class="d-flex width-full flex-items-center position-relative">
+                  <svg class="octicon octicon-repo mr-2 text-gray flex-shrink-0" viewBox="0 0 16 16" version="1.1"
+                    width="16" height="16">
+                    <path fill-rule="evenodd"
+                      d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z">
+                    </path>
+                  </svg>
                   <a class="text-bold flex-auto min-width-0" href="https://y-m-m.github.io/post/leetcodehot60%E7%88%AC%E6%A5%BC%E6%A2%AF/">
                     <span class="repo" title="leetcode hot100 70 爬楼梯">leetcode hot100 70 爬楼梯</span>
                   </a>
@@ -1347,240 +1542,6 @@
             </div>
           </li>
           
-          <li class="col-12 col-md-6 col-lg-6 mb-3 d-flex flex-content-stretch">
-            <div
-              class="Box pinned-item-list-item d-flex p-3 width-full js-pinned-item-list-item public source reorderable sortable-button-item">
-              <div class="pinned-item-list-item-content">
-                <div class="d-flex width-full flex-items-center position-relative">
-                  <svg class="octicon octicon-repo mr-2 text-gray flex-shrink-0" viewBox="0 0 16 16" version="1.1"
-                    width="16" height="16">
-                    <path fill-rule="evenodd"
-                      d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z">
-                    </path>
-                  </svg>
-                  <a class="text-bold flex-auto min-width-0" href="https://y-m-m.github.io/post/linux_%E7%BD%91%E7%BB%9C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/">
-                    <span class="repo" title="Linux 网络程序设计">Linux 网络程序设计</span>
-                  </a>
-                </div>
-
-
-                <div name="summary" class="pinned-item-desc text-gray text-small d-block mt-2 mb-3">
-                  <h1 id="socket概述">Socket概述</h1>
-<h2 id="socket">Socket</h2>
-<ul>
-<li>协议栈实现
-<ul>
-<li>传输层以上由用户态应用程序实现</li>
-<li>传输层和网络互联层协议在内核中实现（路由协议由用户态进程实现）</li>
-<li>第一第二层一般由硬件实现</li>
-</ul>
-</li>
-<li>UNIX提供给应用程序使用网络功能的方法
-<ul>
-<li>BSD将设备和通信管道组织成文件方式，创建方式不同，访问方法相同
-<ul>
-<li>终端设备</li>
-<li>管道</li>
-<li>通信服务Socket</li>
-</ul>
-</li>
-<li>AT&amp;T UNIX的TLI编程接口</li>
-</ul>
-</li>
-<li>Socket编程接口面向网络通信，不仅仅用于TCP/IP
-<ul>
-<li>利用虚拟loopback接口(127.0.0.1)，可实现同台计算机进程间通信</li>
-</ul>
-</li>
-</ul>
-<h2 id="tcp与udp">TCP与UDP</h2>
-<ul>
-<li>TCP
-<ul>
-<li>面向连接</li>
-<li>可靠</li>
-<li>字节流传输</li>
-<li>不保证报文边界</li>
-</ul>
-</li>
-<li>UDP
-<ul>
-<li>面向数据报</li>
-<li>不可靠</li>
-<li>数据报传输</li>
-<li>广播和组播</li>
-</ul>
-</li>
-</ul>
-<h2 id="网络字节顺序">网络字节顺序</h2>
-<ul>
-<li>CPU字节顺序
-<ul>
-<li>Big Endian (大尾)，即将低位字节排在前
-<ul>
-<li>Power PC，SPARC，Motorola</li>
-</ul>
-</li>
-<li>Little Endian (小尾)
-<ul>
-<li>Intel X86</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>网络字节顺序
-<ul>
-<li>big endian (大尾) 排序方式 , 与X86相反</li>
-</ul>
-</li>
-<li>网络字节转换的库函数
-<ul>
-<li>htonl ntohl 四字节整数(long)</li>
-<li>htons ntohs 两字节整数(short)</li>
-</ul>
-</li>
-</ul>
-<h2 id="socket系统调用">socket系统调用</h2>
-<ul>
-<li>int socket( int family, int type, int protocol);
-<ul>
-<li>创建socket文件描述符，端点名未指定</li>
-<li>family：协议栈，TCP/IP为AF_INET</li>
-<li>type：套接字类型
-<ul>
-<li>流式虚电路：SOCK_STREAM</li>
-<li>数据报：SOCK_DGRAM</li>
-<li>IP、ICMP：SOCK_RAW</li>
-</ul>
-</li>
-<li>protocol：协议（常为0），IPPROTO_TCP、 IPPROTO_UDP</li>
-<li>返回值：文件描述符sockfd</li>
-</ul>
-</li>
-<li>int bind( int sockfd, struct sockaddr *name, int namelen)
-<ul>
-<li>为文件描述符sockfd设定本地端点名name，也可以用在客户端程序</li>
-<li>端口被其他进程占用时，失败返回-1</li>
-<li>传输层：端到端
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">sockaddr_in</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">short</span> <span class="n">sin_family</span><span class="p">;</span>           <span class="c1">// AF_INE
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">u_short</span> <span class="n">sin_port</span><span class="p">;</span>           <span class="c1">// port number
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">struct</span> <span class="nc">in_addr</span> <span class="n">sin_addr</span><span class="p">;</span>    <span class="c1">// IP address
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">char</span> <span class="n">sin_zero</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>           <span class="c1">// unsed
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">};</span>
-</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">in_addr</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">u_long</span> <span class="n">s_addr</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div></li>
-</ul>
-</li>
-<li>int connect( int sockfd, struct sockaddr *name, size_t name_len);
-<ul>
-<li>对应sockfd，设定<strong>对端</strong>端点名到name</li>
-<li>TCP执行三次握手，等待对方应答，进程睡眠</li>
-<li>连接成功返回0，失败返回-1</li>
-<li>UDP:无连接建立，<strong>对端</strong>端点名记录到内核中sockfd对应的数据结构</li>
-</ul>
-</li>
-<li>int listen( int sockfd, int backlog);
-<ul>
-<li>开始监听到达的连接请求，连接到sockfd关联的端点名上</li>
-<li>backlog：最多的排队请求个数，常设为5</li>
-<li>不会阻塞，不负责数据通信</li>
-</ul>
-</li>
-<li>int accept( int sockfd, struct sockaddr *name, int *namelen);
-<ul>
-<li>接受一个连接请求，将远端端点名计入name</li>
-<li>依次取得在sockfd上排队的连接请求，建立并返回一个新的文件描述符</li>
-<li>若sockfd上无连接请求，accept调用被阻塞</li>
-<li>TCP三次握手结束后accept返回</li>
-</ul>
-</li>
-<li>int read( int sockfd, void *buf, int nbyte);</li>
-<li>int write( int sockfd, void *buf, int nbyte);
-<ul>
-<li>在用户缓存buf和文件描述符sockfd对应的内核缓存之间搬送数据</li>
-<li>read ：读到数据就返回；接收缓存无数据则阻塞</li>
-<li>write：写完缓存就返回；发送连接忙则阻塞</li>
-<li>返回值：实际收到和写出的数据长度；出错返回-1；read返回0，表明连接被对方关闭</li>
-</ul>
-</li>
-<li>int close( int sockfd);
-<ul>
-<li>关闭连接，释放文件描述符</li>
-<li>发送缓冲区不为空时：
-<ul>
-<li>默认继续发送缓冲区中数据；</li>
-<li>系统调用setsockop可以设置sockfd的SO_LINGER选项，（设定时限后）直接丢弃缓冲区数据</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h1 id="tcp客户-服务器程序">TCP客户-服务器程序</h1>
-<h2 id="客户端程序">客户端程序</h2>
-<ul>
-<li>创建文件描述符socket</li>
-<li>建立连接connect
-<ul>
-<li>进程阻塞，等待TCP连接建立</li>
-</ul>
-</li>
-<li>端点名的概念：IP地址+端口号
-<ul>
-<li>本地端点名：可动态分配</li>
-<li>远端端点名：well-known port</li>
-</ul>
-</li>
-<li>发送数据
-<ul>
-<li>发送速率大于通信速率，进程会被阻塞</li>
-</ul>
-</li>
-<li>关闭连接</li>
-</ul>
-<h2 id="clientc">client.c</h2>
-<p><img src="/images/%E6%88%AA%E5%B1%8F2025-05-28%2008.29.24.png" alt="">
-<img src="/images/%E6%88%AA%E5%B1%8F2025-05-28%2008.32.11.png" alt=""></p>
-                </div>
-
-                <p class="mb-0 f6 text-gray">
-                  
-                  
-                  <a href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    计算机科学与技术
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/linux" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    Linux
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/linux-%E7%BD%91%E7%BB%9C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    Linux 网络程序设计
-                  </a>
-                  
-                  
-                </p>
-              </div>
-            </div>
-          </li>
-          
         </ol>
       </div>
     </div>
@@ -1596,6 +1557,12 @@
 {
   "title": "leetcode%20hot100%20198%20%e6%89%93%e5%ae%b6%e5%8a%ab%e8%88%8d",
   "link": "https://y-m-m.github.io/post/leetcodehot198%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D/",
+  "publishDate": "2025-07-08%2000:00:00"
+},
+
+{
+  "title": "leetcode%20hot100%20279%20%e5%ae%8c%e5%85%a8%e5%b9%b3%e6%96%b9%e6%95%b0",
+  "link": "https://y-m-m.github.io/post/leetcodehot279%E5%AE%8C%E5%85%A8%E5%B9%B3%E6%96%B9%E6%95%B0/",
   "publishDate": "2025-07-08%2000:00:00"
 },
 
@@ -1651,12 +1618,6 @@
   "title": "Pregel:%20A%20System%20for%20Large-Scale%20Graph%20Processing",
   "link": "https://y-m-m.github.io/post/pregel/",
   "publishDate": "2025-05-13%2000:00:00"
-},
-
-{
-  "title": "leetcode%20hot100%20279%20%e5%ae%8c%e5%85%a8%e5%b9%b3%e6%96%b9%e6%95%b0",
-  "link": "https://y-m-m.github.io/post/leetcodehot279%E5%AE%8C%E5%85%A8%E5%B9%B3%E6%96%B9%E6%95%B0/",
-  "publishDate": "2025-04-30%2000:00:00"
 },
 
 {

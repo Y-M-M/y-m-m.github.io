@@ -149,7 +149,7 @@
                 </path>
               </svg>
               Posts
-              <span class="Counter">188</span>
+              <span class="Counter">190</span>
             </a>
           </nav>
           <div class="profile-color-modes js-promo-color-modes-banner-profile isInitialToggle">
@@ -428,7 +428,7 @@
         </path>
       </svg>
       Posts
-      <span class="Counter ">188</span>
+      <span class="Counter ">190</span>
     </a>
   </nav>
 </div>
@@ -1604,6 +1604,381 @@
           <div class="col-12 d-inline-block">
             <div class="d-inline-block mb-1">
               <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/mist/">MIST : Multi-modal Iterative Spatial-Temporal Transformer(多模态迭代时空转换器) for Long-form Video Question Answering</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <blockquote>
+<p>2022-12-19 arXiv</p>
+</blockquote>
+<h1 id="abstract">Abstract</h1>
+<ul>
+<li>多模态VQA模型: 短视频片段/图片 -&gt; 长视频
+<ul>
+<li>使用密集视频采样策略计算太复杂</li>
+<li>稀疏采样难以应对多粒度、多事件可视化推理</li>
+</ul>
+</li>
+<li>MIST的特点
+<ul>
+<li>dense spatialtemporal self-attention-&gt;级联的片段和区域选择模块，自适应地选择与问题本身密切相关的帧和图像区域</li>
+<li>然后通过attention model对不同粒度的视觉概念进行高效处理</li>
+<li>MIST在多个层次上迭代地进行选择和关注，以支持对多个事件的推理</li>
+<li>使用数据集
+<ul>
+<li>AGQA, NExT-QA, STAR, Env-QA(平均时长从12s到44s不等)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="1-introduction">1 Introduction</h1>
+<h2 id="challenges">Challenges</h2>
+<ul>
+<li>多事件推理(复杂的时序推理，如多事件推理，因果关系)</li>
+<li>不同粒度的视觉概念之间的相互作用(可能涉及跨越不同事件的更复杂的物体、关系和事件的交互)</li>
+<li>目前的多模态transformer依赖于密集的自注意力，随视频时间的延长，计算成本呈指数增长 -&gt; 只对每个视频采样3帧或4帧，不管其长度如何</li>
+</ul>
+<h2 id="新模型mist">新模型MIST</h2>
+<ul>
+<li>考虑所有事件的一般内容，关注与问题相关的少数事件的细节</li>
+<li>MIST将稠密的联合时空自注意力机制分解为问题条件的级联片段和区域选择模块，以及多模态多粒度特征上的时空自注意力
+<ul>
+<li>级联选择通过关注与问题相关的片段和区域，降低了计算成本并提高了性能</li>
+<li>通过对片段和图像块的自注意力，更好的捕获了不同粒度的视觉概念之间的相互作用</li>
+<li>通过迭代的进行选择和自注意力，MIST可以在多个事件上进行推理，并更好的进行时间和因果推理</li>
+</ul>
+</li>
+</ul>
+<h1 id="2-related-work">2 Related work</h1>
+<h2 id="video-question-answering">Video question answering</h2>
+<ul>
+<li>长视频VQA任务主要关注于对情节和、社会交往的理解，和更复杂的时空推理能力；目前的工作在前两类基准上取得了可喜的成果，本文主要关注于最后一类问题</li>
+<li>方法
+<ul>
+<li>早期提出了各种基于LSTM和图神经网络的模型 来捕获 跨模态的或动作与外观的交互</li>
+<li>最近的一项工作将图建模集成到transformers中，以显式地捕获视频中的对象及其关系</li>
+<li>许多工作直接在下游videoQA任务上对预训练模型进行微调</li>
+<li>本文对自注意力机制进行了修正，以便更好的进行多时间、多粒度的视觉推理</li>
+</ul>
+</li>
+</ul>
+<h2 id="将预训练的模型迁移到下游任务中">将预训练的模型迁移到下游任务中</h2>
+<ul>
+<li>预训练的vision-language Transformers, 如CLIP -&gt; 下游任务，如目标检测，图像生成和视频文本检索
+<ul>
+<li>CLIP4Clip: 均值池化，Transformer等-&gt;更好的表示视频</li>
+<li>CLIP2Video: 提出了时间差分块来更好的捕捉运动信息</li>
+<li>我们保留了预训练模型的优点，并改进了它在下游任务上的弱点</li>
+</ul>
+</li>
+</ul>
+<h2 id="long-form-video-modeling">Long-form video modeling</h2>
+<ul>
+<li>利用视频的自然特性，减少计算量</li>
+<li>本文考虑了QA任务的特点，以问题为导向，减少计算量，提高性能</li>
+</ul>
+<h2 id="iterative-attention">Iterative Attention</h2>
+<ul>
+<li>MIST利用了VQA中的多模态对应关系来引导迭代注意</li>
+</ul>
+<h1 id="3-method">3 Method</h1>
+<ul>
+<li>VQA任务目标
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2011.23.49.png" alt=""></li>
+<li>MIST回答问题的三步
+<ol>
+<li>利用预训练模型提取输入特征</li>
+<li>迭代地在选定的特征集合上perform自注意力，以执行多事件推理</li>
+<li>根据得到的video, question, answer features预测答案
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2011.24.30.png" alt=""></li>
+</ol>
+</li>
+</ul>
+<h2 id="31-input-representation">3.1 Input Representation</h2>
+<ul>
+<li>视频部分
+<ul>
+<li>将视频分为K个长度均匀的片段，每个片段包含T帧，每帧被分为N个小块 -&gt; 图片块和帧的 [CLS] token 以N和T计数</li>
+<li>vision-language Transformer，如CLIP，All-in-one with frozen parameters，提取所有帧的图像块级别的特征
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.54.55.png" alt="">
+<ul>
+<li>由于分段特征是单独提取的，表示其在整个视频中的时间位置Pt ∈ {φt(i)|i ∈ [0, K · T ]}和帧索引</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>文本部分
+<ul>
+<li>将问题表征为单词序列</li>
+<li>将它输入到vision-language Transformer来获取单词级别的特征
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.55.42.png" alt="">
+<ul>
+<li>w1 corresponds to [CLS] and w2, &hellip;, wM are words in question</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="32-ista">3.2 ISTA</h2>
+<ul>
+<li>Iterative Spatial-Temporal Attention Layer 迭代时空注意力层</li>
+<li>迭代的选择基于问题的长视频中的片段和区域，然后对选择的片段和区域进行多事件推理</li>
+<li>步骤
+<ul>
+<li>Segment selection</li>
+<li>Region selection</li>
+<li>时空自注意力
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.56.26.png" alt=""></li>
+</ul>
+</li>
+</ul>
+<h3 id="segment-selection">Segment Selection</h3>
+<ul>
+<li>给定一组image patch特征x，计算segments和问题的特征 -&gt; 选择Topk segments的patch features</li>
+<li>执行temporal attention
+<ul>
+<li>对每一个第k segment第t frame做空间维度的特征池化</li>
+<li>将frame features沿时间维度进行池化得到segment features</li>
+<li>Question feature通过对word features进行池化得到</li>
+<li>池化函数可以根据使用的Transformer的具体类型，从mean pooling, first token pooling, simple MLP layer等中选择</li>
+</ul>
+</li>
+</ul>
+<h3 id="region-selection">Region Selection</h3>
+<ul>
+<li>对采样所得的帧，选择与问题最相关的patches</li>
+</ul>
+<h3 id="spatial-temporal-self-attention">Spatial-Temporal Self-Attention</h3>
+<ul>
+<li>给定选定的frames和选定的regions，使用一个self-attention layer推理出一个融合的特征向量来联合表示question和video</li>
+<li>只保留选择出的patches</li>
+<li>嵌入类型特征 -&gt; 多头注意力机制获得所有输入令牌的上下文特征</li>
+</ul>
+<h3 id="iterative-execution-of-ista">Iterative Execution of ISTA</h3>
+<h2 id="answer-prediction">Answer prediction</h2>
+<ul>
+<li>将所有ISTA层的token特征池化
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.58.07.png" alt=""></li>
+<li>计算Xo和所有通过预训练模型获取的候选答案之间的相似度，选择相似度最大的答案作为最终预测答案</li>
+</ul>
+<h1 id="4-experiments">4 Experiments</h1>
+<h2 id="41-datasets">4.1 Datasets</h2>
+<h3 id="agqa">AGQA</h3>
+<ul>
+<li>一个开放的，用于合成时空推理的VQA基准，使用v2版本(有更平衡的分布)</li>
+<li>2.27M QA对，9.7K videos，平均长度30s</li>
+</ul>
+<h3 id="next-qa">NExT-QA</h3>
+<ul>
+<li>用于因果和时序推理的多选择视频问答基准</li>
+<li>包括5440个视频，平均长度44s，约25K个问题</li>
+</ul>
+<h3 id="star">STAR</h3>
+<ul>
+<li>用于情景推理的多选择VQA基准</li>
+<li>22个视频片段，平均长度12s，约60K个问题</li>
+</ul>
+<h3 id="env-qa">Env-QA</h3>
+<ul>
+<li>开放的，用于动态环境理解的VQA基准</li>
+<li>23K个自我中心视频，平均长度20s，85K问题，是在虚拟环境AI2THOR上收集的</li>
+</ul>
+<h2 id="42-implementation-details">4.2 Implementation Details</h2>
+<ul>
+<li>可以建立在大多数预训练的多模态Transformer上，在实验中尝试了针对图像语言预训练的模型CLIP(ViT-B/32)和针对视频语言预训练的模型All-in-One-Base</li>
+<li>Topk = 2, Topj = 12, the layer of ISTA L = 2, 每个视频采样32帧，并将其分割成K = 8个segments</li>
+</ul>
+<h2 id="43-comparison-with-state-of-the-arts">4.3 Comparison with State-of-the-arts</h2>
+<ul>
+<li>与最先进的SOTA方法进行比较
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.59.15.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.59.34.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2013.59.55.png" alt="">
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.00.23.png" alt=""></li>
+<li>我们提出的方法达到了最先进的性能，并且在所有数据集上都优于现有的方法</li>
+</ul>
+<h2 id="44-comparison-with-baselines">4.4 Comparison with Baselines</h2>
+<ul>
+<li>在基于CLIP的MIST框架中，我们通过在AGQA v2数据集上微调相同的预训练输入表示，将ISTA与其他解决方案进行比较
+<ul>
+<li>MeanPool: 简单的抽取帧特征的平均值作为整个视频的表示</li>
+<li>Trans.-Frame: 遵循CLIP4Clip中的seqTransf类型，利用Transformer对帧特征进行自注意力来表示视频</li>
+<li>Trans.-Patch: 类似Trans.-Frame, 但它在所有patch tokens上执行自注意力</li>
+<li>Divided STA: 我们遵循视频分类模型中的Transformer对image patches执行uni-modal two-step SpaceTime Attention
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.00.59.png" alt=""></li>
+<li>如上结果表示，ISTA优于其他变体</li>
+</ul>
+</li>
+<li>原因</li>
+<li>长格式视频的内容往往复杂多样，简单的聚合所有帧特征的方法，可能会造成信息丢失</li>
+<li>长格式视频问答需要更强大的时空推理能力来关注视频的一些细节，而均值池化只在捕获整体内容上表现良好</li>
+<li>长格式QA中考虑region information是有帮助的，但稠密的自注意力和divided STA都没有考虑多粒度之间的相互作用，性能提升有限</li>
+</ul>
+<h2 id="45-ablation-study">4.5 Ablation Study</h2>
+<ul>
+<li>提出MIST的几组变体，显示其关键组件的有效性</li>
+</ul>
+<h3 id="effect-of-each-component-in-ista">Effect of each component in ISTA</h3>
+<ul>
+<li>删除ISTA层中的关键模块，即Segment Selection(SS), Region Selection(RS), Self-attention layer(STA)
+<img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.01.50.png" alt="">
+<ul>
+<li>移除Segment Selection会引入大量的无关区域信息，hurt the performance</li>
+<li>Segment Selection对于多事件推理很重要，会损害需要时序推理的问题的表现</li>
+<li>去除STA时，性能下降显著，原因与mean pooling类似，我们需要一个强大的模型来捕捉多粒度推理</li>
+<li>去除RS无明显影响，原因是视频中的objects相对较少，经过temporal attention后，patch number大大减少；但使用spatial selection module可以显著降低计算成本</li>
+</ul>
+</li>
+</ul>
+<h3 id="effects-of-different-ista-configurations">Effects of different ISTA configurations</h3>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-03-05%2014.02.53.png" alt=""></p>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                论文阅读
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AC%94%E8%AE%B0">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                笔记
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Thu, 20 Feb 2025 00:00:00 &#43;0000" class="no-wrap"
+                title=" Thu, 20 Feb 2025 00:00:00 &#43;0000">
+                Thu, 20 Feb 2025 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/leetcode2080%E5%8C%BA%E9%97%B4%E5%86%85%E6%9F%A5%E8%AF%A2%E6%95%B0%E5%AD%97%E7%9A%84%E9%A2%91%E7%8E%87/">leetcode 2080 区间内查询数字的频率</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <p><a href="https://leetcode.cn/problems/range-frequency-queries/description/">leetcode 2080 区间内查询数字的频率</a></p>
+<h1 id="题目">题目</h1>
+<blockquote>
+<p>请你设计一个数据结构，它能求出给定子数组内一个给定值的 频率 。       <br>
+子数组中一个值的 频率 指的是这个子数组中这个值的出现次数。       <br>
+请你实现 RangeFreqQuery 类：</p>
+<ul>
+<li>RangeFreqQuery(int[] arr) 用下标从 0 开始的整数数组 arr 构造一个类的实例。</li>
+<li>int query(int left, int right, int value) 返回子数组 arr[left&hellip;right] 中 value 的 频率 。          <br>
+一个 子数组 指的是数组中一段连续的元素。arr[left&hellip;right] 指的是 nums 中包含下标 left 和 right 在内 的中间一段连续元素。</li>
+</ul>
+</blockquote>
+<h1 id="示例">示例</h1>
+<h2 id="示例一">示例一</h2>
+<blockquote>
+<p>输入：
+[&ldquo;RangeFreqQuery&rdquo;, &ldquo;query&rdquo;, &ldquo;query&rdquo;]          <br>
+[[[12, 33, 4, 56, 22, 2, 34, 33, 22, 12, 34, 56]], [1, 2, 4], [0, 11, 33]]             <br>
+输出：          <br>
+[null, 1, 2]           <br>
+解释                 <br>
+RangeFreqQuery rangeFreqQuery = new RangeFreqQuery([12, 33, 4, 56, 22, 2, 34, 33, 22, 12, 34, 56]);           <br>
+rangeFreqQuery.query(1, 2, 4); // 返回 1 。4 在子数组 [33, 4] 中出现 1 次。          <br>
+rangeFreqQuery.query(0, 11, 33); // 返回 2 。33 在整个子数组中出现 2 次。</p>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学与技术
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                算法题
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%BE%E8%AE%A1">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                设计
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%BA%BF%E6%AE%B5%E6%A0%91">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                线段树
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%95%B0%E7%BB%84">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                数组
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Tue, 18 Feb 2025 00:00:00 &#43;0000" class="no-wrap"
+                title=" Tue, 18 Feb 2025 00:00:00 &#43;0000">
+                Tue, 18 Feb 2025 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
                 <a href="https://y-m-m.github.io/post/mllm%E7%BB%BC%E8%BF%B0/">A Survey on Multimodal Large Language Models</a>
               </h3>
             </div>
@@ -2669,291 +3044,6 @@
               <relative-time datetime=" Tue, 31 Dec 2024 00:00:00 &#43;0000" class="no-wrap"
                 title=" Tue, 31 Dec 2024 00:00:00 &#43;0000">
                 Tue, 31 Dec 2024 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/leetcode1367%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%AD%E7%9A%84%E9%93%BE%E8%A1%A8/">leetcode 1367 二叉树中的链表</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <p><a href="https://leetcode.cn/problems/linked-list-in-binary-tree/description/">leetcode 1367 二叉树中的链表</a></p>
-<h1 id="题目">题目</h1>
-<blockquote>
-<p>给你一棵以 root 为根的二叉树和一个 head 为第一个节点的链表。    <br>
-如果在二叉树中，存在一条一直向下的路径，且每个点的数值恰好一一对应以 head 为首的链表中每个节点的值，那么请你返回 True ，否则返回 False 。    <br>
-一直向下的路径的意思是：从树中某个节点开始，一直连续向下的路径。</p>
-</blockquote>
-<h1 id="示例">示例</h1>
-<h2 id="示例一">示例一</h2>
-<p><img src="/images/%E6%88%AA%E5%B1%8F2024-12-30%2020.55.54.png" alt=""></p>
-<blockquote>
-<p>输入：head = [4,2,8], root = [1,4,4,null,2,2,null,1,null,6,8,null,null,null,null,1,3]   <br>
-输出：true   <br>
-解释：树中蓝色的节点构成了与链表对应的子路径。</p>
-</blockquote>
-<h2 id="示例二">示例二</h2>
-<p><img src="/images/%E6%88%AA%E5%B1%8F2024-12-30%2020.56.21.png" alt=""></p>
-<blockquote>
-<p>输入：head = [1,4,2,6], root = [1,4,4,null,2,2,null,1,null,6,8,null,null,null,null,1,3]     <br>
-输出：true</p>
-</blockquote>
-<h2 id="示例三">示例三</h2>
-<blockquote>
-<p>输入：head = [1,4,2,6,8], root = [1,4,4,null,2,2,null,1,null,6,8,null,null,null,null,1,3]               <br>
-输出：false         <br>
-解释：二叉树中不存在一一对应链表的路径。</p>
-</blockquote>
-<h1 id="提示">提示</h1>
-<ul>
-<li>二叉树和链表中的每个节点的值都满足 1 &lt;= node.val &lt;= 100 。</li>
-<li>链表包含的节点数目在 1 到 100 之间。</li>
-<li>二叉树包含的节点数目在 1 到 2500 之间。</li>
-</ul>
-<h1 id="题解">题解</h1>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cm">/**
-</span></span></span><span class="line"><span class="cl"><span class="cm"> * Definition for singly-linked list.
-</span></span></span><span class="line"><span class="cl"><span class="cm"> * struct ListNode {
-</span></span></span><span class="line"><span class="cl"><span class="cm"> *     int val;
-</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode *next;
-</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode() : val(0), next(nullptr) {}
-</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x) : val(x), next(nullptr) {}
-</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x, ListNode *next) : val(x), next(next) {}
-</span></span></span><span class="line"><span class="cl"><span class="cm"> * };
-</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
-</span></span><span class="line"><span class="cl"><span class="cm">/**
-</span></span></span><span class="line"><span class="cl"><span class="cm"> * Definition for a binary tree node.
-</span></span></span><span class="line"><span class="cl"><span class="cm"> * struct TreeNode {
-</span></span></span><span class="line"><span class="cl"><span class="cm"> *     int val;
-</span></span></span><span class="line"><span class="cl"><span class="cm"> *     TreeNode *left;
-</span></span></span><span class="line"><span class="cl"><span class="cm"> *     TreeNode *right;
-</span></span></span><span class="line"><span class="cl"><span class="cm"> *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
-</span></span></span><span class="line"><span class="cl"><span class="cm"> *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
-</span></span></span><span class="line"><span class="cl"><span class="cm"> *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
-</span></span></span><span class="line"><span class="cl"><span class="cm"> * };
-</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
-</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">isMatch</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">now</span><span class="p">,</span> <span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="c1">// 判断root开始的子树中有没有与head匹配的路线
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">now</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="c1">// cout &lt;&lt; &#34;now-&gt;val = &#34; &lt;&lt; now-&gt;val &lt;&lt; &#34;, root-&gt;val = &#34; &lt;&lt; root-&gt;val &lt;&lt; endl;
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">now</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">==</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="p">(</span><span class="n">isMatch</span><span class="p">(</span><span class="n">now</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">,</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">||</span> <span class="n">isMatch</span><span class="p">(</span><span class="n">now</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">,</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">));</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">else</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">head</span><span class="p">,</span> <span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span>  <span class="c1">// 深度优先遍历，直到找到合适的子串或遍历完整棵树为止
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">isMatch</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">root</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="k">else</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">dfs</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl">                <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                <span class="p">}</span>
-</span></span><span class="line"><span class="cl">                <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">dfs</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl">                <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                <span class="p">}</span>
-</span></span><span class="line"><span class="cl">                <span class="k">else</span>
-</span></span><span class="line"><span class="cl">                <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">else</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="nf">isSubPath</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">head</span><span class="p">,</span> <span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">dfs</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">root</span><span class="p">);</span> <span class="c1">// 深度优先搜索
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div><ul>
-<li>提交结果
-<ul>
-<li>通过</li>
-</ul>
-</li>
-</ul>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机科学与技术
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                算法题
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%A0%91">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                树
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                深度优先搜索
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E9%93%BE%E8%A1%A8">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                链表
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Mon, 30 Dec 2024 00:00:00 &#43;0000" class="no-wrap"
-                title=" Mon, 30 Dec 2024 00:00:00 &#43;0000">
-                Mon, 30 Dec 2024 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/leetcode3218%E5%88%87%E8%9B%8B%E7%B3%95%E7%9A%84%E6%9C%80%E5%B0%8F%E6%80%BB%E5%BC%80%E9%94%80%E4%B8%80/">leetcode 3218 切蛋糕的最小总开销一</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <h1 id="题目">题目</h1>
-<blockquote>
-<p>有一个 m x n 大小的矩形蛋糕，需要切成 1 x 1 的小块。    <br>
-给你整数 m ，n 和两个数组：  <br>
-horizontalCut 的大小为 m - 1 ，其中 horizontalCut[i] 表示沿着水平线 i 切蛋糕的开销。     <br>
-verticalCut 的大小为 n - 1 ，其中 verticalCut[j] 表示沿着垂直线 j 切蛋糕的开销。    <br>
-一次操作中，你可以选择任意不是 1 x 1 大小的矩形蛋糕并执行以下操作之一：     <br>
-沿着水平线 i 切开蛋糕，开销为 horizontalCut[i] 。     <br>
-沿着垂直线 j 切开蛋糕，开销为 verticalCut[j] 。     <br>
-每次操作后，这块蛋糕都被切成两个独立的小蛋糕。       <br>
-每次操作的开销都为最开始对应切割线的开销，并且不会改变。       <br>
-请你返回将蛋糕全部切成 1 x 1 的蛋糕块的 最小 总开销。</p>
-</blockquote>
-<h1 id="示例">示例</h1>
-<h2 id="示例一">示例一</h2>
-<blockquote>
-<p>输入：m = 3, n = 2, horizontalCut = [1,3], verticalCut = [5]          <br>
-输出：13         <br>
-解释：</p>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机科学与技术
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                算法题
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/leetcode">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                leetcode
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%B4%AA%E5%BF%83">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                贪心
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%95%B0%E7%BB%84">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                数组
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Wed, 25 Dec 2024 00:00:00 &#43;0000" class="no-wrap"
-                title=" Wed, 25 Dec 2024 00:00:00 &#43;0000">
-                Wed, 25 Dec 2024 00:00:00 &#43;0000
               </relative-time>
             </div>
           </div>

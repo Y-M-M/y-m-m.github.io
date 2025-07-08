@@ -464,6 +464,149 @@
           <div class="col-12 d-inline-block">
             <div class="d-inline-block mb-1">
               <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/leetcodehot234%E5%9B%9E%E6%96%87%E9%93%BE%E8%A1%A8/">leetcode hot100 234 回文链表</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <p><a href="https://leetcode.cn/problems/palindrome-linked-list/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode hot100 234 回文链表</a></p>
+<h1 id="题目">题目</h1>
+<blockquote>
+<p>给你一个单链表的头节点 head ，请你判断该链表是否为回文链表。如果是，返回 true ；否则，返回 false 。</p>
+</blockquote>
+<h1 id="示例">示例</h1>
+<h2 id="示例一">示例一</h2>
+<blockquote>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-04-01%2020.44.53.png" alt="">            <br>
+<strong>输入</strong>：head = [1,2,2,1]         <br>
+<strong>输出</strong>：true</p>
+</blockquote>
+<h2 id="示例二">示例二</h2>
+<blockquote>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-04-01%2020.46.07.png" alt="">    <br>
+输入：head = [1,2]        <br>
+输出：false</p>
+</blockquote>
+<h1 id="提示">提示</h1>
+<ul>
+<li>链表中节点数目在范围[1, 10<sup>5</sup>] 内</li>
+<li>0 &lt;= Node.val &lt;= 9</li>
+</ul>
+<h1 id="题解">题解</h1>
+<h2 id="方法一">方法一</h2>
+<ul>
+<li>分析
+<ul>
+<li>用一个vector记录所有节点的node</li>
+<li>判断vector是否回文</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Definition for singly-linked list.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * struct ListNode {
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     int val;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode *next;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode() : val(0), next(nullptr) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x) : val(x), next(nullptr) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * };
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">isPalindrome</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">head</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">nums</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">head</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">nums</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">head</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">head</span> <span class="o">=</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;</span> <span class="n">r</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">!=</span> <span class="n">nums</span><span class="p">[</span><span class="n">r</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">l</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">r</span><span class="o">--</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学与技术
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                算法题
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/leetcode">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                leetcode
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%A0%88">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                栈
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E9%80%92%E5%BD%92">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                递归
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Tue, 01 Apr 2025 00:00:00 &#43;0000" class="no-wrap"
+                title=" Tue, 01 Apr 2025 00:00:00 &#43;0000">
+                Tue, 01 Apr 2025 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
                 <a href="https://y-m-m.github.io/post/leetcodehot240%E6%90%9C%E7%B4%A2%E4%BA%8C%E7%BB%B4%E7%9F%A9%E9%98%B5%E4%BA%8C/">leetcode hot100 240 搜索二维矩阵二</a>
               </h3>
             </div>
@@ -1545,147 +1688,6 @@
                   </path>
                 </svg>
                 哈希表
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Sun, 30 Mar 2025 00:00:00 &#43;0000" class="no-wrap"
-                title=" Sun, 30 Mar 2025 00:00:00 &#43;0000">
-                Sun, 30 Mar 2025 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/leetcodehot60%E7%88%AC%E6%A5%BC%E6%A2%AF/">leetcode hot100 70 爬楼梯</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <p><a href="https://leetcode.cn/problems/climbing-stairs/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode hot100 70 爬楼梯</a></p>
-<h1 id="题目">题目</h1>
-<blockquote>
-<p>假设你正在爬楼梯。需要 n 阶你才能到达楼顶。        <br>
-每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？</p>
-</blockquote>
-<h1 id="示例">示例</h1>
-<h2 id="示例一">示例一</h2>
-<blockquote>
-<p><strong>输入</strong>：n = 2        <br>
-<strong>输出</strong>：2         <br>
-<strong>解释</strong>：有两种方法可以爬到楼顶。</p>
-<ol>
-<li>1 阶 + 1 阶</li>
-<li>2 阶</li>
-</ol>
-</blockquote>
-<h2 id="示例二">示例二</h2>
-<blockquote>
-<p><strong>输入</strong>：n = 3       <br>
-<strong>输出</strong>：3        <br>
-<strong>解释</strong>：有三种方法可以爬到楼顶。</p>
-<ol>
-<li>1 阶 + 1 阶 + 1 阶</li>
-<li>1 阶 + 2 阶</li>
-<li>2 阶 + 1 阶</li>
-</ol>
-</blockquote>
-<h1 id="提示">提示</h1>
-<ul>
-<li>1 &lt;= n &lt;= 45</li>
-</ul>
-<h1 id="题解">题解</h1>
-<h2 id="方法一">方法一</h2>
-<ul>
-<li>分析
-<ul>
-<li>递归</li>
-<li>上到第i个台阶，可通过i - 1台阶，也可通过i - 2台阶，methods[i] = methods[i - 1] + methods[i - 2]</li>
-<li>上到台阶1仅有一种方法，上到台阶2有两种方法</li>
-</ul>
-</li>
-<li>提交结果
-<ul>
-<li>通过</li>
-</ul>
-</li>
-<li>复杂度
-<ul>
-<li>时间复杂度O(n)</li>
-<li>空间复杂度O(1)</li>
-</ul>
-</li>
-</ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">climbStairs</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="n">x</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="n">y</span> <span class="o">=</span> <span class="n">z</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">y</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机科学与技术
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                算法题
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/leetcode">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                leetcode
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%B0%E5%BF%86%E5%8C%96%E6%90%9C%E7%B4%A2">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                记忆化搜索
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%95%B0%E5%AD%A6">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                数学
               </a>
               
               

@@ -149,7 +149,7 @@
                 </path>
               </svg>
               Posts
-              <span class="Counter">193</span>
+              <span class="Counter">194</span>
             </a>
           </nav>
           <div class="profile-color-modes js-promo-color-modes-banner-profile isInitialToggle">
@@ -428,7 +428,7 @@
         </path>
       </svg>
       Posts
-      <span class="Counter ">193</span>
+      <span class="Counter ">194</span>
     </a>
   </nav>
 </div>
@@ -441,7 +441,7 @@
       
       <div class="TableObject border-bottom border-gray-light py-3">
         <div class="user-repo-search-results-summary TableObject-item TableObject-item--primary v-align-top">
-          <strong>168</strong>
+          <strong>169</strong>
           results
           for <strong>计算机科学与技术</strong>
         </div>
@@ -459,6 +459,340 @@
       </div>
       
       <ul>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/linux_%E6%96%87%E6%9C%AC%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86/">Linux 文本文件处理</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <h1 id="文本文件及其处理工具">文本文件及其处理工具</h1>
+<ul>
+<li>Linux中的文本信息
+<ul>
+<li>文本文件
+<ul>
+<li>C语言，Java语言等编程文件的源程序语言</li>
+<li>文本格式的数据文件</li>
+<li>文本格式的文字信息</li>
+</ul>
+</li>
+<li>程序输出</li>
+<li>系统配置信息
+<ul>
+<li>/etc下的配置文件（功能类似windows的注册表）</li>
+</ul>
+</li>
+<li>文本型网络协议 因特网大部分传输层以上的协议是文本型协议
+<ul>
+<li>会话层协议：HTTP，POP3，SMTP，IMAP，</li>
+<li>表示层协议：HTML，XML，MIME</li>
+</ul>
+</li>
+<li>文本文件处理的命令
+<ul>
+<li>Linux提供大量的文本文件处理的命令</li>
+<li>多数命令都有复杂的选项</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>进程的标准输入/输出，重定向，管道
+<ul>
+<li>进程的基本概念
+<ul>
+<li>进程与程序</li>
+<li>进程的生命周期</li>
+</ul>
+</li>
+<li>进程的输入输出
+<ul>
+<li>标准输入stdin</li>
+<li>标准输出stdout</li>
+</ul>
+</li>
+<li>重定向机制
+<ul>
+<li>输出重定向
+<ul>
+<li>ls –l &gt; filelist.txt</li>
+</ul>
+</li>
+<li>输入重定向
+<ul>
+<li>sort &lt; filelist.txt</li>
+</ul>
+</li>
+<li>管道机制
+<ul>
+<li>ls –l | sort</li>
+</ul>
+</li>
+<li>重定向机制和管道机制的重要性</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>文本文件处理命令的特点
+<ul>
+<li>特点
+<ul>
+<li>不指定处理对象文件名时，从标准输入获得数据</li>
+<li>指定处理对象文件名时，从文件中获取数据</li>
+<li>多数命令可以指定多个文件</li>
+<li>处理结果在标准输出显示</li>
+</ul>
+</li>
+<li>考虑的因素
+<ul>
+<li>标准输入/标准输出</li>
+<li>shell的文件通配符</li>
+<li>输入输出重定向</li>
+<li>管道</li>
+</ul>
+</li>
+<li>灵活性：工具命令的组合
+<ul>
+<li>Linux倾向于提供独立的多个精巧的工具命令，数据格式为文本信息</li>
+<li>鼓励使用重定向或管道机制将多个工具命令组合在一起，提供灵活的功能</li>
+<li>应用系统设计时，也应该考虑到这些特点
+<ul>
+<li>例如：数据库内容的展示，直接输出多列文本，考虑到各种工具软件的使用</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>文件读取与处理的
+<ul>
+<li>more/less：逐屏显示文件
+<ul>
+<li>历史
+<ul>
+<li>more：最先由BSD UNIX开发</li>
+<li>less：Linux上广泛使用</li>
+</ul>
+</li>
+<li>使用方法
+<ul>
+<li>more shudu.c 指定一个文件</li>
+<li>more *.[ch] 指定多个文件</li>
+<li>ls -l | more 指定0个文件</li>
+<li>less shudu.c</li>
+</ul>
+</li>
+<li>满屏后，显示&ndash;more&ndash;或&ndash;more&ndash;(15%)，可以使用more命令
+<img src="/images/%E6%88%AA%E5%B1%8F2025-05-17%2010.47.15.png" alt=""></li>
+<li>Linux系统中的命令less
+<ul>
+<li>less is more</li>
+<li>回退浏览的功能更强</li>
+<li>可直接使键盘的上下箭头键，或者j,k，类似vi的光标定位键，以及PgUp，PgDn，Home，End键</li>
+<li>有的Unix系统不提供less命令，但是可利用more命令的增强功能</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>cat与od：列出文件内容
+<ul>
+<li>基本功能与命名
+<ul>
+<li>cat concatenate:串结，文本格式打印 （选项-n：行号）</li>
+<li>od octal dump逐字节打印（-c, -t c, -t x1，-t d1, -t u1选项）</li>
+</ul>
+</li>
+<li>举例
+<ul>
+<li>cat tryl.c 命令行参数1个</li>
+<li>cat –n shudu.c</li>
+<li>cat tryl.c tryx.c try.h 命令行参数3个</li>
+<li>cat &gt; try 命令行参数=0个，从stdin获取数据，直到ctrl-d</li>
+<li>cat tryl.c try2.c try.h &gt; trysrc</li>
+<li>cat makefile *.[ch] &gt; src</li>
+<li>od –t x1 x.dat 以十六进制打印文件x.dat各字节</li>
+<li>od –t x1 x.dat | more 以十六进制打印文件x.dat各字节</li>
+<li>od –c /bin/bash 逐字符方式打印文件，遇到不可打印字符打印编码</li>
+<li>echo abcdABCD | od –t x1 十六进制分开显示字符的ASCII码</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>head与tail：显示文件的头部或者尾部
+<ul>
+<li>默认只选择10行，-n选项可以选择行数</li>
+<li>head –n 15 ab.c
+<ul>
+<li>显示文件ab.c中前15行</li>
+</ul>
+</li>
+<li>head –n 23 a.c b.c c.c | more
+<ul>
+<li>显示三个文件各自的前23行共显示69行</li>
+</ul>
+</li>
+<li>tail –n 40 liu.mail</li>
+<li>head –n -20 msg.c 除去文件尾部20行其余均算“头”</li>
+<li>tail –n +20 msg.c 除去文件头部20行其余均算作“尾”</li>
+<li>tail -f debug.txt 实时打印文件尾部被追加的内容（选项-f:forever）
+<ul>
+<li>netstat -s -t| head -n 20 显示tcp协议的统计数据</li>
+<li>ls -s | sort | head –n 20</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>tee：三通
+<ul>
+<li>功能
+<ul>
+<li>将从标准输入stdin得到的数据抄送到标准输出stdout显示，同时存入磁盘文件中</li>
+</ul>
+</li>
+<li>应用举例
+<ul>
+<li>./myap | tee myap.log</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>wc：字计数
+<ul>
+<li>功能
+<ul>
+<li>列出文件中一共有多少行，有多少个单词，多少字符</li>
+<li>当指定的文件数大于1时，最后还列出一个合计</li>
+<li>常用选项-l：只列出行计数</li>
+</ul>
+</li>
+<li>举例
+<ul>
+<li>wc sum.c （1个文件）</li>
+<li>wc x.c makefile stat.sh （多个文件）</li>
+<li>wc -l *.c makefile start.sh</li>
+<li>ps -ef | wc -l （以标准输入作为输入；可用于统计系统中进程总数）</li>
+<li>ps -ef | grep liang | wc -l （和liang相关的进程个数）</li>
+<li>who | wc -l （当前系统登录用户个数）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>sort：对文件内容排序
+<ul>
+<li>sort选项
+<ul>
+<li>-n选项(Numberic):对于数字按照算术值大小排序，而不是按照字符串比较规则，例如123与67</li>
+<li>可以选择行中某一部分作为排序关键字</li>
+<li>选择升序或降序（-r）</li>
+<li>字符串比较时对字母是否区分大小写</li>
+<li>内排序外排序等算法参数选择（当数据量较大时，性能调优）</li>
+</ul>
+</li>
+<li>举例
+<ul>
+<li>sort telno &gt; telno1</li>
+<li>ls -s | sort | tail –10</li>
+<li>ls -s | sort -n | tail –10</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>tr：翻译字符
+<ul>
+<li>用法
+<ul>
+<li>tr string1 string2</li>
+<li>把标准输入拷贝到标准输出，string1中出现的字符替换为string2中的对应字符</li>
+</ul>
+</li>
+<li>例
+<ul>
+<li>cat telnos | tr UVX uvx</li>
+</ul>
+</li>
+<li>例：用［］指定一个集合
+<ul>
+<li>cat report | tr &lsquo;[a-z]&rsquo; &lsquo;[A-Z]&rsquo;</li>
+<li>将小写字母改为大写字母</li>
+</ul>
+</li>
+<li>例：用\加三个八进制数字(类似C语言)表示一字符
+<ul>
+<li>cat file1 | tr % &lsquo;\012&rsquo; 将%改为换行符,注意不要漏掉必需的单引号</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>uniq：筛选文件中的重复行
+<ul>
+<li>用法
+<ul>
+<li>uniq options</li>
+<li>uniq options input-file</li>
+<li>uniq options input-file output-file</li>
+</ul>
+</li>
+<li>重复的行：紧邻的两行内容相同</li>
+<li>选项
+<ul>
+<li>-u （uniqe）只保留没有重复的行</li>
+<li>-d （duplicated）只保留有重复的行（但只打印一次）</li>
+<li>没有以上两个选项，打印没有重复的行和有重复的行(但只打印一次)</li>
+<li>-c （count）计数同样的行出现几次</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学与技术
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/linux">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                Linux
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%96%87%E6%9C%AC%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                文本文件处理
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Sat, 17 May 2025 00:00:00 &#43;0000" class="no-wrap"
+                title=" Sat, 17 May 2025 00:00:00 &#43;0000">
+                Sat, 17 May 2025 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
         
         <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
           <div class="col-12 d-inline-block">
@@ -2421,196 +2755,6 @@ medianFinder.findMedian(); // return 2.0</p>
                   </path>
                 </svg>
                 递归
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Mon, 28 Apr 2025 00:00:00 &#43;0000" class="no-wrap"
-                title=" Mon, 28 Apr 2025 00:00:00 &#43;0000">
-                Mon, 28 Apr 2025 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/leetcodehot739%E6%AF%8F%E6%97%A5%E6%B8%A9%E5%BA%A6/">leetcode hot100 739 每日温度</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <p><a href="https://leetcode.cn/problems/daily-temperatures/description/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode hot100 739 每日温度</a></p>
-<h1 id="题目">题目</h1>
-<blockquote>
-<p>给定一个整数数组 temperatures ，表示每天的温度，返回一个数组 answer ，其中 answer[i] 是指对于第 i 天，下一个更高温度出现在几天后。如果气温在这之后都不会升高，请在该位置用 0 来代替。</p>
-</blockquote>
-<h1 id="示例">示例</h1>
-<h2 id="示例一">示例一</h2>
-<blockquote>
-<p><strong>输入</strong>: temperatures = [73,74,75,71,69,72,76,73]          <br>
-<strong>输出</strong>: [1,1,4,2,1,1,0,0]</p>
-</blockquote>
-<h2 id="示例二">示例二</h2>
-<blockquote>
-<p><strong>输入</strong>: temperatures = [30,40,50,60]         <br>
-<strong>输出</strong>: [1,1,1,0]</p>
-</blockquote>
-<h2 id="示例三">示例三</h2>
-<blockquote>
-<p><strong>输入</strong>: temperatures = [30,60,90]        <br>
-<strong>输出</strong>: [1,1,0]</p>
-</blockquote>
-<h1 id="提示">提示</h1>
-<ul>
-<li>1 &lt;= temperatures.length &lt;= 10<sup>5</sup></li>
-<li>30 &lt;= temperatures[i] &lt;= 100</li>
-</ul>
-<h1 id="题解">题解</h1>
-<h2 id="方法一">方法一</h2>
-<ul>
-<li>分析
-<ul>
-<li>使用prioity_queue记录尚未找到答案的位置，按temperature从小到达排列</li>
-<li>从前往后遍历，遍历到每一个新的temperature，就更新能更新的</li>
-</ul>
-</li>
-<li>提交结果
-<ul>
-<li>通过</li>
-</ul>
-</li>
-</ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">dailyTemperatures</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">temperatures</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">auto</span> <span class="n">cmp</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">temperatures</span><span class="p">](</span><span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">temperatures</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">temperatures</span><span class="p">[</span><span class="n">right</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">        <span class="p">};</span>
-</span></span><span class="line"><span class="cl">        <span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="k">decltype</span><span class="p">(</span><span class="n">cmp</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">pq</span><span class="p">(</span><span class="n">cmp</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">temperatures</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">pq</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="kt">int</span> <span class="n">updatepos</span> <span class="o">=</span> <span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">                
-</span></span><span class="line"><span class="cl">                <span class="k">while</span> <span class="p">(</span><span class="n">temperatures</span><span class="p">[</span><span class="n">updatepos</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">temperatures</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-</span></span><span class="line"><span class="cl">                <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                    <span class="c1">// cout &lt;&lt; temperatures[updatepos] &lt;&lt; &#34;, &#34; &lt;&lt; temperatures[i] &lt;&lt; endl;
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                    <span class="n">ans</span><span class="p">[</span><span class="n">updatepos</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">updatepos</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                    <span class="n">pq</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">                    <span class="k">if</span> <span class="p">(</span><span class="n">pq</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
-</span></span><span class="line"><span class="cl">                    <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                        <span class="k">break</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">                    <span class="n">updatepos</span> <span class="o">=</span> <span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">                <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="n">pq</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div><h2 id="方法二">方法二</h2>
-<ul>
-<li>分析
-<ul>
-<li>使用递减栈</li>
-<li>将所有比当前temperature小的栈顶元素都出栈，并更新ans数组</li>
-</ul>
-</li>
-<li>提交结果
-<ul>
-<li>通过</li>
-</ul>
-</li>
-</ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">dailyTemperatures</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">temperatures</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">pos</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">temperatures</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">temperatures</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">pos</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="kt">int</span> <span class="n">nowpos</span> <span class="o">=</span> <span class="n">pos</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">temperatures</span><span class="p">[</span><span class="n">nowpos</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">temperatures</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-</span></span><span class="line"><span class="cl">                <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                    <span class="n">ans</span><span class="p">[</span><span class="n">nowpos</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">nowpos</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                    <span class="n">pos</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">                <span class="p">}</span>
-</span></span><span class="line"><span class="cl">                <span class="k">else</span>
-</span></span><span class="line"><span class="cl">                <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                    <span class="k">break</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="n">pos</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div><h1 id="参考资料">参考资料</h1>
-<ul>
-<li><a href="https://leetcode.cn/problems/daily-temperatures/solutions/71433/leetcode-tu-jie-739mei-ri-wen-du-by-misterbooo/?envType=study-plan-v2&amp;envId=top-100-liked">程序员吴师兄的题解</a></li>
-</ul>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机科学与技术
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                算法题
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/leetcode">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                leetcode
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%A0%88">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                栈
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%95%B0%E7%BB%84">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                数组
               </a>
               
               

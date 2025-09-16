@@ -149,7 +149,7 @@
                 </path>
               </svg>
               Posts
-              <span class="Counter">199</span>
+              <span class="Counter">200</span>
             </a>
           </nav>
           <div class="profile-color-modes js-promo-color-modes-banner-profile isInitialToggle">
@@ -428,7 +428,7 @@
         </path>
       </svg>
       Posts
-      <span class="Counter ">199</span>
+      <span class="Counter ">200</span>
     </a>
   </nav>
 </div>
@@ -441,7 +441,7 @@
       
       <div class="TableObject border-bottom border-gray-light py-3">
         <div class="user-repo-search-results-summary TableObject-item TableObject-item--primary v-align-top">
-          <strong>173</strong>
+          <strong>174</strong>
           results
           for <strong>计算机科学与技术</strong>
         </div>
@@ -459,6 +459,140 @@
       </div>
       
       <ul>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/leetcodehot347%E5%89%8Dk%E4%B8%AA%E9%AB%98%E9%A2%91%E5%85%83%E7%B4%A0/">leetcode hot100 347 前k个高频元素</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <p><a href="https://leetcode.cn/problems/top-k-frequent-elements/description/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode hot100 347 前k个高频元素</a></p>
+<h1 id="题目">题目</h1>
+<blockquote>
+<p>给你一个整数数组 nums 和一个整数 k ，请你返回其中出现频率前 k 高的元素。你可以按 任意顺序 返回答案</p>
+</blockquote>
+<h1 id="示例">示例</h1>
+<h2 id="示例一">示例一</h2>
+<blockquote>
+<p><strong>输入</strong>: nums = [1,1,1,2,2,3], k = 2          <br>
+<strong>输出</strong>: [1,2]</p>
+</blockquote>
+<h2 id="示例二">示例二</h2>
+<blockquote>
+<p><strong>输入</strong>: nums = [1], k = 1            <br>
+<strong>输出</strong>: [1]</p>
+</blockquote>
+<h2 id="提示">提示</h2>
+<ul>
+<li>1 &lt;= nums.length &lt;= 10<sup>5</sup></li>
+<li>k 的取值范围是 [1, 数组中不相同的元素的个数]</li>
+<li>题目数据保证答案唯一，换句话说，数组中前 k 个高频元素的集合是唯一的</li>
+</ul>
+<blockquote>
+<p>进阶：你所设计算法的时间复杂度 必须 优于 O(n log n) ，其中 n 是数组大小。</p>
+</blockquote>
+<h1 id="题解">题解</h1>
+<h2 id="方法一">方法一</h2>
+<ul>
+<li>分析
+<ul>
+<li>unordered_map记录出现次数</li>
+<li>vector自定义排序</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">topKFrequent</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">times</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">snums</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="nl">num</span> <span class="p">:</span> <span class="n">nums</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">times</span><span class="p">[</span><span class="n">num</span><span class="p">])</span> <span class="n">snums</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">num</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">times</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// cout &lt;&lt; num &lt;&lt; &#34;, &#34; &lt;&lt; times[num] &lt;&lt; endl;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="k">auto</span> <span class="n">cmp</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">times</span><span class="p">](</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">bool</span> 
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">times</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">times</span><span class="p">[</span><span class="n">y</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="p">};</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sort</span><span class="p">(</span><span class="n">snums</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">snums</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">cmp</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">snums</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">snums</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学与技术
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                算法题
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/leetcode">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                leetcode
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%95%B0%E7%BB%84">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                数组
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%93%88%E5%B8%8C%E8%A1%A8">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                哈希表
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Wed, 30 Apr 2025 00:00:00 &#43;0000" class="no-wrap"
+                title=" Wed, 30 Apr 2025 00:00:00 &#43;0000">
+                Wed, 30 Apr 2025 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
         
         <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
           <div class="col-12 d-inline-block">
@@ -2145,113 +2279,6 @@ minStack.getMin();   &ndash;&gt; 返回 -2.</p>
               <relative-time datetime=" Sat, 26 Apr 2025 00:00:00 &#43;0000" class="no-wrap"
                 title=" Sat, 26 Apr 2025 00:00:00 &#43;0000">
                 Sat, 26 Apr 2025 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/leetcodehot2845%E7%BB%9F%E8%AE%A1%E8%B6%A3%E5%91%B3%E5%AD%90%E6%95%B0%E7%BB%84%E7%9A%84%E6%95%B0%E7%9B%AE/">leetcode hot100 2845 统计趣味子数组的数目</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <p><a href="https://leetcode.cn/problems/count-of-interesting-subarrays/description/?envType=daily-question&amp;envId=2025-04-25">leetcode hot100 2845 统计趣味子数组的数目</a></p>
-<h1 id="题目">题目</h1>
-<blockquote>
-<p>给你一个下标从 0 开始的整数数组 nums ，以及整数 modulo 和整数 k 。             <br>
-请你找出并统计数组中 趣味子数组 的数目。          <br>
-如果 子数组 nums[l..r] 满足下述条件，则称其为 趣味子数组 ：           <br>
-在范围 [l, r] 内，设 cnt 为满足 nums[i] % modulo == k 的索引 i 的数量。并且 cnt % modulo == k 。               <br>
-以整数形式表示并返回趣味子数组的数目。              <br>
-注意：子数组是数组中的一个连续非空的元素序列</p>
-</blockquote>
-<h1 id="示例">示例</h1>
-<h2 id="示例一">示例一</h2>
-<blockquote>
-<p><strong>输入</strong>：nums = [3,2,4], modulo = 2, k = 1          <br>
-<strong>输出</strong>：3              <br>
-<strong>解释</strong>：在这个示例中，趣味子数组分别是：       <br>
-子数组 nums[0..0] ，也就是 [3] 。</p>
-<ul>
-<li>在范围 [0, 0] 内，只存在 1 个下标 i = 0 满足 nums[i] % modulo == k 。</li>
-<li>因此 cnt = 1 ，且 cnt % modulo == k 。               <br>
-子数组 nums[0..1] ，也就是 [3,2] 。</li>
-<li>在范围 [0, 1] 内，只存在 1 个下标 i = 0 满足 nums[i] % modulo == k 。</li>
-<li>因此 cnt = 1 ，且 cnt % modulo == k 。           <br>
-子数组 nums[0..2] ，也就是 [3,2,4] 。</li>
-<li>在范围 [0, 2] 内，只存在 1 个下标 i = 0 满足 nums[i] % modulo == k 。</li>
-<li>因此 cnt = 1 ，且 cnt % modulo == k 。            <br>
-可以证明不存在其他趣味子数组。因此，答案为 3</li>
-</ul>
-</blockquote>
-<h2 id="示例二">示例二</h2>
-<blockquote>
-<p>输入：nums = [3,1,9,6], modulo = 3, k = 0         <br>
-输出：2           <br>
-解释：在这个示例中，趣味子数组分别是：              <br>
-子数组 nums[0..3] ，也就是 [3,1,9,6] 。</p>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机科学与技术
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                算法题
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/leetcode">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                leetcode
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%95%B0%E7%BB%84">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                数组
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%93%88%E5%B8%8C%E8%A1%A8">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                哈希表
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Fri, 25 Apr 2025 00:00:00 &#43;0000" class="no-wrap"
-                title=" Fri, 25 Apr 2025 00:00:00 &#43;0000">
-                Fri, 25 Apr 2025 00:00:00 &#43;0000
               </relative-time>
             </div>
           </div>

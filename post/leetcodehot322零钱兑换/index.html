@@ -22,7 +22,7 @@
 示例 示例一 输入：coins = [1, 2, 5], amount = 11 输出：3 解释：11 = 5 &#43; 5 &#43; 1
 示例二 输入：coins = [2], amount = 3 输出：-1
 示例三 输入：coins = [1], amount = 0 输出：0
-提示 1 &lt;= coins.length &lt;= 12 1 &lt;= coins[i] &lt;= 231 - 1 0 &lt;= amount &lt;= 104 题解 方法一 分析 依次计算从1到amount需要多少硬币构成 提交结果 超出时间限制 109/189个通过的测试样例 复杂度 时间复杂度O(n2) 空间复杂度O(n) class Solution { public: int coinChange(vector&lt;int&gt;&amp; coins, int amount) { if (amount == 0) return 0; vector&lt;int&gt; num(amount &#43; 1, INT32_MAX); for (int coin : coins) { if (coin &lt;= amount) { num[coin] = 1; } } if (num.back() != INT32_MAX) return num.back(); if (amount == 1) return -1; for (int i = 1; i &lt;= amount; i&#43;&#43;) { if (num[i] != INT32_MAX) continue; else { for (int j = 1; j &lt; i; j&#43;&#43;) { if (num[j] == INT32_MAX || num[i - j] == INT32_MAX) continue; num[i] = min(num[i], num[j] &#43; num[i - j]); } } } if (num.back() == INT32_MAX) return -1; return num.back(); } }; 方法二 分析 记忆化搜索 提交结果 通过 复杂度 时间复杂度O(Sn) 空间复杂度O(S) class Solution { public: int coinChange(vector&lt;int&gt;&amp; coins, int amount) { vector&lt;int&gt; num(amount &#43; 1, -1); num[0] = 0; for (int i = 1; i &lt;= amount; i&#43;&#43;) { for (int coin : coins) { if (i &lt; coin) continue; else { if (num[i - coin] == -1) continue; else { if (num[i] == -1) { num[i] = num[i - coin] &#43; 1; } else { num[i] = min(num[i], num[i - coin] &#43; 1); } } } } } return num[amount]; } }; 方法三" />
+提示 1 &lt;= coins.length &lt;= 12 1 &lt;= coins[i] &lt;= 231 - 1 0 &lt;= amount &lt;= 104 题解 方法一 分析 依次计算从1到amount需要多少硬币构成 提交结果 超出时间限制 109/189个通过的测试样例 复杂度 时间复杂度O(n2) 空间复杂度O(n) class Solution { public: int coinChange(vector&lt;int&gt;&amp; coins, int amount) { if (amount == 0) return 0; vector&lt;int&gt; num(amount &#43; 1, INT32_MAX); for (int coin : coins) { if (coin &lt;= amount) { num[coin] = 1; } } if (num.back() != INT32_MAX) return num.back(); if (amount == 1) return -1; for (int i = 1; i &lt;= amount; i&#43;&#43;) { if (num[i] != INT32_MAX) continue; else { for (int j = 1; j &lt; i; j&#43;&#43;) { if (num[j] == INT32_MAX || num[i - j] == INT32_MAX) continue; num[i] = min(num[i], num[j] &#43; num[i - j]); } } } if (num.back() == INT32_MAX) return -1; return num.back(); } }; 方法二 分析 记忆化搜索 提交结果 通过 复杂度 时间复杂度O(Sn) 空间复杂度O(S) class Solution { public: int coinChange(vector&lt;int&gt;&amp; coins, int amount) { vector&lt;int&gt; num(amount &#43; 1, -1); num[0] = 0; for (int i = 1; i &lt;= amount; i&#43;&#43;) { for (int coin : coins) { if (i &lt; coin) continue; else { if (num[i - coin] == -1) continue; else { if (num[i] == -1) { num[i] = num[i - coin] &#43; 1; } else { num[i] = min(num[i], num[i - coin] &#43; 1); } } } } } return num[amount]; } }; " />
 <meta name="keywords"
   content='blog, google analytics' />
 <meta name="robots" content="noodp" />
@@ -36,7 +36,7 @@
 示例 示例一 输入：coins = [1, 2, 5], amount = 11 输出：3 解释：11 = 5 &#43; 5 &#43; 1
 示例二 输入：coins = [2], amount = 3 输出：-1
 示例三 输入：coins = [1], amount = 0 输出：0
-提示 1 &lt;= coins.length &lt;= 12 1 &lt;= coins[i] &lt;= 231 - 1 0 &lt;= amount &lt;= 104 题解 方法一 分析 依次计算从1到amount需要多少硬币构成 提交结果 超出时间限制 109/189个通过的测试样例 复杂度 时间复杂度O(n2) 空间复杂度O(n) class Solution { public: int coinChange(vector&lt;int&gt;&amp; coins, int amount) { if (amount == 0) return 0; vector&lt;int&gt; num(amount &#43; 1, INT32_MAX); for (int coin : coins) { if (coin &lt;= amount) { num[coin] = 1; } } if (num.back() != INT32_MAX) return num.back(); if (amount == 1) return -1; for (int i = 1; i &lt;= amount; i&#43;&#43;) { if (num[i] != INT32_MAX) continue; else { for (int j = 1; j &lt; i; j&#43;&#43;) { if (num[j] == INT32_MAX || num[i - j] == INT32_MAX) continue; num[i] = min(num[i], num[j] &#43; num[i - j]); } } } if (num.back() == INT32_MAX) return -1; return num.back(); } }; 方法二 分析 记忆化搜索 提交结果 通过 复杂度 时间复杂度O(Sn) 空间复杂度O(S) class Solution { public: int coinChange(vector&lt;int&gt;&amp; coins, int amount) { vector&lt;int&gt; num(amount &#43; 1, -1); num[0] = 0; for (int i = 1; i &lt;= amount; i&#43;&#43;) { for (int coin : coins) { if (i &lt; coin) continue; else { if (num[i - coin] == -1) continue; else { if (num[i] == -1) { num[i] = num[i - coin] &#43; 1; } else { num[i] = min(num[i], num[i - coin] &#43; 1); } } } } } return num[amount]; } }; 方法三" />
+提示 1 &lt;= coins.length &lt;= 12 1 &lt;= coins[i] &lt;= 231 - 1 0 &lt;= amount &lt;= 104 题解 方法一 分析 依次计算从1到amount需要多少硬币构成 提交结果 超出时间限制 109/189个通过的测试样例 复杂度 时间复杂度O(n2) 空间复杂度O(n) class Solution { public: int coinChange(vector&lt;int&gt;&amp; coins, int amount) { if (amount == 0) return 0; vector&lt;int&gt; num(amount &#43; 1, INT32_MAX); for (int coin : coins) { if (coin &lt;= amount) { num[coin] = 1; } } if (num.back() != INT32_MAX) return num.back(); if (amount == 1) return -1; for (int i = 1; i &lt;= amount; i&#43;&#43;) { if (num[i] != INT32_MAX) continue; else { for (int j = 1; j &lt; i; j&#43;&#43;) { if (num[j] == INT32_MAX || num[i - j] == INT32_MAX) continue; num[i] = min(num[i], num[j] &#43; num[i - j]); } } } if (num.back() == INT32_MAX) return -1; return num.back(); } }; 方法二 分析 记忆化搜索 提交结果 通过 复杂度 时间复杂度O(Sn) 空间复杂度O(S) class Solution { public: int coinChange(vector&lt;int&gt;&amp; coins, int amount) { vector&lt;int&gt; num(amount &#43; 1, -1); num[0] = 0; for (int i = 1; i &lt;= amount; i&#43;&#43;) { for (int coin : coins) { if (i &lt; coin) continue; else { if (num[i - coin] == -1) continue; else { if (num[i] == -1) { num[i] = num[i - coin] &#43; 1; } else { num[i] = min(num[i], num[i - coin] &#43; 1); } } } } } return num[amount]; } }; " />
 <meta name="twitter:site" content="https://y-m-m.github.io/" />
 <meta name="twitter:creator" content="陈皮" />
 <meta name="twitter:image"
@@ -50,7 +50,7 @@
 示例 示例一 输入：coins = [1, 2, 5], amount = 11 输出：3 解释：11 = 5 &#43; 5 &#43; 1
 示例二 输入：coins = [2], amount = 3 输出：-1
 示例三 输入：coins = [1], amount = 0 输出：0
-提示 1 &lt;= coins.length &lt;= 12 1 &lt;= coins[i] &lt;= 231 - 1 0 &lt;= amount &lt;= 104 题解 方法一 分析 依次计算从1到amount需要多少硬币构成 提交结果 超出时间限制 109/189个通过的测试样例 复杂度 时间复杂度O(n2) 空间复杂度O(n) class Solution { public: int coinChange(vector&lt;int&gt;&amp; coins, int amount) { if (amount == 0) return 0; vector&lt;int&gt; num(amount &#43; 1, INT32_MAX); for (int coin : coins) { if (coin &lt;= amount) { num[coin] = 1; } } if (num.back() != INT32_MAX) return num.back(); if (amount == 1) return -1; for (int i = 1; i &lt;= amount; i&#43;&#43;) { if (num[i] != INT32_MAX) continue; else { for (int j = 1; j &lt; i; j&#43;&#43;) { if (num[j] == INT32_MAX || num[i - j] == INT32_MAX) continue; num[i] = min(num[i], num[j] &#43; num[i - j]); } } } if (num.back() == INT32_MAX) return -1; return num.back(); } }; 方法二 分析 记忆化搜索 提交结果 通过 复杂度 时间复杂度O(Sn) 空间复杂度O(S) class Solution { public: int coinChange(vector&lt;int&gt;&amp; coins, int amount) { vector&lt;int&gt; num(amount &#43; 1, -1); num[0] = 0; for (int i = 1; i &lt;= amount; i&#43;&#43;) { for (int coin : coins) { if (i &lt; coin) continue; else { if (num[i - coin] == -1) continue; else { if (num[i] == -1) { num[i] = num[i - coin] &#43; 1; } else { num[i] = min(num[i], num[i - coin] &#43; 1); } } } } } return num[amount]; } }; 方法三" />
+提示 1 &lt;= coins.length &lt;= 12 1 &lt;= coins[i] &lt;= 231 - 1 0 &lt;= amount &lt;= 104 题解 方法一 分析 依次计算从1到amount需要多少硬币构成 提交结果 超出时间限制 109/189个通过的测试样例 复杂度 时间复杂度O(n2) 空间复杂度O(n) class Solution { public: int coinChange(vector&lt;int&gt;&amp; coins, int amount) { if (amount == 0) return 0; vector&lt;int&gt; num(amount &#43; 1, INT32_MAX); for (int coin : coins) { if (coin &lt;= amount) { num[coin] = 1; } } if (num.back() != INT32_MAX) return num.back(); if (amount == 1) return -1; for (int i = 1; i &lt;= amount; i&#43;&#43;) { if (num[i] != INT32_MAX) continue; else { for (int j = 1; j &lt; i; j&#43;&#43;) { if (num[j] == INT32_MAX || num[i - j] == INT32_MAX) continue; num[i] = min(num[i], num[j] &#43; num[i - j]); } } } if (num.back() == INT32_MAX) return -1; return num.back(); } }; 方法二 分析 记忆化搜索 提交结果 通过 复杂度 时间复杂度O(Sn) 空间复杂度O(S) class Solution { public: int coinChange(vector&lt;int&gt;&amp; coins, int amount) { vector&lt;int&gt; num(amount &#43; 1, -1); num[0] = 0; for (int i = 1; i &lt;= amount; i&#43;&#43;) { for (int coin : coins) { if (i &lt; coin) continue; else { if (num[i - coin] == -1) continue; else { if (num[i] == -1) { num[i] = num[i - coin] &#43; 1; } else { num[i] = min(num[i], num[i - coin] &#43; 1); } } } } } return num[amount]; } }; " />
 <meta property="og:url" content="https://y-m-m.github.io/post/leetcodehot322%E9%9B%B6%E9%92%B1%E5%85%91%E6%8D%A2/" />
 <meta property="og:site_name" content="leetcode hot100 322 零钱兑换" />
 <meta property="og:image"
@@ -162,9 +162,9 @@
 
                   
                   <span class="file-info-divider"></span>
-                  Modified <relative-time datetime="Tue, 08 Jul 2025 17:23:45 &#43;0800"
+                  Modified <relative-time datetime="Sun, 07 Sep 2025 13:44:02 &#43;0800"
                     class="no-wrap">
-                    Tue, 08 Jul 2025 17:23:45 &#43;0800</relative-time>
+                    Sun, 07 Sep 2025 13:44:02 &#43;0800</relative-time>
                   
                 </div>
               </div>
@@ -194,7 +194,7 @@
                         </div>
                       </div>
                     </details-menu>
-                      500 Words
+                      497 Words
                     
 
                   </div>
@@ -392,8 +392,7 @@
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">num</span><span class="p">[</span><span class="n">amount</span><span class="p">];</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div><h2 id="方法三">方法三</h2>
-</article>
+</span></span></code></pre></div></article>
               </div>
             </div>
           </div>

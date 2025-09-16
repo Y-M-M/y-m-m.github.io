@@ -149,7 +149,7 @@
                 </path>
               </svg>
               Posts
-              <span class="Counter">194</span>
+              <span class="Counter">199</span>
             </a>
           </nav>
           <div class="profile-color-modes js-promo-color-modes-banner-profile isInitialToggle">
@@ -428,7 +428,7 @@
         </path>
       </svg>
       Posts
-      <span class="Counter ">194</span>
+      <span class="Counter ">199</span>
     </a>
   </nav>
 </div>
@@ -1604,6 +1604,858 @@
           <div class="col-12 d-inline-block">
             <div class="d-inline-block mb-1">
               <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/leetcodehot25k%E4%B8%AA%E4%B8%80%E7%BB%84%E7%BF%BB%E8%BD%AC%E9%93%BE%E8%A1%A8/">leetcode hot100 25 K个一组翻转链表</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <p><a href="https://leetcode.cn/problems/reverse-nodes-in-k-group/description/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode hot100 25 K个一组翻转链表</a></p>
+<h1 id="题目">题目</h1>
+<blockquote>
+<p>给你链表的头节点 head ，每 k 个节点一组进行翻转，请你返回修改后的链表。            <br>
+k 是一个正整数，它的值小于或等于链表的长度。如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。          <br>
+你不能只是单纯的改变节点内部的值，而是需要实际进行节点交换。</p>
+</blockquote>
+<h1 id="示例">示例</h1>
+<h2 id="示例一">示例一</h2>
+<blockquote>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-04-05%2008.34.32.png" alt="">
+输入：head = [1,2,3,4,5], k = 2        <br>
+输出：[2,1,4,3,5]</p>
+</blockquote>
+<h2 id="示例二">示例二</h2>
+<blockquote>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-04-05%2008.35.14.png" alt="">
+输入：head = [1,2,3,4,5], k = 3       <br>
+输出：[3,2,1,4,5]</p>
+</blockquote>
+<h1 id="提示">提示</h1>
+<ul>
+<li>链表中的节点数目为 n</li>
+<li>1 &lt;= k &lt;= n &lt;= 5000</li>
+<li>0 &lt;= Node.val &lt;= 1000</li>
+</ul>
+<h1 id="题解">题解</h1>
+<h2 id="方法一">方法一</h2>
+<ul>
+<li>分析
+<ul>
+<li>递归</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Definition for singly-linked list.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * struct ListNode {
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     int val;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode *next;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode() : val(0), next(nullptr) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x) : val(x), next(nullptr) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * };
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ListNode</span><span class="o">*</span> <span class="n">reverseOneGroup</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">head</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">curr</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">curr</span> <span class="o">!=</span> <span class="k">nullptr</span> <span class="o">&amp;&amp;</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">curr</span> <span class="o">=</span> <span class="n">curr</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">count</span> <span class="o">==</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ListNode</span><span class="o">*</span> <span class="n">prev</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ListNode</span><span class="o">*</span> <span class="n">curr</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ListNode</span><span class="o">*</span> <span class="n">next</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">next</span> <span class="o">=</span> <span class="n">curr</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">curr</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">prev</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">prev</span> <span class="o">=</span> <span class="n">curr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">curr</span> <span class="o">=</span> <span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">curr</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">reverseOneGroup</span><span class="p">(</span><span class="n">curr</span><span class="p">,</span> <span class="n">k</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">prev</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">ListNode</span><span class="o">*</span> <span class="nf">reverseKGroup</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">head</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">reverseOneGroup</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">k</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h2 id="方法二">方法二</h2>
+<ul>
+<li>分析
+<ul>
+<li>迭代</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 翻转一个子链表，并且返回新的头与尾
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">pair</span><span class="o">&lt;</span><span class="n">ListNode</span><span class="o">*</span><span class="p">,</span> <span class="n">ListNode</span><span class="o">*&gt;</span> <span class="n">myReverse</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">head</span><span class="p">,</span> <span class="n">ListNode</span><span class="o">*</span> <span class="n">tail</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">prev</span> <span class="o">=</span> <span class="n">tail</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">prev</span> <span class="o">!=</span> <span class="n">tail</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ListNode</span><span class="o">*</span> <span class="n">nex</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">prev</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">prev</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">p</span> <span class="o">=</span> <span class="n">nex</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="p">{</span><span class="n">tail</span><span class="p">,</span> <span class="n">head</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">ListNode</span><span class="o">*</span> <span class="nf">reverseKGroup</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">head</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">hair</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ListNode</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">hair</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">pre</span> <span class="o">=</span> <span class="n">hair</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">head</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ListNode</span><span class="o">*</span> <span class="n">tail</span> <span class="o">=</span> <span class="n">pre</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 查看剩余部分长度是否大于等于 k
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">tail</span> <span class="o">=</span> <span class="n">tail</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">tail</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">return</span> <span class="n">hair</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ListNode</span><span class="o">*</span> <span class="n">nex</span> <span class="o">=</span> <span class="n">tail</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">tie</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">tail</span><span class="p">)</span> <span class="o">=</span> <span class="n">myReverse</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">tail</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 把子链表重新接回原链表
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">pre</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">tail</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">nex</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pre</span> <span class="o">=</span> <span class="n">tail</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">head</span> <span class="o">=</span> <span class="n">tail</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">hair</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h1 id="参考资料">参考资料</h1>
+<p><a href="https://leetcode.cn/problems/reverse-nodes-in-k-group/solutions/248591/k-ge-yi-zu-fan-zhuan-lian-biao-by-leetcode-solutio/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode官方题解</a></p>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学与技术
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                算法题
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/leetcode">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                leetcode
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E9%80%92%E5%BD%92">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                递归
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E9%93%BE%E8%A1%A8">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                链表
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Sat, 05 Apr 2025 00:00:00 &#43;0000" class="no-wrap"
+                title=" Sat, 05 Apr 2025 00:00:00 &#43;0000">
+                Sat, 05 Apr 2025 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/leetcodehot19%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E7%9A%84%E5%80%92%E6%95%B0%E7%AC%ACn%E4%B8%AA%E8%8A%82%E7%82%B9/">leetcode hot100 19 删除链表的倒数第n个节点</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <p><a href="https://leetcode.cn/problems/remove-nth-node-from-end-of-list/description/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode hot100 19 删除链表的倒数第n个节点</a></p>
+<h1 id="题目">题目</h1>
+<blockquote>
+<p>给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。</p>
+</blockquote>
+<h1 id="示例">示例</h1>
+<h2 id="示例一">示例一</h2>
+<blockquote>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-04-04%2009.02.48.png" alt="">       <br>
+输入：head = [1,2,3,4,5], n = 2         <br>
+输出：[1,2,3,5]</p>
+</blockquote>
+<h2 id="示例二">示例二</h2>
+<blockquote>
+<p>输入：head = [1], n = 1          <br>
+输出：[]</p>
+</blockquote>
+<h2 id="示例三">示例三</h2>
+<blockquote>
+<p>输入：head = [1,2], n = 1      <br>
+输出：[1]</p>
+</blockquote>
+<h1 id="提示">提示</h1>
+<ul>
+<li>链表中结点的数目为 sz</li>
+<li>1 &lt;= sz &lt;= 30</li>
+<li>0 &lt;= Node.val &lt;= 100</li>
+<li>1 &lt;= n &lt;= sz</li>
+</ul>
+<h1 id="题解">题解</h1>
+<h2 id="方法一">方法一</h2>
+<ul>
+<li>分析
+<ul>
+<li>两遍遍历</li>
+<li>第一遍找到正序的序号</li>
+<li>第二遍删除</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Definition for singly-linked list.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * struct ListNode {
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     int val;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode *next;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode() : val(0), next(nullptr) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x) : val(x), next(nullptr) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * };
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ListNode</span><span class="o">*</span> <span class="n">removeNthFromEnd</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">head</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">ptr</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ptr</span> <span class="o">=</span> <span class="n">ptr</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">num</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ptr</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">num</span> <span class="o">=</span> <span class="n">num</span> <span class="o">-</span> <span class="n">n</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">head</span> <span class="o">=</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ptr</span> <span class="o">=</span> <span class="n">ptr</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ptr</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">ptr</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h2 id="方法二">方法二</h2>
+<ul>
+<li>分析
+<ul>
+<li>递归</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Definition for singly-linked list.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * struct ListNode {
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     int val;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode *next;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode() : val(0), next(nullptr) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x) : val(x), next(nullptr) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * };
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">remove</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">head</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">reminder</span> <span class="o">=</span> <span class="n">remove</span><span class="p">(</span><span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">reminder</span> <span class="o">==</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">reminder</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ListNode</span><span class="o">*</span> <span class="nf">removeNthFromEnd</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">head</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">remove</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">len</span> <span class="o">==</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">head</span> <span class="o">=</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h2 id="方法三">方法三</h2>
+<ul>
+<li>分析
+<ul>
+<li>栈</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Definition for singly-linked list.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * struct ListNode {
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     int val;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode *next;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode() : val(0), next(nullptr) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x) : val(x), next(nullptr) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * };
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ListNode</span><span class="o">*</span> <span class="n">removeNthFromEnd</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">head</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">dummy</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ListNode</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">head</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">stack</span><span class="o">&lt;</span><span class="n">ListNode</span><span class="o">*&gt;</span> <span class="n">stk</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">dummy</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">cur</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">stk</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">cur</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">stk</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">prev</span> <span class="o">=</span> <span class="n">stk</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">prev</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">prev</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">dummy</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">delete</span> <span class="n">dummy</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h2 id="方法四">方法四</h2>
+<ul>
+<li>分析
+<ul>
+<li>双指针</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ListNode</span><span class="o">*</span> <span class="n">removeNthFromEnd</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">head</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">dummy</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ListNode</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">head</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">first</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">second</span> <span class="o">=</span> <span class="n">dummy</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">first</span> <span class="o">=</span> <span class="n">first</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">first</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">first</span> <span class="o">=</span> <span class="n">first</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">second</span> <span class="o">=</span> <span class="n">second</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">second</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">second</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">dummy</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">delete</span> <span class="n">dummy</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h1 id="参考资料">参考资料</h1>
+<p><a href="https://leetcode.cn/problems/remove-nth-node-from-end-of-list/solutions/450350/shan-chu-lian-biao-de-dao-shu-di-nge-jie-dian-b-61/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode官方题解</a></p>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学与技术
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                算法题
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/leetcode">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                leetcode
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E9%93%BE%E8%A1%A8">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                链表
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%8F%8C%E6%8C%87%E9%92%88">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                双指针
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Fri, 04 Apr 2025 00:00:00 &#43;0000" class="no-wrap"
+                title=" Fri, 04 Apr 2025 00:00:00 &#43;0000">
+                Fri, 04 Apr 2025 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/leetcodehot2%E4%B8%A4%E6%95%B0%E7%9B%B8%E5%8A%A0/">leetcode hot100 2 两数相加</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <p><a href="https://leetcode.cn/problems/add-two-numbers/description/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode hot100 2 两数相加</a></p>
+<h1 id="题目">题目</h1>
+<blockquote>
+<p>给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。       <br>
+请你将两个数相加，并以相同形式返回一个表示和的链表。                  <br>
+你可以假设除了数字 0 之外，这两个数都不会以 0 开头。</p>
+</blockquote>
+<h1 id="示例">示例</h1>
+<h2 id="示例一">示例一</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-04-04%2008.24.17.png" alt=""></p>
+<blockquote>
+<p><strong>输入</strong>：l1 = [2,4,3], l2 = [5,6,4]
+<strong>输出</strong>：[7,0,8]           <br>
+<strong>解释</strong>：342 + 465 = 807.</p>
+</blockquote>
+<h2 id="示例二">示例二</h2>
+<blockquote>
+<p>输入：l1 = [0], l2 = [0]        <br>
+输出：[0]</p>
+</blockquote>
+<h2 id="示例三">示例三</h2>
+<blockquote>
+<p>输入：l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]             <br>
+输出：[8,9,9,9,0,0,0,1]</p>
+</blockquote>
+<h1 id="提示">提示</h1>
+<ul>
+<li>每个链表中的节点数在范围 [1, 100] 内</li>
+<li>0 &lt;= Node.val &lt;= 9</li>
+<li>题目数据保证列表表示的数字不含前导零</li>
+</ul>
+<h1 id="题解">题解</h1>
+<h2 id="方法一">方法一</h2>
+<ul>
+<li>分析
+<ul>
+<li>直接模拟数学相加计算过程</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Definition for singly-linked list.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * struct ListNode {
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     int val;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode *next;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode() : val(0), next(nullptr) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x) : val(x), next(nullptr) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * };
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ListNode</span><span class="o">*</span> <span class="n">addTwoNumbers</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">l1</span><span class="p">,</span> <span class="n">ListNode</span><span class="o">*</span> <span class="n">l2</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">carry</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">head</span> <span class="o">=</span> <span class="n">l2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">l2node</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">l1</span> <span class="o">!=</span> <span class="k">nullptr</span> <span class="o">&amp;&amp;</span> <span class="n">l2</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">l2</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">l2node</span> <span class="o">=</span> <span class="n">l2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">l1</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">+</span> <span class="n">l2</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">+</span> <span class="n">carry</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">carry</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">/</span> <span class="mi">10</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">l2</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">%</span> <span class="mi">10</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">l1</span> <span class="o">=</span> <span class="n">l1</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">l2</span> <span class="o">=</span> <span class="n">l2</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">l1</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">l2</span> <span class="o">=</span> <span class="n">l1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">l2node</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">l1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">tail</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">tail</span> <span class="o">=</span> <span class="n">l2node</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">((</span><span class="n">l2</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">carry</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">l2</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">tail</span> <span class="o">=</span> <span class="n">l2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">l2</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">+</span> <span class="n">carry</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">l2</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">%</span> <span class="mi">10</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">carry</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">/</span> <span class="mi">10</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">l2</span> <span class="o">=</span> <span class="n">l2</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">carry</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ListNode</span><span class="o">*</span> <span class="n">newnode</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ListNode</span><span class="p">(</span><span class="n">carry</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">tail</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">newnode</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学与技术
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                算法题
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/leetcode">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                leetcode
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E9%80%92%E5%BD%92">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                递归
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E9%93%BE%E8%A1%A8">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                链表
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Fri, 04 Apr 2025 00:00:00 &#43;0000" class="no-wrap"
+                title=" Fri, 04 Apr 2025 00:00:00 &#43;0000">
+                Fri, 04 Apr 2025 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/leetcodehot24%E4%B8%A4%E4%B8%A4%E4%BA%A4%E6%8D%A2%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E8%8A%82%E7%82%B9/">leetcode hot100 24 两两交换链表中的节点</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <h1 id="题目">题目</h1>
+<blockquote>
+<p>给你一个链表，两两交换其中相邻的节点，并返回交换后链表的头节点。你必须在不修改节点内部的值的情况下完成本题（即，只能进行节点交换）。</p>
+</blockquote>
+<h1 id="示例">示例</h1>
+<h2 id="示例一">示例一</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-04-04%2010.21.11.png" alt=""></p>
+<blockquote>
+<p><strong>输入</strong>：head = [1,2,3,4]
+<strong>输出</strong>：[2,1,4,3]</p>
+</blockquote>
+<h2 id="示例二">示例二</h2>
+<blockquote>
+<p><strong>输入</strong>：head = []            <br>
+<strong>输出</strong>：[]</p>
+</blockquote>
+<h2 id="示例三">示例三</h2>
+<blockquote>
+<p><strong>输入</strong>：head = [1]         <br>
+<strong>输出</strong>：[1]</p>
+</blockquote>
+<h1 id="提示">提示</h1>
+<ul>
+<li>链表中节点的数目在范围 [0, 100] 内</li>
+<li>0 &lt;= Node.val &lt;= 100</li>
+</ul>
+<h1 id="题解">题解</h1>
+<h2 id="方法一">方法一</h2>
+<ul>
+<li>分析
+<ul>
+<li>遍历一遍，交换相邻节点</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Definition for singly-linked list.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * struct ListNode {
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     int val;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode *next;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode() : val(0), next(nullptr) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x) : val(x), next(nullptr) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * };
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="n">exchange</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">node</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">node</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">temp</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">temp</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">node</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ListNode</span><span class="o">*</span> <span class="nf">swapPairs</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">head</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">newhead</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ListNode</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">newhead</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">newhead</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">ptr</span> <span class="o">!=</span> <span class="k">nullptr</span> <span class="o">&amp;&amp;</span> <span class="n">ptr</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">!=</span> <span class="k">nullptr</span> <span class="o">&amp;&amp;</span> <span class="n">ptr</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">exchange</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ptr</span> <span class="o">=</span> <span class="n">ptr</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">newhead</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">delete</span> <span class="n">newhead</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h2 id="方法二">方法二</h2>
+<ul>
+<li>分析
+<ul>
+<li>递归</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Definition for singly-linked list.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * struct ListNode {
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     int val;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode *next;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode() : val(0), next(nullptr) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x) : val(x), next(nullptr) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * };
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ListNode</span><span class="o">*</span> <span class="n">swapPairs</span><span class="p">(</span><span class="n">ListNode</span><span class="o">*</span> <span class="n">head</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">head</span> <span class="o">==</span> <span class="k">nullptr</span> <span class="o">||</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ListNode</span><span class="o">*</span> <span class="n">newhead</span> <span class="o">=</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">swapPairs</span><span class="p">(</span><span class="n">newhead</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">newhead</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">newhead</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h1 id="参考资料">参考资料</h1>
+<ul>
+<li><a href="https://leetcode.cn/problems/swap-nodes-in-pairs/solutions/444474/liang-liang-jiao-huan-lian-biao-zhong-de-jie-di-91/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode官方题解</a></li>
+</ul>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学与技术
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                算法题
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/leetcode">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                leetcode
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E9%80%92%E5%BD%92">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                递归
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E9%93%BE%E8%A1%A8">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                链表
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Fri, 04 Apr 2025 00:00:00 &#43;0000" class="no-wrap"
+                title=" Fri, 04 Apr 2025 00:00:00 &#43;0000">
+                Fri, 04 Apr 2025 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
                 <a href="https://y-m-m.github.io/post/leetcodehot141%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8/">leetcode hot100 141 环形链表</a>
               </h3>
             </div>
@@ -2673,928 +3525,6 @@
               <relative-time datetime=" Tue, 01 Apr 2025 00:00:00 &#43;0000" class="no-wrap"
                 title=" Tue, 01 Apr 2025 00:00:00 &#43;0000">
                 Tue, 01 Apr 2025 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/leetcodehot240%E6%90%9C%E7%B4%A2%E4%BA%8C%E7%BB%B4%E7%9F%A9%E9%98%B5%E4%BA%8C/">leetcode hot100 240 搜索二维矩阵二</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <p><a href="https://leetcode.cn/problems/search-a-2d-matrix-ii/description/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode hot100 240 搜索二维矩阵二</a></p>
-<h1 id="题目">题目</h1>
-<blockquote>
-<p>编写一个高效的算法来搜索 m x n 矩阵 matrix 中的一个目标值 target 。该矩阵具有以下特性：</p>
-<ul>
-<li>每行的元素从左到右升序排列。</li>
-<li>每列的元素从上到下升序排列。</li>
-</ul>
-</blockquote>
-<h1 id="示例">示例</h1>
-<h2 id="示例一">示例一</h2>
-<p><img src="/images/%E6%88%AA%E5%B1%8F2025-03-31%2012.51.16.png" alt=""></p>
-<blockquote>
-<p><strong>输入</strong>：matrix = [[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]], target = 5          <br>
-<strong>输出</strong>：true</p>
-</blockquote>
-<h2 id="示例二">示例二</h2>
-<p><img src="/images/%E6%88%AA%E5%B1%8F2025-03-31%2012.52.02.png" alt=""></p>
-<blockquote>
-<p><strong>输入</strong>：matrix = [[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]], target = 20
-<strong>输出</strong>：false</p>
-</blockquote>
-<h1 id="提示">提示</h1>
-<ul>
-<li>m == matrix.length</li>
-<li>n == matrix[i].length</li>
-<li>1 &lt;= n, m &lt;= 300</li>
-<li>-10<sup>9</sup> &lt;= matrix[i][j] &lt;= 10<sup>9</sup></li>
-<li>每行的所有元素从左到右升序排列</li>
-<li>每列的所有元素从上到下升序排列</li>
-<li>-10<sup>9</sup> &lt;= target &lt;= 10<sup>9</sup></li>
-</ul>
-<h1 id="题解">题解</h1>
-<h2 id="方法一">方法一</h2>
-<ul>
-<li>分析
-<ul>
-<li>沿矩形对称轴二分查找，确定与target相邻的两个数，再进一步确定target是否存在</li>
-</ul>
-</li>
-<li>提交结果
-<ul>
-<li>125/130个通过的测试样例</li>
-<li>解答错误</li>
-</ul>
-</li>
-<li>存在的问题
-<ul>
-<li>如果存在i1, j1; i2, j2</li>
-<li>i1 &gt; i2</li>
-<li>j1 &lt; j2</li>
-<li>不能确定两者的大小关系</li>
-</ul>
-</li>
-</ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">binaryfind</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">matrix</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">target</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">bias</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">mindim</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">nownum</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="o">&gt;</span> <span class="n">n</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">nownum</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">[</span><span class="n">mid</span> <span class="o">+</span> <span class="n">bias</span><span class="p">][</span><span class="n">mid</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">m</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">nownum</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">[</span><span class="n">mid</span><span class="p">][</span><span class="n">mid</span> <span class="o">+</span> <span class="n">bias</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="k">else</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">nownum</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">[</span><span class="n">mid</span><span class="p">][</span><span class="n">mid</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">nownum</span> <span class="o">&gt;</span> <span class="n">target</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">r</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="k">else</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">l</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">lastr</span> <span class="o">=</span> <span class="n">mindim</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">lastc</span> <span class="o">=</span> <span class="n">mindim</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">firstr</span> <span class="o">=</span> <span class="n">r</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">firstc</span> <span class="o">=</span> <span class="n">r</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">secondr</span> <span class="o">=</span> <span class="n">l</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">secondc</span> <span class="o">=</span> <span class="n">l</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="o">&gt;</span> <span class="n">n</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">lastr</span> <span class="o">+=</span> <span class="n">bias</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="n">firstr</span> <span class="o">+=</span> <span class="n">bias</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="n">secondr</span> <span class="o">+=</span> <span class="n">bias</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">m</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">lastc</span> <span class="o">+=</span> <span class="n">bias</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="n">firstc</span> <span class="o">+=</span> <span class="n">bias</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="n">secondc</span> <span class="o">+=</span> <span class="n">bias</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&gt;=</span> <span class="n">mindim</span> <span class="o">&amp;&amp;</span> <span class="n">matrix</span><span class="p">[</span><span class="n">lastr</span><span class="p">][</span><span class="n">lastc</span><span class="p">]</span> <span class="o">!=</span> <span class="n">target</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">firstr</span><span class="p">][</span><span class="n">firstc</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">firstr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">firstc</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">firstc</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">matrix</span><span class="p">[</span><span class="n">secondr</span><span class="p">][</span><span class="n">secondc</span><span class="p">])</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">break</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">firstc</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">firstr</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">firstr</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">matrix</span><span class="p">[</span><span class="n">secondr</span><span class="p">][</span><span class="n">secondc</span><span class="p">])</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">break</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">firstr</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">secondc</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">secondc</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">matrix</span><span class="p">[</span><span class="n">firstr</span><span class="p">][</span><span class="n">firstc</span><span class="p">])</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">break</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">firstc</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">--</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">secondr</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">secondr</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">matrix</span><span class="p">[</span><span class="n">firstr</span><span class="p">][</span><span class="n">firstc</span><span class="p">])</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">break</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">firstr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">firstc</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="nf">searchMatrix</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">matrix</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">m</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">        <span class="n">n</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">size</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="o">&gt;</span> <span class="n">n</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">shape</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">shape</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">else</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">shape</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="n">mindim</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="n">mindim</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">cnt</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">binaryfind</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">m</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">shape</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">mindim</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div><h2 id="方法二">方法二</h2>
-<ul>
-<li>分析
-<ul>
-<li>通过对当前矩阵的第一行、第一列进行二分查找，缩小矩阵的范围，舍弃第一行、第一列、比target大的行、比target大的列</li>
-</ul>
-</li>
-<li>提交结果
-<ul>
-<li>通过</li>
-</ul>
-</li>
-</ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">subfind</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">matrix</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">,</span> <span class="kt">int</span> <span class="n">beginr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">beginc</span><span class="p">,</span> <span class="kt">int</span> <span class="n">endr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">endc</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="c1">// cout &lt;&lt; beginr &lt;&lt; &#34;, &#34; &lt;&lt; beginc &lt;&lt; &#34;, &#34; &lt;&lt; endr &lt;&lt; &#34;, &#34; &lt;&lt; endc &lt;&lt; endl;
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">beginr</span> <span class="o">&gt;</span> <span class="n">endr</span> <span class="o">||</span> <span class="n">beginc</span> <span class="o">&gt;</span> <span class="n">endc</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">rl</span> <span class="o">=</span> <span class="n">beginr</span><span class="p">,</span> <span class="n">rr</span> <span class="o">=</span> <span class="n">endr</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">rl</span> <span class="o">&lt;=</span> <span class="n">rr</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">rl</span> <span class="o">+</span> <span class="n">rr</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">mid</span><span class="p">][</span><span class="n">beginc</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">target</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">rr</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span> 
-</span></span><span class="line"><span class="cl">            <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">mid</span><span class="p">][</span><span class="n">beginc</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">rl</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="k">else</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">rr</span> <span class="o">&lt;</span> <span class="n">beginr</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">newendr</span> <span class="o">=</span> <span class="n">rr</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">ll</span> <span class="o">=</span> <span class="n">beginc</span><span class="p">,</span> <span class="n">lr</span> <span class="o">=</span> <span class="n">endc</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">ll</span> <span class="o">&lt;=</span> <span class="n">lr</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">ll</span> <span class="o">+</span> <span class="n">lr</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">beginr</span><span class="p">][</span><span class="n">mid</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">target</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">lr</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">beginr</span><span class="p">][</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">ll</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="k">else</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">lr</span> <span class="o">&lt;</span> <span class="n">beginc</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="c1">// cout &lt;&lt; &#34;lr = &#34; &lt;&lt; lr &lt;&lt; endl;
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">int</span> <span class="n">newendc</span> <span class="o">=</span> <span class="n">lr</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nf">subfind</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">beginr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">beginc</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">newendr</span><span class="p">,</span> <span class="n">newendc</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="nf">searchMatrix</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">matrix</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">subfind</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">matrix</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div><h2 id="方法三">方法三</h2>
-<ul>
-<li>分析
-<ul>
-<li>直接遍历</li>
-</ul>
-</li>
-<li>提交结果
-<ul>
-<li>通过</li>
-</ul>
-</li>
-</ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">searchMatrix</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">matrix</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">size</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">                <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div><h2 id="方法四">方法四</h2>
-<ul>
-<li>分析
-<ul>
-<li>对每一行分别二分查找</li>
-</ul>
-</li>
-<li>提交结果
-<ul>
-<li>通过</li>
-</ul>
-</li>
-</ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">searchMatrix</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">matrix</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="nl">row</span><span class="p">:</span> <span class="n">matrix</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">lower_bound</span><span class="p">(</span><span class="n">row</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">row</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">target</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">!=</span> <span class="n">row</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">it</span> <span class="o">==</span> <span class="n">target</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div><h2 id="方法五">方法五</h2>
-<ul>
-<li>分析
-<ul>
-<li>一个元素(x, y)可以确定
-<ul>
-<li>如果matrix(x, y) &gt; target，则第其以下、以右的元素均 &gt; target</li>
-<li>如果matrix(x, y) &lt; target, 则其以左、以上的元素均 &lt; target</li>
-</ul>
-</li>
-<li>同时考虑这两个因素，可知左下角和右上角的元素可以很容易的通过简单比较而让矩阵缩小</li>
-</ul>
-</li>
-<li>提交结果
-<ul>
-<li>通过</li>
-</ul>
-</li>
-</ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">searchMatrix</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">matrix</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">size</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">target</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">y</span><span class="o">--</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">x</span><span class="o">++</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="k">else</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机科学与技术
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                算法题
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/leetcode">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                leetcode
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%95%B0%E7%BB%84">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                数组
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                二分查找
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Mon, 31 Mar 2025 00:00:00 &#43;0000" class="no-wrap"
-                title=" Mon, 31 Mar 2025 00:00:00 &#43;0000">
-                Mon, 31 Mar 2025 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/leetcodehot48%E6%97%8B%E8%BD%AC%E5%9B%BE%E5%83%8F/">leetcode hot100 48 旋转图像</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <p><a href="https://leetcode.cn/problems/rotate-image/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode hot100 48 旋转图像</a></p>
-<h1 id="题目">题目</h1>
-<blockquote>
-<p>给定一个 n × n 的二维矩阵 matrix 表示一个图像。请你将图像顺时针旋转 90 度。                 <br>
-你必须在 原地 旋转图像，这意味着你需要直接修改输入的二维矩阵。请不要 使用另一个矩阵来旋转图像。</p>
-</blockquote>
-<h1 id="示例">示例</h1>
-<h2 id="示例一">示例一</h2>
-<p><img src="/images/%E6%88%AA%E5%B1%8F2025-03-31%2010.55.03.png" alt=""></p>
-<blockquote>
-<p><strong>输入</strong>：matrix = [[1,2,3],[4,5,6],[7,8,9]]         <br>
-<strong>输出</strong>：[[7,4,1],[8,5,2],[9,6,3]]</p>
-</blockquote>
-<h2 id="示例二">示例二</h2>
-<p><img src="/images/%E6%88%AA%E5%B1%8F2025-03-31%2010.55.52.png" alt=""></p>
-<blockquote>
-<p><strong>输入</strong>：matrix = [[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]]         <br>
-<strong>输出</strong>：[[15,13,2,5],[14,3,4,1],[12,6,8,9],[16,7,10,11]]</p>
-</blockquote>
-<h1 id="提示">提示</h1>
-<ul>
-<li>n == matrix.length == matrix[i].length</li>
-<li>1 &lt;= n &lt;= 20</li>
-<li>-1000 &lt;= matrix[i][j] &lt;= 1000</li>
-</ul>
-<h1 id="提交结果">提交结果</h1>
-<ul>
-<li>分析
-<ul>
-<li>swap</li>
-<li>对于每一圈的0～n - 2的每一个数字，交换3次即可全部放到指定位置</li>
-</ul>
-</li>
-<li>提交结果
-<ul>
-<li>通过</li>
-</ul>
-</li>
-</ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="n">rotate</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">matrix</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">swap</span><span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">cnt</span><span class="p">][</span><span class="n">cnt</span> <span class="o">+</span> <span class="n">i</span><span class="p">],</span> <span class="n">matrix</span><span class="p">[</span><span class="n">cnt</span> <span class="o">+</span> <span class="n">i</span><span class="p">][</span><span class="n">cnt</span> <span class="o">+</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
-</span></span><span class="line"><span class="cl">                <span class="n">swap</span><span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">cnt</span><span class="p">][</span><span class="n">cnt</span> <span class="o">+</span> <span class="n">i</span><span class="p">],</span> <span class="n">matrix</span><span class="p">[</span><span class="n">cnt</span> <span class="o">+</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">cnt</span> <span class="o">+</span> <span class="n">n</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
-</span></span><span class="line"><span class="cl">                <span class="n">swap</span><span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">cnt</span><span class="p">][</span><span class="n">cnt</span> <span class="o">+</span> <span class="n">i</span><span class="p">],</span> <span class="n">matrix</span><span class="p">[</span><span class="n">cnt</span> <span class="o">+</span> <span class="n">n</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">cnt</span><span class="p">]);</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="n">cnt</span><span class="o">++</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="n">n</span> <span class="o">-=</span> <span class="mi">2</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机科学与技术
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                算法题
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/leetcode">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                leetcode
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%95%B0%E7%BB%84">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                数组
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%95%B0%E5%AD%A6">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                数学
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Mon, 31 Mar 2025 00:00:00 &#43;0000" class="no-wrap"
-                title=" Mon, 31 Mar 2025 00:00:00 &#43;0000">
-                Mon, 31 Mar 2025 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/leetcodehot54%E8%9E%BA%E6%97%8B%E7%9F%A9%E9%98%B5/">leetcode hot100 54 螺旋矩阵</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <p><a href="https://leetcode.cn/problems/spiral-matrix/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode hot100 54 螺旋矩阵</a></p>
-<h1 id="题目">题目</h1>
-<blockquote>
-<p>给你一个 m 行 n 列的矩阵 matrix ，请按照 顺时针螺旋顺序 ，返回矩阵中的所有元素。</p>
-</blockquote>
-<h1 id="示例">示例</h1>
-<h2 id="示例一">示例一</h2>
-<p><img src="/images/%E6%88%AA%E5%B1%8F2025-03-31%2010.17.43.png" alt=""></p>
-<blockquote>
-<p>输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]                       <br>
-输出：[1,2,3,6,9,8,7,4,5]</p>
-</blockquote>
-<h2 id="示例二">示例二</h2>
-<p><img src="/images/%E6%88%AA%E5%B1%8F2025-03-31%2010.18.17.png" alt=""></p>
-<blockquote>
-<p>输入：matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]            <br>
-输出：[1,2,3,4,8,12,11,10,9,5,6,7]</p>
-</blockquote>
-<h1 id="提示">提示</h1>
-<ul>
-<li>m == matrix.length</li>
-<li>n == matrix[i].length</li>
-<li>1 &lt;= m, n &lt;= 10</li>
-<li>-100 &lt;= matrix[i][j] &lt;= 100</li>
-</ul>
-<h1 id="题解">题解</h1>
-<h2 id="方法一">方法一</h2>
-<ul>
-<li>分析
-<ul>
-<li>模拟</li>
-</ul>
-</li>
-<li>提交结果
-<ul>
-<li>通过</li>
-</ul>
-</li>
-</ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">spiralOrder</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">matrix</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">row</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">col</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">size</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">row</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">col</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="c1">// cout &lt;&lt; &#34;row = &#34; &lt;&lt; row &lt;&lt; &#34;, col = &#34; &lt;&lt; col &lt;&lt; endl;
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">cnt</span> <span class="o">&lt;</span> <span class="n">col</span><span class="p">;</span> <span class="n">cnt</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]);</span>
-</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">cnt</span> <span class="o">!=</span> <span class="n">col</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">                <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                    <span class="n">j</span><span class="o">++</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="n">row</span><span class="o">--</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="n">i</span><span class="o">++</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">row</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">break</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">cnt</span> <span class="o">&lt;</span> <span class="n">row</span><span class="p">;</span> <span class="n">cnt</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]);</span>
-</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">cnt</span> <span class="o">!=</span> <span class="n">row</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">                <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                    <span class="n">i</span><span class="o">++</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="n">col</span><span class="o">--</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="n">j</span><span class="o">--</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">col</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">break</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">cnt</span> <span class="o">&lt;</span> <span class="n">col</span><span class="p">;</span> <span class="n">cnt</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]);</span>
-</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">cnt</span> <span class="o">!=</span> <span class="n">col</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">                <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                    <span class="n">j</span><span class="o">--</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="n">row</span><span class="o">--</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="n">i</span><span class="o">--</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">row</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">break</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">cnt</span> <span class="o">&lt;</span> <span class="n">row</span><span class="p">;</span> <span class="n">cnt</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">ans</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]);</span>
-</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">cnt</span> <span class="o">!=</span> <span class="n">row</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">                <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                    <span class="n">i</span><span class="o">--</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="n">col</span><span class="o">--</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="n">j</span><span class="o">++</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机科学与技术
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                算法题
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/leetcode">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                leetcode
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%95%B0%E7%BB%84">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                数组
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%9F%A9%E9%98%B5">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                矩阵
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Mon, 31 Mar 2025 00:00:00 &#43;0000" class="no-wrap"
-                title=" Mon, 31 Mar 2025 00:00:00 &#43;0000">
-                Mon, 31 Mar 2025 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/leetcodehot238%E9%99%A4%E8%87%AA%E8%BA%AB%E4%BB%A5%E5%A4%96%E6%95%B0%E7%BB%84%E7%9A%84%E4%B9%98%E7%A7%AF/">leetcode hot100 238 除自身以外数组的乘积</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <p><a href="https://leetcode.cn/problems/product-of-array-except-self/description/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode 238 除自身以外数组的乘积</a></p>
-<h1 id="题目">题目</h1>
-<blockquote>
-<p>给你一个整数数组 nums，返回 数组 answer ，其中 answer[i] 等于 nums 中除 nums[i] 之外其余各元素的乘积 。                <br>
-题目数据 保证 数组 nums之中任意元素的全部前缀元素和后缀的乘积都在  32 位 整数范围内。                       <br>
-请 不要使用除法，且在 O(n) 时间复杂度内完成此题。</p>
-</blockquote>
-<h1 id="示例">示例</h1>
-<h2 id="示例-1">示例 1:</h2>
-<blockquote>
-<p>输入: nums = [1,2,3,4]          <br>
-输出: [24,12,8,6]</p>
-</blockquote>
-<h2 id="示例-2">示例 2:</h2>
-<blockquote>
-<p>输入: nums = [-1,1,0,-3,3]          <br>
-输出: [0,0,9,0,0]</p>
-</blockquote>
-<h1 id="提示">提示</h1>
-<ul>
-<li>2 &lt;= nums.length &lt;= 10<sup>5</sup></li>
-<li>-30 &lt;= nums[i] &lt;= 30</li>
-<li>输入 保证 数组 answer[i] 在  32 位 整数范围内</li>
-</ul>
-<h1 id="题解">题解</h1>
-<h2 id="方法一">方法一</h2>
-<ul>
-<li>分析
-<ul>
-<li>前缀+后缀</li>
-</ul>
-</li>
-<li>提交结果
-<ul>
-<li>通过</li>
-</ul>
-</li>
-</ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">productExceptSelf</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">pre</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">suf</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">pre</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">        <span class="n">suf</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">back</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">pre</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">pre</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">suf</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">suf</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">ans</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">suf</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">        <span class="n">ans</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">pre</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">pre</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">suf</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div><h2 id="方法二">方法二</h2>
-<ul>
-<li>分析
-<ul>
-<li>直接在ans数组上进行操作</li>
-<li></li>
-</ul>
-</li>
-<li>提交结果
-<ul>
-<li>通过</li>
-</ul>
-</li>
-</ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">productExceptSelf</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ans</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">suf</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">suf</span> <span class="o">=</span> <span class="n">suf</span> <span class="o">*</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">            <span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">suf</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机科学与技术
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                算法题
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/leetcode">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                leetcode
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%95%B0%E7%BB%84">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                数组
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%89%8D%E7%BC%80%E5%92%8C">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                前缀和
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Sun, 30 Mar 2025 00:00:00 &#43;0000" class="no-wrap"
-                title=" Sun, 30 Mar 2025 00:00:00 &#43;0000">
-                Sun, 30 Mar 2025 00:00:00 &#43;0000
               </relative-time>
             </div>
           </div>

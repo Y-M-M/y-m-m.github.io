@@ -151,7 +151,7 @@
                 </path>
               </svg>
               Posts
-              <span class="Counter">194</span>
+              <span class="Counter">199</span>
             </a>
           </nav>
           <div class="profile-color-modes js-promo-color-modes-banner-profile isInitialToggle">
@@ -430,7 +430,7 @@
         </path>
       </svg>
       Posts
-      <span class="Counter ">194</span>
+      <span class="Counter ">199</span>
     </a>
   </nav>
 </div>
@@ -454,6 +454,710 @@
           Popular posts
         </h2>
         <ol class="d-flex flex-wrap list-style-none gutter-condensed mb-4 js-pinned-items-reorder-list">
+          
+          <li class="col-12 col-md-6 col-lg-6 mb-3 d-flex flex-content-stretch">
+            <div
+              class="Box pinned-item-list-item d-flex p-3 width-full js-pinned-item-list-item public source reorderable sortable-button-item">
+              <div class="pinned-item-list-item-content">
+                <div class="d-flex width-full flex-items-center position-relative">
+                  <svg class="octicon octicon-repo mr-2 text-gray flex-shrink-0" viewBox="0 0 16 16" version="1.1"
+                    width="16" height="16">
+                    <path fill-rule="evenodd"
+                      d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z">
+                    </path>
+                  </svg>
+                  <a class="text-bold flex-auto min-width-0" href="https://y-m-m.github.io/post/leetcodehot32%E6%9C%80%E9%95%BF%E6%9C%89%E6%95%88%E6%8B%AC%E5%8F%B7/">
+                    <span class="repo" title="leetcode hot100 32 最长有效括号">leetcode hot100 32 最长有效括号</span>
+                  </a>
+                </div>
+
+
+                <div name="summary" class="pinned-item-desc text-gray text-small d-block mt-2 mb-3">
+                  <p><a href="https://leetcode.cn/problems/longest-valid-parentheses/description/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode hot100 32 最长有效括号</a></p>
+<h1 id="题目">题目</h1>
+<blockquote>
+<p>给你一个只包含 &lsquo;(&rsquo; 和 &lsquo;)&rsquo; 的字符串，找出最长有效（格式正确且连续）括号 子串 的长度。     <br>
+左右括号匹配，即每个左括号都有对应的右括号将其闭合的字符串是格式正确的，比如 &ldquo;(()())&quot;。</p>
+</blockquote>
+<h1 id="示例">示例</h1>
+<h2 id="示例-1">示例 1：</h2>
+<blockquote>
+<p>输入：s = &ldquo;(()&rdquo;     <br>
+输出：2      <br>
+解释：最长有效括号子串是 &ldquo;()&rdquo;</p>
+</blockquote>
+<h2 id="示例-2">示例 2：</h2>
+<blockquote>
+<p>输入：s = &ldquo;)()())&rdquo;      <br>
+输出：4       <br>
+解释：最长有效括号子串是 &ldquo;()()&rdquo;</p>
+</blockquote>
+<h2 id="示例-3">示例 3：</h2>
+<blockquote>
+<p>输入：s = &quot;&rdquo;      <br>
+输出：0</p>
+</blockquote>
+<h1 id="提示">提示</h1>
+<ul>
+<li>0 &lt;= s.length &lt;= 3 * 10<sup>4</sup></li>
+<li>s[i] 为 &lsquo;(&rsquo; 或 &lsquo;)&rsquo;</li>
+</ul>
+<h1 id="题解">题解</h1>
+<h2 id="方法一">方法一</h2>
+<ul>
+<li>分析
+<ul>
+<li>以pos结尾的子串若是有效子串，则必满足如下条件
+<ul>
+<li>pos - 1 为&rsquo;)&lsquo;时，则其前面可有任意个有效子串，再往前的字符为&rsquo;(&rsquo;</li>
+<li>pos - 1为&rsquo;(&lsquo;时，构成长度为2的有效子串</li>
+</ul>
+</li>
+<li>在此基础上还需注意：有效子串拼接后仍为有效子串</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">findlen</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nowlen</span><span class="p">,</span> <span class="kt">int</span> <span class="n">pos</span><span class="p">,</span> <span class="kt">int</span> <span class="n">prepos</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">prepos</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;(&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">pos</span> <span class="o">-</span> <span class="n">prepos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">nowlen</span><span class="p">[</span><span class="n">prepos</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="kt">int</span> <span class="n">newprepos</span> <span class="o">=</span> <span class="n">prepos</span> <span class="o">-</span> <span class="n">nowlen</span><span class="p">[</span><span class="n">prepos</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">newprepos</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="nf">findlen</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">nowlen</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">newprepos</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">combine</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nowlen</span><span class="p">,</span> <span class="kt">int</span> <span class="n">pos</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">prepos</span> <span class="o">=</span> <span class="n">pos</span> <span class="o">-</span> <span class="n">nowlen</span><span class="p">[</span><span class="n">pos</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">prepos</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">nowlen</span><span class="p">[</span><span class="n">prepos</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">nowlen</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">+=</span> <span class="n">nowlen</span><span class="p">[</span><span class="n">prepos</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="n">combine</span><span class="p">(</span><span class="n">nowlen</span><span class="p">,</span> <span class="n">pos</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="nf">longestValidParentheses</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">length</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">n</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">nowlen</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">nowlen</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;(&#39;</span><span class="p">)</span> <span class="n">nowlen</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">nowlen</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">findlen</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">nowlen</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">combine</span><span class="p">(</span><span class="n">nowlen</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ans</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">nowlen</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h2 id="方法二">方法二</h2>
+<ul>
+<li>分析
+<ul>
+<li>栈</li>
+<li>栈底一开始存入-1，之后
+<ul>
+<li>对于 &lsquo;(&rsquo;，存入其下标</li>
+<li>对于 &lsquo;)&rsquo;，将栈顶元素出栈
+<ul>
+<li>若出栈后栈中还有元素，说明刚刚出栈的元素与&rsquo;)&lsquo;构成有效子串</li>
+<li>若出栈后栈中没有元素，说明刚刚出栈的元素不能与&rsquo;)&lsquo;构成有效子串，此时应将当前&rsquo;)&lsquo;的下标入栈，继续进行后续操作</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">longestValidParentheses</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">invalidpos</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">invalidpos</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">length</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;(&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">invalidpos</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">invalidpos</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">invalidpos</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">ans</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">invalidpos</span><span class="p">.</span><span class="n">top</span><span class="p">(),</span> <span class="n">ans</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="k">else</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">invalidpos</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h2 id="方法三">方法三</h2>
+<ul>
+<li>分析
+<ul>
+<li>从左往右遍历，只要保证左括号数目始终不超过右括号数目，等左右括号数目相等时，即可获得最长有效子串</li>
+<li>这种方法会漏掉一种情况，当左括号数目始终多于右括号时，就无法求的最长子串的长度</li>
+<li>从右往左遍历一次，重复此过程，即可解决这个问题</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">longestValidParentheses</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">length</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;(&#39;</span><span class="p">)</span> <span class="n">left</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span> <span class="n">right</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">left</span> <span class="o">==</span> <span class="n">right</span><span class="p">)</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">left</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">ans</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">right</span> <span class="o">&gt;</span> <span class="n">left</span><span class="p">)</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;(&#39;</span><span class="p">)</span> <span class="n">left</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span> <span class="n">right</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">left</span> <span class="o">==</span> <span class="n">right</span><span class="p">)</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">left</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">ans</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">left</span> <span class="o">&gt;</span> <span class="n">right</span><span class="p">)</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div>
+                </div>
+
+                <p class="mb-0 f6 text-gray">
+                  
+                  
+                  <a href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    计算机科学与技术
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    算法题
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/leetcode" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    leetcode
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/%E6%A0%88" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    栈
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    字符串
+                  </a>
+                  
+                  
+                </p>
+              </div>
+            </div>
+          </li>
+          
+          <li class="col-12 col-md-6 col-lg-6 mb-3 d-flex flex-content-stretch">
+            <div
+              class="Box pinned-item-list-item d-flex p-3 width-full js-pinned-item-list-item public source reorderable sortable-button-item">
+              <div class="pinned-item-list-item-content">
+                <div class="d-flex width-full flex-items-center position-relative">
+                  <svg class="octicon octicon-repo mr-2 text-gray flex-shrink-0" viewBox="0 0 16 16" version="1.1"
+                    width="16" height="16">
+                    <path fill-rule="evenodd"
+                      d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z">
+                    </path>
+                  </svg>
+                  <a class="text-bold flex-auto min-width-0" href="https://y-m-m.github.io/post/leetcodehot416%E5%88%86%E5%89%B2%E7%AD%89%E5%92%8C%E5%AD%90%E9%9B%86/">
+                    <span class="repo" title="leetcode hot100 416 分割等和子集">leetcode hot100 416 分割等和子集</span>
+                  </a>
+                </div>
+
+
+                <div name="summary" class="pinned-item-desc text-gray text-small d-block mt-2 mb-3">
+                  <p><a href="https://leetcode.cn/problems/partition-equal-subset-sum/description/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode hot100 416 分割等和子集</a></p>
+<h1 id="题目">题目</h1>
+<blockquote>
+<p>给你一个 只包含正整数 的 非空 数组 nums 。请你判断是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。</p>
+</blockquote>
+<h1 id="示例">示例</h1>
+<h2 id="示例一">示例一</h2>
+<blockquote>
+<p><strong>输入</strong>：nums = [1,5,11,5]   <br>
+<strong>输出</strong>：true      <br>
+<strong>解释</strong>：数组可以分割成 [1, 5, 5] 和 [11] 。</p>
+</blockquote>
+<h2 id="示例二">示例二</h2>
+<blockquote>
+<p><strong>输入</strong>：nums = [1,2,3,5]      <br>
+<strong>输出</strong>：false   <br>
+<strong>解释</strong>：数组不能分割成两个元素和相等的子集。</p>
+</blockquote>
+<h1 id="提示">提示</h1>
+<ul>
+<li>1 &lt;= nums.length &lt;= 200</li>
+<li>1 &lt;= nums[i] &lt;= 100</li>
+</ul>
+<h1 id="题解">题解</h1>
+<h2 id="方法一">方法一</h2>
+<ul>
+<li>分析
+<ul>
+<li>动态规划
+<ul>
+<li>计算所有数字的和sum，然后可将问题转化为求数组中能不能找出和为sum/2的元素(元素不重复)，即0-1背包问题</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">canPartition</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="nl">num</span> <span class="p">:</span> <span class="n">nums</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">sum</span> <span class="o">+=</span> <span class="n">num</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">sum</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">target</span> <span class="o">=</span> <span class="n">sum</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">target</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;&gt;</span> <span class="n">dp</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">(</span><span class="n">target</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">false</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">        <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">target</span><span class="p">)</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">)</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">target</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">j</span><span class="p">)</span> 
+</span></span><span class="line"><span class="cl">                    <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">                <span class="k">else</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">||</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]];</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">target</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div>
+                </div>
+
+                <p class="mb-0 f6 text-gray">
+                  
+                  
+                  <a href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    计算机科学与技术
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    算法题
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/leetcode" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    leetcode
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/%E6%95%B0%E7%BB%84" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    数组
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    动态规划
+                  </a>
+                  
+                  
+                </p>
+              </div>
+            </div>
+          </li>
+          
+          <li class="col-12 col-md-6 col-lg-6 mb-3 d-flex flex-content-stretch">
+            <div
+              class="Box pinned-item-list-item d-flex p-3 width-full js-pinned-item-list-item public source reorderable sortable-button-item">
+              <div class="pinned-item-list-item-content">
+                <div class="d-flex width-full flex-items-center position-relative">
+                  <svg class="octicon octicon-repo mr-2 text-gray flex-shrink-0" viewBox="0 0 16 16" version="1.1"
+                    width="16" height="16">
+                    <path fill-rule="evenodd"
+                      d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z">
+                    </path>
+                  </svg>
+                  <a class="text-bold flex-auto min-width-0" href="https://y-m-m.github.io/post/leetcodehot62%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84/">
+                    <span class="repo" title="leetcode hot100 62 不同路径">leetcode hot100 62 不同路径</span>
+                  </a>
+                </div>
+
+
+                <div name="summary" class="pinned-item-desc text-gray text-small d-block mt-2 mb-3">
+                  <p><a href="https://leetcode.cn/problems/unique-paths/description/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode hot100 62 不同路径</a></p>
+<h1 id="题目">题目</h1>
+<blockquote>
+<p>一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为 “Start” ）。     <br>
+机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为 “Finish” ）。       <br>
+问总共有多少条不同的路径？</p>
+</blockquote>
+<h1 id="示例">示例</h1>
+<h2 id="示例-1">示例 1：</h2>
+<blockquote>
+<p><strong>输入</strong>：m = 3, n = 7        <br>
+<strong>输出</strong>：28</p>
+</blockquote>
+<h2 id="示例-2">示例 2：</h2>
+<blockquote>
+<p><strong>输入</strong>：m = 3, n = 2     <br>
+<strong>输出</strong>：3      <br>
+<strong>解释</strong>：     <br>
+从左上角开始，总共有 3 条路径可以到达右下角。</p>
+<ol>
+<li>向右 -&gt; 向下 -&gt; 向下</li>
+<li>向下 -&gt; 向下 -&gt; 向右</li>
+<li>向下 -&gt; 向右 -&gt; 向下</li>
+</ol>
+</blockquote>
+<h2 id="示例-3">示例 3：</h2>
+<blockquote>
+<p><strong>输入</strong>：m = 7, n = 3      <br>
+<strong>输出</strong>：28</p>
+</blockquote>
+<h2 id="示例-4">示例 4：</h2>
+<blockquote>
+<p><strong>输入</strong>：m = 3, n = 3     <br>
+<strong>输出</strong>：6</p>
+                </div>
+
+                <p class="mb-0 f6 text-gray">
+                  
+                  
+                  <a href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    计算机科学与技术
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    算法题
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/leetcode" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    leetcode
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/%E6%95%B0%E5%AD%A6" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    数学
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    动态规划
+                  </a>
+                  
+                  
+                </p>
+              </div>
+            </div>
+          </li>
+          
+          <li class="col-12 col-md-6 col-lg-6 mb-3 d-flex flex-content-stretch">
+            <div
+              class="Box pinned-item-list-item d-flex p-3 width-full js-pinned-item-list-item public source reorderable sortable-button-item">
+              <div class="pinned-item-list-item-content">
+                <div class="d-flex width-full flex-items-center position-relative">
+                  <svg class="octicon octicon-repo mr-2 text-gray flex-shrink-0" viewBox="0 0 16 16" version="1.1"
+                    width="16" height="16">
+                    <path fill-rule="evenodd"
+                      d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z">
+                    </path>
+                  </svg>
+                  <a class="text-bold flex-auto min-width-0" href="https://y-m-m.github.io/post/leetcodehot152%E4%B9%98%E7%A7%AF%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84/">
+                    <span class="repo" title="leetcode hot100 152 乘积最大子数组">leetcode hot100 152 乘积最大子数组</span>
+                  </a>
+                </div>
+
+
+                <div name="summary" class="pinned-item-desc text-gray text-small d-block mt-2 mb-3">
+                  <p><a href="https://leetcode.cn/problems/maximum-product-subarray/description/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode hot100 152 乘积最大子数组</a></p>
+<h1 id="题目">题目</h1>
+<blockquote>
+<p>给你一个整数数组 nums ，请你找出数组中乘积最大的非空连续 子数组（该子数组中至少包含一个数字），并返回该子数组所对应的乘积。</p>
+</blockquote>
+<blockquote>
+<p>测试用例的答案是一个 32-位 整数。</p>
+</blockquote>
+<h1 id="示例">示例</h1>
+<h2 id="示例一">示例一</h2>
+<blockquote>
+<p><strong>输入</strong>: nums = [2,3,-2,4]       <br>
+<strong>输出</strong>: 6      <br>
+<strong>解释</strong>: 子数组 [2,3] 有最大乘积 6。</p>
+</blockquote>
+<h2 id="示例二">示例二</h2>
+<blockquote>
+<p><strong>输入</strong>: nums = [-2,0,-1]     <br>
+<strong>输出</strong>: 0      <br>
+<strong>解释</strong>: 结果不能为 2, 因为 [-2,-1] 不是子数组。</p>
+</blockquote>
+<h1 id="提示">提示</h1>
+<ul>
+<li>1 &lt;= nums.length &lt;= 2 * 10<sup>4</sup></li>
+<li>-10 &lt;= nums[i] &lt;= 10</li>
+<li>nums 的任何子数组的乘积都 保证 是一个 32-位 整数</li>
+</ul>
+<h1 id="题解">题解</h1>
+<h2 id="方法一">方法一</h2>
+<ul>
+<li>分析
+<ul>
+<li>动态规划</li>
+<li>最优子结构
+<ul>
+<li>maxproduct[i] = max(maxproduct[i - 1] * nums[i], minproduct[i - 1] * nums[i], nums[i])</li>
+<li>minproduct[i] = min(maxproduct[i - 1] * nums[i], minproduct[i - 1] * nums[i], nums[i])</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">maxProduct</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">maxnum</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">minnum</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">maxnum</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="n">minnum</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">maxnum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">maxnum</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">maxnum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span> <span class="n">minnum</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">maxnum</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">minnum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">minnum</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">minnum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">maxnum</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">minnum</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="o">-</span><span class="n">INT32_MAX</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="nl">num</span> <span class="p">:</span> <span class="n">maxnum</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ans</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">num</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><h2 id="方法二">方法二</h2>
+<ul>
+<li>分析
+<ul>
+<li>思路与方法一相同</li>
+<li>在方法一的基础上，其实只需要记录minproduct[i - 1], maxproduct[i - 1], minproduct[i], maxproduct[i]这四个数字，并不断更新即可</li>
+</ul>
+</li>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">maxProduct</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">beforemax</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">beforemin</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">maxnum</span><span class="p">,</span> <span class="n">minnum</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">beforemax</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">maxnum</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">beforemax</span> <span class="o">*</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">maxnum</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">beforemin</span> <span class="o">*</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">maxnum</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">minnum</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">beforemax</span> <span class="o">*</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">minnum</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">beforemin</span> <span class="o">*</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">minnum</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">maxnum</span> <span class="o">&gt;</span> <span class="n">ans</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ans</span> <span class="o">=</span> <span class="n">maxnum</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">beforemax</span> <span class="o">=</span> <span class="n">maxnum</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">beforemin</span> <span class="o">=</span> <span class="n">minnum</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div>
+                </div>
+
+                <p class="mb-0 f6 text-gray">
+                  
+                  
+                  <a href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    计算机科学与技术
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    算法题
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/leetcode" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    leetcode
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/%E6%95%B0%E7%BB%84" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    数组
+                  </a>
+                  
+                  <a href="https://y-m-m.github.io/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92" class="pinned-item-meta muted-link ">
+                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                      <path fill-rule="evenodd"
+                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                      </path>
+                    </svg>
+                    动态规划
+                  </a>
+                  
+                  
+                </p>
+              </div>
+            </div>
+          </li>
           
           <li class="col-12 col-md-6 col-lg-6 mb-3 d-flex flex-content-stretch">
             <div
@@ -701,719 +1405,36 @@
             </div>
           </li>
           
-          <li class="col-12 col-md-6 col-lg-6 mb-3 d-flex flex-content-stretch">
-            <div
-              class="Box pinned-item-list-item d-flex p-3 width-full js-pinned-item-list-item public source reorderable sortable-button-item">
-              <div class="pinned-item-list-item-content">
-                <div class="d-flex width-full flex-items-center position-relative">
-                  <svg class="octicon octicon-repo mr-2 text-gray flex-shrink-0" viewBox="0 0 16 16" version="1.1"
-                    width="16" height="16">
-                    <path fill-rule="evenodd"
-                      d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z">
-                    </path>
-                  </svg>
-                  <a class="text-bold flex-auto min-width-0" href="https://y-m-m.github.io/post/leetcodehot118%E6%9D%A8%E8%BE%89%E4%B8%89%E8%A7%92/">
-                    <span class="repo" title="leetcode hot100 118 杨辉三角">leetcode hot100 118 杨辉三角</span>
-                  </a>
-                </div>
-
-
-                <div name="summary" class="pinned-item-desc text-gray text-small d-block mt-2 mb-3">
-                  <p><a href="https://leetcode.cn/problems/pascals-triangle/description/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode hot100 118 杨辉三角</a></p>
-<h1 id="题目">题目</h1>
-<blockquote>
-<p>给定一个非负整数 numRows，生成「杨辉三角」的前 numRows 行。         <br>
-在「杨辉三角」中，每个数是它左上方和右上方的数的和。               <br>
-<img src="/images/%E6%88%AA%E5%B1%8F2025-07-08%2009.33.46.png" alt=""></p>
-</blockquote>
-<h1 id="示例">示例</h1>
-<h2 id="示例一">示例一</h2>
-<blockquote>
-<p>输入: numRows = 5        <br>
-输出: [[1],[1,1],[1,2,1],[1,3,3,1],[1,4,6,4,1]]</p>
-</blockquote>
-<h2 id="示例二">示例二</h2>
-<blockquote>
-<p>输入: numRows = 1        <br>
-输出: [[1]]</p>
-</blockquote>
-<h1 id="提示">提示</h1>
-<ul>
-<li>1 &lt;= numRows &lt;= 30</li>
-</ul>
-<h1 id="题解">题解</h1>
-<ul>
-<li>分析
-<ul>
-<li>从第二行开始，特别处理左右两边的1，中间的数计算加法</li>
-</ul>
-</li>
-<li>提交结果
-<ul>
-<li>通过</li>
-</ul>
-</li>
-<li>复杂度
-<ul>
-<li>时间复杂度O(n<sup>2</sup>)</li>
-<li>空间复杂度O(n<sup>2</sup>)</li>
-</ul>
-</li>
-</ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">generate</span><span class="p">(</span><span class="kt">int</span> <span class="n">numRows</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">ans</span><span class="p">(</span><span class="n">numRows</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">ans</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numRows</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="n">ans</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">ans</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]);</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div>
-                </div>
-
-                <p class="mb-0 f6 text-gray">
-                  
-                  
-                  <a href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    计算机科学与技术
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    算法题
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/leetcode" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    leetcode
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/%E6%95%B0%E7%BB%84" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    数组
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    动态规划
-                  </a>
-                  
-                  
-                </p>
-              </div>
-            </div>
-          </li>
-          
-          <li class="col-12 col-md-6 col-lg-6 mb-3 d-flex flex-content-stretch">
-            <div
-              class="Box pinned-item-list-item d-flex p-3 width-full js-pinned-item-list-item public source reorderable sortable-button-item">
-              <div class="pinned-item-list-item-content">
-                <div class="d-flex width-full flex-items-center position-relative">
-                  <svg class="octicon octicon-repo mr-2 text-gray flex-shrink-0" viewBox="0 0 16 16" version="1.1"
-                    width="16" height="16">
-                    <path fill-rule="evenodd"
-                      d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z">
-                    </path>
-                  </svg>
-                  <a class="text-bold flex-auto min-width-0" href="https://y-m-m.github.io/post/leetcodehot198%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D/">
-                    <span class="repo" title="leetcode hot100 198 打家劫舍">leetcode hot100 198 打家劫舍</span>
-                  </a>
-                </div>
-
-
-                <div name="summary" class="pinned-item-desc text-gray text-small d-block mt-2 mb-3">
-                  <h1 id="题目">题目</h1>
-<blockquote>
-<p>你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。         <br>
-给定一个代表每个房屋存放金额的非负整数数组，计算你 不触动警报装置的情况下 ，一夜之内能够偷窃到的最高金额。</p>
-</blockquote>
-<h1 id="示例">示例</h1>
-<h2 id="示例一">示例一</h2>
-<blockquote>
-<p><strong>输入</strong>：[1,2,3,1]       <br>
-<strong>输出</strong>：4           <br>
-<strong>解释</strong>：偷窃 1 号房屋 (金额 = 1) ，然后偷窃 3 号房屋 (金额 = 3)。偷窃到的最高金额 = 1 + 3 = 4 。</p>
-</blockquote>
-<h2 id="示例二">示例二</h2>
-<blockquote>
-<p><strong>输入</strong>：[2,7,9,3,1]         <br>
-<strong>输出</strong>：12         <br>
-<strong>解释</strong>：偷窃 1 号房屋 (金额 = 2), 偷窃 3 号房屋 (金额 = 9)，接着偷窃 5 号房屋 (金额 = 1)。偷窃到的最高金额 = 2 + 9 + 1 = 12 。</p>
-</blockquote>
-<h1 id="提示">提示</h1>
-<blockquote>
-<ul>
-<li>1 &lt;= nums.length &lt;= 100</li>
-<li>0 &lt;= nums[i] &lt;= 400</li>
-</ul>
-</blockquote>
-<h1 id="题解">题解</h1>
-<h2 id="方法一">方法一</h2>
-<ul>
-<li>分析
-<ul>
-<li>动态规划</li>
-<li>maxmoney[i] = max(maxmoney[i - 1], maxmoney[i - 2] + num[i])</li>
-</ul>
-</li>
-<li>提交结果
-<ul>
-<li>通过</li>
-</ul>
-</li>
-<li>复杂度
-<ul>
-<li>时间复杂度 O(n)</li>
-<li>空间复杂度 O(n)</li>
-</ul>
-</li>
-</ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">rob</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">maxmoney</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">maxmoney</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">        <span class="n">maxmoney</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">maxmoney</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">maxmoney</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">2</span><span class="p">],</span> <span class="n">maxmoney</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">maxmoney</span><span class="p">.</span><span class="n">back</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div><h2 id="方法二">方法二</h2>
-<ul>
-<li>分析
-<ul>
-<li>在方法一的基础上改进</li>
-</ul>
-</li>
-<li>提交结果
-<ul>
-<li>通过</li>
-</ul>
-</li>
-<li>复杂度
-<ul>
-<li>时间复杂度O(n)</li>
-<li>空间复杂度O(1)</li>
-</ul>
-</li>
-</ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">rob</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">z</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">z</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">            <span class="n">x</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="n">y</span> <span class="o">=</span> <span class="n">z</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="n">z</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">y</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div>
-                </div>
-
-                <p class="mb-0 f6 text-gray">
-                  
-                  
-                  <a href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    计算机科学与技术
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    算法题
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/leetcode" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    leetcode
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/%E6%95%B0%E7%BB%84" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    数组
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    动态规划
-                  </a>
-                  
-                  
-                </p>
-              </div>
-            </div>
-          </li>
-          
-          <li class="col-12 col-md-6 col-lg-6 mb-3 d-flex flex-content-stretch">
-            <div
-              class="Box pinned-item-list-item d-flex p-3 width-full js-pinned-item-list-item public source reorderable sortable-button-item">
-              <div class="pinned-item-list-item-content">
-                <div class="d-flex width-full flex-items-center position-relative">
-                  <svg class="octicon octicon-repo mr-2 text-gray flex-shrink-0" viewBox="0 0 16 16" version="1.1"
-                    width="16" height="16">
-                    <path fill-rule="evenodd"
-                      d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z">
-                    </path>
-                  </svg>
-                  <a class="text-bold flex-auto min-width-0" href="https://y-m-m.github.io/post/leetcodehot279%E5%AE%8C%E5%85%A8%E5%B9%B3%E6%96%B9%E6%95%B0/">
-                    <span class="repo" title="leetcode hot100 279 完全平方数">leetcode hot100 279 完全平方数</span>
-                  </a>
-                </div>
-
-
-                <div name="summary" class="pinned-item-desc text-gray text-small d-block mt-2 mb-3">
-                  <p><a href="https://leetcode.cn/problems/perfect-squares/description/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode hot100 279 完全平方数</a></p>
-<h1 id="题目">题目</h1>
-<blockquote>
-<p>给你一个整数 n ，返回 和为 n 的完全平方数的最少数量 。         <br>
-完全平方数 是一个整数，其值等于另一个整数的平方；换句话说，其值等于一个整数自乘的积。例如，1、4、9 和 16 都是完全平方数，而 3 和 11 不是。</p>
-</blockquote>
-<h1 id="示例">示例</h1>
-<h2 id="示例一">示例一</h2>
-<blockquote>
-<p>输入：n = 12      <br>
-输出：3         <br>
-解释：12 = 4 + 4 + 4</p>
-</blockquote>
-<h2 id="示例二">示例二</h2>
-<blockquote>
-<p>输入：n = 13         <br>
-输出：2       <br>
-解释：13 = 4 + 9</p>
-</blockquote>
-<h1 id="提示">提示</h1>
-<ul>
-<li>1 &lt;= n &lt;= 10<sup>4</sup></li>
-</ul>
-<h1 id="题解">题解</h1>
-<h2 id="方法一">方法一</h2>
-<ul>
-<li>分析
-<ul>
-<li>当i是完全平方数的时候，num[i] = 1</li>
-<li>当i不是完全平方数的时候，num[i] = min(num[j] + num[i - j])</li>
-</ul>
-</li>
-<li>提交结果
-<ul>
-<li>通过</li>
-</ul>
-</li>
-<li>复杂度
-<ul>
-<li>时间复杂度O(n<sup>2</sup>)</li>
-<li>空间复杂度O(n)</li>
-</ul>
-</li>
-</ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">numSquares</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">num</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">INT32_MAX</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">*</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">num</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">INT32_MAX</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">                <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                    <span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">num</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span><span class="p">],</span> <span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-</span></span><span class="line"><span class="cl">                <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">num</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div><h2 id="方法二">方法二</h2>
-<ul>
-<li>分析
-<ul>
-<li>一个数学定理可以帮助解决本题：「四平方和定理」。</li>
-<li>四平方和定理证明了任意一个正整数都可以被表示为至多四个正整数的平方和。这给出了本题的答案的上界。</li>
-<li>同时四平方和定理包含了一个更强的结论：当且仅当 n ≠ 4<sup>k</sup>×(8m+7) 时，n 可以被表示为至多三个正整数的平方和。因此，当 n=4<sup>k</sup> × (8m + 7) 时，n 只能被表示为四个正整数的平方和。此时我们可以直接返回 4。当 n ≠ 4<sup>k</sup> × (8m + 7) 时，我们需要判断到底多少个完全平方数能够表示 n，我们知道答案只会是 1,2,3 中的一个：
-<ul>
-<li>答案为 1 时，则必有 n 为完全平方数，这很好判断；</li>
-<li>答案为 2 时，则有 n = a<sup>2</sup> + b<sup>2</sup>，我们只需要枚举所有的 a(1 ≤ a ≤ n)，判断 n − a<sup>2</sup>是否为完全平方数即可；</li>
-<li>答案为 3 时，我们很难在一个优秀的时间复杂度内解决它，但我们只需要检查答案为 1 或 2 的两种情况，即可利用排除法确定答案。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>提交结果
-<ul>
-<li>通过</li>
-</ul>
-</li>
-</ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// 判断是否为完全平方数
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">bool</span> <span class="n">isPerfectSquare</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">y</span> <span class="o">*</span> <span class="n">y</span> <span class="o">==</span> <span class="n">x</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="c1">// 判断是否能表示为 4^k*(8m+7)
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">bool</span> <span class="nf">checkAnswer4</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">x</span> <span class="o">%</span> <span class="mi">4</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">x</span> <span class="o">/=</span> <span class="mi">4</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">8</span> <span class="o">==</span> <span class="mi">7</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="nf">numSquares</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">isPerfectSquare</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">checkAnswer4</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="mi">4</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">*</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="n">i</span> <span class="o">*</span> <span class="n">i</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">isPerfectSquare</span><span class="p">(</span><span class="n">j</span><span class="p">))</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="mi">2</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">3</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div><h1 id="参考资料">参考资料</h1>
-<p><a href="https://leetcode.cn/problems/perfect-squares/solutions/822940/wan-quan-ping-fang-shu-by-leetcode-solut-t99c/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode官方题解</a></p>
-                </div>
-
-                <p class="mb-0 f6 text-gray">
-                  
-                  
-                  <a href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    计算机科学与技术
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    算法题
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/leetcode" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    leetcode
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/%E5%B9%BF%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    广度优先搜索
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/%E6%95%B0%E5%AD%A6" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    数学
-                  </a>
-                  
-                  
-                </p>
-              </div>
-            </div>
-          </li>
-          
-          <li class="col-12 col-md-6 col-lg-6 mb-3 d-flex flex-content-stretch">
-            <div
-              class="Box pinned-item-list-item d-flex p-3 width-full js-pinned-item-list-item public source reorderable sortable-button-item">
-              <div class="pinned-item-list-item-content">
-                <div class="d-flex width-full flex-items-center position-relative">
-                  <svg class="octicon octicon-repo mr-2 text-gray flex-shrink-0" viewBox="0 0 16 16" version="1.1"
-                    width="16" height="16">
-                    <path fill-rule="evenodd"
-                      d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z">
-                    </path>
-                  </svg>
-                  <a class="text-bold flex-auto min-width-0" href="https://y-m-m.github.io/post/leetcodehot322%E9%9B%B6%E9%92%B1%E5%85%91%E6%8D%A2/">
-                    <span class="repo" title="leetcode hot100 322 零钱兑换">leetcode hot100 322 零钱兑换</span>
-                  </a>
-                </div>
-
-
-                <div name="summary" class="pinned-item-desc text-gray text-small d-block mt-2 mb-3">
-                  <h1 id="题目">题目</h1>
-<blockquote>
-<p>给你一个整数数组 coins ，表示不同面额的硬币；以及一个整数 amount ，表示总金额。              <br>
-计算并返回可以凑成总金额所需的 最少的硬币个数 。如果没有任何一种硬币组合能组成总金额，返回 -1 。           <br>
-你可以认为每种硬币的数量是无限的。</p>
-</blockquote>
-<h1 id="示例">示例</h1>
-<h2 id="示例一">示例一</h2>
-<blockquote>
-<p>输入：coins = [1, 2, 5], amount = 11        <br>
-输出：3           <br>
-解释：11 = 5 + 5 + 1</p>
-</blockquote>
-<h2 id="示例二">示例二</h2>
-<blockquote>
-<p>输入：coins = [2], amount = 3          <br>
-输出：-1</p>
-</blockquote>
-<h2 id="示例三">示例三</h2>
-<blockquote>
-<p>输入：coins = [1], amount = 0       <br>
-输出：0</p>
-</blockquote>
-<h1 id="提示">提示</h1>
-<ul>
-<li>1 &lt;= coins.length &lt;= 12</li>
-<li>1 &lt;= coins[i] &lt;= 2<sup>31</sup> - 1</li>
-<li>0 &lt;= amount &lt;= 10<sup>4</sup></li>
-</ul>
-<h1 id="题解">题解</h1>
-<h2 id="方法一">方法一</h2>
-<ul>
-<li>分析
-<ul>
-<li>依次计算从1到amount需要多少硬币构成</li>
-</ul>
-</li>
-<li>提交结果
-<ul>
-<li>超出时间限制</li>
-<li>109/189个通过的测试样例</li>
-</ul>
-</li>
-<li>复杂度
-<ul>
-<li>时间复杂度O(n<sup>2</sup>)</li>
-<li>空间复杂度O(n)</li>
-</ul>
-</li>
-</ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">coinChange</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">coins</span><span class="p">,</span> <span class="kt">int</span> <span class="n">amount</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">amount</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">num</span><span class="p">(</span><span class="n">amount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">INT32_MAX</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="nl">coin</span> <span class="p">:</span> <span class="n">coins</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">coin</span> <span class="o">&lt;=</span> <span class="n">amount</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">num</span><span class="p">[</span><span class="n">coin</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">num</span><span class="p">.</span><span class="n">back</span><span class="p">()</span> <span class="o">!=</span> <span class="n">INT32_MAX</span><span class="p">)</span> <span class="k">return</span> <span class="n">num</span><span class="p">.</span><span class="n">back</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">amount</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">amount</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">INT32_MAX</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="k">else</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">                <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                    <span class="k">if</span> <span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">INT32_MAX</span> <span class="o">||</span> <span class="n">num</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">INT32_MAX</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                    <span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">num</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">num</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span><span class="p">]);</span>
-</span></span><span class="line"><span class="cl">                <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">num</span><span class="p">.</span><span class="n">back</span><span class="p">()</span> <span class="o">==</span> <span class="n">INT32_MAX</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">num</span><span class="p">.</span><span class="n">back</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div><h2 id="方法二">方法二</h2>
-<ul>
-<li>分析
-<ul>
-<li>记忆化搜索
-<img src="/images/%E6%88%AA%E5%B1%8F2025-07-08%2017.20.48.png" alt=""></li>
-</ul>
-</li>
-<li>提交结果
-<ul>
-<li>通过</li>
-</ul>
-</li>
-<li>复杂度
-<ul>
-<li>时间复杂度O(Sn)</li>
-<li>空间复杂度O(S)</li>
-</ul>
-</li>
-</ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">coinChange</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">coins</span><span class="p">,</span> <span class="kt">int</span> <span class="n">amount</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">num</span><span class="p">(</span><span class="n">amount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">num</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">amount</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="nl">coin</span> <span class="p">:</span> <span class="n">coins</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">coin</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                <span class="k">else</span>
-</span></span><span class="line"><span class="cl">                <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                    <span class="k">if</span> <span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">coin</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                    <span class="k">else</span>
-</span></span><span class="line"><span class="cl">                    <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                        <span class="k">if</span> <span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">                        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                            <span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">num</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">coin</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">                        <span class="k">else</span>
-</span></span><span class="line"><span class="cl">                        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                            <span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">num</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">coin</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">                        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">                <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">num</span><span class="p">[</span><span class="n">amount</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div><h2 id="方法三">方法三</h2>
-                </div>
-
-                <p class="mb-0 f6 text-gray">
-                  
-                  
-                  <a href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    计算机科学与技术
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    算法题
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/leetcode" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    leetcode
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/%E5%B9%BF%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    广度优先搜索
-                  </a>
-                  
-                  <a href="https://y-m-m.github.io/tags/%E6%95%B0%E7%BB%84" class="pinned-item-meta muted-link ">
-                    <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                      <path fill-rule="evenodd"
-                        d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                      </path>
-                    </svg>
-                    数组
-                  </a>
-                  
-                  
-                </p>
-              </div>
-            </div>
-          </li>
-          
         </ol>
       </div>
     </div>
 
     
     <div class="mt-4 position-relative" id="contributions" data='[
+{
+  "title": "leetcode%20hot100%2032%20%e6%9c%80%e9%95%bf%e6%9c%89%e6%95%88%e6%8b%ac%e5%8f%b7",
+  "link": "https://y-m-m.github.io/post/leetcodehot32%E6%9C%80%E9%95%BF%E6%9C%89%E6%95%88%E6%8B%AC%E5%8F%B7/",
+  "publishDate": "2025-09-16%2000:00:00"
+},
+
+{
+  "title": "leetcode%20hot100%20416%20%e5%88%86%e5%89%b2%e7%ad%89%e5%92%8c%e5%ad%90%e9%9b%86",
+  "link": "https://y-m-m.github.io/post/leetcodehot416%E5%88%86%E5%89%B2%E7%AD%89%E5%92%8C%E5%AD%90%E9%9B%86/",
+  "publishDate": "2025-09-16%2000:00:00"
+},
+
+{
+  "title": "leetcode%20hot100%2062%20%e4%b8%8d%e5%90%8c%e8%b7%af%e5%be%84",
+  "link": "https://y-m-m.github.io/post/leetcodehot62%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84/",
+  "publishDate": "2025-09-16%2000:00:00"
+},
+
+{
+  "title": "leetcode%20hot100%20152%20%e4%b9%98%e7%a7%af%e6%9c%80%e5%a4%a7%e5%ad%90%e6%95%b0%e7%bb%84",
+  "link": "https://y-m-m.github.io/post/leetcodehot152%E4%B9%98%E7%A7%AF%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84/",
+  "publishDate": "2025-09-15%2000:00:00"
+},
+
 {
   "title": "leetcode%20hot100%20300%20%e6%9c%80%e9%95%bf%e9%80%92%e5%a2%9e%e5%ad%90%e5%ba%8f%e5%88%97",
   "link": "https://y-m-m.github.io/post/leetcodehot300%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/",
@@ -2485,6 +2506,12 @@
 {
   "title": "%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9fbilibili%e7%89%88",
   "link": "https://y-m-m.github.io/post/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/",
+  "publishDate": "2024-09-11%2000:00:00"
+},
+
+{
+  "title": "%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9fbilibili%e7%89%88",
+  "link": "https://y-m-m.github.io/post/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fbilibili%E7%89%88/",
   "publishDate": "2024-09-11%2000:00:00"
 },
 

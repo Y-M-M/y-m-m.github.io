@@ -149,7 +149,7 @@
                 </path>
               </svg>
               Posts
-              <span class="Counter">200</span>
+              <span class="Counter">204</span>
             </a>
           </nav>
           <div class="profile-color-modes js-promo-color-modes-banner-profile isInitialToggle">
@@ -428,7 +428,7 @@
         </path>
       </svg>
       Posts
-      <span class="Counter ">200</span>
+      <span class="Counter ">204</span>
     </a>
   </nav>
 </div>
@@ -1604,6 +1604,668 @@
           <div class="col-12 d-inline-block">
             <div class="d-inline-block mb-1">
               <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/leetcode1870%E5%87%86%E6%97%B6%E5%88%B0%E8%BE%BE%E7%9A%84%E5%88%97%E8%BD%A6%E7%9A%84%E6%9C%80%E5%B0%8F%E6%97%B6%E9%80%9F/">leetcode 1870 准时到达的列车的最小时速</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <p><a href="https://leetcode.cn/problems/minimum-speed-to-arrive-on-time/description/">leetcode 1870</a></p>
+<h2 id="题目">题目</h2>
+<ul>
+<li>
+<p>给你一个浮点数 hour ，表示你到达办公室可用的总通勤时间。要到达办公室，你必须按给定次序乘坐 n 趟列车。另给你一个长度为 n 的整数数组 dist ，其中 dist[i] 表示第 i 趟列车的行驶距离（单位是千米）。</p>
+</li>
+<li>
+<p>每趟列车均只能在整点发车，所以你可能需要在两趟列车之间等待一段时间。</p>
+</li>
+</ul>
+<p>例如，第 1 趟列车需要 1.5 小时，那你必须再等待 0.5 小时，搭乘在第 2 小时发车的第 2 趟列车。       <br>
+返回能满足你准时到达办公室所要求全部列车的 最小正整数 时速（单位：千米每小时），如果无法准时到达，则返回 -1 。</p>
+<p>生成的测试用例保证答案不超过 $10^7$ ，且 hour 的 小数点后最多存在两位数字 。</p>
+<h2 id="例子">例子</h2>
+<ul>
+<li>输入：dist = [1,3,2], hour = 6</li>
+<li>输出：1</li>
+<li>解释：速度为 1 时：
+<ol>
+<li>第 1 趟列车运行需要 1/1 = 1 小时。</li>
+<li>由于是在整数时间到达，可以立即换乘在第 1 小时发车的列车。第 2 趟列车运行需要 3/1 = 3 小时。</li>
+<li>由于是在整数时间到达，可以立即换乘在第 4 小时发车的列车。第 3 趟列车运行需要 2/1 = 2 小时。</li>
+<li>你将会恰好在第 6 小时到达。</li>
+</ol>
+</li>
+</ul>
+<h2 id="提示">提示</h2>
+<ul>
+<li>n == dist.length</li>
+<li>1 &lt;= n &lt;= 105</li>
+<li>1 &lt;= dist[i] &lt;= 105</li>
+<li>1 &lt;= hour &lt;= 109</li>
+<li>hours 中，小数点后最多存在两位数字</li>
+</ul>
+<h2 id="题解">题解</h2>
+<h3 id="方法一">方法一</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">minSpeedOnTime</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">dist</span><span class="p">,</span> <span class="kt">double</span> <span class="n">hour</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">dist</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="n">hour</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">long</span> <span class="kt">long</span> <span class="n">distance</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">dist</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">distance</span> <span class="o">+=</span> <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">long</span> <span class="kt">long</span> <span class="n">pre_speed</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">ceil</span><span class="p">(</span><span class="n">distance</span> <span class="o">/</span> <span class="n">hour</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">long</span> <span class="kt">long</span> <span class="n">speed</span> <span class="o">=</span> <span class="n">pre_speed</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">double</span> <span class="n">all_time</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">dist</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="kt">long</span> <span class="kt">long</span> <span class="n">now_dist</span> <span class="o">=</span> <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">                <span class="k">while</span> <span class="p">(</span><span class="n">now_dist</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">now_dist</span> <span class="o">-=</span> <span class="n">speed</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">all_time</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">all_time</span> <span class="o">+=</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="n">dist</span><span class="p">.</span><span class="n">back</span><span class="p">()</span> <span class="o">/</span> <span class="n">speed</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">all_time</span> <span class="o">&lt;=</span> <span class="n">hour</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span> <span class="n">speed</span> <span class="o">=</span> <span class="n">speed</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">speed</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><ul>
+<li>提交结果
+<ul>
+<li>50/66个通过的测试样例</li>
+<li>超出时间限制</li>
+</ul>
+</li>
+<li>分析
+<ul>
+<li>思路
+<ul>
+<li>对于n辆车，最终所需时间一定大于n-1，先判断hour能不能满足这个条件，如果不能，就直接返回-1</li>
+<li>先用总路程除以总时间，向上取整，确定最终需要的最小速度的底线，再由底线依次递增，逐个判断当前速度能不能满足条件</li>
+</ul>
+</li>
+<li>问题
+<ul>
+<li>double所能存储的位数有限，一旦浮点数过小，就会被当成0处理(已修正)</li>
+<li>注意long long和double数据类型之间的转换</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="方法二">方法二</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">minSpeedOnTime</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">dist</span><span class="p">,</span> <span class="kt">double</span> <span class="n">hour</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">dist</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 将hour乘100，再通过llround函数四舍五入为整型
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">long</span> <span class="kt">long</span> <span class="n">hr</span> <span class="o">=</span> <span class="n">llround</span><span class="p">(</span><span class="n">hour</span> <span class="o">*</span> <span class="mi">100</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// hour &gt; n-1 才能满足条件
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">hr</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// 二分查找合适的速度
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="mf">1e7</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">l</span> <span class="o">+</span> <span class="p">(</span><span class="n">r</span> <span class="o">-</span> <span class="n">l</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 计算速度为mid的时候所需要的总时间
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="kt">long</span> <span class="kt">long</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 前n - 1段中第i段贡献的时间，需要向上取整
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">t</span> <span class="o">+=</span> <span class="p">(</span><span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 最后一段贡献的时间，无需向上取整
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">t</span> <span class="o">*=</span> <span class="n">mid</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">t</span> <span class="o">+=</span> <span class="n">dist</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">&lt;=</span> <span class="n">hr</span> <span class="o">*</span> <span class="n">mid</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 将分数比较转化为整数比较
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="n">r</span> <span class="o">=</span> <span class="n">mid</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">l</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">l</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><ul>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+<li>分析
+<ul>
+<li>对速度二分查找</li>
+<li>注意
+<ul>
+<li>将时间*100进行处理，避免double在接近0的时候直接写成0的问题</li>
+<li>前面的时间需要向上取整，最后一段的时间无需向上取整</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="参考资料">参考资料</h1>
+<p><a href="https://leetcode.cn/problems/minimum-speed-to-arrive-on-time/solutions/791412/zhun-shi-dao-da-de-lie-che-zui-xiao-shi-tl9df/">leetcode官方题解</a></p>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学与技术
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                算法题
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/leetcode">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                leetcode
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%95%B0%E7%BB%84">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                数组
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                二分查找
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Wed, 02 Oct 2024 00:00:00 &#43;0000" class="no-wrap"
+                title=" Wed, 02 Oct 2024 00:00:00 &#43;0000">
+                Wed, 02 Oct 2024 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/leetcode983%E6%9C%80%E4%BD%8E%E7%A5%A8%E4%BB%B7/">leetcode 983 最低票价</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <p><a href="https://leetcode.cn/problems/minimum-cost-for-tickets/description/">leetcode 983 最低票价</a></p>
+<h2 id="题目">题目</h2>
+<ul>
+<li>
+<p>在一个火车旅行很受欢迎的国度，你提前一年计划了一些火车旅行。在接下来的一年里，你要旅行的日子将以一个名为 days 的数组给出。每一项是一个从 1 到 365 的整数。</p>
+</li>
+<li>
+<p>火车票有 三种不同的销售方式 ：</p>
+<ol>
+<li>一张 为期一天 的通行证售价为 costs[0] 美元；</li>
+<li>一张 为期七天 的通行证售价为 costs[1] 美元；</li>
+<li>一张 为期三十天 的通行证售价为 costs[2] 美元。</li>
+<li>通行证允许数天无限制的旅行。 例如，如果我们在第 2 天获得一张 为期 7 天 的通行证，那么我们可以连着旅行 7 天：第 2 天、第 3 天、第 4 天、第 5 天、第 6 天、第 7 天和第 8 天。</li>
+</ol>
+</li>
+<li>
+<p>返回 你想要完成在给定的列表 days 中列出的每一天的旅行所需要的最低消费 。</p>
+</li>
+</ul>
+<h2 id="示例">示例</h2>
+<ul>
+<li>输入：days = [1,4,6,7,8,20], costs = [2,7,15]</li>
+<li>输出：11</li>
+<li>解释：
+例如，这里有一种购买通行证的方法，可以让你完成你的旅行计划： <br>
+在第 1 天，你花了 costs[0] = $2 买了一张为期 1 天的通行证，它将在第 1 天生效。     <br>
+在第 3 天，你花了 costs[1] = $7 买了一张为期 7 天的通行证，它将在第 3, 4, &hellip;, 9 天生效。   <br>
+在第 20 天，你花了 costs[0] = $2 买了一张为期 1 天的通行证，它将在第 20 天生效。  <br>
+你总共花了 $11，并完成了你计划的每一天旅行。</li>
+</ul>
+<h2 id="提示">提示</h2>
+<ul>
+<li>数组</li>
+<li>动态规划</li>
+</ul>
+<h2 id="难度">难度</h2>
+<ul>
+<li>中等</li>
+</ul>
+<h2 id="题解">题解</h2>
+<h3 id="方法一">方法一</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">mincostTickets</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">days</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">costs</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span> <span class="n">is_travel</span><span class="p">(</span><span class="n">days</span><span class="p">.</span><span class="n">back</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">days</span><span class="p">.</span><span class="n">back</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">is_travel</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">days</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">is_travel</span><span class="p">[</span><span class="n">days</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">all_money</span><span class="p">(</span><span class="n">days</span><span class="p">.</span><span class="n">back</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">all_money</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">days</span><span class="p">.</span><span class="n">back</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">is_travel</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">7</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">all_money</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">all_money</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">costs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">all_money</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">7</span><span class="p">]</span> <span class="o">+</span> <span class="n">costs</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">30</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">all_money</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">all_money</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">all_money</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">30</span><span class="p">]</span> <span class="o">+</span> <span class="n">costs</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">all_money</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">all_money</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">costs</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">all_money</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">all_money</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">costs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">costs</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">all_money</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">all_money</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">costs</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span> <span class="n">all_money</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">all_money</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">all_money</span><span class="p">[</span><span class="n">days</span><span class="p">.</span><span class="n">back</span><span class="p">()];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><ul>
+<li>提交结果
+<ul>
+<li>通过</li>
+</ul>
+</li>
+<li>分析
+<ul>
+<li>思路
+<ul>
+<li>最优子结构
+<ul>
+<li>第i天所需花费的金额，仅与这一天是否外出旅行，以及i-1天/i-7天/i-30天所需花费的金额有关</li>
+</ul>
+</li>
+<li>建立is_travel数组，便于查询每一天是否需要出行</li>
+<li>建立all_money数组，存储截止第i天为止需要花费的金额，根据is_travel[i], all_moneny[i - 1], all_money[i - 7], all_money[i - 30], costs[0], cost[1], cost[2]求得</li>
+</ul>
+</li>
+<li>注意
+<ul>
+<li>需要考虑costs[2] &lt; costs[1] &lt; costs[0]的情况</li>
+</ul>
+</li>
+<li>改进(已修改代码)
+<ul>
+<li>将is_travel改成bool类型的</li>
+<li>不要一次开长度为365的数组，根据去旅行的最后一天来开，够用就行</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学与技术
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                算法题
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/leetcode">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                leetcode
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                动态规划
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Tue, 01 Oct 2024 00:00:00 &#43;0000" class="no-wrap"
+                title=" Tue, 01 Oct 2024 00:00:00 &#43;0000">
+                Tue, 01 Oct 2024 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/c&#43;&#43;stl%E4%B8%ADheap%E7%9A%84%E7%94%A8%E6%B3%95/">C&#43;&#43; STL中heap函数的用法</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <h1 id="c-stl中heap函数的用法">C++ STL中heap函数的用法</h1>
+<h2 id="什么是heap">什么是heap？</h2>
+<p>C++STL中提供的一种构建和维护<a href="https://en.wikipedia.org/wiki/Heap_(data_structure)">堆</a>的函数接口</p>
+<h2 id="包括哪些函数">包括哪些函数？</h2>
+<ul>
+<li>make_heap(_First, _Last, _Comp)
+<ul>
+<li>将区间内的元素构建成堆</li>
+<li>_First: 需要构建堆的第一个元素的迭代器；_Last: 需要构建堆的最后一个元素的迭代器</li>
+<li>_Comp 构建方式
+<ul>
+<li>less<int>() 大顶堆，默认是大顶堆</li>
+<li>greater<int>() 小顶堆</li>
+<li>需要#include <functional></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>push_heap(_First, _Last, _Comp)
+<ul>
+<li>新添加一个元素在末尾(vector的end处)，然后重新调整堆序</li>
+<li>第三个参数应该与make_heap保持一致</li>
+<li>在使用push_heap之前，应确保已经用push_back()将数据存入到数组中</li>
+</ul>
+</li>
+<li>pop_heap(_First, _Last, _Comp)
+<ul>
+<li>对heap取出下一个元素，把堆顶元素取出来，放至区间末尾，其余元素进行调整，重新构成堆</li>
+<li>第三个参数应与make_heap保持一致</li>
+<li>如果要弹出原先的堆顶元素，应再使用pop_back()</li>
+</ul>
+</li>
+<li>sort_heap(_First, _Last)
+<ul>
+<li>将heap转化为一个已排序群集</li>
+<li>将堆进行排序，排序后序列将失去堆的特性，小顶堆所得的群集数字从小到大排列，大顶堆所得的群集从大到小排列</li>
+</ul>
+</li>
+<li>is_heap()
+<ul>
+<li>测试范围内的元素是否为一个二叉堆</li>
+</ul>
+</li>
+<li>is_heap_until()
+<ul>
+<li>返回第一个破坏二插堆结构的元素的迭代器</li>
+</ul>
+</li>
+</ul>
+<h2 id="内部是如何实现的">内部是如何实现的？</h2>
+<p><a href="https://www.runoob.com/w3cnote/heap-sort.html">堆排序</a></p>
+<h2 id="举例">举例</h2>
+<p><a href="https://leetcode.cn/problems/seat-reservation-manager/description/">leetcode1845(参考官方题解)</a></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">SeatManager</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">SeatManager</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">seat</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span> <span class="c1">// 为数组增加新的元素
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">make_heap</span><span class="p">(</span><span class="n">seat</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">seat</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">greater</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">());</span> <span class="c1">// 构建小顶堆
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="nf">reserve</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">pop_heap</span><span class="p">(</span><span class="n">seat</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">seat</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">greater</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">());</span> 
+</span></span><span class="line"><span class="cl">        <span class="c1">// 将小顶堆的堆顶元素弹出来，放到数组最后，调整其他元素构成新的堆
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">seat</span><span class="p">.</span><span class="n">back</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">seat</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">unreserve</span><span class="p">(</span><span class="kt">int</span> <span class="n">seatNumber</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">seat</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">seatNumber</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">push_heap</span><span class="p">(</span><span class="n">seat</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">seat</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">greater</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">seat</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Your SeatManager object will be instantiated and called as such:
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * SeatManager* obj = new SeatManager(n);
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * int param_1 = obj-&gt;reserve();
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * obj-&gt;unreserve(seatNumber);
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span></code></pre></div><h2 id="参考资料">参考资料</h2>
+<p><a href="https://blog.csdn.net/bandaoyu/article/details/109441444">csdn1</a> <br>
+<a href="https://blog.csdn.net/longhopefor/article/details/38303545">csdn2</a></p>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学与技术
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%A0%86">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                堆
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/c&#43;&#43;">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                c&#43;&#43;
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Mon, 30 Sep 2024 00:00:00 &#43;0000" class="no-wrap"
+                title=" Mon, 30 Sep 2024 00:00:00 &#43;0000">
+                Mon, 30 Sep 2024 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/%E6%95%B0%E7%8A%B6%E6%95%B0%E7%BB%84/">数状数组</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <h1 id="数状数组">数状数组</h1>
+<h2 id="介绍">介绍</h2>
+<ul>
+<li>一种支持单点修改和区间查询的代码量小的数据结构
+普通数状数组维护的信息及运算要满足<strong>结合律</strong>和<strong>可差分</strong></li>
+</ul>
+<pre tabindex="0"><code>什么是可差分？
+  具有逆运算的运算，即已知x * y和x可以求出y
+</code></pre><ul>
+<li>树状数组和线段树有什么区别？
+<ul>
+<li>树状数组能解决的问题是线段树的子集，树状数组能做的，线段树一定可以，线段树能做的，树状数组不一定可以</li>
+<li>树状数组代码要远比线段树短，时间效率常数更小</li>
+</ul>
+</li>
+</ul>
+<h2 id="为什么要使用树状数组">为什么要使用树状数组？</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2024-09-30%2021.04.37.png" alt="原数组">  <br>
+观察如图所示的数组，数组a长度为n    <br>
+每次求前m项和的时间复杂度为O(n)，如果要反复求前m项和，需要花费太多时间。有没有什么办法能降低其时间复杂度呢？</p>
+<p>考虑<strong>前缀和数组</strong>，数组中每个位置记录从a<sub>0</sub>开始到这个位置的所有数字之和，每次想要求前m项和时只需将索引为m-1的数字取出来即可</p>
+<p>看起来很好，存在什么问题呢？     <br>
+<strong>单点修改</strong>太麻烦。每次只要a<sub>i</sub>发生改变，前缀和数组中后续所有数字都需要改变。</p>
+<p>还有什么更好的办法吗？   <br>
+可维护一个新的数据结构，如下
+<img src="/images/%E6%88%AA%E5%B1%8F2024-09-30%2021.09.17.png" alt=""> <br>
+在这个数据结构中，若要计算所有数字之和，只需取最上面一层61即可，计算前三个数字之和只需要第二层(从下面数)的14与第一层的1即可，依次类推</p>
+<p>很容易就可以发现，每一行从下标0开始，1、3、5等奇数序号的数字在求前m项和时完全不会用到，无需额外存储</p>
+<p>去掉奇数项之后  <br>
+<img src="/images/%E6%88%AA%E5%B1%8F2024-09-30%2021.18.19.png" alt="剩下需要额外存储的数"></p>
+<p>为这些数字构建一个新的数组c <br>
+<img src="/images/%E6%88%AA%E5%B1%8F2024-09-30%2021.19.16.png" alt="所获新数组"><br>
+数组c就是树状数组，在树状数组中，可以很容易的完成单点修改、单点查询、区间修改、区间查询等操作。</p>
+<p><em>神奇的是，新数组的长度刚好为n</em></p>
+<p>为什么呢？        <br>
+(1 + 2 + 4 + 8 + &hellip; + n/2) + 1 = n - 1 + 1 = n</p>
+<blockquote>
+<p>对n个数，取出n/2，从n/2开始加，每次加剩下的1/2，一直加到剩下的数字不可二分(1)为止，加上剩下的1就可以恢复原状，即n</p>
+</blockquote>
+<h2 id="观察树状数组">观察树状数组</h2>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2024-09-30%2021.51.07.png" alt="树状数组样例"></p>
+<h3 id="基本性质-管辖区间">基本性质 管辖区间</h3>
+<ul>
+<li>很容易发现
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">树状数组元素</th>
+          <th style="text-align: left">管辖区间</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">c[1]</td>
+          <td style="text-align: left">[1&hellip;1]</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">c[2]</td>
+          <td style="text-align: left">[1&hellip;2]</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">c[3]</td>
+          <td style="text-align: left">[3&hellip;3]</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">c[4]</td>
+          <td style="text-align: left">[1&hellip;4]</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">&hellip;</td>
+          <td style="text-align: left"></td>
+      </tr>
+  </tbody>
+</table>
+</li>
+<li>c[x]的管辖区间[x - lowbit(x) + 1, x]</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">lowbit</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// x的二进制中，最低的1以及后面所有的0组成的数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">return</span> <span class="n">x</span> <span class="o">&amp;</span> <span class="o">-</span><span class="n">x</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3 id="树形态的性质">树形态的性质</h3>
+<blockquote>
+<p>l(x) = x - lowbit(x) + 1
+x = s * 2<sup>k + 1</sup> + 2 <sup>k</sup>, lowbit(x) = 2<sup>k</sup>
+c[x]与c[y]的管辖范围不相交-&gt;[l(x), x]与[l(y), y]不相交</p>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学与技术
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                算法与数据结构
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                树状数组
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Sun, 29 Sep 2024 00:00:00 &#43;0000" class="no-wrap"
+                title=" Sun, 29 Sep 2024 00:00:00 &#43;0000">
+                Sun, 29 Sep 2024 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
                 <a href="https://y-m-m.github.io/post/leetcode2286%E4%BB%A5%E7%BB%84%E4%B8%BA%E5%8D%95%E4%BD%8D%E8%AE%A2%E9%9F%B3%E4%B9%90%E4%BC%9A%E9%97%A8%E7%A5%A8/">leetcode 2286 以组为单位订音乐会门票</a>
               </h3>
             </div>
@@ -2599,513 +3261,6 @@ public:
               <relative-time datetime=" Wed, 11 Sep 2024 00:00:00 &#43;0000" class="no-wrap"
                 title=" Wed, 11 Sep 2024 00:00:00 &#43;0000">
                 Wed, 11 Sep 2024 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/conda%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/">conda常用指令</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">操作</th>
-          <th style="text-align: left">命令</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">新建环境</td>
-          <td style="text-align: left">conda create -n ENV_NAME python=3.8.8</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">激活环境</td>
-          <td style="text-align: left">conda activate ENV_NAME</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">安装包</td>
-          <td style="text-align: left">conda intall PACKAGE_NAME</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">卸载包</td>
-          <td style="text-align: left">conda remove PACKAGE_NAME</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">显示所有已安装的包</td>
-          <td style="text-align: left">conda list</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">退出环境</td>
-          <td style="text-align: left">conda deactivate</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">删除环境</td>
-          <td style="text-align: left">conda env remove -n ENV_NAME</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">显示所有已安装的环境</td>
-          <td style="text-align: left">conda env list</td>
-      </tr>
-  </tbody>
-</table>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机科学
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                学习笔记
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Thu, 22 Aug 2024 00:00:00 &#43;0000" class="no-wrap"
-                title=" Thu, 22 Aug 2024 00:00:00 &#43;0000">
-                Thu, 22 Aug 2024 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/%E8%AE%A1%E7%BD%91%E8%AF%BE%E8%AE%BE/">计算机网络课程设计</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <h1 id="题目-dns中继服务器的实现">题目 DNS中继服务器的实现</h1>
-<ul>
-<li>设计一个DNS服务器程序，读入“域名-IP地址”对照表（一个文件），当客户端查询域名对应的IP地址时，用域名检索该对照表，得到三种检索结果：
-<ul>
-<li>检索结果为IP地址0.0.0.0，则向客户端返回“域名不存在”的报错信息（不良网站拦截功能）</li>
-<li>检索结果为普通IP地址，则向客户返回这个地址（服务器功能）</li>
-<li>表中未检测到该域名，则向因特网DNS服务器发出查询，并将结果返回给客户端（中继功能）
-<ul>
-<li>考虑多个计算机上的客户端会同时查询，需要进行消息ID的转换</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h1 id="dns介绍">DNS介绍</h1>
-<h2 id="dns查询过程迭代查询">DNS查询过程(迭代查询)</h2>
-<ul>
-<li>客户端向DNS服务器发起查询请求</li>
-<li>DNS搜索本地解析库没有结果。向根域发起查询请求，根域告诉DNS服务器，.com服务器上有它需要的资源</li>
-<li>DNS服务器又向.com服务器发起请求，.com服务器告诉DNS服务器，.google.com上有它需要的资源</li>
-<li>DNS服务器又向.google.com服务器发起请求，得到解析记录，并返回给了客户端。用户提供一种名称，查询以得到另一种名称：域名-&gt;IP或IP-&gt;域名</li>
-</ul>
-<h2 id="dns报文">DNS报文</h2>
-<ul>
-<li>
-<p>构成
-<img src="/images/%E6%88%AA%E5%B1%8F2024-06-24%2021.06.06.png" alt=""></p>
-</li>
-<li>
-<p>格式</p>
-<ul>
-<li>除Header外其余四部分为可变长度(12字节长)</li>
-<li>Question: the question for the name server</li>
-<li>Answer: RRs answering the question</li>
-<li>Authority: RRs pointing toward an authority</li>
-<li>Additional: RRs holding additional information</li>
-<li>后三段格式相同，每段都是由0~n个资源记录(Resource Record)构成</li>
-</ul>
-</li>
-<li>
-<p>报头字段 12字节
-<img src="/images/%E6%88%AA%E5%B1%8F2024-06-24%2021.10.12.png" alt="Header Section Format"></p>
-<ul>
-<li>ID
-<ul>
-<li>由客户程序设置并由服务器返回结果。客户程序通过它来确定响应与查询是否匹配</li>
-</ul>
-</li>
-<li>QR：0表示查询报，1表示响应报</li>
-<li>OPCODE
-<ul>
-<li>通常值为0(标准查询)，其他值为1(反向查询)和2(服务器状态请求)</li>
-</ul>
-</li>
-<li>AA：权威答案</li>
-<li>TC：截断的
-<ul>
-<li>应答的总长度超过512字节时，只返回前512个字节</li>
-</ul>
-</li>
-<li>RD：期望递归
-<ul>
-<li>查询报中设置，响应报中返回</li>
-<li>告诉名字服务器处理递归查询</li>
-<li>如果该位为1，则递归查询</li>
-<li>如果该位为0，且被请求的名字服务器没有一个权威回答，就返回一个能解答该查询的其他名字服务器列表，这称为迭代查询</li>
-</ul>
-</li>
-<li>RA：递归可用
-<ul>
-<li>如果名字服务器支持递归查询，则在响应中该比特设置为1</li>
-</ul>
-</li>
-<li>Z：必须为0，保留字段</li>
-<li>RCODE：响应码，仅用于响应报
-<ul>
-<li>值为0(没有差错)</li>
-<li>值为3表示名字差错。从权威名字服务器返回，表示在查询中指定域名不存在</li>
-</ul>
-</li>
-<li>QDCOUNT
-<ul>
-<li>Number of entries in the question section</li>
-</ul>
-</li>
-<li>ANCOUNT
-<ul>
-<li>Number of RRs in the answer section</li>
-</ul>
-</li>
-<li>NSCOUNT
-<ul>
-<li>Number of name server RRs in authority records section</li>
-</ul>
-</li>
-<li>ARCOUNT
-<ul>
-<li>Number of RRs in additional records section</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p>Question Section Format
-<img src="/images/%E6%88%AA%E5%B1%8F2024-06-24%2021.25.28.png" alt=""></p>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机科学
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机网络
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%AE%9E%E8%B7%B5%E8%BF%87%E7%A8%8B">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                实践过程
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Tue, 25 Jun 2024 00:00:00 &#43;0000" class="no-wrap"
-                title=" Tue, 25 Jun 2024 00:00:00 &#43;0000">
-                Tue, 25 Jun 2024 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/%E7%BB%88%E7%AB%AF%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/">mac下终端常用命令</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <h1 id="关于目录的操作">关于目录的操作</h1>
-<ul>
-<li>ls
-<ul>
-<li>ls: 查看当前目录下文件</li>
-<li>ls-a: 查看当前目录下文件以及隐藏文件</li>
-</ul>
-</li>
-<li>mkdir: 创建新目录</li>
-<li>cd
-<ul>
-<li>cd 目录名: 进入目录</li>
-<li>cd ..: 返回上一级目录</li>
-</ul>
-</li>
-<li>rm
-<ul>
-<li>rmdir 目录名: 删除空目录，此删除不会出现在废纸篓里</li>
-<li>rm -rf 目录名: 删除空目录/非空目录，此删除不会出现在废纸篓里(强制删除，不会询问)</li>
-<li>rm -r 目录名: 删除目录，会提示你确认删除文件</li>
-<li>rm 文件名: 此删除不会出现在废纸篓里</li>
-</ul>
-</li>
-<li>cp
-<ul>
-<li>cp 文件名1 文件名2: 拷贝文件1，并命名为文件2</li>
-<li>cp 文件名 文件夹名/: 将文件拷贝到文件夹中</li>
-<li>cp -r 文件夹名1 文件夹名2: 将文件夹1拷贝为文件夹2</li>
-</ul>
-</li>
-<li>mv
-<ul>
-<li>mv 文件夹名 文件夹名/: 将一个文件夹移动到另一个文件夹中</li>
-</ul>
-</li>
-<li>find *.txt: 查找当前目录下所有.txt文件</li>
-<li>pwd: 显示当前目录</li>
-<li>open
-<ul>
-<li>open .: 打开成可视化的文件夹(当前目录)</li>
-<li>open 路径: 打开路径对应的文件夹</li>
-</ul>
-</li>
-</ul>
-<h1 id="关于文件的操作">关于文件的操作</h1>
-<ul>
-<li>touch 文件名: 创建文件</li>
-<li>mv 文件名1 文件名2: 将文件重命名为文件名2</li>
-<li>less 文件路径
-<ul>
-<li>查询文件内容</li>
-<li>按q退出</li>
-</ul>
-</li>
-<li>cat 文件名: 显示文件内容</li>
-</ul>
-<h1 id="关于系统的操作">关于系统的操作</h1>
-<ul>
-<li>关机
-<ul>
-<li>sudo shutdown -h now立刻关机</li>
-<li>sudo shutdown -h +10十分钟后关机</li>
-<li>sudo shutdown -h 20:00晚上八点关机</li>
-</ul>
-</li>
-<li>sudo shutdown -r now重启</li>
-</ul>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AC%94%E8%AE%B0">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                笔记
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%91%BD%E4%BB%A4%E8%A1%8C">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                命令行
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Thu, 23 May 2024 00:00:00 &#43;0000" class="no-wrap"
-                title=" Thu, 23 May 2024 00:00:00 &#43;0000">
-                Thu, 23 May 2024 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86bilibili%E7%89%88/">计算机组成原理bilibili版</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <h1 id="第一章-计算机系统概述">第一章 计算机系统概述</h1>
-<h2 id="1-1-计算机系统的组成">1-1 计算机系统的组成</h2>
-<ul>
-<li>软件系统（软件需要在硬件上运行）
-<ul>
-<li>系统软件：为管理整个计算机系统所编制的程序
-<ul>
-<li>操作系统 数据库管理系统 网络系统</li>
-<li>标准程序库 语言处理程序 服务程序</li>
-</ul>
-</li>
-<li>应用软件：为实现用户应用所编制的各种程序
-<ul>
-<li>科学计算 数据处理</li>
-<li>过程控制 事务管理</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>硬件系统
-<ul>
-<li>主机</li>
-<li>外设</li>
-</ul>
-</li>
-<li>计算机系统性能的好坏，取决于硬件和软件功能的总和</li>
-</ul>
-<h2 id="1-2-计算机的发展电子数字计算机">1-2 计算机的发展（电子数字计算机）</h2>
-<ul>
-<li>图灵机：理想的计算模型
-<ul>
-<li>一种具备读写、存储等功能的通用计算机模型</li>
-<li>一条带子，一个读写头和一个控制装置，能执行任何给定的计算，能执行任何可能的任务</li>
-<li>奠定了现代计算机的基础</li>
-</ul>
-</li>
-<li>1938年 信息论创始人 香农-&gt;布尔代数与开关电路的联系</li>
-<li>世界上第一台真正意义上的电子数字计算机 阿塔纳索夫-贝瑞计算机ABC 300个电子管，不可编程，仅用于求解线性方程组</li>
-<li>1946，基于ABC计算机-&gt;电子数字积分机和计算机ENIAC 十进制、弹道参数计算 莫克利和艾克特得到美国军方的支持和冯·诺依曼等人的帮助</li>
-<li>四个发展阶段
-<ul>
-<li>第1代1946-1957 电子管（真空管） 使用机器语言编程，无操作系统</li>
-<li>第2代1958-1-64 晶体管 主要使用汇编语言编程，开始使用FORTRAN、COBOL等高等语言，单道批处理系统</li>
-<li>第3代1965-1971 集成电路 高级语言进一步发展，出现了B语言（C语言的前身），多道批处理系统，分时系统</li>
-<li>第4代1972至今，超大规模集成电路 各种高级语言，现代操作系统</li>
-</ul>
-</li>
-<li>体积越小、功耗月底、可靠性越高、速度越快-&gt;依赖于电子器件的发展</li>
-<li>摩尔定律：半导体集成电路上可容纳的晶体管数量大约每经过18-24个月便会增加一倍。换言之，处理器的性能大约每两年翻一倍，同时价格下降为之前的一半 （从2013年开始，减缓为3年翻一番</li>
-<li>软件发展
-<ul>
-<li>机器语言</li>
-<li>汇编语言</li>
-<li>高级语言
-<ul>
-<li>第一个高级语言FORTRAN</li>
-<li>最简单的语言Basic</li>
-<li>里程碑Pascal</li>
-<li>现代程序语革命的起点</li>
-</ul>
-</li>
-<li>面向对象
-<ul>
-<li>C++</li>
-<li>Java</li>
-<li>Python</li>
-<li>&hellip;&hellip;</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>当前计算机发展趋势
-<ul>
-<li>更微型化
-<ul>
-<li>低功耗</li>
-<li>较高性能</li>
-<li>多用途</li>
-</ul>
-</li>
-<li>更巨型化
-<ul>
-<li>超高速</li>
-<li>并行处理</li>
-<li>智能化</li>
-</ul>
-</li>
-<li>目前我国最快的超级计算机是神威·太湖之光，每秒可进行9.3亿亿次浮点运算</li>
-</ul>
-</li>
-</ul>
-<h2 id="1-3-计算机硬件">1-3 计算机硬件</h2>
-<ul>
-<li>
-<p>冯诺依曼计算机</p>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机科学
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机组成原理
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AC%94%E8%AE%B0">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                笔记
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Sat, 23 Mar 2024 00:00:00 &#43;0000" class="no-wrap"
-                title=" Sat, 23 Mar 2024 00:00:00 &#43;0000">
-                Sat, 23 Mar 2024 00:00:00 &#43;0000
               </relative-time>
             </div>
           </div>

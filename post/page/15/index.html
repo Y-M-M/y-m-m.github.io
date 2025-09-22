@@ -149,7 +149,7 @@
                 </path>
               </svg>
               Posts
-              <span class="Counter">205</span>
+              <span class="Counter">206</span>
             </a>
           </nav>
           <div class="profile-color-modes js-promo-color-modes-banner-profile isInitialToggle">
@@ -428,7 +428,7 @@
         </path>
       </svg>
       Posts
-      <span class="Counter ">205</span>
+      <span class="Counter ">206</span>
     </a>
   </nav>
 </div>
@@ -1599,6 +1599,129 @@
         
       
       <ul>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/c&#43;&#43;lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/">C&#43;&#43;中lambda表达式的用法</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <h1 id="什么是lambda表达式">什么是lambda表达式？</h1>
+<ul>
+<li>一种定义匿名函数对象的简便方法</li>
+<li>使用位置
+<ul>
+<li>被调用的位置</li>
+<li>作为参数传递给函数的位置</li>
+</ul>
+</li>
+</ul>
+<h1 id="定义">定义</h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="p">[</span><span class="n">capture</span><span class="p">]</span> <span class="p">(</span><span class="n">parameters</span><span class="p">)</span> <span class="k">mutable</span><span class="o">-&gt;</span><span class="k">return</span><span class="o">-</span><span class="n">type</span> <span class="p">{</span><span class="n">statement</span><span class="p">}</span>
+</span></span></code></pre></div><ul>
+<li>capture
+<ul>
+<li>[=]通过值捕获所有变量(只有lambda体中提及的对象才会被捕获)
+<ul>
+<li>[变量名] 通过值捕获指定变量</li>
+</ul>
+</li>
+<li>[&amp;]通过引用捕获所有变量
+<ul>
+<li>[&amp;变量名] 通过引用捕获制定变量</li>
+</ul>
+</li>
+<li>this指针
+<ul>
+<li>在类成员函数体中使用Lamada表达式，如果需要访问封闭类的成员函数和数据成员，需要将this指针传递给capture子句</li>
+<li>C++17模式以及更高版本中，可以在capture子句中指定*this通过值捕获this指针，通过值捕获会将整个Lambda闭包复制到调用Lambda的每个站点，在并行或异步操作中非常有用</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl">  <span class="p">[</span><span class="o">&amp;</span><span class="n">total</span><span class="p">,</span> <span class="n">factor</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">  <span class="p">[</span><span class="n">factor</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">total</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">  <span class="p">[</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">factor</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">  <span class="p">[</span><span class="o">=</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">total</span><span class="p">]</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl">  <span class="k">struct</span> <span class="nc">S</span> <span class="p">{</span> <span class="kt">void</span> <span class="nf">f</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">);</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="kt">void</span> <span class="n">S</span><span class="o">::</span><span class="n">f</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="p">[</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">i</span><span class="p">]{};</span>      <span class="c1">// OK
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="p">[</span><span class="o">&amp;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">i</span><span class="p">]{};</span>     <span class="c1">// ERROR: i preceded by &amp; when &amp; is the default
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="p">[</span><span class="o">=</span><span class="p">,</span> <span class="k">this</span><span class="p">]{};</span>   <span class="c1">// ERROR: this when = is the default
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="p">[</span><span class="o">=</span><span class="p">,</span> <span class="o">*</span><span class="k">this</span><span class="p">]{</span> <span class="p">};</span> <span class="c1">// OK: captures this by value. See below.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]{};</span>      <span class="c1">// ERROR: i repeated
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="p">}</span>
+</span></span></code></pre></div></li>
+<li>parameters
+<ul>
+<li>类似函数的参数列表</li>
+<li>C++14中，可传入类型为auto的参数，参数列表中每个auto实例等效于一个不同类型的参数</li>
+</ul>
+</li>
+<li>说明符
+<ul>
+<li>mutable 允许函数体修改各个复制捕获的对象，以及调用其非const成员函数</li>
+<li>constexpr 显式指定函数调用运算符为 constexpr 函数。此说明符不存在时，若函数调用运算符恰好满足针对 constexpr 函数的所有要求，则它也会是 constexpr；  (C++17 起)</li>
+<li>consteval 指定函数调用运算符为立即函数。不能同时使用 consteval 和 constexpr。(C++20 起)</li>
+</ul>
+</li>
+<li>return-type
+<ul>
+<li>前面必须包含&rsquo;-&gt;'</li>
+</ul>
+</li>
+</ul>
+<h1 id="参考资料">参考资料</h1>
+<p><a href="https://learn.microsoft.com/zh-cn/cpp/cpp/lambda-expressions-in-cpp?view=msvc-170">Microsoft Learn Challenge</a>
+<a href="https://blog.csdn.net/gongjianbo1992/article/details/105128849">CSDN</a>
+<a href="https://oi-wiki.org/lang/lambda/">OI Wiki</a></p>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学与技术
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                lambda表达式
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/c&#43;&#43;">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                c&#43;&#43;
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Mon, 25 Nov 2024 00:00:00 &#43;0000" class="no-wrap"
+                title=" Mon, 25 Nov 2024 00:00:00 &#43;0000">
+                Mon, 25 Nov 2024 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
         
         <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
           <div class="col-12 d-inline-block">
@@ -2909,108 +3032,6 @@ queries[i] = [$u_i, v_i$] 表示新建一条从城市 $u_i$ 到城市 $v_i$ 的�
                   </path>
                 </svg>
                 位运算
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Sun, 17 Nov 2024 00:00:00 &#43;0000" class="no-wrap"
-                title=" Sun, 17 Nov 2024 00:00:00 &#43;0000">
-                Sun, 17 Nov 2024 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/leetcode825%E9%80%82%E9%BE%84%E7%9A%84%E6%9C%8B%E5%8F%8B/">leetcode 825 适龄的朋友</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <p><a href="https://leetcode.cn/problems/friends-of-appropriate-ages/description/">leetcode 825 适龄的朋友</a></p>
-<h1 id="题目">题目</h1>
-<blockquote>
-<p>在社交媒体网站上有 n 个用户。给你一个整数数组 ages ，其中 ages[i] 是第 i 个用户的年龄。                     <br>
-如果下述任意一个条件为真，那么用户 x 将不会向用户 y（x != y）发送好友请求：                  <br>
-ages[y] &lt;= 0.5 * ages[x] + 7                       <br>
-ages[y] &gt; ages[x]                    <br>
-ages[y] &gt; 100 &amp;&amp; ages[x] &lt; 100                   <br>
-否则，x 将会向 y 发送一条好友请求。                       <br>
-注意，如果 x 向 y 发送一条好友请求，y 不必也向 x 发送一条好友请求。另外，用户不会向自己发送好友请求。                          <br>
-返回在该社交媒体网站上产生的好友请求总数。</p>
-</blockquote>
-<h1 id="示例">示例</h1>
-<h2 id="示例一">示例一</h2>
-<blockquote>
-<p>输入：ages = [16,16]     <br>
-输出：2    <br>
-解释：2 人互发好友请求。</p>
-</blockquote>
-<h2 id="示例二">示例二</h2>
-<blockquote>
-<p>输入：ages = [16,17,18]          <br>
-输出：2         <br>
-解释：产生的好友请求为 17 -&gt; 16 ，18 -&gt; 17 。</p>
-</blockquote>
-<h2 id="示例三">示例三</h2>
-<blockquote>
-<p>输入：ages = [20,30,100,110,120]          <br>
-输出：3                  <br>
-解释：产生的好友请求为 110 -&gt; 100 ，120 -&gt; 110 ，120 -&gt; 100 。</p>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机科学与技术
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                算法题
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/leetcode">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                leetcode
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%95%B0%E7%BB%84">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                数组
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E5%8F%8C%E6%8C%87%E9%92%88">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                双指针
               </a>
               
               

@@ -149,7 +149,7 @@
                 </path>
               </svg>
               Posts
-              <span class="Counter">205</span>
+              <span class="Counter">206</span>
             </a>
           </nav>
           <div class="profile-color-modes js-promo-color-modes-banner-profile isInitialToggle">
@@ -428,7 +428,7 @@
         </path>
       </svg>
       Posts
-      <span class="Counter ">205</span>
+      <span class="Counter ">206</span>
     </a>
   </nav>
 </div>
@@ -1599,6 +1599,387 @@
         
       
       <ul>
+        
+        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
+          <div class="col-12 d-inline-block">
+            <div class="d-inline-block mb-1">
+              <h3 class="wb-break-all">
+                <a href="https://y-m-m.github.io/post/linux_vi/">Linux使用 vi</a>
+              </h3>
+            </div>
+
+            <div>
+              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                <h1 id="用户偏好设置">用户偏好设置</h1>
+<ul>
+<li>文件：HOME目录下的.exrc，记作$HOME/.exrc
+<ul>
+<li>set number 每行左边显示行号</li>
+<li>set tabstop = 4 制表符位置为4格对齐</li>
+</ul>
+</li>
+<li>运行时使用set命令
+<ul>
+<li>:set 检查偏好设置</li>
+<li>:set option 设置一个偏好</li>
+<li>:set nooption 取消一个设置</li>
+</ul>
+</li>
+</ul>
+<h1 id="vi的两种工作状态">vi的两种工作状态</h1>
+<ul>
+<li>命令状态
+<ul>
+<li>键盘输入解释为命令</li>
+<li>一般按键无回显</li>
+<li>以冒号可以引入编辑的命令和查找命令</li>
+<li>编辑命令i(在当前字符前插入) a(在当前字符后插入)时，可以用命令状态转换为文本状态</li>
+</ul>
+</li>
+<li>文本状态
+<ul>
+<li>键盘输入解释为输入的文本</li>
+<li>可以输入多行，回车键换行</li>
+<li>正文输入有回显</li>
+<li>按Esc键，返回到命令状态</li>
+</ul>
+</li>
+</ul>
+<h1 id="命令状态指令">命令状态指令</h1>
+<h2 id="光标单字符移动">光标单字符移动</h2>
+<ul>
+<li>单字符移动
+<ul>
+<li>h 光标左移一列</li>
+<li>j 光标下移一列</li>
+<li>k 光标上移一列</li>
+<li>l 光标右移一列</li>
+<li>一般可以直接用方向键代替这四个指令</li>
+</ul>
+</li>
+<li>连续执行多遍单字符移动
+<ul>
+<li>指令前加数字，数字表示执行的次数</li>
+</ul>
+</li>
+</ul>
+<h2 id="翻页">翻页</h2>
+<ul>
+<li>命令
+<ul>
+<li>ctrl-b 向后翻页(可用PgDn键代替)</li>
+<li>ctrl-f 向前翻页(可用PgUp键代替)</li>
+</ul>
+</li>
+<li>可连续执行多遍</li>
+</ul>
+<h2 id="光标行内快速移动">光标行内快速移动</h2>
+<ul>
+<li>行尾行首
+<ul>
+<li>将光标移至当前行首 ^</li>
+<li>将光标移至当前行尾 $</li>
+</ul>
+</li>
+<li>移动一个单词
+<ul>
+<li>移到右一个单词 w</li>
+<li>移到左一个单词 b</li>
+</ul>
+</li>
+</ul>
+<h2 id="光标移动到指定行">光标移动到指定行</h2>
+<ul>
+<li>移到指定的行
+<ul>
+<li>:476 将光标定位于476行</li>
+<li>:1 将光标定位于第1行</li>
+<li>:$ 将光标定位于文件尾</li>
+</ul>
+</li>
+<li>描述行号
+<ul>
+<li>. 当前行
+<ul>
+<li>.+10 当前位置下移十行</li>
+</ul>
+</li>
+<li>$ 代表最后一行的尾号</li>
+</ul>
+</li>
+<li>括号配对
+<ul>
+<li>%
+<ul>
+<li>将光标移动到一个括号所在行，按%键，光标自动定位到配对的那一对括号</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="删除命令">删除命令</h2>
+<ul>
+<li>删除字符
+<ul>
+<li>删除当前字符
+<ul>
+<li>x</li>
+</ul>
+</li>
+<li>可重复执行多次</li>
+</ul>
+</li>
+<li>删除行
+<ul>
+<li>删除当前行
+<ul>
+<li>dd</li>
+</ul>
+</li>
+<li>可重复执行多次</li>
+</ul>
+</li>
+</ul>
+<h2 id="字符替换">字符替换</h2>
+<ul>
+<li>替换光标处字符
+<ul>
+<li>r</li>
+<li>ra 将当前光标处字符替换为a</li>
+<li>rarbrc 将当前光标处开始的三个字符依次替换为a，b，c</li>
+</ul>
+</li>
+</ul>
+<h2 id="取消和重复">取消和重复</h2>
+<ul>
+<li>取消上一次的编辑操作
+<ul>
+<li>u</li>
+</ul>
+</li>
+<li>重复上一次的编辑操作
+<ul>
+<li>.</li>
+</ul>
+</li>
+</ul>
+<h2 id="文件操作命令">文件操作命令</h2>
+<ul>
+<li>存盘退出
+<ul>
+<li>Shift + ZZ</li>
+<li>:wq</li>
+</ul>
+</li>
+<li>存盘不退出
+<ul>
+<li>:w</li>
+</ul>
+</li>
+<li>不存盘退出
+<ul>
+<li>:q!</li>
+</ul>
+</li>
+<li>直接退出
+<ul>
+<li>q</li>
+</ul>
+</li>
+<li>读入文件xyz.c插入到当前行之下
+<ul>
+<li>:r xyz.c</li>
+</ul>
+</li>
+<li>写文件，把第50行至文件尾的内容写到file1中
+<ul>
+<li>:50, $w file1</li>
+<li>:50, $w! file1(强制覆盖)</li>
+</ul>
+</li>
+</ul>
+<h2 id="剪贴板">剪贴板</h2>
+<ul>
+<li>删除，并拷贝到剪贴板
+<ul>
+<li>:10,50d 删除第10-50行</li>
+<li>:1,.d 删除文件首至当前行的部分</li>
+<li>:.,$d 删除当前行到文件尾</li>
+</ul>
+</li>
+<li>不删除，拷贝到剪贴板
+<ul>
+<li>:10,50y</li>
+</ul>
+</li>
+<li>粘贴剪贴板信息
+<ul>
+<li>p</li>
+</ul>
+</li>
+</ul>
+<h2 id="块操作复制与删除">块操作：复制与删除</h2>
+<ul>
+<li>:5,10co56 复制5-15行到第56行之下</li>
+<li>:8,34m78 移动第8-31行到第78行之下</li>
+</ul>
+<h2 id="行合并刷屏和状态显示">行合并、刷屏和状态显示</h2>
+<ul>
+<li>两行合并 J
+<ul>
+<li>当前行下面的行合并到当前行</li>
+</ul>
+</li>
+<li>刷新屏幕显示
+<ul>
+<li>ctrl-l</li>
+</ul>
+</li>
+<li>状态显示
+<ul>
+<li>ctrl-g</li>
+<li>在屏幕最下面一行列出正在编辑的文件的名字，总行数，当前行号，文件是否被修改过等信息</li>
+</ul>
+</li>
+</ul>
+<h2 id="模式查找">模式查找</h2>
+<ul>
+<li>用正则表达式来描述一个字符串模式</li>
+<li>查找命令
+<ul>
+<li>格式 /patern</li>
+</ul>
+</li>
+<li>继续查找命令
+<ul>
+<li>n 向下查找下一个next</li>
+<li>N 向上查找下一个</li>
+<li>循环式搜索</li>
+</ul>
+</li>
+</ul>
+<h2 id="模式替换">模式替换</h2>
+<ul>
+<li>替换命令
+<ul>
+<li>:n1,n2s/pattern/string/g</li>
+</ul>
+</li>
+<li>例
+<ul>
+<li>:1,50s/abc/xyz/</li>
+<li>:1,50s/abc/xyz/g</li>
+<li>:50,80s/^/    / 第50-80行右移4列</li>
+<li>:50,80s/^    // 第50-80行左移4列</li>
+<li>:1,$s/ *$// 消除尾部多余的空格</li>
+<li>:1,$s/a[i]/b[j]/g 小心陷阱：不能把a[i]替换为b[j]</li>
+<li>:1,$/a*b/x+y/g 小心陷阱：不能把a * b替换为x + y</li>
+</ul>
+</li>
+<li>转义字符
+<ul>
+<li>将a[i] * b[j]替换为x[k] * y[n]的命令
+<ul>
+<li>:1,$s/a[i]*b[j]/x[k]*y[n]/g</li>
+</ul>
+</li>
+<li>将buf.len/1000替为buffer.size/1024的命令
+<ul>
+<li>:1,$s/buf.len/1000/buffer.size/1024/g</li>
+<li>模式串和替换字符串中的斜线前加转义符\以区别于替换命令格式中所必须的斜线</li>
+</ul>
+</li>
+<li>:1,$s:buf.len/1000:buffer.size/1024:g
+<ul>
+<li>s后面以冒号取代斜线，分界符换为冒号，避免对斜线的转义</li>
+</ul>
+</li>
+<li>:1,$s^http://www.myvdo.com/a/b/c/index.html^https://www.xyvdo.com/index.html^g
+<ul>
+<li>s后面以^号作分界符</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>更灵活的替换
+<ul>
+<li>模式描述中增加(和)
+<ul>
+<li>在正则表达式中圆括号，仍然代表它自身</li>
+<li>在正则表达式中出现的(和)不影响匹配操作</li>
+</ul>
+</li>
+<li>例
+<ul>
+<li>[a-zA-Z_][a-zA-Z0-9_]*-&gt;number</li>
+<li>([a-zA-Z_][a-zA-Z0-9_]*)-&gt;number</li>
+<li>替换字符串中的 \0 \1 \2 ……
+<ul>
+<li>将“变量名-&gt;number”替换为“变量名-&gt;num”
+<ul>
+<li>:1,$s/([a-zA-Z_][a-zA-Z0-9_]*)-&gt;number/\1-&gt;num/g</li>
+</ul>
+</li>
+<li>将日期格式“月-日-年”改为“年.月.日”,
+<ul>
+<li>比如：将 04-26-1997替换为1997.04.26使用命令:</li>
+<li>:1,$s/([0-9][0-9])-([0-9][0-9])-([0-9][0-9]*)/\3.\1.\2/g</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="总结">总结</h1>
+<p><img src="/images/%E6%88%AA%E5%B1%8F2025-04-16%2016.09.07.png" alt="">       <br>
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-16%2016.09.50.png" alt="">    <br>
+<img src="/images/%E6%88%AA%E5%B1%8F2025-04-16%2016.10.27.png" alt=""></p>
+              </div>
+            </div>
+
+            <div class="f6 text-gray mt-2">
+              
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                计算机科学
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/linux">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                Linux
+              </a>
+              
+              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/vi">
+                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                  <path fill-rule="evenodd"
+                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
+                  </path>
+                </svg>
+                vi
+              </a>
+              
+              
+
+              Created
+              <relative-time datetime=" Tue, 15 Apr 2025 00:00:00 &#43;0000" class="no-wrap"
+                title=" Tue, 15 Apr 2025 00:00:00 &#43;0000">
+                Tue, 15 Apr 2025 00:00:00 &#43;0000
+              </relative-time>
+            </div>
+          </div>
+        </li>
         
         <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
           <div class="col-12 d-inline-block">
@@ -3354,188 +3735,6 @@
 </span></span><span class="line"><span class="cl"><span class="p">};</span>
 </span></span></code></pre></div><h1 id="参考资料">参考资料</h1>
 <p><a href="https://leetcode.cn/problems/symmetric-tree/solutions/268109/dui-cheng-er-cha-shu-by-leetcode-solution/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode官方题解</a></p>
-              </div>
-            </div>
-
-            <div class="f6 text-gray mt-2">
-              
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%8E%E6%8A%80%E6%9C%AF">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                计算机科学与技术
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E7%AE%97%E6%B3%95%E9%A2%98">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                算法题
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/leetcode">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                leetcode
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%A0%91">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                树
-              </a>
-              
-              <a class="muted-link mr-3" href="https://y-m-m.github.io/tags/%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2">
-                <svg class="octicon octicon-tag" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-                  <path fill-rule="evenodd"
-                    d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z">
-                  </path>
-                </svg>
-                深度优先搜索
-              </a>
-              
-              
-
-              Created
-              <relative-time datetime=" Wed, 09 Apr 2025 00:00:00 &#43;0000" class="no-wrap"
-                title=" Wed, 09 Apr 2025 00:00:00 &#43;0000">
-                Wed, 09 Apr 2025 00:00:00 &#43;0000
-              </relative-time>
-            </div>
-          </div>
-        </li>
-        
-        <li class="col-12 d-flex width-full py-4 border-bottom color-border-secondary public source">
-          <div class="col-12 d-inline-block">
-            <div class="d-inline-block mb-1">
-              <h3 class="wb-break-all">
-                <a href="https://y-m-m.github.io/post/leetcodehot104%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%A4%A7%E6%B7%B1%E5%BA%A6/">leetcode hot100 104 二叉树的最大深度</a>
-              </h3>
-            </div>
-
-            <div>
-              <div class="col-12 d-inline-block text-gray mb-2 pr-4">
-                <p><a href="https://leetcode.cn/problems/maximum-depth-of-binary-tree/description/?envType=study-plan-v2&amp;envId=top-100-liked">104 二叉树的最大深度</a></p>
-<h1 id="题目">题目</h1>
-<blockquote>
-<p>给定一个二叉树 root ，返回其最大深度。          <br>
-二叉树的 最大深度 是指从根节点到最远叶子节点的最长路径上的节点数。</p>
-</blockquote>
-<h1 id="示例">示例</h1>
-<h2 id="示例一">示例一</h2>
-<blockquote>
-<p><img src="/images/%E6%88%AA%E5%B1%8F2025-04-09%2008.06.03.png" alt="">          <br>
-<strong>输入</strong>：root = [3,9,20,null,null,15,7]           <br>
-<strong>输出</strong>：3</p>
-</blockquote>
-<h2 id="示例二">示例二</h2>
-<blockquote>
-<p><strong>输入</strong>：root = [1,null,2]             <br>
-<strong>输出</strong>：2</p>
-</blockquote>
-<h1 id="提示">提示</h1>
-<ul>
-<li>树中节点的数量在 [0, 10<sup>4</sup>] 区间内。</li>
-<li>-100 &lt;= Node.val &lt;= 100</li>
-</ul>
-<h1 id="题解">题解</h1>
-<h2 id="方法一">方法一</h2>
-<ul>
-<li>分析
-<ul>
-<li>递归</li>
-<li>深度优先搜索</li>
-</ul>
-</li>
-<li>提交结果
-<ul>
-<li>通过</li>
-</ul>
-</li>
-</ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cm">/**
-</span></span></span><span class="line"><span class="cl"><span class="cm"> * Definition for a binary tree node.
-</span></span></span><span class="line"><span class="cl"><span class="cm"> * struct TreeNode {
-</span></span></span><span class="line"><span class="cl"><span class="cm"> *     int val;
-</span></span></span><span class="line"><span class="cl"><span class="cm"> *     TreeNode *left;
-</span></span></span><span class="line"><span class="cl"><span class="cm"> *     TreeNode *right;
-</span></span></span><span class="line"><span class="cl"><span class="cm"> *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
-</span></span></span><span class="line"><span class="cl"><span class="cm"> *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
-</span></span></span><span class="line"><span class="cl"><span class="cm"> *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
-</span></span></span><span class="line"><span class="cl"><span class="cm"> * };
-</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
-</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">maxDepth</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">max</span><span class="p">(</span><span class="n">maxDepth</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">),</span> <span class="n">maxDepth</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">));</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div><h2 id="方法二">方法二</h2>
-<ul>
-<li>分析
-<ul>
-<li>广度优先搜索</li>
-</ul>
-</li>
-<li>提交结果
-<ul>
-<li>通过</li>
-</ul>
-</li>
-</ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cm">/**
-</span></span></span><span class="line"><span class="cl"><span class="cm"> * Definition for a binary tree node.
-</span></span></span><span class="line"><span class="cl"><span class="cm"> * struct TreeNode {
-</span></span></span><span class="line"><span class="cl"><span class="cm"> *     int val;
-</span></span></span><span class="line"><span class="cl"><span class="cm"> *     TreeNode *left;
-</span></span></span><span class="line"><span class="cl"><span class="cm"> *     TreeNode *right;
-</span></span></span><span class="line"><span class="cl"><span class="cm"> *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
-</span></span></span><span class="line"><span class="cl"><span class="cm"> *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
-</span></span></span><span class="line"><span class="cl"><span class="cm"> *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
-</span></span></span><span class="line"><span class="cl"><span class="cm"> * };
-</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
-</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">maxDepth</span><span class="p">(</span><span class="n">TreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="n">queue</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">*&gt;</span> <span class="n">Q</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="n">Q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">Q</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">sz</span> <span class="o">=</span> <span class="n">Q</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="p">(</span><span class="n">sz</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">TreeNode</span><span class="o">*</span> <span class="n">node</span> <span class="o">=</span> <span class="n">Q</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">                <span class="n">Q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="n">Q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="n">Q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">                <span class="n">sz</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="n">ans</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div>
               </div>
             </div>
 
